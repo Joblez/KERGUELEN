@@ -1,5 +1,8 @@
 version "4.8"
 
+// MBase
+#include "MBase/MBaseLib/zscript.zs"
+
 #include "zscript/weapons/baseweapon.zs"
 
 #include "zscript/misc/Barrel.zs"

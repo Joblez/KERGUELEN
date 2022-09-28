@@ -9,7 +9,7 @@ Actor Stimbonus : Health replaces HealthBonus
 	Scale 1
 	States
 	{
-	Spawn:	
+	Spawn:
 		PICU B 60
 		PICU B 60 Bright
 		loop
@@ -28,7 +28,7 @@ Inventory.PickupMessage "Stimpack - (+15 Health)"
 	STIM A 60
 	STIM A 60 Bright
 	loop
-	} 
+	}
 }
 
 Actor MedKit : Health replaces MediKit
@@ -39,11 +39,11 @@ Inventory.PickupMessage "Medkit - (+30 Health)"
 	states
 	{
 	Spawn:
-	MEDI A 60 
+	MEDI A 60
 	MEDI A 60 Bright
 	loop
-	
-	} 
+
+	}
 }
 
 Actor AMRShard : BasicArmorBonus replaces Armorbonus
@@ -63,15 +63,15 @@ Actor AMRShard : BasicArmorBonus replaces Armorbonus
 		PICU A 60
 		PICU A 60 Bright
 		loop
-  
+
   }
-} 
+}
 
 Actor KevlarVest : BasicArmorPickup replaces GreenArmor
 {
   Radius 20
   Height 16
-  Inventory.PickupMessage "Light Armor - (+100 Armor)" 
+  Inventory.PickupMessage "Light Armor - (+100 Armor)"
   Inventory.Icon "AMR1A0"
   Inventory.pickupsound "pickup/armor"
   Armor.SavePercent 33.335

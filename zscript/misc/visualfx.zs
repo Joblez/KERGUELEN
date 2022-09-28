@@ -101,7 +101,6 @@ class SmokeSpawner2 : Actor
 	}
 }
 
-
 class SmokeSpawner : Actor
 {
 	Default
@@ -148,7 +147,7 @@ class WallSparks : Actor
 }
 
 class RocketDebris : Actor
-{ 
+{
 	Default
 	{
 		+MISSILE
@@ -312,7 +311,6 @@ class Melee_Puff: Bullet_Puff
 	}
 }
 
-
 class BaseCasing : Actor
 {
 	Default
@@ -363,7 +361,7 @@ class PistolCasing : BaseCasing
 		CAS3 I 3 A_SetTranslucent(0.2, 0);
 		Stop;
 	}
-	
+
 }
 
 class RevolverCasing : Basecasing
@@ -466,7 +464,7 @@ class ShotgunCasing : BaseCasing
 		CAS2 I 3 A_SetTranslucent(0.0, 0);
 		Stop;
 	}
-	
+
 }
 
 class GrenadeCasing : BaseCasing
@@ -605,7 +603,6 @@ Class ShellSpawnerL : BaseSpawner
 	}
 }
 
-
 Class RifleSpawnerR : BaseSpawner
 {
 	States
@@ -684,7 +681,6 @@ class Rocket_Trail : Actor
 		Stop;
 	}
 }
-
 
 class Rocket_Trail2 : Rocket_Trail
 {

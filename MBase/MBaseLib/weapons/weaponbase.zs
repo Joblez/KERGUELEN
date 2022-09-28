@@ -153,7 +153,7 @@ class WeaponBase : DoomWeapon abstract
 		WeaponBase.BobIntensityResponseTime 2.0 / TICRATE;
 		WeaponBase.BobSpeedResponseTime 2.0 / TICRATE;
 	}
-		
+
 	States
 	{
 	// Select and Deselect are used as equip and unequip notifiers.
@@ -169,7 +169,7 @@ class WeaponBase : DoomWeapon abstract
 	SwitchingOut:
 		RPLC A 1 A_LowerSMNotify(10);
 		Loop;
-	
+
 	Spawn:
 		UNKN A -1;
 		Stop;
@@ -269,7 +269,7 @@ class WeaponBase : DoomWeapon abstract
 			int buttonEvent, eventType;
 			[buttonEvent, eventType] = queue.TryConsumeEvent();
 
-			if (buttonEvent != 0 && eventType != 0) 
+			if (buttonEvent != 0 && eventType != 0)
 			{
 				TryHandleButtonEvent(buttonEvent, eventType);
 			}
@@ -331,7 +331,7 @@ class WeaponBase : DoomWeapon abstract
 		FTranslatedLineTarget t;
 		double yaw = owner.Angle;
 		double pitch = owner.Pitch;
-		
+
 		if (damage < 0) damage = m_Damage;
 		if (range <= 0.0) range = m_Range;
 
@@ -612,7 +612,7 @@ class WeaponBase : DoomWeapon abstract
 			owner.player.mo.GetPlayerInput(MODINPUT_SIDEMOVE),
 				-MAX_SIDE_MOVE, MAX_SIDE_MOVE,
 				-1.0, 1.0);
-		
+
 		double moveInputStrength = MathVec2.Clamp((normalizedForwardMove, normalizedSideMove), -1.0, 1.0).Length();
 
 		double previousMovementSpeed = (m_PreviousPlayerVel.x, m_PreviousPlayerVel.y).Length();
@@ -878,7 +878,7 @@ class WeaponBase : DoomWeapon abstract
 			&& (!mo.bNotAutoAimed || ignoreNotAutoAimed)
 			&& owner.Distance2D(mo) <= targetRange
 			&& owner.IsVisible(mo, false);
-		
+
 		if (smartAimMode == SAIM_NEVERFRIENDS) autoAimable = autoAimable && !mo.bFriendly;
 
 		return autoAimable;
@@ -1075,7 +1075,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		vector2 maxRecoilTranslation = (double.Infinity, double.Infinity), vector2 maxRecoilScale = (double.Infinity, double.Infinity))
 	{
 		if (m_Initialized) return;
-		
+
 		InterpolatedInit(smoothTime, translationName, scaleName);
 
 		m_Initialized = false;

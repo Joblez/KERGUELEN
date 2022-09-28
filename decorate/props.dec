@@ -8,7 +8,7 @@ Dropitem "SROCC4",255,1
 Dropitem "SROCC5",255,1
 }
 
-actor SROCC1 
+actor SROCC1
 {
 //$Category Props
 Height 8
@@ -16,59 +16,59 @@ Radius 8
 +Solid
 	States
 	{
-	
+
 	Spawn:
 	ROCC A -1
 	stop
-	
+
 	}
 }
 
-actor SROCC2 : SROCC1 
+actor SROCC2 : SROCC1
 {
 	States
 	{
-	
+
 	Spawn:
 	ROCC B -1
 	stop
-	
+
 	}
 }
 
-actor SROCC3: SROCC1 
+actor SROCC3: SROCC1
 {
 	States
 	{
-	
+
 	Spawn:
 	ROCC C -1
 	stop
-	
+
 	}
 }
 
-actor SROCC4 : SROCC1 
+actor SROCC4 : SROCC1
 {
 	States
 	{
-	
+
 	Spawn:
 	ROCC D -1
 	stop
-	
+
 	}
 }
 
-actor SROCC5 : SROCC1 
+actor SROCC5 : SROCC1
 {
 	States
 	{
-	
+
 	Spawn:
 	ROCC E -1
 	stop
-	
+
 	}
 }
 
@@ -82,7 +82,7 @@ States
 	{
 	Spawn:
 		TREE A -1
-		stop	
+		stop
 		}
 }
 
@@ -92,7 +92,7 @@ actor Deadtree2: Deadtree 10266
 	{
 	Spawn:
 		TREE B -1
-		stop	
+		stop
 	}
 
 }
@@ -106,11 +106,11 @@ Radius 8
 +Solid
 	States
 	{
-	
+
 	Spawn:
 	SHRB A -1
 	stop
-	
+
 	}
 }
 
@@ -119,11 +119,11 @@ Actor Shrub2 : Shrub1 10269
 Height 24
 	States
 	{
-	
+
 	Spawn:
 	SHRB B -1
 	stop
-	
+
 	}
 }
 
@@ -132,11 +132,11 @@ Actor Shrub3 : Shrub1 10270
 Height 24
 	States
 	{
-	
+
 	Spawn:
 	SHRB C -1
 	stop
-	
+
 	}
 }
 
@@ -145,11 +145,11 @@ Actor Shrub4 : Shrub1 10271
 Height 118
 	States
 	{
-	
+
 	Spawn:
 	SHRB D -1
 	stop
-	
+
 	}
 }
 
@@ -162,7 +162,7 @@ States
 	{
 	Spawn:
 		TRNF A -1
-		stop	
+		stop
 		}
 }
 
@@ -172,7 +172,7 @@ States
 	{
 	Spawn:
 		TRNF B -1
-		stop	
+		stop
 		}
 
 }
@@ -183,7 +183,7 @@ States
 	{
 	Spawn:
 		TRNF C -1
-		stop	
+		stop
 		}
 
 }
@@ -194,7 +194,7 @@ States
 	{
 	Spawn:
 		TRNF D -1
-		stop	
+		stop
 		}
 
 }
@@ -209,7 +209,7 @@ States
 	{
 	Spawn:
 		CABB A -1
-		stop	
+		stop
 		}
 }
 
@@ -220,7 +220,7 @@ States
 	{
 	Spawn:
 		CABB B -1
-		stop	
+		stop
 		}
 }
 
@@ -231,7 +231,7 @@ States
 	{
 	Spawn:
 		CABB C -1
-		stop	
+		stop
 		}
 }
 
@@ -242,6 +242,6 @@ States
 	{
 	Spawn:
 		CABB D -1
-		stop	
+		stop
 		}
 }

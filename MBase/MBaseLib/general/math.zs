@@ -201,7 +201,7 @@ struct MathVec2
 		double maxDifference = maxSpeed * smoothTime;
 		double maxDifferenceSquared = maxDifference * maxDifference;
 
-		
+
 		double squareMagnitude = (xDifference * xDifference) + (yDifference * yDifference);
 
 		if (squareMagnitude > maxDifferenceSquared)

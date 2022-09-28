@@ -97,7 +97,7 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 	{
 		m_InterpolatedScale.m_Target = target;
 	}
-	
+
 	void Reset()
 	{
 		m_InterpolatedTranslation.Reset();

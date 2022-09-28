@@ -1,7 +1,7 @@
 // TODO: Document resuming transitions.
 /**
  * A one-way connection between two child states of a particular state.
- * 
+ *
  * Transitions define a trigger event, an optional origin state, or "from"
  * state, and a target state, or "to" state. A transition is triggered when the
  * containing state receives an event that matches the transition's event ID,
@@ -391,7 +391,7 @@ class SMState
 
 	/**
 	 * Removes the child of the given class from the array of children, if one
-	 * is found. 
+	 * is found.
 	 *
 	 * Returns itself upon success, so calls to this method can be chained to
 	 * other method calls on the same state.
@@ -486,7 +486,7 @@ class SMState
 	// TODO: Update RemoveTransition documentation.
 	/**
 	 * Removes the transition with the given event ID and origin state from the
-	 * transition array, or the unbound transition with the given event ID, 
+	 * transition array, or the unbound transition with the given event ID,
 	 * if one is found.
 	 *
 	 * Returns itself upon success, so calls to this method can be chained to
@@ -644,7 +644,7 @@ class SMState
 	{
 		EnterState();
 		if (m_ActiveChild == null) return;
-	
+
 		m_ActiveChild.CallEnter();
 	}
 
@@ -658,7 +658,7 @@ class SMState
 		UpdateState();
 		TryPerformTransition('None'); // Perform any live transitions.
 		if (m_ActiveChild == null) return;
-		
+
 		m_ActiveChild.CallUpdate();
 	}
 
@@ -847,7 +847,7 @@ class SMMachine : SMState abstract
 	 *		);
 	 *
 	 *		AddChild(new("SMEnemyAlert"));
-	 *	
+	 *
 	 *		AddTransition(new("SMTransition")
 	 *			.On('DetectedThreat').From("SMEnemyIdle").To("SMEnemyAlert")
 	 *		);

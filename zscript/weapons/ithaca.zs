@@ -35,7 +35,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 	Spawn:
 		PICK B -1;
 		Stop;
-	
+
 	Ready:
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		ITAI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
@@ -63,7 +63,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 {
 			if (CountInv("Sh12Tube") == 0) {
 				return ResolveState("Ready");
-			}	
+			}
 			else {
 				return ResolveState("Pump");
 			}
@@ -94,7 +94,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 { invoker.m_Chambered = invoker.m_Chambered + 1; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
-	
+
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;

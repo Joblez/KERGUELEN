@@ -1,6 +1,6 @@
 actor Sheep 11000
 {
-//$Category Friendlies	
+//$Category Friendlies
   Monster
   Health 50
   Radius 30
@@ -17,7 +17,7 @@ actor Sheep 11000
   -COUNTKILL
 	States
 	{
-		Spawn:	
+		Spawn:
 			SHEP A 10 A_Look()
 			Goto See
 		See:
@@ -29,10 +29,10 @@ actor Sheep 11000
 		RunAway:
 			TNT1 A 0 A_ChangeFlag("Frightened", True)
 			TNT1 A 0 A_SetSpeed(6,AAPTR_DEFAULT)
-			SHEP  BBCCDDEE 1 A_Chase
-			SHEP  BBCCDDEE 1 A_Chase
-			SHEP  BBCCDDEE 1 A_Chase
-			SHEP  BBCCDDEE 1 A_Chase
+			SHEP BBCCDDEE 1 A_Chase
+			SHEP BBCCDDEE 1 A_Chase
+			SHEP BBCCDDEE 1 A_Chase
+			SHEP BBCCDDEE 1 A_Chase
 			TNT1 A 0 A_SetSpeed(3,AAPTR_DEFAULT)
 			TNT1 A 0 A_ChangeFlag("Frightened", False)
 			Goto See
@@ -40,6 +40,6 @@ actor Sheep 11000
 			TNT1 A 0 A_Playsound("sheep/sight")
 			SHED ABCDE 4
 			SHED E -1
-			Stop	
+			Stop
 	}
 }

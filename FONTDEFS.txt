@@ -12,9 +12,9 @@
        9 FON09
 	   ! FON010
 	   & FON012
-       % FON013	   
+       % FON013
        / FON022
-       - FON020  	   
+       - FON020
 	   , FON019
 	   + FON018
 	   ( FON015
@@ -70,9 +70,9 @@
 	   w FON1W
 	   x FON1X
 	   y FON1Y
-	   z FON1Z	   
+	   z FON1Z
    }
-   
+
 	SMALLFNT
  {
 	0 CFON00
@@ -132,5 +132,4 @@
 	\ CFON031
 	] CFON032
 	^ CFON033
-}	
- 
+}

@@ -17,8 +17,8 @@ Actor Ammo9mm: Ammo 2007
 	9MMI B -1
 	loop
 	}
-}	
-	
+}
+
 Actor 9mmbigbox : Ammo9mm 2048
 {
   //$Category Decorate
@@ -49,8 +49,8 @@ Actor Ammo223: Ammo 2047
 	A223 A -1
 	loop
 	}
-}	
-	
+}
+
 Actor Ammo223bigbox : Ammo223 17
 {
   //$Category Ammunition
@@ -82,8 +82,8 @@ Actor Ammo45: Ammo 302
 	A223 A -1
 	loop
 	}
-}	
-	
+}
+
 Actor Ammo45bigbox : Ammo45 303
 {
   //$Category Ammunition
@@ -151,7 +151,7 @@ Actor Ammo40mm : Ammo 2010
 		M79A A -1
 		loop
 	}
-}	
+}
 
 Actor 40mmBox : Ammo40mm 2046
 {
@@ -166,7 +166,7 @@ Actor 40mmBox : Ammo40mm 2046
 		M79A B -1
 		loop
 	}
-}	
+}
 //12 Gauge Shells
 
 Actor Ammo12 : Ammo 2008
@@ -175,7 +175,7 @@ Actor Ammo12 : Ammo 2008
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.PickupMessage "A handful of shotgun shells."
 	Inventory.Amount 4
-	Inventory.MaxAmount 48 
+	Inventory.MaxAmount 48
 	Scale 1
 	States
 	{
@@ -183,7 +183,7 @@ Actor Ammo12 : Ammo 2008
 		SHEL A -1
 		loop
 	}
-}	
+}
 
 Actor 12gaugebox : Ammo12 2049
 {
@@ -201,7 +201,7 @@ Actor 12gaugebox : Ammo12 2049
 	}
 }
 
-// 30.06 
+// 30.06
 
 Actor Ammo3006 : Ammo 304
 {
@@ -209,7 +209,7 @@ Actor Ammo3006 : Ammo 304
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.PickupMessage "A handful of rifle bullets."
 	Inventory.Amount 6
-	Inventory.MaxAmount 24 
+	Inventory.MaxAmount 24
 	Scale 1
 	States
 	{
@@ -217,7 +217,7 @@ Actor Ammo3006 : Ammo 304
 		SHEL A -1
 		loop
 	}
-}	
+}
 
 Actor 3006box : Ammo3006 305
 {
@@ -234,5 +234,3 @@ Actor 3006box : Ammo3006 305
 		loop
 	}
 }
-
-

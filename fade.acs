@@ -6,9 +6,9 @@ Script 101 OPEN
 	{
 		faderange(0, 0, 0, 1.0, 0, 0, 0, 0.0, 3.0);
 		}
-		
+
 }
- 
+
 Script 102 DEATH
 {
 
@@ -16,7 +16,7 @@ Script 102 DEATH
 		{
 			fadeto(0, 0, 0, 1.0, 0.5);
 			}
-			
+
 }
 
 Script 103 RESPAWN

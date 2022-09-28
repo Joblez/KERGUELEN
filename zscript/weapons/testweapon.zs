@@ -99,17 +99,17 @@ class Revolver : BaseWeapon
 	AltReady:
 		SWSA N 4 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
-	
+
 	Ready:
 		SWAI A 4 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
-	
+
 	Empty:
 		TNT1 A 0 { invoker.m_action == 0; }
 		SWAI A 0 A_StartSound("weapons/empty", 1);
 		SWDA A 2;
 		Goto Ready;
-	
+
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo357", 1, 1);
 		Goto Ready;
@@ -149,24 +149,24 @@ class Revolver : BaseWeapon
 				TakeInventory (invoker.AmmoType2, 1);
 
 				return ResolveState ("Load");
-			
-				}		
-				
+
+				}
+
 		load:
-		SWLD ABCD 1;		
+		SWLD ABCD 1;
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO);
 		SWLD EFG 2;
 		SWLD HIJ 1;
 		Goto loading;
-	ReloadFinish:	
+	ReloadFinish:
 	Close:
 		SWCL ABCD 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO);
 		SWCL EFGHIJKLMN 2;
-		Goto Ready;		
-	
+		Goto Ready;
+
 	select:
-		TNT1 A 0 SetPlayerProperty(0,1,2);	
+		TNT1 A 0 SetPlayerProperty(0,1,2);
 		TNT1 A 1;
 		SWAI A 1 Offset(67, 100);
 		SWAI A 1 Offset(54, 81);
@@ -175,16 +175,16 @@ class Revolver : BaseWeapon
 		SWAI A 1 Offset(2, 34);
 		SWAF HI 1;
 		SWAI A 1 A_Raise(16);
-		Goto Ready;	
+		Goto Ready;
 	deselect:
 		SWAI A 1 Offset(2, 34);
-		SWAI A 1 Offset(22, 58);	
+		SWAI A 1 Offset(22, 58);
 		SWAI A 1 Offset(32, 69);
-		SWAI A 1 Offset(54, 81);		
+		SWAI A 1 Offset(54, 81);
 		SWAI A 1 Offset(67, 100);
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Loop;
 		}
-}	
+}
 

@@ -24,15 +24,15 @@ class FNC : BaseWeapon replaces Chaingun
 		Tag "FNC";
 		Weapon.SlotNumber 4;
 	}
-	
+
 	bool m_FireSelect;
-	
+
 	States
 	{
 	Spawn:
 		PICK C -1;
 		Loop;
-	
+
 	Ready:
 		FNCI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
@@ -48,7 +48,7 @@ class FNC : BaseWeapon replaces Chaingun
 		FNCF CDE 1;
 		FNCI A 1 A_Raise(16);
 		Goto Ready;
-	
+
 	Deselect:
 		FNCI A 1 Offset(2, 34);
 		FNCI A 1 Offset(22, 58);
@@ -103,7 +103,7 @@ class FNC : BaseWeapon replaces Chaingun
 			A_AlertMonsters();
 			//A_StartSound("fnc/fire",1);
 			A_StartSound("fnc/loop",1,CHANF_LOOPING);
-	
+
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
 			psp.frame = random(0,3);
@@ -115,7 +115,7 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
 		FNCF CDEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
-	
+
 	FinalShot:
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("weapons/empty", 10);
@@ -126,7 +126,7 @@ class FNC : BaseWeapon replaces Chaingun
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
-	
+
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;

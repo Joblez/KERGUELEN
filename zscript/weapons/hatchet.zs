@@ -50,7 +50,7 @@ class Hatchet : BaseWeapon
 		HATI A 1 Offset(22, 58);
 		CRWI A 0 A_Raise(16);
 		Goto Ready;
-	
+
 	Fire:
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 2),"Punch1");
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 3),"Punch2"); // LPunch.

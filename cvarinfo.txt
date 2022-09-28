@@ -12,9 +12,3 @@ server int weapon_particle_toggle = 1;
 server int fade_toggle = 0;
 
 server int recoil_toggle = 1;
-
-
-
-
-
-

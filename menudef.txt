@@ -9,7 +9,7 @@ DEFAULTLISTMENU
 LISTMENU "MainMenu"
 {
 	StaticPatch 94, 2, "M_DOOM"
-    
+
 
     Position 115, 68
     TextItem "Play", "n", "PlayerclassMenu"

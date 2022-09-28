@@ -16,7 +16,7 @@ class FloatModifier
 	EModifierType GetType() const
 	{
 		return m_Type;
-	}	
+	}
 
 	void SetType(EModifierType newType)
 	{
@@ -418,7 +418,7 @@ class Vector3Modifier
 		m_Value = newValue;
 		if (m_Target) m_Target.MarkDirty();
 	}
-	
+
 	void SetX(double newX)
 	{
 		m_Value.x = newX;

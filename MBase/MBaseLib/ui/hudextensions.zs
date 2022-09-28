@@ -128,7 +128,7 @@ class SMHUDState : SMState abstract
 	virtual ui void PreDraw(RenderEvent event) { }
 	virtual ui void Draw(RenderEvent event) { }
 	virtual ui void PostDraw(RenderEvent event) { }
-	
+
 	HUDExtension GetHUDExtension() const
 	{
 		return HUDExtension(GetData());

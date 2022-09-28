@@ -1,0 +1,107 @@
+Actor Stimbonus : Health replaces HealthBonus
+{
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
+	Inventory.Pickupmessage "Health Bonus - (+2 Health)"
+	Inventory.pickupsound "pickup/health"
+	Inventory.Amount 2
+	Inventory.MaxAmount 200
+	Scale 1
+	States
+	{
+	Spawn:	
+		PICU B 60
+		PICU B 60 BRIGHT
+		loop
+
+	}
+}
+
+Actor Stimpack2 : Health replaces Stimpack
+{
+Inventory.Amount 15
+Inventory.PickupMessage "Stimpack - (+15 Health)"
+	Inventory.pickupsound "pickup/health"
+	states
+	{
+	Spawn:
+	STIM A 60
+	STIM A 60 BRIGHT
+	loop
+	} 
+}
+
+Actor MedKit : Health replaces MediKit
+{
+Inventory.Amount 30
+Inventory.PickupMessage "Medkit - (+30 Health)"
+	Inventory.pickupsound "pickup/health"
+	states
+	{
+	Spawn:
+	MEDI A 60 
+	MEDI A 60 BRIGHT
+	loop
+	
+	} 
+}
+
+Actor AMRShard : BasicArmorBonus replaces Armorbonus
+{
+  Radius 20
+  Height 16
+  Inventory.PickupMessage "Armor Bonus - (+2 Armor)"
+  Inventory.pickupsound "pickup/armor2"
+  Armor.SavePercent 33.335
+  Armor.SaveAmount 2
+  Armor.MaxSaveAmount 200
+  +COUNTITEM
+  +INVENTORY.ALWAYSPICKUP
+  States
+  {
+	spawn:
+		PICU A 60
+		PICU A 60 BRIGHT
+		loop
+  
+  }
+} 
+
+Actor KevlarVest : BasicArmorPickup replaces GreenArmor
+{
+  Radius 20
+  Height 16
+  Inventory.PickupMessage "Light Armor - (+100 Armor)" 
+  Inventory.Icon "AMR1A0"
+  Inventory.pickupsound "pickup/armor"
+  Armor.SavePercent 33.335
+  Armor.SaveAmount 100
+  States
+  {
+  Spawn:
+  AMR1 A 60
+  AMR1 A 60 BRIGHT
+  loop
+  }
+}
+
+
+
+Actor TacticalKevlar : BasicArmorPickup replaces BlueArmor
+{
+  Radius 20
+  Height 16
+  Inventory.PickupMessage "Heavy Armor - (+200 Armor)"
+  Inventory.Icon "AMR2A0"
+  Inventory.pickupsound "pickup/armor"
+  Armor.SavePercent 50
+  Armor.SaveAmount 200
+  States
+  {
+  Spawn:
+    AMR2 A 60
+	AMR2 A 60 BRIGHT
+    loop
+  }
+}
+

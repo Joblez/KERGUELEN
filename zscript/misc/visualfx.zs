@@ -214,7 +214,7 @@ class RocketDebrisII : RocketDebris
 		RenderStyle "Add";
 		Speed 10;
 		Alpha 0.5;
-		Acale 0.3;
+		Scale 0.3;
 	}
 
 	States

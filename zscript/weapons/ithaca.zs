@@ -20,7 +20,7 @@ Class Ithaca: Baseweapon replaces Shotgun
 	}
 	
 	bool m_chambered;
-	
+	bool m_isloading;
 	States
 	{
 
@@ -34,6 +34,10 @@ Class Ithaca: Baseweapon replaces Shotgun
 	loop;
 	
 	Fire:
+
+		TNT1 A 0 A_Jumpif((invoker.m_chambered == 0 && invoker.m_isloading ==1),"Reloadend");
+		TNT1 A 0 A_Jumpif((invoker.m_chambered == 1 && invoker.m_isloading ==1),"Reloadend");
+	
 		TNT1 A 0 A_JumpIfInventory("Sh12tube",1,1);				
 		Goto empty;	
 		TNT1 A 0 {invoker.m_chambered = invoker.m_chambered - 1; }	
@@ -75,6 +79,7 @@ Class Ithaca: Baseweapon replaces Shotgun
 	goto ready;	
 
 	Charge:
+		TNT1 A 0 {invoker.m_isloading = invoker.m_isloading - 1; }		
 		TNT1 A 0 A_Startsound("shotgun/pumpback",9);
 		ITAP ABC 2;	
 		ITAP DE 2;
@@ -110,15 +115,17 @@ Class Ithaca: Baseweapon replaces Shotgun
 		TNT1 A 0 A_JumpIfInventory("Sh12tube", Stube, "Ready");	
 		TNT1 A 0 A_JumpIfInventory("Ammo12", 1,1);
 		goto ready;		
-	Reloadstart:
+	Reloadstart:	
 		TNT1 A 0 A_Startsound("Weapon/cloth2",9);				
-		ITRS ABCDE 1 A_Weaponready(WRF_NOFIRE);
+		ITRS ABCDE 1 A_Weaponready(WRF_NOFIRE);		
 		ITRS FGH 2 A_Weaponready(WRF_NOFIRE);
+		TNT1 A 0 {invoker.m_isloading = invoker.m_isloading + 1; }			
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sh12tube", Stube, "Reloadend");
 		TNT1 A 0 A_JumpIfInventory("Ammo12", 1, "ProperReload");
 		Goto ReloadEnd;
 	ProperReload:
+
 		TNT1 A 0 A_Weaponready(WRF_NOSWITCH);
 		ITRL ABCDEF 1 A_Weaponready(WRF_NOSWITCH);
 		TNT1 A 0 A_Startsound("shotgun/load",10);	
@@ -141,9 +148,10 @@ Class Ithaca: Baseweapon replaces Shotgun
 			
 			}			
 	Reloadend:
+		TNT1 A 0 {invoker.m_isloading = invoker.m_isloading - 1; }		
 		ITRE ABCDEF 2 A_Weaponready(WRF_NOSWITCH);			
  		ITRE GHIJ 1 A_Weaponready(WRF_NOSWITCH);
-		TNT1 A 0 A_Jumpif((invoker.m_chambered == 1),"Ready");			
+		TNT1 A 0 A_Jumpif((invoker.m_chambered == 1),"Ready");	
 		goto charge;
 	
 	}

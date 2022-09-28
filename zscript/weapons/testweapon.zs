@@ -84,10 +84,9 @@ class Revolver : baseweapon
 		SWAF E 1;
 		SWAF F 1;
 		SWAF G 1 ;
-	//	SWAF H 1 ;
-	SingleActionHold:
+	postpostshot:
 		SWAF I 1 ;
-		TNT1 A 0 A_ReFire("SingleActionHold");
+		TNT1 A 0 A_ReFire("postpostshot");
 		Goto Ready;
 
 	Altfire:	
@@ -108,7 +107,7 @@ class Revolver : baseweapon
 		loop;
 	
 	empty:
-		TNT1 A 0 { invoker.m_action = invoker.m_action - 1; }		
+		TNT1 A 0 { invoker.m_action == 0; }		
 		SWAI A 0 A_Startsound("weapons/empty",1);		
 		SWDA A 2;				
 		goto ready;

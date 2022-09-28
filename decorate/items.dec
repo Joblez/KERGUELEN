@@ -2,7 +2,7 @@ Actor Stimbonus : Health replaces HealthBonus
 {
 	+COUNTITEM
 	+INVENTORY.ALWAYSPICKUP
-	Inventory.Pickupmessage "Health Bonus - (+2 Health)"
+	Inventory.PickupMessage "Health Bonus - (+2 Health)"
 	Inventory.pickupsound "pickup/health"
 	Inventory.Amount 2
 	Inventory.MaxAmount 200
@@ -11,7 +11,7 @@ Actor Stimbonus : Health replaces HealthBonus
 	{
 	Spawn:	
 		PICU B 60
-		PICU B 60 BRIGHT
+		PICU B 60 Bright
 		loop
 
 	}
@@ -26,7 +26,7 @@ Inventory.PickupMessage "Stimpack - (+15 Health)"
 	{
 	Spawn:
 	STIM A 60
-	STIM A 60 BRIGHT
+	STIM A 60 Bright
 	loop
 	} 
 }
@@ -40,7 +40,7 @@ Inventory.PickupMessage "Medkit - (+30 Health)"
 	{
 	Spawn:
 	MEDI A 60 
-	MEDI A 60 BRIGHT
+	MEDI A 60 Bright
 	loop
 	
 	} 
@@ -61,7 +61,7 @@ Actor AMRShard : BasicArmorBonus replaces Armorbonus
   {
 	spawn:
 		PICU A 60
-		PICU A 60 BRIGHT
+		PICU A 60 Bright
 		loop
   
   }
@@ -80,7 +80,7 @@ Actor KevlarVest : BasicArmorPickup replaces GreenArmor
   {
   Spawn:
   AMR1 A 60
-  AMR1 A 60 BRIGHT
+  AMR1 A 60 Bright
   loop
   }
 }
@@ -100,7 +100,7 @@ Actor TacticalKevlar : BasicArmorPickup replaces BlueArmor
   {
   Spawn:
     AMR2 A 60
-	AMR2 A 60 BRIGHT
+	AMR2 A 60 Bright
     loop
   }
 }

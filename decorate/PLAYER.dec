@@ -41,13 +41,13 @@ ACTOR Newplayer : PlayerPawn
 		PLAY F 2
 		PLAY F 2 
 		PLAY E 2
-		goto Spawn
+		Goto Spawn
 	Pain:
 		PLAY G 4 
 		PLAY G 4 A_Pain
 		Goto Spawn
 	Death:
-	TNT1 A 0 A_stopsound(1)
+	TNT1 A 0 A_StopSound(1)
 	PLAY H 3 A_playerScream
 	PLAY I 3 
     PLAY J 3 A_NoBlocking

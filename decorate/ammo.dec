@@ -9,7 +9,7 @@ Actor Ammo9mm: Ammo 2007
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.Amount 8
 	Inventory.MaxAmount 40
-	Inventory.Pickupmessage "A pistol magazine."
+	Inventory.PickupMessage "A pistol magazine."
 
 	States
 	{
@@ -41,7 +41,7 @@ Actor Ammo223: Ammo 2047
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.Amount 30
 	Inventory.MaxAmount 150
-	Inventory.Pickupmessage "An M16 magazine."
+	Inventory.PickupMessage "An M16 magazine."
 
 	States
 	{
@@ -74,7 +74,7 @@ Actor Ammo45: Ammo 302
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.Amount 30
 	Inventory.MaxAmount 150
-	Inventory.Pickupmessage "A Grease Gun magazine."
+	Inventory.PickupMessage "A Grease Gun magazine."
 
 	States
 	{
@@ -109,7 +109,7 @@ Actor Ammo357: Ammo 300
 	Inventory.MaxAmount 24
 	Ammo.Backpackamount 6
 	Ammo.Backpackmaxamount 36
-	Inventory.pickupmessage "A few revolver bullets."
+	Inventory.PickupMessage "A few revolver bullets."
 
 	Scale 0.7
 	States
@@ -143,7 +143,7 @@ Actor Ammo40mm : Ammo 2010
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.PickupMessage "A Grenade."
 	Inventory.Amount 1
-	Inventory.Maxamount 10
+	Inventory.MaxAmount 10
 	Scale 1
 	States
 	{
@@ -157,7 +157,7 @@ Actor 40mmBox : Ammo40mm 2046
 {
 	//$Category PsychAmmo
 	Inventory.Amount 5
-	Inventory.Pickupmessage "A box of grenades."
+	Inventory.PickupMessage "A box of grenades."
 
 	Scale 1
 	States
@@ -175,7 +175,7 @@ Actor Ammo12 : Ammo 2008
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.PickupMessage "A handful of shotgun shells."
 	Inventory.Amount 4
-	Inventory.Maxamount 48 
+	Inventory.MaxAmount 48 
 	Scale 1
 	States
 	{
@@ -190,7 +190,7 @@ Actor 12gaugebox : Ammo12 2049
 	//$Category Decorate
 	Inventory.Amount 20
 	Inventory.Pickupsound "pickup/misc"
-	Inventory.Pickupmessage "A box of shotgun shells."
+	Inventory.PickupMessage "A box of shotgun shells."
 
 	Scale 1
 	States
@@ -209,7 +209,7 @@ Actor Ammo3006 : Ammo 304
 	Inventory.Pickupsound "pickup/misc"
 	Inventory.PickupMessage "A handful of rifle bullets."
 	Inventory.Amount 6
-	Inventory.Maxamount 24 
+	Inventory.MaxAmount 24 
 	Scale 1
 	States
 	{
@@ -224,7 +224,7 @@ Actor 3006box : Ammo3006 305
 	//$Category Decorate
 	Inventory.Amount 12
 	Inventory.Pickupsound "pickup/misc"
-	Inventory.Pickupmessage "A box of rifle bullets."
+	Inventory.PickupMessage "A box of rifle bullets."
 
 	Scale 1
 	States

@@ -19,7 +19,7 @@ actor Sheep 11000
 	{
 		Spawn:	
 			SHEP A 10 A_Look()
-			goto See
+			Goto See
 		See:
 			SHEP BBBCCCDDDEEE 2 A_Wander
 			loop

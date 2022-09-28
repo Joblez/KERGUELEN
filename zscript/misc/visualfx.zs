@@ -1,105 +1,103 @@
-class Muzzlesmoke : actor
-
+class MuzzleSmoke : Actor
 {
 	Default
 	{
-	+NOGRAVITY
-	+NOBLOCKMAP
-	+FLOORCLIP
-	+FORCEXYBILLBOARD
-	+NOINTERACTION
-	+DONTSPLASH
-	+CLIENTSIDEONLY	
-	Speed -1;
-	RenderStyle "Add";
-	Alpha 0.5;
-	Radius 0;
-	Height 0;
-	Scale 0.5;
+		+NOGRAVITY
+		+NOBLOCKMAP
+		+FLOORCLIP
+		+FORCEXYBILLBOARD
+		+NOINTERACTION
+		+DONTSPLASH
+		+CLIENTSIDEONLY
+		Speed -1;
+		RenderStyle "Add";
+		Alpha 0.5;
+		Radius 0;
+		Height 0;
+		Scale 0.5;
 	}
 	States
 	{
 	Spawn:
-    TNT1 A 0 A_SetTranslucent(0.25);
-	SMOK ABCDEFGHIJKLMNOPQ 2 A_FadeOut(0.005);
-	stop;
-	}	
+		TNT1 A 0 NoDelay A_SetTranslucent(0.25);
+		SMOK ABCDEFGHIJKLMNOPQ 2 A_FadeOut(0.005);
+		Stop;
+	}
 }
 
-class Muzzlesmoke2 : Muzzlesmoke
+class MuzzleSmoke2 : MuzzleSmoke
 {
 	Default
 	{
-	+NOGRAVITY
-	+NOBLOCKMAP
-	+FLOORCLIP
-	+FORCEXYBILLBOARD
-	+NOINTERACTION
-	+DONTSPLASH
-	Speed 1;
-	+CLIENTSIDEONLY
-	Alpha		0.3;
-	Radius		0;
-	Height		0;
-	Scale		0.8;
+		+NOGRAVITY
+		+NOBLOCKMAP
+		+FLOORCLIP
+		+FORCEXYBILLBOARD
+		+NOINTERACTION
+		+DONTSPLASH
+		+CLIENTSIDEONLY
+		Speed 1;
+		Alpha 0.3;
+		Radius 0;
+		Height 0;
+		Scale 0.8;
 	}
-		
 }
 
-class Explosionsmoke : actor
+class ExplosionSmoke : Actor
 {
 	Default
 	{
-	+CLIENTSIDEONLY		
-	RenderStyle "Add";
-	Alpha 0.3;
-	Radius 2;
-	Height 2;
-	Scale 0.8;
-	Projectile;
-	Speed 12;
-	Gravity 0.65;
-	-NOGRAVITY	
+		+CLIENTSIDEONLY
+		-NOGRAVITY
+		RenderStyle "Add";
+		Alpha 0.3;
+		Radius 2;
+		Height 2;
+		Scale 0.8;
+		Projectile;
+		Speed 12;
+		Gravity 0.65;
 	}
+
 	States
 	{
 	Spawn:
-    TNT1 A 1 A_SetTranslucent(0.25);
-	SMOK ABCDEFGHIJKLMNOPQ 2 BRIGHT A_SpawnItem("muzzlesmoke2");
+		TNT1 A 1 A_SetTranslucent(0.25);
+		SMOK ABCDEFGHIJKLMNOPQ 2 Bright A_SpawnItem("MuzzleSmoke2");
 	Death:
-	stop;
+		Stop;
 	}
 }
 
-class ExplosiveSmokespawner : Actor
+class ExplosiveSmokeSpawner : Actor
 {
 	Default
 	{
-	Speed 30;
-	+NOCLIP
+		+NOCLIP
+		Speed 30;
 	}
-	states
+	States
 	{
-	spawn:
-	TNT1 A 0 A_SpawnProjectile("explosionsmoke",32,0,random(0, 360),2,random(0, 180));
-	stop;
+		Spawn:
+		TNT1 A 0 NoDelay A_SpawnProjectile("ExplosionSmoke", 32, 0, random(0, 360), 2, random(0, 180));
+		Stop;
 	}
-
 }
 
-class Smokespawner2 : actor
+class SmokeSpawner2 : Actor
 {
 	Default
 	{
-	Speed 20;
-	+NOCLIP
+		+NOCLIP
+		Speed 20;
 	}
-	states
+
+	States
 	{
-	spawn:
-	TNT1 A 1;	
-	TNT1 A 0 A_SpawnProjectile("Muzzlesmoke2", 0, 0);
-	stop;
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnProjectile("MuzzleSmoke2", 0, 0);
+		Stop;
 	}
 }
 
@@ -108,15 +106,15 @@ class Smokespawner : actor
 {
 	Default
 	{
-	Speed 20;
-	+NOCLIP
+		+NOCLIP
+		Speed 20;
 	}
-	states
+
+	States
 	{
-	spawn:
-	TNT1 A 1;	
-	TNT1 A 0 A_SpawnProjectile("Muzzlesmoke", 0, 0,random(-180,180),0,random(-180,180));
-	stop;
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnProjectile("MuzzleSmoke", 0, 0, random(-180, 180), 0, random(-180, 180));
+		Stop;
 	}
 }
 

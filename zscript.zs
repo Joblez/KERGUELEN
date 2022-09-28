@@ -16,3 +16,6 @@ version "4.8"
 #include "zscript/weapons/ithaca.zs"
 
 #include "zscript/weapons/fnc.zs"
+
+// Second-level includes.
+#include "zscript_postinc.zs"

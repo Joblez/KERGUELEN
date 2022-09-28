@@ -60,3 +60,50 @@ actor Grarg replaces Doomimp
 			Stop
 	}
 }
+
+actor greenlittleguy replaces zombieman
+{
+	Health 40
+	Radius 16
+	Height 48
+	Speed 5
+	PainChance 200
+	Mass 100
+	+FLOORCLIP
+	Scale 0.7
+	Monster
+	SeeSound "BPinky/Sight"
+	DeathSound "BPinky/Death"
+	ActiveSound "Barks"
+	PainSound "BPinky/Pain"
+	Obituary "%o was slashed to bits."
+	States
+	{
+		Spawn:
+			TNT1 A 0 A_Jump(10, "Grumble")		
+			GGLG A 4 A_Look()
+			loop	
+		See:
+			TNT1 A 0 A_SetSpeed(15)
+			GGLG AABBCCDD 2 A_Chase
+			loop
+		Missile:			
+		Melee:
+			TNT1 A 0 A_PlaySound("BPinky/Bite")
+			GGLG EF 6 A_FaceTarget
+			GGLG G 6 A_CustomMeleeAttack(random(2, 5) * 3, "imp/melee", "Melee", true)
+			Goto See
+			
+		Grumble:
+			TNT1 A 0 A_PlaySound("BPinky/Idle")
+			Goto Spawn
+		Pain:
+			GGLG H 2 A_Pain
+			Goto See
+		Death:
+			TNT1 A 0 A_PlaySound("BPinky/Death")
+			GGLD ABCD 4
+			GGLD E -1
+			Stop	
+	}
+}

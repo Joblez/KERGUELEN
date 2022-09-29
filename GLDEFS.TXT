@@ -1,0 +1,61 @@
+PointLight Flash
+{
+Offset 0 0 0
+Color 0.5 0.25 0.0
+Size 16
+}
+
+PointLight Explosion
+{
+Offset 0 0 0
+Color 0.5 0.25 0.0
+Size 256
+}
+
+PointLight Red
+{
+Offset 0 0 0
+Color 0.25 0.0 0.0
+Size 32
+}
+
+PointLight Purple
+{
+Offset 0 0 0
+Color 0.25 0.0 0.25
+Size 32
+}
+
+PointLight Green
+{
+Offset 0 0 0
+Color 0.0 0.25 0.0
+Size 48
+}
+
+PointLight Blue
+{
+Offset 0 0 0
+Color 0.0 0.0 0.25
+Size 32
+}
+
+
+PointLight Blue2
+{
+Offset 0 0 0
+Color 0.0 0.1 0.25
+Size 64
+}
+
+Object MuzzleSmoke
+{
+Frame TNT1A { Light Flash }
+Frame SMOKA { Light Flash }
+}
+
+Object MuzzleSmoke2
+{
+Frame TNT1A { Light Flash }
+Frame SMOKA { Light Flash }
+}

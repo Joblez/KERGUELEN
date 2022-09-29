@@ -139,23 +139,39 @@ weapons/empty DRYFIRE
 
 weapons/firemode DSWEPCK
 
-$random BPinky/Death { BPDEAT1 BPDEAT2 }
+$random Grarg/Death { BPDEAT1 BPDEAT2 }
 
 BPDEAT1 BPDEAT1
 BPDEAT2 BPDEAT2
 
-$random BPinky/Pain { BPPAI1 BPPAI2 }
+$random Grarg/Pain { BPPAI1 BPPAI2 }
 
 BPPAI1 BPPAI1
 BPPAI2 BPPAI2
 
-BPinky/Bite BPBITE
-BPinky/Sight BPSEE
-BPinky/Idle BPGRUMBL
+Grarg/Bite BPBITE
+Grarg/Sight BPSEE
+Grarg/Idle BPGRUMBL
 
-$random Barks { BPBark BPBark2 }
+$random Grarg/Barks { BPBark BPBark2 }
 BPBark	BPBark
 BPBark2 BPBark2
+
+GLG/Idle DGLGIDL
+
+GLG/Death DGLGDTH
+
+$random GLG/attack { DGLGAT1 DGLGAT2 DGLGAT3 }
+
+DGLGAT1 DGLGAT1
+DGLGAT2 DGLGAT2
+DGLGAT3 DGLGAT3
+
+$random GLG/pain { DGLGPN1 DGLGPN2 DGLGPN3 }
+
+DGLGPN1 DGLGPN1
+DGLGPN2 DGLGPN2
+DGLGPN3 DGLGPN3
 
 $random sheep/sight { sight1 sight2 sight3 sight4 sight5 sight6 }
 sight1	sight1

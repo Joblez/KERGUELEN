@@ -1,0 +1,184 @@
+$pitchshiftrange 0
+$Random weapons/shell2 { DS76C1 DS76C2 DS76C3 DS76C4 }
+
+DS76C1	DS76C1
+DS76C2	DS76C2
+DS76C3	DS76C3
+DS76C4	DS76C4
+
+$Random weapons/shell3 { DS12G1 DS12G2 DS12G3 DS12G4 }
+
+DS12G1	DS12G1
+DS12G2	DS12G2
+DS12G3	DS12G3
+DS12G4	DS12G4
+
+$Random weapons/shell4 { DS451 DS452 DS453 DS454 }
+
+DS451	DS451
+DS452	DS452
+DS453	DS453
+DS454	DS454
+
+$random weapons/shell5 { M801 M802 M803 }
+
+M801	M8401
+M802	M8402
+M803	M8403
+
+$RANDOM weapons/ricochet { ric1 ric2 ric3 ric4}
+
+ric1	RIC01
+ric2	RIC02
+ric3	RIC03
+ric4	RIC04
+
+world/drip dsempty
+$random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }
+
+dssplas1 dssplas1
+dssplas2 dssplas2
+dssplas3 dssplas3
+dssplas4 dssplas4
+dssplas5 dssplas5
+
+world/watersplashsmall	dssplsml
+
+$random world/sludgegloop { DSPLOOS1 DSPLOOS2 DSPLOOS3 DSPLOOS4 DSPLOOS5 }
+DSPLOOS1 DSPLOOS1
+DSPLOOS2 DSPLOOS2
+DSPLOOS3 DSPLOOS3
+DSPLOOS4 DSPLOOS4
+DSPLOOS5 DSPLOOS5
+
+world/sludgegloopsmall	dsplosml
+$random world/lavasizzle	{ dslvsi1 dslvsi2 dslvsi3 dslvsi4 dslvsi5 }
+
+dslvsi1 dslvsi1
+dslvsi2 dslvsi2
+dslvsi3 dslvsi3
+dslvsi4 dslvsi4
+dslvsi5 dslvsi5
+
+world/lavsiz2			dslvsiz2
+world/lavasizzlesmall	dslavsml
+
+$random sw/fire { DSREVO1 DSREVO2 DSREVO3 DSREVO4 }
+
+DSREVO1	DSREVO1
+DSREVO2 DSREVO2
+DSREVO3	DSREVO3
+DSREVO4	DSREVO4
+
+sw/cock DSHAMR
+
+sw/open DSRVOPN
+
+sw/close DSRVCLS
+
+sw/eject DSRVEJC
+
+$random sw/load { DSRLOD1 DSRLOD2 DSRLOD3 DSRLOD4 }
+
+DSRLOD1 DSRLOD1
+DSRLOD2 DSRLOD2
+DSRLOD3 DSRLOD3
+DSRLOD4 DSRLOD4
+
+sw/raise DSREGRB
+
+$random hatchet/swing { DSFISW1 DSFISW2 DSFISW3 }
+
+DSFISW1 DSFISW1
+DSFISW2 DSFISW2
+DSFISW3 DSFISW3
+
+$random hatchet/hit {DWKHIT1 DWKHIT2 DWKHIT3}
+
+DWKHIT1 DWKHIT1
+DWKHIT2 DWKHIT2
+DWKHIT3 DWKHIT3
+
+hatchet/hitwall DSHITWL
+
+$random shotgun/fire { DSSHTG1 DSSHTG2 DSSHTG3 }
+
+DSSHTG1 DSSHTG1
+DSSHTG2 DSSHTG2
+DSSHTG3 DSSHTG3
+
+shotgun/pumpback DSSHPMB
+shotgun/pumpfor DSSHPMF
+
+$random shotgun/load { DSLODH1 DSLODH2 DSLODH3 }
+
+DSLODH1 DSLODH1
+DSLODH2 DSLODH2
+DSLODH3 DSLODH3
+
+$random fnc/fire { DSFNCF1 DSFNCF2 DSFNCF3 DSFNCF4 }
+
+DSFNCF1 DSFNCF1
+DSFNCF2 DSFNCF2
+DSFNCF3 DSFNCF3
+DSFNCF4 DSFNCF4
+
+fnc/magout DSFNOUT
+
+fnc/magins DSFNINS
+
+fnc/boltback DSFNBAC
+
+fnc/boltrel DSFNREL
+
+fnc/loop DSMCHLP
+
+fnc/loopend DSMCHED
+
+weapons/empty DRYFIRE
+
+weapons/firemode DSWEPCK
+
+$random Grarg/Death { BPDEAT1 BPDEAT2 }
+
+BPDEAT1 BPDEAT1
+BPDEAT2 BPDEAT2
+
+$random Grarg/Pain { BPPAI1 BPPAI2 }
+
+BPPAI1 BPPAI1
+BPPAI2 BPPAI2
+
+Grarg/Bite BPBITE
+Grarg/Sight BPSEE
+Grarg/Idle BPGRUMBL
+
+$random Grarg/Barks { BPBark BPBark2 }
+BPBark	BPBark
+BPBark2 BPBark2
+
+GLG/Idle DGLGIDL
+
+GLG/Death DGLGDTH
+
+$random GLG/attack { DGLGAT1 DGLGAT2 DGLGAT3 }
+
+DGLGAT1 DGLGAT1
+DGLGAT2 DGLGAT2
+DGLGAT3 DGLGAT3
+
+$random GLG/pain { DGLGPN1 DGLGPN2 DGLGPN3 }
+
+DGLGPN1 DGLGPN1
+DGLGPN2 DGLGPN2
+DGLGPN3 DGLGPN3
+
+$random sheep/sight { sight1 sight2 sight3 sight4 sight5 sight6 }
+sight1	sight1
+sight2	sight2
+sight3	sight3
+sight4	sight4
+sight5	sight5
+sight6	sight6
+
+SheepNom/Nom SHEEPNOM

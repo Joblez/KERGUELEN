@@ -1,0 +1,14 @@
+// CVar Info
+server int fs_enabled = 1;
+server float fs_volume_mul = 1.0;
+server float fs_delay_mul = 1.0;
+
+server int casing_toggle = 1;
+
+server int smoke_toggle = 1;
+
+server int weapon_particle_toggle = 1;
+
+server int fade_toggle = 0;
+
+server int recoil_toggle = 1;

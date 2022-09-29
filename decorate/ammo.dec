@@ -1,0 +1,236 @@
+
+//AMMO TYPES
+
+//9x19mm Parabellum
+
+Actor Ammo9mm: Ammo 2007
+{
+	//$Category Decorate
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.Amount 8
+	Inventory.MaxAmount 40
+	Inventory.PickupMessage "A pistol magazine."
+
+	States
+	{
+	Spawn:
+	9MMI B -1
+	loop
+	}
+}
+
+Actor 9mmbigbox : Ammo9mm 2048
+{
+  //$Category Decorate
+  Inventory.Amount 24
+  Inventory.PickupMessage "A box of pistol ammo."
+  Inventory.Pickupsound "pickup/misc"
+  States
+  {
+  Spawn:
+    9MMI C -1
+    Loop
+  }
+}
+
+//223 Remington / 5.56 NATO
+
+Actor Ammo223: Ammo 2047
+{
+	//$Category Ammunition
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.Amount 30
+	Inventory.MaxAmount 150
+	Inventory.PickupMessage "An M16 magazine."
+
+	States
+	{
+	Spawn:
+	A223 A -1
+	loop
+	}
+}
+
+Actor Ammo223bigbox : Ammo223 17
+{
+  //$Category Ammunition
+  Inventory.Amount 60
+  Inventory.PickupMessage "A box of M16 magazines."
+
+  Inventory.Pickupsound "pickup/misc"
+  States
+  {
+  Spawn:
+    A223 B -1
+    Loop
+  }
+}
+
+//.45 ACP
+
+Actor Ammo45: Ammo 302
+{
+	//$Category Ammunition
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.Amount 30
+	Inventory.MaxAmount 150
+	Inventory.PickupMessage "A Grease Gun magazine."
+
+	States
+	{
+	Spawn:
+	A223 A -1
+	loop
+	}
+}
+
+Actor Ammo45bigbox : Ammo45 303
+{
+  //$Category Ammunition
+  Inventory.Amount 60
+  Inventory.PickupMessage "A box of Grease Gun magazines."
+
+  Inventory.Pickupsound "pickup/misc"
+  States
+  {
+  Spawn:
+    A223 B -1
+    Loop
+  }
+}
+
+//.357 Magnum
+
+Actor Ammo357: Ammo 300
+{
+	//$Category Decorate
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.Amount 6
+	Inventory.MaxAmount 24
+	Ammo.Backpackamount 6
+	Ammo.Backpackmaxamount 36
+	Inventory.PickupMessage "A few revolver bullets."
+
+	Scale 0.7
+	States
+	{
+	Spawn:
+	3577 B -1
+	loop
+	}
+}
+
+Actor 357bigbox : Ammo357 301
+{
+  //$Category Decorate
+  Inventory.Amount 12
+  Inventory.PickupMessage "A package of revolver bullets."
+  Inventory.Pickupsound "pickup/misc"
+  Scale 1
+  States
+  {
+  Spawn:
+    3577 C -1
+    Loop
+  }
+}
+
+//40mm Contact Grenades
+
+Actor Ammo40mm : Ammo 2010
+{
+	//$Category PsychAmmo
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.PickupMessage "A Grenade."
+	Inventory.Amount 1
+	Inventory.MaxAmount 10
+	Scale 1
+	States
+	{
+	Spawn:
+		M79A A -1
+		loop
+	}
+}
+
+Actor 40mmBox : Ammo40mm 2046
+{
+	//$Category PsychAmmo
+	Inventory.Amount 5
+	Inventory.PickupMessage "A box of grenades."
+
+	Scale 1
+	States
+	{
+	Spawn:
+		M79A B -1
+		loop
+	}
+}
+//12 Gauge Shells
+
+Actor Ammo12 : Ammo 2008
+{
+	//$Category Decorate
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.PickupMessage "A handful of shotgun shells."
+	Inventory.Amount 4
+	Inventory.MaxAmount 48
+	Scale 1
+	States
+	{
+	Spawn:
+		SHEL A -1
+		loop
+	}
+}
+
+Actor 12gaugebox : Ammo12 2049
+{
+	//$Category Decorate
+	Inventory.Amount 20
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.PickupMessage "A box of shotgun shells."
+
+	Scale 1
+	States
+	{
+	Spawn:
+		SBOX A -1
+		loop
+	}
+}
+
+// 30.06
+
+Actor Ammo3006 : Ammo 304
+{
+	//$Category Decorate
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.PickupMessage "A handful of rifle bullets."
+	Inventory.Amount 6
+	Inventory.MaxAmount 24
+	Scale 1
+	States
+	{
+	Spawn:
+		SHEL A -1
+		loop
+	}
+}
+
+Actor 3006box : Ammo3006 305
+{
+	//$Category Decorate
+	Inventory.Amount 12
+	Inventory.Pickupsound "pickup/misc"
+	Inventory.PickupMessage "A box of rifle bullets."
+
+	Scale 1
+	States
+	{
+	Spawn:
+		SBOX A -1
+		loop
+	}
+}

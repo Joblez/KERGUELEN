@@ -5,8 +5,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 {
 	Default
 	{
-		+WEAPON.NOAUTOFIRE;
-		+WEAPON.NOALERT;
 		Weapon.BobRangeX 0.3;
 		Weapon.BobRangeY 0.3;
 		Weapon.BobSpeed 1.5;
@@ -16,6 +14,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		Inventory.PickupSound "weapon/pickup";
 
 		Tag "Weapon";
+		+WEAPON.NOAUTOFIRE;
+		+WEAPON.NOALERT;
 	}
 
 	States

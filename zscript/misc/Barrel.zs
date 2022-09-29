@@ -2,19 +2,20 @@ Class BarrelExploding : Actor replaces ExplosiveBarrel
 {
 	Default
 	{
+		Health 20;
+		Radius 10;
+		Height 34;
+		DamageType "fire";
+		DeathSound("Barrel/Hiss");
+		Obituary "$OB_BARREL";
 		+SOLID;
 		+SHOOTABLE;
 		+NOBLOOD;
 		+ACTIVATEMCROSS;
 		+DONTGIB;
 		+NOICEDEATH;
-		Health 20;
-		Radius 10;
-		Height 34;
-		DamageType "fire";
-		Deathsound("Barrel/Hiss");
-		Obituary "$OB_BARREL";
 	}
+
 	States
 	{
 	Spawn:
@@ -26,7 +27,7 @@ Class BarrelExploding : Actor replaces ExplosiveBarrel
 		BEXP C 5 Bright;
 		BEXP D 5 Bright A_Explode();
 		TNT1 A 0 {
-			if (GetCvar("weapon_particle_toggle") == 1)
+			if (GetCVar("weapon_particle_toggle") == 1)
 			{
 				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
 				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));

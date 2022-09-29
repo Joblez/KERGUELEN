@@ -6,7 +6,6 @@ actor Grarg replaces Doomimp
 	Speed 5
 	PainChance 200
 	Mass 100
-	+FLOORCLIP
 	Scale 0.7
 	Monster
 	SeeSound "Grarg/Sight"
@@ -14,35 +13,40 @@ actor Grarg replaces Doomimp
 	ActiveSound "Grarg/Barks"
 	PainSound "Grarg/Pain"
 	Obituary "%o was ripped to pieces."
+	+FLOORCLIP
+
 	States
 	{
-		Spawn:
-			TNT1 A 0 A_Jump(10, "Grumble")
-			GRRG A 4 A_Look()
-			loop
-		See:
-			TNT1 A 0 A_SetSpeed(15)
-			GRRG BBCCDDEE 2 A_Chase
-			loop
-		Melee:
-			TNT1 A 0 A_PlaySound("Grarg/Bite")
-			GRRG FG 6 A_FaceTarget
-			GRRG H 6 A_CustomMeleeAttack(random(3, 9) * 5, "imp/melee", "Melee", true)
-			Goto See
+	Spawn:
+		TNT1 A 0 A_Jump(10, "Grumble")
+		GRRG A 4 A_Look()
+		Loop
 
-		Missile:
-			TNT1 A 0 A_PlaySound("Grarg/Bite")
-			GRRG F 3 A_FaceTarget
-			TNT1 A 0 ThrustThingZ(0,32,0,0)
-			TNT1 A 0 ThrustThing (angle*256/360, 18, 0, 0)
-		Jumpup:
-			GRRG G 5
-			GRRG H 2 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
-		JumpDown:
-			GRRG H 1 A_CheckFloor ("Land")
-			GRRG H 1
-			GRRG H 1 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
-			loop
+	See:
+		TNT1 A 0 A_SetSpeed(15)
+		GRRG BBCCDDEE 2 A_Chase
+		Loop
+
+	Melee:
+		TNT1 A 0 A_PlaySound("Grarg/Bite")
+		GRRG FG 6 A_FaceTarget
+		GRRG H 6 A_CustomMeleeAttack(random(3, 9) * 5, "imp/melee", "Melee", true)
+		Goto See
+
+	Missile:
+		TNT1 A 0 A_PlaySound("Grarg/Bite")
+		GRRG F 3 A_FaceTarget
+		TNT1 A 0 ThrustThingZ(0, 32, 0, 0)
+		TNT1 A 0 ThrustThing (angle * 256 / 360, 18, 0, 0)
+	Jumpup:
+		GRRG G 5
+		GRRG H 2 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+	JumpDown:
+		GRRG H 1 A_CheckFloor("Land")
+		GRRG H 1
+		GRRG H 1 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+		Loop
+
 	Land:
 		GRRG FA 2 A_Stop
 		Goto See
@@ -50,9 +54,11 @@ actor Grarg replaces Doomimp
 		Grumble:
 			TNT1 A 0 A_PlaySound("Grarg/Idle")
 			Goto Spawn
+
 		Pain:
 			GRGD A 2 A_Pain
 			Goto See
+
 		Death:
 			TNT1 A 0 A_Scream
 			TNT1 A 0 A_PlaySound("Grarg/Death")
@@ -72,7 +78,6 @@ actor greenlittleguy replaces zombieman
 	Speed 8
 	PainChance 200
 	Mass 100
-	+FLOORCLIP
 	Scale 0.7
 	Monster
 	SeeSound "GLG/Attack"
@@ -80,35 +85,41 @@ actor greenlittleguy replaces zombieman
 	ActiveSound "GLG/Idle"
 	PainSound "GLG/Pain"
 	Obituary "%o was slashed to bits."
+	+FLOORCLIP
+
 	States
 	{
-		Spawn:
-			TNT1 A 0 A_Jump(10, "Grumble")
-			GGLG A 4 A_Look()
-			loop
-		See:
-			TNT1 A 0 A_SetSpeed(15)
-			GGLG AABBCCDD 2 A_Chase
-			loop
-		Missile:
-		Melee:
-			TNT1 A 0 A_PlaySound("GLG/Attack")
-			GGLG EF 6 A_FaceTarget
-			GGLG G 6 A_CustomMeleeAttack(random(2, 5) * 3, "imp/melee", "Melee", true)
-			Goto See
+	Spawn:
+		TNT1 A 0 A_Jump(10, "Grumble")
+		GGLG A 4 A_Look()
+		Loop
 
-		Grumble:
-			TNT1 A 0 A_PlaySound("GLG/Idle")
-			Goto Spawn
-		Pain:
-			GGLG H 2 A_Pain
-			Goto See
-		Death:
-			TNT1 A 0 A_Scream
-			TNT1 A 0 A_PlaySound("GLG/Death")
-			GGLD ABCD 6
-			TNT1 A 0 A_NoBlocking
-			GGLD E -1
-			Stop
+	See:
+		TNT1 A 0 A_SetSpeed(15)
+		GGLG AABBCCDD 2 A_Chase
+		Loop
+
+	Missile:
+	Melee:
+		TNT1 A 0 A_PlaySound("GLG/Attack")
+		GGLG EF 6 A_FaceTarget
+		GGLG G 6 A_CustomMeleeAttack(random(2, 5) * 3, "imp/melee", "Melee", true)
+		Goto See
+
+	Grumble:
+		TNT1 A 0 A_PlaySound("GLG/Idle")
+		Goto Spawn
+
+	Pain:
+		GGLG H 2 A_Pain
+		Goto See
+
+	Death:
+		TNT1 A 0 A_Scream
+		TNT1 A 0 A_PlaySound("GLG/Death")
+		GGLD ABCD 6
+		TNT1 A 0 A_NoBlocking
+		GGLD E -1
+		Stop
 	}
 }

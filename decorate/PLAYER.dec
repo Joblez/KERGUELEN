@@ -1,63 +1,67 @@
 ACTOR Newplayer : PlayerPawn
 {
-  Player.DisplayName "Player"
-  Player.Startitem "Hatchet", 1
-  Player.Startitem "Revolver", 1
-  player.viewheight 50
-  Player.AttackZOffset 22
-  player.startitem "Ammo357", 24
-  player.soundclass "player"
-  Player.Weaponslot 1, ""
-  Player.Weaponslot 2, ""
-  Player.Weaponslot 3, ""
-  Player.Weaponslot 4, ""
-  Player.Weaponslot 5, ""
-  Player.Weaponslot 6, ""
-  Speed 0.75
-  +NOSKIN
+	Player.DisplayName "Player"
+	Player.Startitem "Hatchet", 1
+	Player.Startitem "Revolver", 1
+	Player.viewheight 50
+	Player.AttackZOffset 22
+	Player.startitem "Ammo357", 24
+	Player.soundclass "player"
+	Player.WeaponSlot 1, ""
+	Player.WeaponSlot 2, ""
+	Player.WeaponSlot 3, ""
+	Player.WeaponSlot 4, ""
+	Player.WeaponSlot 5, ""
+	Player.WeaponSlot 6, ""
 
-  states
-  {
+	Speed 0.75
+	+NOSKIN
 
-  Spawn:
-  PLAY A -1
-  loop
+	States
+	{
 
-  See:
-   PLAY A 4
-   PLAY B 4
-   PLAY C 4
-   PLAY D 4
-   Goto Spawn
+	Spawn:
+		PLAY A -1
+		Loop
 
- 	Missile:
+	See:
+		PLAY A 4
+		PLAY B 4
+		PLAY C 4
+		PLAY D 4
+		Goto Spawn
+
+	Missile:
 		PLAY E 2
 		PLAY F 2
 		PLAY F 2
 		PLAY E 2
 		Goto Spawn
+
 	Melee:
 		PLAY E 2
 		PLAY F 2
 		PLAY F 2
 		PLAY E 2
 		Goto Spawn
+
 	Pain:
 		PLAY G 4
 		PLAY G 4 A_Pain
 		Goto Spawn
+
 	Death:
-	TNT1 A 0 A_StopSound(1)
-	PLAY H 3 A_playerScream
-	PLAY I 3
-    PLAY J 3 A_NoBlocking
-    PLAY K 3
-    PLAY L 3
-    PLAY M 3
-	PLAY N 3
-	PLAY N -1
-   stop
-  }
+		TNT1 A 0 A_StopSound(1)
+		PLAY H 3 A_PlayerScream
+		PLAY I 3
+		PLAY J 3 A_NoBlocking
+		PLAY K 3
+		PLAY L 3
+		PLAY M 3
+		PLAY N 3
+		PLAY N -1
+		Stop
+	}
 
 }
 

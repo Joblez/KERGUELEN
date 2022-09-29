@@ -2,6 +2,12 @@ class MuzzleSmoke : Actor
 {
 	Default
 	{
+		Speed -1;
+		RenderStyle "Add";
+		Alpha 0.5;
+		Radius 0;
+		Height 0;
+		Scale 0.5;
 		+NOGRAVITY
 		+NOBLOCKMAP
 		+FLOORCLIP
@@ -9,12 +15,6 @@ class MuzzleSmoke : Actor
 		+NOINTERACTION
 		+DONTSPLASH
 		+CLIENTSIDEONLY
-		Speed -1;
-		RenderStyle "Add";
-		Alpha 0.5;
-		Radius 0;
-		Height 0;
-		Scale 0.5;
 	}
 	States
 	{
@@ -29,6 +29,11 @@ class MuzzleSmoke2 : MuzzleSmoke
 {
 	Default
 	{
+		Speed 1;
+		Alpha 0.3;
+		Radius 0;
+		Height 0;
+		Scale 0.8;
 		+NOGRAVITY
 		+NOBLOCKMAP
 		+FLOORCLIP
@@ -36,11 +41,6 @@ class MuzzleSmoke2 : MuzzleSmoke
 		+NOINTERACTION
 		+DONTSPLASH
 		+CLIENTSIDEONLY
-		Speed 1;
-		Alpha 0.3;
-		Radius 0;
-		Height 0;
-		Scale 0.8;
 	}
 }
 
@@ -48,8 +48,6 @@ class ExplosionSmoke : Actor
 {
 	Default
 	{
-		+CLIENTSIDEONLY
-		-NOGRAVITY
 		RenderStyle "Add";
 		Alpha 0.3;
 		Radius 2;
@@ -58,6 +56,8 @@ class ExplosionSmoke : Actor
 		Projectile;
 		Speed 12;
 		Gravity 0.65;
+		+CLIENTSIDEONLY
+		-NOGRAVITY
 	}
 
 	States
@@ -74,8 +74,8 @@ class ExplosiveSmokeSpawner : Actor
 {
 	Default
 	{
-		+NOCLIP
 		Speed 30;
+		+NOCLIP
 	}
 	States
 	{
@@ -89,8 +89,8 @@ class SmokeSpawner2 : Actor
 {
 	Default
 	{
-		+NOCLIP
 		Speed 20;
+		+NOCLIP
 	}
 
 	States
@@ -105,8 +105,8 @@ class SmokeSpawner : Actor
 {
 	Default
 	{
-		+NOCLIP
 		Speed 20;
+		+NOCLIP
 	}
 
 	States
@@ -121,15 +121,15 @@ class WallSparks : Actor
 {
 	Default
 	{
+		Damage 0;
+		Speed 75;
+		Alpha 0.4;
+		Scale 0.1;
 		+THRUACTORS
 		+GHOST
 		-NOGRAVITY
 		+THRUGHOST
 		+RANDOMIZE
-		Damage 0;
-		Speed 75;
-		Alpha 0.4;
-		Scale 0.1;
 	}
 
 	States
@@ -150,13 +150,6 @@ class RocketDebris : Actor
 {
 	Default
 	{
-		+MISSILE
-		+RANDOMIZE
-		+FORCEXYBILLBOARD
-		-NOGRAVITY
-		+THRUACTORS
-		+GHOST
-		+THRUGHOST
 		BounceType "Grenade";
 		Damage 0;
 		Gravity 0.3;
@@ -166,6 +159,13 @@ class RocketDebris : Actor
 		Speed 15;
 		Alpha 0.5;
 		Scale 0.6;
+		+MISSILE
+		+RANDOMIZE
+		+FORCEXYBILLBOARD
+		-NOGRAVITY
+		+THRUACTORS
+		+GHOST
+		+THRUGHOST
 	}
 
 	States
@@ -238,11 +238,6 @@ class Bullet_Puff : Actor replaces BulletPuff
 {
 	Default
 	{
-		+NOBLOCKMAP;
-		+NOGRAVITY;
-		+RANDOMIZE;
-		+FLOORCLIP;
-		+NOEXTREMEDEATH;
 		RenderStyle "Add";
 		Decal "BulletChip";
 		Radius 1;
@@ -250,6 +245,11 @@ class Bullet_Puff : Actor replaces BulletPuff
 		Scale 0.7;
 		Alpha 0.7;
 		Speed 0;
+		+NOBLOCKMAP;
+		+NOGRAVITY;
+		+RANDOMIZE;
+		+FLOORCLIP;
+		+NOEXTREMEDEATH;
 	}
 
 	States
@@ -315,13 +315,6 @@ class BaseCasing : Actor
 {
 	Default
 	{
-		+MISSILE
-		+DROPOFF
-		+NOBLOCKMAP
-		+MOVEWITHSECTOR
-		+THRUACTORS
-		+FORCEXYBILLBOARD
-		+ACTIVATEIMPACT
 		Height 4;
 		Radius 2;
 		Speed 8;
@@ -329,6 +322,13 @@ class BaseCasing : Actor
 		Bouncetype "Doom";
 		BounceFactor 0.5;
 		WallBounceFactor 0.5;
+		+MISSILE
+		+DROPOFF
+		+NOBLOCKMAP
+		+MOVEWITHSECTOR
+		+THRUACTORS
+		+FORCEXYBILLBOARD
+		+ACTIVATEIMPACT
 	}
 }
 
@@ -534,12 +534,12 @@ class BaseSpawner: Actor
 
 	Default
 	{
+		Projectile;
+		Speed 35;
 		+NOCLIP;
 		+DONTSPLASH;
 		+NOTIMEFREEZE;
 		-ACTIVATEIMPACT;
-		Projectile;
-		Speed 35;
 	}
 }
 
@@ -657,6 +657,11 @@ class Rocket_Trail : Actor
 {
 	Default
 	{
+		Height 1;
+		Radius 1;
+		Mass 0;
+		RenderStyle "Add";
+		Scale 0.1;
 		+MISSILE;
 		+NOBLOCKMAP;
 		+NOGRAVITY;
@@ -666,11 +671,6 @@ class Rocket_Trail : Actor
 		+THRUACTORS;
 		+GHOST;
 		+THRUGHOST;
-		Height 1;
-		Radius 1;
-		Mass 0;
-		RenderStyle "Add";
-		Scale 0.1;
 	}
 
 	States
@@ -686,10 +686,6 @@ class Rocket_Trail2 : Rocket_Trail
 {
 	Default
 	{
-		+BOUNCEONCEILINGS;
-		+BOUNCEONWALLS;
-		-SKYEXPLODE;
-		-NOGRAVITY;
 		Radius 1;
 		Height 1;
 		Alpha 1.0;
@@ -697,5 +693,9 @@ class Rocket_Trail2 : Rocket_Trail
 		Scale 0.1;
 		Speed 4;
 		Gravity 0.2;
+		+BOUNCEONCEILINGS;
+		+BOUNCEONWALLS;
+		-SKYEXPLODE;
+		-NOGRAVITY;
 	}
 }

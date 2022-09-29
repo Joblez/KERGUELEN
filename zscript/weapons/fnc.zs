@@ -15,14 +15,16 @@ class FNC : BaseWeapon replaces Chaingun
 	Default
 	{
 		Inventory.PickupMessage "(4)";
+
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 30;
 		Weapon.AmmoType1 "RifleMag";
 		Weapon.AmmoType2 "Ammo223";
+		Weapon.SlotNumber 4;
+
 		DamageType "Normal";
 		Tag "FNC";
-		Weapon.SlotNumber 4;
 	}
 
 	bool m_FireSelect; //Fire selector

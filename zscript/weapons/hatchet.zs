@@ -16,11 +16,12 @@ class Hatchet : BaseWeapon
 
 	Default
 	{
-		+WEAPON.MELEEWEAPON;
-		+WEAPON.AMMO_OPTIONAL;
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
+
 		DamageType "Hatchet";
+		+WEAPON.MELEEWEAPON;
+		+WEAPON.AMMO_OPTIONAL;
 	}
 
 	States

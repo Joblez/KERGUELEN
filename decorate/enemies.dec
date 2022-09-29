@@ -80,20 +80,20 @@ actor greenlittleguy replaces zombieman
 	States
 	{
 		Spawn:
-			TNT1 A 0 A_Jump(10, "Grumble")		
+			TNT1 A 0 A_Jump(10, "Grumble")
 			GGLG A 4 A_Look()
-			loop	
+			loop
 		See:
 			TNT1 A 0 A_SetSpeed(15)
 			GGLG AABBCCDD 2 A_Chase
 			loop
-		Missile:			
+		Missile:
 		Melee:
 			TNT1 A 0 A_PlaySound("GLG/Attack")
 			GGLG EF 6 A_FaceTarget
 			GGLG G 6 A_CustomMeleeAttack(random(2, 5) * 3, "imp/melee", "Melee", true)
 			Goto See
-			
+
 		Grumble:
 			TNT1 A 0 A_PlaySound("GLG/Idle")
 			Goto Spawn
@@ -104,6 +104,6 @@ actor greenlittleguy replaces zombieman
 			TNT1 A 0 A_PlaySound("GLG/Death")
 			GGLD ABCD 6
 			GGLD E -1
-			Stop	
+			Stop
 	}
 }

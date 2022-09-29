@@ -9,7 +9,7 @@ actor Sheep 11000
 	Mass 50
 	Scale 0.7
 	PainChance 255
-	SeeAound "sheep/sight"
+	SeeSound "sheep/sight"
 	ActiveSound "sheep/sight"
 	PainSound "sheep/sight"
 	+FRIENDLY

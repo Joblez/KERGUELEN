@@ -23,10 +23,8 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.SlotNumber 3;
 		Weapon.AmmoType2 "Ammo12";
 		Weapon.AmmoType1 "Sh12Tube";
-
 		Inventory.PickupMessage "(3)";
-
-		DamageType "Normal";
+		DamageType "Shotgun";
 		Tag "Ithaca";
 	}
 
@@ -42,8 +40,8 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Loop;
 
 	Fire:
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 0 && invoker.m_IsLoading == 1), "ReloadEnd");
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 1 && invoker.m_IsLoading == 1), "ReloadEnd");
+		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 0 && invoker.m_IsLoading == 1), "ReloadEnd"); //if empty
+		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 1 && invoker.m_IsLoading == 1), "ReloadEnd"); //if loaded
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube",1,1);
 		Goto Empty;
 

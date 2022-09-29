@@ -9,7 +9,6 @@ Class RevoCylinder : Ammo
 	{
 		Inventory.Amount BCYN;
 		Inventory.MaxAmount BCYN;
-
 		Ammo.BackpackAmount 0;
 		Ammo.BackpackMaxAmount BCYN;
 	}
@@ -29,9 +28,7 @@ class Revolver : BaseWeapon
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.AmmoType "RevoCylinder";
 		Weapon.UpSound("sw/raise");
-
 		Inventory.PickupMessage "[2].357 Revolver";
-
 		Tag "Model 19";
 		Obituary "%o was smoked by %k.";
 	}
@@ -152,7 +149,7 @@ class Revolver : BaseWeapon
 
 				}
 
-		load:
+	load:
 		SWLD ABCD 1;
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO);
 		SWLD EFG 2;

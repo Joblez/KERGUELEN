@@ -129,17 +129,20 @@ class Revolver : BaseWeapon
 		SWEJ U 2;
 	Loading:
 		TNT1 A 0 {
-			if (CheckInventory (invoker.AmmoType1, 0) || !CheckInventory (invoker.AmmoType2, 1)) {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1)) {
 				return ResolveState ("ReloadFinish");
 			}
 
-			int ammoAmount = min (FindInventory (invoker.AmmoType1).maxAmount - CountInv (invoker.AmmoType1), CountInv (invoker.AmmoType2));
-			if (ammoAmount <= 0) return ResolveState ("Ready");
+			int ammoAmount = min(
+				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
+				CountInv(invoker.AmmoType2));
 
-			GiveInventory (invoker.AmmoType1, 1);
-			TakeInventory (invoker.AmmoType2, 1);
+			if (ammoAmount <= 0) return ResolveState("Ready");
 
-			return ResolveState ("Load");
+			GiveInventory(invoker.AmmoType1, 1);
+			TakeInventory(invoker.AmmoType2, 1);
+
+			return ResolveState("Load");
 		}
 
 	load:

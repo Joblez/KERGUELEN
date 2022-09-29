@@ -40,12 +40,12 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Loop;
 
 	Fire:
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 0 && invoker.m_IsLoading == 1), "ReloadEnd"); //if empty
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 1 && invoker.m_IsLoading == 1), "ReloadEnd"); //if loaded
+		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); //if empty
+		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); //if loaded
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube",1,1);
 		Goto Empty;
 
-		TNT1 A 0 { invoker.m_Chambered = invoker.m_Chambered - 1; }
+		TNT1 A 0 { invoker.m_Chambered = false; }
 		TNT1 A 0 A_FireBullets(4.5, 4, 12, 3, "BulletPuff");
 		ITAF A 2 Bright {
 			A_ShotgunRecoil();
@@ -73,7 +73,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9);
 		TNT1 A 0 A_CasingShotgunL(10, -22);
 		ITAP FG 2;
-		TNT1 A 0 { invoker.m_Chambered = invoker.m_Chambered + 1; }
+		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
 
@@ -83,13 +83,13 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Goto Ready;
 
 	Charge:
-		TNT1 A 0 { invoker.m_IsLoading = invoker.m_IsLoading - 1; }
+		TNT1 A 0 { invoker.m_IsLoading = false; }
 		TNT1 A 0 A_StartSound("shotgun/pumpback", 9);
 		ITAP ABC 2;
 		ITAP DE 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9);
 		ITAP FG 2;
-		TNT1 A 0 { invoker.m_Chambered = invoker.m_Chambered + 1; }
+		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
 
@@ -124,7 +124,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_StartSound("Weapon/cloth2", 9);
 		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE);
 		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE);
-		TNT1 A 0 { invoker.m_IsLoading = invoker.m_IsLoading + 1; }
+		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", STUBE, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo12", 1, "ProperReload");
@@ -154,10 +154,10 @@ Class Ithaca : BaseWeapon replaces Shotgun
 			return ResolveState ("ReloadRepeat");
 		}
 	ReloadEnd:
-		TNT1 A 0 { invoker.m_IsLoading = invoker.m_IsLoading - 1; }
+		TNT1 A 0 { invoker.m_IsLoading = false; }
 		ITRE ABCDEF 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRE GHIJ 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered == 1), "Ready");
+		TNT1 A 0 A_JumpIf((invoker.m_Chambered), "Ready");
 		Goto Charge;
 	}
 }

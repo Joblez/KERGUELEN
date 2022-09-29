@@ -18,9 +18,6 @@ class Hatchet : BaseWeapon
 	{
 		+WEAPON.MELEEWEAPON;
 		+WEAPON.AMMO_OPTIONAL;
-		+WEAPON.WIMPY_WEAPON;
-		+WEAPON.NOALERT;
-		+WEAPON.NOAUTOFIRE;
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
 		DamageType "Fist";

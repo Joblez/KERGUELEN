@@ -6,6 +6,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	Default
 	{
 		+WEAPON.NOAUTOFIRE;
+		+WEAPON.NOALERT;
 		Weapon.BobRangeX 0.3;
 		Weapon.BobRangeY 0.3;
 		Weapon.BobSpeed 1.5;

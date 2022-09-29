@@ -2,7 +2,7 @@ PointLight Flash
 {
 Offset 0 0 0
 Color 0.5 0.25 0.0
-Size 16
+Size 64
 }
 
 PointLight Explosion

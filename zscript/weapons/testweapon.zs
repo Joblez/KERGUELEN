@@ -48,7 +48,7 @@ class Revolver : BaseWeapon
 		SWDA B 1;
 		SWDA C 1;
 	Shoot:
-		TNT1 A 0 A_JumpIfInventory("RevoCylinder",1,1);
+		TNT1 A 0 A_JumpIfInventory("RevoCylinder", 1, 1);
 		Goto Empty;
 
 		SWDA E 0 Bright {

@@ -168,29 +168,24 @@ class RocketDebris : Actor
 		+THRUGHOST
 	}
 
+	action void A_SpawnDebris()
+	{
+		A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
+		A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
+	}
+
 	States
 	{
 	Spawn:
 		PRBM A 4 Bright NoDelay A_SetTranslucent(0.8, 1);
-		TNT1 A 0 {
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-		}
+		TNT1 A 0 A_SpawnDebris;
 		PRBM A 4 Bright A_SetTranslucent(0.7, 1);
-		TNT1 A 0 {
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 180));
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 180));
-		}
+		TNT1 A 0 A_SpawnDebris;
 		PRBM A 4 Bright A_SetTranslucent(0.6, 1);
-		TNT1 A 0 {
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-		}
+		TNT1 A 0 A_SpawnDebris;
 		PRBM A 4 Bright A_SetTranslucent(0.4, 1);
-		TNT1 A 0 {
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-			A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-		}
+		TNT1 A 0 A_SpawnDebris;
+
 		PRBM A 4 Bright A_SetTranslucent(0.1, 1);
 		Goto Death;
 	Death:

@@ -29,18 +29,11 @@ Class BarrelExploding : Actor replaces ExplosiveBarrel
 		TNT1 A 0 {
 			if (GetCVar("weapon_particle_toggle") == 1)
 			{
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-				A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
+				for (int i = 0; i < 6; ++i)
+				{
+					A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
+					A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
+				}
 			}
 		}
 		BOOM ABCD 1 Bright A_SetTranslucent(0.8, 1);

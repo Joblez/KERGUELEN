@@ -139,9 +139,11 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL M 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
-			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1)) {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
+			{
 				return ResolveState ("ReloadEnd");
 			}
+
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));

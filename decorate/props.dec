@@ -1,26 +1,25 @@
-actor Rockspawner: Randomspawner 10255
+actor RockSpawner : RandomSpawner 10255
 {
-//$Category Props
-Dropitem "SROCC1",255,1
-Dropitem "SROCC2",255,1
-Dropitem "SROCC3",255,1
-Dropitem "SROCC4",255,1
-Dropitem "SROCC5",255,1
+	//$Category Props
+	DropItem "SROCC1", 255, 1
+	DropItem "SROCC2", 255, 1
+	DropItem "SROCC3", 255, 1
+	DropItem "SROCC4", 255, 1
+	DropItem "SROCC5", 255, 1
 }
 
 actor SROCC1
 {
-//$Category Props
-Height 8
-Radius 8
-+Solid
+	//$Category Props
+	Height 8
+	Radius 8
+	+SOLID
+
 	States
 	{
-
 	Spawn:
-	ROCC A -1
-	stop
-
+		ROCC A -1
+		Stop
 	}
 }
 
@@ -28,23 +27,19 @@ actor SROCC2 : SROCC1
 {
 	States
 	{
-
 	Spawn:
-	ROCC B -1
-	stop
-
+		ROCC B -1
+		Stop
 	}
 }
 
-actor SROCC3: SROCC1
+actor SROCC3 : SROCC1
 {
 	States
 	{
-
 	Spawn:
-	ROCC C -1
-	stop
-
+		ROCC C -1
+		Stop
 	}
 }
 
@@ -52,11 +47,9 @@ actor SROCC4 : SROCC1
 {
 	States
 	{
-
 	Spawn:
-	ROCC D -1
-	stop
-
+		ROCC D -1
+		Stop
 	}
 }
 
@@ -64,29 +57,29 @@ actor SROCC5 : SROCC1
 {
 	States
 	{
-
 	Spawn:
-	ROCC E -1
-	stop
-
+		ROCC E -1
+		Stop
 	}
 }
 
 
-actor Deadtree 10265 {
-//$Category Props
-Height 100
-Radius 16
-+Solid
-States
+actor DeadTree 10265
+{
+	//$Category Props
+	Height 100
+	Radius 16
+	+SOLID
+
+	States
 	{
 	Spawn:
 		TREE A -1
-		stop
-		}
+		Stop
+	}
 }
 
-actor Deadtree2: Deadtree 10266
+actor DeadTree2: DeadTree 10266
 {
 	States
 	{
@@ -94,154 +87,159 @@ actor Deadtree2: Deadtree 10266
 		TREE B -1
 		stop
 	}
-
 }
 
 
-Actor Shrub1 10268
+actor Shrub1 10268
 {
-//$Category Props
-Height 60
-Radius 8
-+Solid
+	//$Category Props
+	Height 60
+	Radius 8
+	+SOLID
+
 	States
 	{
-
 	Spawn:
-	SHRB A -1
-	stop
-
+		SHRB A -1
+		Stop
 	}
 }
 
-Actor Shrub2 : Shrub1 10269
+actor Shrub2 : Shrub1 10269
 {
-Height 24
+	Height 24
+
 	States
 	{
-
 	Spawn:
-	SHRB B -1
-	stop
-
+		SHRB B -1
+		Stop
 	}
 }
 
-Actor Shrub3 : Shrub1 10270
+actor Shrub3 : Shrub1 10270
 {
-Height 24
+	Height 24
+
 	States
 	{
-
 	Spawn:
-	SHRB C -1
-	stop
-
+		SHRB C -1
+		Stop
 	}
 }
 
-Actor Shrub4 : Shrub1 10271
+actor Shrub4 : Shrub1 10271
 {
-Height 118
+	Height 118
+
 	States
 	{
-
 	Spawn:
-	SHRB D -1
-	stop
-
+		SHRB D -1
+		Stop
 	}
 }
 
-actor NFTree1 10272 {
-//$Category Props
-Height 100
-Radius 16
-+Solid
-States
+actor NFTree1 10272
+{
+	//$Category Props
+	Height 100
+	Radius 16
+	+SOLID
+
+	States
 	{
 	Spawn:
 		TRNF A -1
-		stop
-		}
+		Stop
+	}
 }
 
-actor NFTree2 : NFTree1 10273 {
-//$Category Props
-States
+actor NFTree2 : NFTree1 10273
+{
+	//$Category Props
+	States
 	{
 	Spawn:
 		TRNF B -1
-		stop
-		}
-
+		Stop
+	}
 }
 
-actor NFTree3 : NFTree1 10274 {
-//$Category Props
-States
+actor NFTree3 : NFTree1 10274
+{
+	//$Category Props
+	States
 	{
 	Spawn:
 		TRNF C -1
-		stop
-		}
-
+		Stop
+	}
 }
 
-actor NFTree4 : NFTree1 10275 {
-//$Category Props
-States
+actor NFTree4 : NFTree1 10275
+{
+	//$Category Props
+	States
 	{
 	Spawn:
 		TRNF D -1
-		stop
-		}
-
+		Stop
+	}
 }
 
-actor Cabbage 10276 {
-//$Category Props
-Height 16
-Radius 16
-Scale 0.6
-+Solid
-States
+actor Cabbage 10276
+{
+	//$Category Props
+	Height 16
+	Radius 16
+	Scale 0.6
+	+SOLID
+
+	States
 	{
 	Spawn:
 		CABB A -1
-		stop
-		}
+		Stop
+	}
 }
 
-actor Cabbage2 : Cabbage 10277 {
-//$Category Props
-+Solid
-States
+actor Cabbage2 : Cabbage 10277
+{
+	//$Category Props
+	+SOLID
+
+	States
 	{
 	Spawn:
 		CABB B -1
-		stop
-		}
+		Stop
+	}
 }
 
-actor Cabbage3 : Cabbage 10278 {
-//$Category Props
-+Solid
-States
+actor Cabbage3 : Cabbage 10278
+{
+	//$Category Props
+	+SOLID
+
+	States
 	{
 	Spawn:
 		CABB C -1
-		stop
-		}
+		Stop
+	}
 }
 
-actor Cabbage4 : Cabbage 10279 {
-//$Category Props
-+Solid
-States
+actor Cabbage4 : Cabbage 10279
+{
+	//$Category Props
+	+SOLID
+
+	States
 	{
 	Spawn:
 		CABB D -1
-		stop
-		}
+		Stop
+	}
 }

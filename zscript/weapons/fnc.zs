@@ -176,7 +176,8 @@ class FNC : BaseWeapon replaces Chaingun
 	NotEmpty:
 		FNCE CDEFGH 2;
 		TNT1 A 0 {
-			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1)) {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
+			{
 				return ResolveState ("Ready");
 			}
 

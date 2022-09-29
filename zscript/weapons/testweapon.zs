@@ -26,8 +26,8 @@ class Revolver : BaseWeapon
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 6;
+		Weapon.AmmoType1 "RevoCylinder";
 		Weapon.AmmoType2 "Ammo357";
-		Weapon.AmmoType "RevoCylinder";
 		Weapon.UpSound("sw/raise");
 		Inventory.PickupMessage "[2].357 Revolver";
 		Tag "Model 19";
@@ -101,10 +101,21 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	Reload:
-		TNT1 A 0 A_JumpIfInventory("Ammo357", 1, 1);
-		Goto Ready;
-
-		TNT1 A 0 A_JumpIfInventory("RevoCylinder", BCYN, "Ready");
+		TNT1 A 0 {
+			if (CheckInventory(invoker.AmmoType1, BCYN) || !CheckInventory(invoker.AmmoType2, 1))
+			{
+				// Wish I could just conditional operator this...
+				if (invoker.m_SingleAction)
+				{
+					return ResolveState("AltReady");
+				}
+				else
+				{
+					return ResolveState("Ready");
+				}
+			}
+			return ResolveState(null);
+		}
 		SWEJ ABCD 1;
 		SWEJ E 2;
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO);

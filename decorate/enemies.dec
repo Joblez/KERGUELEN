@@ -104,7 +104,7 @@ actor greenlittleguy replaces zombieman
 			GGLG H 2 A_Pain
 			Goto See
 		Death:
-			TNT1 A 0 A_Scream		
+			TNT1 A 0 A_Scream
 			TNT1 A 0 A_PlaySound("GLG/Death")
 			GGLD ABCD 6
 			TNT1 A 0 A_NoBlocking

@@ -20,7 +20,7 @@ class Hatchet : BaseWeapon
 		+WEAPON.AMMO_OPTIONAL;
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
-		DamageType "Fist";
+		DamageType "Hatchet";
 	}
 
 	States
@@ -55,7 +55,7 @@ class Hatchet : BaseWeapon
 		//TNT1 A 0 A_ComboCheck();
 		HAF1 A 1 A_StartSound("hatchet/swing");
 		HAF1 B 1;
-		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff",128);
+		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff",96);
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF1 D 1;
 		HAF1 E 1;
@@ -69,7 +69,7 @@ class Hatchet : BaseWeapon
 		HAF2 C 1;
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF2 D 1;
-		HAF2 E 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 128);
+		HAF2 E 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
 		HAF2 FGHIJKLMNOP 2 A_WeaponReady();
 		Goto Ready;
 
@@ -77,27 +77,11 @@ class Hatchet : BaseWeapon
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck - 3; }
 		HAF1 A 1 A_StartSound("hatchet/swing");
 		HAF1 B 1;
-		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 128);
+		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF1 D 1;
 		HAF1 E 1;
 		HAF1 FGHIJKLM 2 A_WeaponReady();
-		Goto Ready;
-
-	AltFire:
-	Kick:
-		//TNT1 A 0 A_ComboCheck();
-		KICK A 2 A_StartSound("kick/swing");
-		KICK B 1;
-		KICK C 2;
-		KICK D 2 A_CustomPunch(30, 0, 0, "Kick_Puff", 96);
-		KICK E 2;
-		KICK F 1 A_WeaponReady();
-		KICK G 2 A_WeaponReady();
-		TNT1 C 1 A_WeaponReady();
-		TNT1 B 1 A_WeaponReady();
-		TNT1 A 1 A_WeaponReady();
-		TNT1 A 4 A_WeaponReady();
 		Goto Ready;
 	}
 }

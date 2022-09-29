@@ -3,11 +3,11 @@ actor Sheep 11000
 //$Category Friendlies
   Monster
   Health 50
-  Radius 30
+  Radius 20
   Height 32
   Speed 3
   Mass 50
-  Scale 1
+  Scale 0.7
   PainChance 255
   seesound "sheep/sight"
   activesound "sheep/sight"
@@ -21,7 +21,9 @@ actor Sheep 11000
 			SHEP A 10 A_Look()
 			Goto See
 		See:
+			TNT1 A 0 A_Jump(10, "Baa")	
 			SHEP BBBCCCDDDEEE 2 A_Wander
+			TNT1 A 0 A_Jump(10,"Eatgrass")
 			loop
 		Pain:
 			SHEP F 6 A_Pain
@@ -37,9 +39,21 @@ actor Sheep 11000
 			TNT1 A 0 A_ChangeFlag("Frightened", False)
 			Goto See
 		Death:
+			TNT1 A 0 A_Scream
 			TNT1 A 0 A_Playsound("sheep/sight")
-			SHED ABCDE 4
-			SHED E -1
+			SHED ABCDEFG 4
+			SHED H -1
 			Stop
+			
+		Baa:
+			TNT1 A 0 A_Playsound("sheep/sight")
+			goto see
+			
+		Eatgrass:
+			SHEP G 6 A_Playsound("sheep/eat")
+			SHEP HI 6
+			SHEP I 50
+			SHEP HG 6
+			goto See
 	}
 }

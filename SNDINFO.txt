@@ -181,4 +181,4 @@ sight4	sight4
 sight5	sight5
 sight6	sight6
 
-SheepNom/Nom SHEEPNOM
+sheep/eat SHEEPNOM

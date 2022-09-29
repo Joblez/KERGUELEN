@@ -25,8 +25,8 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.SlotNumber 4;
 	}
 
-	bool m_FireSelect;
-
+	bool m_FireSelect; //Fire selector
+	bool m_isempty; //Checks if the gun is empty
 	States
 	{
 	Spawn:
@@ -60,16 +60,15 @@ class FNC : BaseWeapon replaces Chaingun
 		Loop;
 
 	Empty:
-		TNT1 A 0 A_StopSound(1);
+		TNT1 A 0 A_StopSound(1);		
 		TNT1 A 0 A_StartSound("weapons/empty", 10);
 		FNCF DEF 2;
 		Goto Ready;
 
 	Fire:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
-		Goto Empty;
-
-		TNT1 A 0 A_JumpIf((invoker.m_FireSelect == 1), "Automatic");
+		Goto Finalshot;		
+		TNT1 A 0 A_JumpIf((invoker.m_FireSelect == 1), "Automatic"); //Goes to automatic fire if the selector is on full auto
 	Single:
 		TNT1 A 0 A_FireBullets(3, 1, -1, 10, "BulletPuff");
 		FNFL A 1 Bright {
@@ -85,15 +84,13 @@ class FNC : BaseWeapon replaces Chaingun
 		}
 		FNCF A 1;
 		FNCF B 1;
-		FNCF C 1 A_WeaponReady(WRF_NOSWITCH);
+		FNCF C 2 A_WeaponReady(WRF_NOSWITCH);
 		FNCF DEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
-
-	Automatic:
 	Hold:
+	Automatic:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
-		Goto Empty;
-
+		Goto Finalshot;	
 		TNT1 A 0 A_FireBullets(5, 2, -1, 10, "Bulletpuff");
 		FNFL A 1 Bright {
 			A_RifleRecoil();
@@ -101,12 +98,11 @@ class FNC : BaseWeapon replaces Chaingun
 			A_SingleSmoke(5,-3);
 			A_TakeInventory("RifleMag",1);
 			A_AlertMonsters();
-			//A_StartSound("fnc/fire",1);
 			A_StartSound("fnc/loop",1,CHANF_LOOPING);
 
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
-			psp.frame = random(0,3);
+			psp.frame = random(0,3); 
 		}
 		FNCF A 1;
 		FNCF B 1;
@@ -117,16 +113,17 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	FinalShot:
+		TNT1 A 0 A_JumpIf((invoker.m_isempty == 1), "Empty"); //Goes to empty now that the gun has fired it's last shot		
+		TNT1 A 0 { invoker.m_isempty = invoker.m_isempty + 1; } //adds the check
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("weapons/empty", 10);
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
-		FNCF DEF 2;
+		FNCF CDEF 2;
 		Goto Ready;
 
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
-
+		TNT1 A 0 { invoker.m_isempty = invoker.m_isempty - 1; }	//removes the check now that you are reloading			
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;
@@ -171,6 +168,7 @@ class FNC : BaseWeapon replaces Chaingun
 			return ResolveState ("ReloadFinish");
 		}
 	ReloadFinish:
+			
 		Goto Ready;
 
 	NotEmpty:
@@ -197,15 +195,15 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIf((invoker.m_FireSelect == 1), "SemiAuto");
 		TNT1 A 0 A_Print("Full Auto");
 		TNT1 A 0 { invoker.m_FireSelect = invoker.m_FireSelect + 1; }
+		TNT1 A 0 A_StartSound("weapons/firemode", 1);		
 		FNCF DEF 2;
-		TNT1 A 0 A_StartSound("weapons/firemode", 1);
 		Goto Ready;
 
 	SemiAuto:
 		TNT1 A 0 A_Print("Semi Auto");
 		TNT1 A 0 { invoker.m_FireSelect = invoker.m_FireSelect - 1; }
+		TNT1 A 0 A_StartSound("weapons/firemode", 1);		
 		FNCF DEF 2;
-		TNT1 A 0 A_StartSound("weapons/firemode", 1);
 		Goto Ready;
 	}
 }

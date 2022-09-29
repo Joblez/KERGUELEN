@@ -16,7 +16,8 @@ Class RevoCylinder : Ammo
 
 class Revolver : BaseWeapon
 {
-	bool m_action;
+	bool m_SingleAction;
+	vector2 m_Spread;
 
 	Default
 	{
@@ -39,39 +40,28 @@ class Revolver : BaseWeapon
 		PICK A -1;
 		Stop;
 
+	Fire:
+		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
+	DoubleAction:
+		TNT1 A 0 A_StartSound("sw/cock", 3);
+		SWDA A 1;
+		SWDA B 1;
+		SWDA C 1;
 	Shoot:
-		TNT1 A 0 A_JumpIfInventory("RevoCylinder",1,1);
+		TNT1 A 0 A_JumpIfInventory("RevoCylinder", 1, 1);
 		Goto Empty;
 
 		SWDA E 0 Bright {
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
 			A_StartSound("sw/fire", 1);
-			A_FireBullets(1, 1, -1, 30, "BulletPuff");
+			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 30, "BulletPuff");
 			A_PistolRecoil();
 			A_ShotgunSmoke(3, 3);
 		}
-		TNT1 A 0 { invoker.m_action = invoker.m_action - 1; }
+		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto PostShot;
 
-	Fire:
-		TNT1 A 0 A_JumpIf((invoker.m_action == 1), "Shoot");
-	Doubleaction:
-		TNT1 A 0 A_StartSound("sw/cock", 3);
-		SWDA A 1;
-		SWDA B 1;
-		SWDA C 1;
-		TNT1 A 0 A_JumpIfInventory("RevoCylinder", 1, 1);
-		Goto Empty;
-
-		SWDA A 0 Bright {
-			A_AlertMonsters();
-			A_TakeInventory("RevoCylinder", 1);
-			A_StartSound("sw/fire", 1);
-			A_FireBullets(4, 3, -1, 30, "BulletPuff");
-			A_PistolRecoil();
-			A_ShotgunSmoke(3, 3);
-		}
 	PostShot:
 		SWAF A 1 Bright;
 		SWAF B 2 Bright;
@@ -86,25 +76,28 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	AltFire:
-		TNT1 A 0 A_JumpIf((invoker.m_action == 1), "AltReady");
+		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
 		SWSA ABCD 2;
 		TNT1 A 0 A_StartSound("sw/cock", 10);
 		SWSA EFGHIJKLMN 1;
-		TNT1 A 0 { invoker.m_action = invoker.m_action + 1; }
+		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
 
 	AltReady:
+		TNT1 A 0 { invoker.m_Spread = (1, 1); }
 		SWSA N 4 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Ready:
+		TNT1 A 0 { invoker.m_Spread = (4, 3); }
 		SWAI A 4 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Empty:
-		TNT1 A 0 { invoker.m_action == 0; }
-		SWAI A 0 A_StartSound("weapons/empty", 1);
-		SWDA A 2;
+		SWAI A 2 {
+			A_StartSound("weapons/empty", 1);
+			invoker.m_SingleAction = false;
+		}
 		Goto Ready;
 
 	Reload:
@@ -136,18 +129,18 @@ class Revolver : BaseWeapon
 		SWEJ U 2;
 	Loading:
 		TNT1 A 0 {
-	            if (CheckInventory (invoker.AmmoType1, 0) || !CheckInventory (invoker.AmmoType2, 1))
-                return ResolveState ("ReloadFinish");
-					int ammoAmount = min (FindInventory (invoker.AmmoType1).maxAmount - CountInv (invoker.AmmoType1), CountInv (invoker.AmmoType2));
-					if (ammoAmount <= 0)
-					return ResolveState ("Ready");
+			if (CheckInventory (invoker.AmmoType1, 0) || !CheckInventory (invoker.AmmoType2, 1)) {
+				return ResolveState ("ReloadFinish");
+			}
 
-				GiveInventory (invoker.AmmoType1, 1);
-				TakeInventory (invoker.AmmoType2, 1);
+			int ammoAmount = min (FindInventory (invoker.AmmoType1).maxAmount - CountInv (invoker.AmmoType1), CountInv (invoker.AmmoType2));
+			if (ammoAmount <= 0) return ResolveState ("Ready");
 
-				return ResolveState ("Load");
+			GiveInventory (invoker.AmmoType1, 1);
+			TakeInventory (invoker.AmmoType2, 1);
 
-				}
+			return ResolveState ("Load");
+		}
 
 	load:
 		SWLD ABCD 1;

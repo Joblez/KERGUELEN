@@ -158,6 +158,7 @@ class Revolver : BaseWeapon
 		SWCL ABCD 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO);
 		SWCL EFGHIJKLMN 2;
+		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto Ready;
 
 	Select:

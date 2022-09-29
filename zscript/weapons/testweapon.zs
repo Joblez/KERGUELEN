@@ -103,6 +103,7 @@ class Revolver : BaseWeapon
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo357", 1, 1);
 		Goto Ready;
+
 		TNT1 A 0 A_JumpIfInventory("RevoCylinder", BCYN, "Ready");
 		SWEJ ABCD 1;
 		SWEJ E 2;
@@ -114,12 +115,12 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
 		SWEJ LMN 2;
 		TNT1 A 0 {
-			A_CasingRevolver(0,-28);
-			A_CasingRevolver(0,-28);
-			A_CasingRevolver(0,-28);
-			A_CasingRevolverL(0,-28);
-			A_CasingRevolverL(0,-28);
-			A_CasingRevolverL(0,-28);
+			A_CasingRevolver(0, -28);
+			A_CasingRevolver(0, -28);
+			A_CasingRevolver(0, -28);
+			A_CasingRevolverL(0, -28);
+			A_CasingRevolverL(0, -28);
+			A_CasingRevolverL(0, -28);
 		}
 		SWEJ O 2;
 		SWEJ P 2;
@@ -145,13 +146,13 @@ class Revolver : BaseWeapon
 
 			return ResolveState("Load");
 		}
-
-	load:
+	Load:
 		SWLD ABCD 1;
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO);
 		SWLD EFG 2;
 		SWLD HIJ 1;
-		Goto loading;
+		Goto Loading;
+
 	ReloadFinish:
 	Close:
 		SWCL ABCD 2;
@@ -159,7 +160,7 @@ class Revolver : BaseWeapon
 		SWCL EFGHIJKLMN 2;
 		Goto Ready;
 
-	select:
+	Select:
 		TNT1 A 0 SetPlayerProperty(0,1,2);
 		TNT1 A 1;
 		SWAI A 1 Offset(67, 100);
@@ -170,7 +171,8 @@ class Revolver : BaseWeapon
 		SWAF HI 1;
 		SWAI A 1 A_Raise(16);
 		Goto Ready;
-	deselect:
+
+	Deselect:
 		SWAI A 1 Offset(2, 34);
 		SWAI A 1 Offset(22, 58);
 		SWAI A 1 Offset(32, 69);
@@ -179,6 +181,6 @@ class Revolver : BaseWeapon
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Loop;
-		}
+	}
 }
 

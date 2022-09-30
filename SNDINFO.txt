@@ -35,6 +35,8 @@ ric4	RIC04
 
 weapon/pickup PICKUP
 
+pickup/ammo DSTNAMO
+
 world/drip dsempty
 $random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }
 

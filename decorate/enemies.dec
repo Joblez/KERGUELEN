@@ -1,4 +1,4 @@
-actor Grarg replaces DoomImp
+actor Grarg replaces Doomimp
 {
 	Health 100
 	Radius 16
@@ -8,6 +8,7 @@ actor Grarg replaces DoomImp
 	Mass 100
 	Scale 0.7
 	Monster
+	+SEEFRIENDLYMONSTERS
 	SeeSound "Grarg/Sight"
 	DeathSound "Grarg/Death"
 	ActiveSound "Grarg/Barks"
@@ -37,7 +38,7 @@ actor Grarg replaces DoomImp
 		TNT1 A 0 A_PlaySound("Grarg/Bite")
 		GRRG F 3 A_FaceTarget
 		TNT1 A 0 ThrustThingZ(0, 32, 0, 0)
-		TNT1 A 0 ThrustThing(angle * 256 / 360, 18, 0, 0)
+		TNT1 A 0 ThrustThing (angle * 256 / 360, 18, 0, 0)
 	Jumpup:
 		GRRG G 5
 		GRRG H 2 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
@@ -70,7 +71,7 @@ actor Grarg replaces DoomImp
 	}
 }
 
-actor GreenLittleGuy replaces ZombieMan
+actor greenlittleguy replaces Zombieman
 {
 	Health 40
 	Radius 16
@@ -80,6 +81,7 @@ actor GreenLittleGuy replaces ZombieMan
 	Mass 100
 	Scale 0.7
 	Monster
+	+SEEFRIENDLYMONSTERS
 	SeeSound "GLG/Attack"
 	DeathSound "GLG/Death"
 	ActiveSound "GLG/Idle"
@@ -101,10 +103,10 @@ actor GreenLittleGuy replaces ZombieMan
 
 	Missile:
 		GGLG EF 6 A_FaceTarget
-		TNT1 A 0 A_SpawnProjectile("RockProjectile", 56)
-		TNT1 A 0 A_PlaySound("GLG/Attack")
-		GGLG G 6
-		Goto See
+		TNT1 A 0 A_Spawnprojectile("RockProjectile",56)
+		TNT1 A 0 A_PlaySound("GLG/Attack")		
+		GGLG G 6 
+		Goto See	
 	Melee:
 		TNT1 A 0 A_PlaySound("GLG/Attack")
 		GGLG EF 6 A_FaceTarget
@@ -129,34 +131,33 @@ actor GreenLittleGuy replaces ZombieMan
 	}
 }
 
-actor RockProjectile
+actor RockProjectile 
 {
 	Alpha 1
 	Radius 8
 	Height 8
 	Gravity 0.1
 	Projectile
+	+BLOODSPLATTER
+	 +DoomBounce
+	-NOGRAVITY
+	Seesound "rock/bounce"
 	Scale 0.7
 	MissileHeight 8
-	Speed 25
-	Damage (3)
+	Damage (5)
 	DamageType "Normal"
-	SeeSound "rock/bounce"
-	+BLOODSPLATTER
-	+DOOMBOUNCE
-	-NOGRAVITY
-
+	Speed 30
 	States
 	{
 	Spawn:
-		PROC ABCDEGHABCDEGH 3
-		TNT1 A 0 A_SetGravity(0.5)
+		PROC ABCDEGHABCDEGH 3 
+		TNT1 A 0 A_Setgravity(0.5)
 		loop
 	XDeath:
-		TNT1 A 0 A_PlaySound("rock/ow")
-		Stop
+		TNT1 A 0 A_playsound("rock/ow")
+		Stop		
 	Death:
-		PROC A 12
+		PROC A 12 
 		Stop
 	}
 }

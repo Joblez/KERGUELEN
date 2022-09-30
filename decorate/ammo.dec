@@ -9,7 +9,7 @@ actor Ammo9mm: Ammo 2007
 	Inventory.Amount 8
 	Inventory.MaxAmount 40
 	Inventory.PickupMessage "A pistol magazine."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -24,7 +24,7 @@ actor 9mmBigBox : Ammo9mm 2048
 	//$Category Decorate
 	Inventory.Amount 24
 	Inventory.PickupMessage "A box of pistol ammo."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -42,7 +42,7 @@ actor Ammo223: Ammo 2047
 	Inventory.Amount 30
 	Inventory.MaxAmount 150
 	Inventory.PickupMessage "An M16 magazine."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -57,7 +57,7 @@ actor Ammo223bigbox : Ammo223 17
 	//$Category Ammunition
 	Inventory.Amount 60
 	Inventory.PickupMessage "A box of M16 magazines."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -75,7 +75,7 @@ actor Ammo45: Ammo 302
 	Inventory.Amount 30
 	Inventory.MaxAmount 150
 	Inventory.PickupMessage "A Grease Gun magazine."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -90,7 +90,7 @@ actor Ammo45bigbox : Ammo45 303
 	//$Category Ammunition
 	Inventory.Amount 60
 	Inventory.PickupMessage "A box of Grease Gun magazines."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
@@ -111,7 +111,7 @@ actor Ammo357: Ammo 300
 	Inventory.Amount 6
 	Inventory.MaxAmount 24
 	Inventory.PickupMessage "A few revolver bullets."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	Scale 0.7
 
@@ -128,7 +128,7 @@ actor 357BigBox : Ammo357 301
 	//$Category Decorate
 	Inventory.Amount 12
 	Inventory.PickupMessage "A package of revolver bullets."
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 
 	Scale 1.0
 
@@ -147,7 +147,7 @@ actor Ammo40mm : Ammo 2010
 	//$Category PsychAmmo
 	Inventory.Amount 1
 	Inventory.MaxAmount 10
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A Grenade."
 
 	Scale 1.0
@@ -180,7 +180,7 @@ actor 40mmBox : Ammo40mm 2046
 actor Ammo12 : Ammo 2008
 {
 	//$Category Decorate
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A handful of shotgun shells."
 	Inventory.Amount 4
 	Inventory.MaxAmount 48
@@ -199,7 +199,7 @@ actor 12GaugeBox : Ammo12 2049
 {
 	//$Category Decorate
 	Inventory.Amount 20
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A box of shotgun shells."
 
 	Scale 1.0
@@ -219,7 +219,7 @@ actor Ammo3006 : Ammo 304
 	//$Category Decorate
 	Inventory.Amount 6
 	Inventory.MaxAmount 24
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A handful of rifle bullets."
 
 	Scale 1.0
@@ -236,7 +236,7 @@ actor 3006Box : Ammo3006 305
 {
 	//$Category Decorate
 	Inventory.Amount 12
-	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A box of rifle bullets."
 
 	Scale 1.0

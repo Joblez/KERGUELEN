@@ -42,21 +42,23 @@ class FNC : BaseWeapon replaces Chaingun
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		FNCI A 1 Offset(67, 100);
-		FNCI A 1 Offset(54, 81);
-		FNCI A 1 Offset(32, 69);
-		FNCI A 1 Offset(22, 58);
-		FNCI A 1 Offset(2, 34);
+		FNCI A 1 A_SetBaseOffset(67, 100);
+		FNCI A 1 A_SetBaseOffset(54, 81);
+		FNCI A 1 A_SetBaseOffset(32, 69);
+		FNCI A 1 A_SetBaseOffset(22, 58);
+		FNCI A 1 A_SetBaseOffset(2, 34);
 		FNCF CDE 1;
+		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		FNCI A 1 A_Raise(16);
 		Goto Ready;
 
 	Deselect:
-		FNCI A 1 Offset(2, 34);
-		FNCI A 1 Offset(22, 58);
-		FNCI A 1 Offset(32, 69);
-		FNCI A 1 Offset(54, 81);
-		FNCI A 1 Offset(67, 100);
+		FNCI A 1 A_SetBaseOffset(2, 34);
+		FNCI A 1 A_SetBaseOffset(22, 58);
+		FNCI A 1 A_SetBaseOffset(32, 69);
+		FNCI A 1 A_SetBaseOffset(54, 81);
+		FNCI A 1 A_SetBaseOffset(67, 100);
+		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		TNT1 A 4;
 		FNCI A 1 A_Lower(16);
 		Loop;

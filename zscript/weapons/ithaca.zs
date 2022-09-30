@@ -96,21 +96,23 @@ Class Ithaca : BaseWeapon replaces Shotgun
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		ITAI A 1 Offset(67, 100);
-		ITAI A 1 Offset(54, 81);
-		ITAI A 1 Offset(32, 69);
-		ITAI A 1 Offset(22, 58);
-		ITAI A 2 Offset(2, 34);
+		ITAI A 1 A_SetBaseOffset(67, 100);
+		ITAI A 1 A_SetBaseOffset(54, 81);
+		ITAI A 1 A_SetBaseOffset(32, 69);
+		ITAI A 1 A_SetBaseOffset(22, 58);
+		ITAI A 2 A_SetBaseOffset(2, 34);
+		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		ITAF FGH 2;
 		ITAI A 1 A_Raise(16);
 		Goto Ready;
 
 	Deselect:
-		ITAI A 2 Offset(2, 34);
-		ITAI A 1 Offset(22, 58);
-		ITAI A 1 Offset(32, 69);
-		ITAI A 1 Offset(54, 81);
-		ITAI A 1 Offset(67, 100);
+		ITAI A 2 A_SetBaseOffset(2, 34);
+		ITAI A 1 A_SetBaseOffset(22, 58);
+		ITAI A 1 A_SetBaseOffset(32, 69);
+		ITAI A 1 A_SetBaseOffset(54, 81);
+		ITAI A 1 A_SetBaseOffset(67, 100);
+		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		TNT1 A 4;
 		ITAI A 1 A_Lower(16);
 		Loop;

@@ -19,6 +19,8 @@ class Hatchet : BaseWeapon
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
 
+		BaseWeapon.LookSwayResponse 0.0;
+
 		DamageType "Hatchet";
 		+WEAPON.MELEEWEAPON;
 		+WEAPON.AMMO_OPTIONAL;
@@ -32,20 +34,22 @@ class Hatchet : BaseWeapon
 
 	Deselect:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
-		HATI A 1 Offset(22, 58);
-		HATI A 1 Offset(32, 69);
-		HATI A 1 Offset(54, 81);
-		HATI A 1 Offset(67, 100);
+		HATI A 1 A_SetBaseOffset(22, 58);
+		HATI A 1 A_SetBaseOffset(32, 69);
+		HATI A 1 A_SetBaseOffset(54, 81);
+		HATI A 1 A_SetBaseOffset(67, 100);
+		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		CRWI A 0 A_Lower(16);
 		Goto Ready;
 	Select:
-		TNT1 A 0 Offset(1, 30);
+		TNT1 A 0 A_SetBaseOffset(1, 30);
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		HATI A 1 Offset(67, 100);
-		HATI A 1 Offset(54, 81);
-		HATI A 1 Offset(32, 69);
-		HATI A 1 Offset(22, 58);
+		HATI A 1 A_SetBaseOffset(67, 100);
+		HATI A 1 A_SetBaseOffset(54, 81);
+		HATI A 1 A_SetBaseOffset(32, 69);
+		HATI A 1 A_SetBaseOffset(22, 58);
+		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		CRWI A 0 A_Raise(16);
 		Goto Ready;
 

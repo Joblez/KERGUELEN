@@ -34,6 +34,11 @@ class Revolver : BaseWeapon
 		Obituary "%o was smoked by %k.";
 	}
 
+	override void Travelled()
+	{
+		if (m_SingleAction) owner.Player.SetPSprite(PSP_WEAPON, ResolveState("AltReady"));
+	}
+
 	States
 	{
 	Spawn:

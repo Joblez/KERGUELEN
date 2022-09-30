@@ -60,7 +60,7 @@ class Revolver : BaseWeapon
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
 			A_StartSound("sw/fire", 1);
-			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 30, "BulletPuff");
+			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 20, "BulletPuff");
 			A_PistolRecoil();
 			A_ShotgunSmoke(3, 3);
 		}

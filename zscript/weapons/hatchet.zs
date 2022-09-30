@@ -44,7 +44,7 @@ class Hatchet : BaseWeapon
 	Select:
 		TNT1 A 0 A_SetBaseOffset(1, 30);
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
-		TNT1 A 1;
+		TNT1 A 1 A_SetBaseOffset(67, 100);
 		HATI A 1 A_SetBaseOffset(67, 100);
 		HATI A 1 A_SetBaseOffset(54, 81);
 		HATI A 1 A_SetBaseOffset(32, 69);

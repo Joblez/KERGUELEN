@@ -12,6 +12,9 @@ class RifleMag : Ammo
 
 class FNC : BaseWeapon replaces Chaingun
 {
+	bool m_FireSelect; // Fire selector.
+	bool m_IsEmpty; // Checks if the gun is empty.
+
 	Default
 	{
 		Inventory.PickupMessage "(4)";
@@ -27,8 +30,6 @@ class FNC : BaseWeapon replaces Chaingun
 		Tag "FNC";
 	}
 
-	bool m_FireSelect; //Fire selector
-	bool m_IsEmpty; //Checks if the gun is empty
 	States
 	{
 	Spawn:

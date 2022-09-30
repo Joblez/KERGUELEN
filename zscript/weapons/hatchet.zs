@@ -1,4 +1,4 @@
-class Kick_puff: Melee_Puff
+class Kick_Puff: Melee_Puff
 {
 	States
 	{
@@ -41,6 +41,7 @@ class Hatchet : BaseWeapon
 		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		CRWI A 0 A_Lower(16);
 		Goto Ready;
+
 	Select:
 		TNT1 A 0 A_SetBaseOffset(1, 30);
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
@@ -60,7 +61,7 @@ class Hatchet : BaseWeapon
 		//TNT1 A 0 A_ComboCheck();
 		HAF1 A 1 A_StartSound("hatchet/swing");
 		HAF1 B 1;
-		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff",96);
+		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF1 D 1;
 		HAF1 E 1;

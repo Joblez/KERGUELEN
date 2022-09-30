@@ -6,7 +6,7 @@ Class BarrelExploding : Actor replaces ExplosiveBarrel
 		Radius 10;
 		Height 34;
 		DamageType "fire";
-		DeathSound("Barrel/Hiss");
+		DeathSound("barrel/hiss");
 		Obituary "$OB_BARREL";
 		+SOLID;
 		+SHOOTABLE;

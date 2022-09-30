@@ -10,7 +10,7 @@ class Sh12Tube : Ammo
 
 //Ithaca M37
 
-Class Ithaca : BaseWeapon replaces Shotgun
+class Ithaca : BaseWeapon replaces Shotgun
 {
 	bool m_Chambered;
 	bool m_IsLoading;
@@ -40,9 +40,9 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Loop;
 
 	Fire:
-		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); //if empty
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); //if loaded
-		TNT1 A 0 A_JumpIfInventory("Sh12Tube",1,1);
+		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If empty.
+		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loaded.
+		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		Goto Empty;
 
 		TNT1 A 0 { invoker.m_Chambered = false; }
@@ -123,7 +123,7 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		Goto Ready;
 
 	ReloadStart:
-		TNT1 A 0 A_StartSound("Weapon/cloth2", 9);
+		TNT1 A 0 A_StartSound("weapon/cloth2", 9);
 		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE);
 		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE);
 		TNT1 A 0 { invoker.m_IsLoading = true; }
@@ -143,19 +143,19 @@ Class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
-				return ResolveState ("ReloadEnd");
+				return ResolveState("ReloadEnd");
 			}
 
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));
 
-			if (ammoAmount <= 0) return ResolveState ("Ready");
+			if (ammoAmount <= 0) return ResolveState("Ready");
 
-			GiveInventory (invoker.AmmoType1, 1);
-			TakeInventory (invoker.AmmoType2, 1);
+			GiveInventory(invoker.AmmoType1, 1);
+			TakeInventory(invoker.AmmoType2, 1);
 
-			return ResolveState ("ReloadRepeat");
+			return ResolveState("ReloadRepeat");
 		}
 	ReloadEnd:
 		TNT1 A 0 { invoker.m_IsLoading = false; }

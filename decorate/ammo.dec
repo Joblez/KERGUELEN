@@ -145,10 +145,10 @@ actor 357BigBox : Ammo357 301
 actor Ammo40mm : Ammo 2010
 {
 	//$Category PsychAmmo
-	Inventory.PickupSound "pickup/misc"
-	Inventory.PickupMessage "A Grenade."
 	Inventory.Amount 1
 	Inventory.MaxAmount 10
+	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupMessage "A Grenade."
 
 	Scale 1.0
 
@@ -217,10 +217,10 @@ actor 12GaugeBox : Ammo12 2049
 actor Ammo3006 : Ammo 304
 {
 	//$Category Decorate
-	Inventory.PickupSound "pickup/misc"
-	Inventory.PickupMessage "A handful of rifle bullets."
 	Inventory.Amount 6
 	Inventory.MaxAmount 24
+	Inventory.PickupSound "pickup/misc"
+	Inventory.PickupMessage "A handful of rifle bullets."
 
 	Scale 1.0
 

@@ -28,7 +28,7 @@ class FNC : BaseWeapon replaces Chaingun
 	}
 
 	bool m_FireSelect; //Fire selector
-	bool m_isempty; //Checks if the gun is empty
+	bool m_IsEmpty; //Checks if the gun is empty
 	States
 	{
 	Spawn:
@@ -117,8 +117,8 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	FinalShot:
-		TNT1 A 0 A_JumpIf((invoker.m_isempty == 1), "Empty"); //Goes to empty now that the gun has fired it's last shot
-		TNT1 A 0 { invoker.m_isempty = invoker.m_isempty + 1; } //adds the check
+		TNT1 A 0 A_JumpIf((invoker.m_IsEmpty == 1), "Empty"); //Goes to empty now that the gun has fired its last shot.
+		TNT1 A 0 { invoker.m_IsEmpty = invoker.m_IsEmpty + 1; } // Adds the check.
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
 		FNCF CDEF 2;
@@ -127,7 +127,7 @@ class FNC : BaseWeapon replaces Chaingun
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
-		TNT1 A 0 { invoker.m_isempty = invoker.m_isempty - 1; }	//removes the check now that you are reloading
+		TNT1 A 0 { invoker.m_IsEmpty = invoker.m_IsEmpty - 1; } // Removes the check now that you are reloading.
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;
@@ -156,7 +156,8 @@ class FNC : BaseWeapon replaces Chaingun
 		FNCE ABCDEFGH 2;
 	Loading:
 		TNT1 A 0 {
-			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1)) {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
+			{
 				return ResolveState ("Ready");
 			}
 
@@ -172,7 +173,6 @@ class FNC : BaseWeapon replaces Chaingun
 			return ResolveState ("ReloadFinish");
 		}
 	ReloadFinish:
-
 		Goto Ready;
 
 	NotEmpty:

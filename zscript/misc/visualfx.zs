@@ -150,15 +150,15 @@ class RocketDebris : Actor
 {
 	Default
 	{
-		BounceType "Grenade";
 		Damage 0;
 		Gravity 0.3;
 		BounceFactor 0.2;
 		WallBounceFactor 0.2;
-		RenderStyle "Add";
 		Speed 15;
 		Alpha 0.5;
 		Scale 0.6;
+		RenderStyle "Add";
+		BounceType "Grenade";
 		+MISSILE
 		+RANDOMIZE
 		+FORCEXYBILLBOARD
@@ -185,9 +185,9 @@ class RocketDebris : Actor
 		TNT1 A 0 A_SpawnDebris;
 		PRBM A 4 Bright A_SetTranslucent(0.4, 1);
 		TNT1 A 0 A_SpawnDebris;
-
 		PRBM A 4 Bright A_SetTranslucent(0.1, 1);
 		Goto Death;
+
 	Death:
 		TNT1 A 0;
 		Stop;
@@ -233,13 +233,13 @@ class Bullet_Puff : Actor replaces BulletPuff
 {
 	Default
 	{
-		RenderStyle "Add";
-		Decal "BulletChip";
 		Radius 1;
 		Height 1;
 		Scale 0.7;
 		Alpha 0.7;
 		Speed 0;
+		RenderStyle "Add";
+		Decal "BulletChip";
 		+NOBLOCKMAP;
 		+NOGRAVITY;
 		+RANDOMIZE;
@@ -314,9 +314,9 @@ class BaseCasing : Actor
 		Radius 2;
 		Speed 8;
 		Gravity 0.8;
-		Bouncetype "Doom";
 		BounceFactor 0.5;
 		WallBounceFactor 0.5;
+		Bouncetype "Doom";
 		+MISSILE
 		+DROPOFF
 		+NOBLOCKMAP

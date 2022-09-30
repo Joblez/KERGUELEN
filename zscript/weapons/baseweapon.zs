@@ -55,7 +55,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	States
 	{
-		Load:
+	Load:
 		FLAF ABCD 0;
 	}
 
@@ -122,7 +122,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		{
 			A_SetPitch(pitch - 0.3);
 			//A_Recoil(0.1);
-			A_Quake(2,1,0,4);
+			A_Quake(2, 1, 0, 4);
 		}
 	}
 
@@ -132,7 +132,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		{
 			//A_Recoil(0.4);
 			A_SetPitch(pitch - 2);
-			A_Quake(6,4,0,10);
+			A_Quake(6, 4,0, 10);
 		}
 	}
 
@@ -142,7 +142,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		{
 			//A_Recoil(0.1);
 			A_SetPitch(pitch - 0.4);
-			A_Quake(3,2,0,10);
+			A_Quake(3, 2, 0, 10);
 		}
 	}
 
@@ -154,7 +154,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 			//A_Recoil(0.1);
 			A_SetPitch(pitch - 1);
-			A_Quake(3,2,0,4);
+			A_Quake(3, 2, 0, 4);
 		}
 	}
 

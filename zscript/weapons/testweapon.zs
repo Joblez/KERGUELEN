@@ -178,7 +178,7 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	Select:
-		TNT1 A 0 SetPlayerProperty(0,1,2);
+		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 0 { invoker.m_SingleAction = false; }
 		TNT1 A 1;
 		SWAI A 1 A_SetBaseOffset(67, 100);

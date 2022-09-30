@@ -1,12 +1,12 @@
-ACTOR Newplayer : PlayerPawn
+actor NewPlayer : PlayerPawn
 {
-	Player.DisplayName "Player"
-	Player.Startitem "Hatchet", 1
-	Player.Startitem "Revolver", 1
-	Player.viewheight 50
+	Player.ViewHeight 50
 	Player.AttackZOffset 22
-	Player.startitem "Ammo357", 24
-	Player.soundclass "player"
+	Player.DisplayName "Player"
+	Player.StartItem "Hatchet", 1
+	Player.StartItem "Revolver", 1
+	Player.StartItem "Ammo357", 24
+	Player.SoundClass "player"
 	Player.WeaponSlot 1, ""
 	Player.WeaponSlot 2, ""
 	Player.WeaponSlot 3, ""
@@ -19,7 +19,6 @@ ACTOR Newplayer : PlayerPawn
 
 	States
 	{
-
 	Spawn:
 		PLAY A -1
 		Loop
@@ -62,7 +61,6 @@ ACTOR Newplayer : PlayerPawn
 		PLAY N -1
 		Stop
 	}
-
 }
 
 

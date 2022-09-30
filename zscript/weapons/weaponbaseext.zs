@@ -26,7 +26,7 @@ extend class WeaponBase
 		{
 			//A_Recoil(0.1);
 			A_SetPitch(pitch - 0.4);
-			A_Quake(3, 2, 0,10);
+			A_Quake(3, 2, 0, 10);
 		}
 	}
 

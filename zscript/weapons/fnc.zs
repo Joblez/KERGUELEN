@@ -73,7 +73,7 @@ class FNC : BaseWeapon replaces Chaingun
 	Fire:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
-		TNT1 A 0 A_JumpIf((invoker.m_FireSelect == 1), "Automatic"); //Goes to automatic fire if the selector is on full auto
+		TNT1 A 0 A_JumpIf((invoker.m_FireSelect), "Automatic"); //Goes to automatic fire if the selector is on full auto
 	Single:
 		TNT1 A 0 A_FireBullets(3, 1, -1, 10, "BulletPuff");
 		FNFL A 1 Bright {
@@ -111,15 +111,15 @@ class FNC : BaseWeapon replaces Chaingun
 		}
 		FNCF A 1;
 		FNCF B 1;
-		TNT1 A 0 A_ReFire;
+		TNT1 A 0 A_JumpIf(Player.cmd.buttons & BT_ATTACK, "Automatic");
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
 		FNCF CDEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 
 	FinalShot:
-		TNT1 A 0 A_JumpIf((invoker.m_IsEmpty == 1), "Empty"); //Goes to empty now that the gun has fired its last shot.
-		TNT1 A 0 { invoker.m_IsEmpty = invoker.m_IsEmpty + 1; } // Adds the check.
+		TNT1 A 0 A_JumpIf((invoker.m_IsEmpty), "Empty"); //Goes to empty now that the gun has fired its last shot.
+		TNT1 A 0 { invoker.m_IsEmpty = true; } // Adds the check.
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
 		FNCF CDEF 2;
@@ -128,7 +128,7 @@ class FNC : BaseWeapon replaces Chaingun
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
-		TNT1 A 0 { invoker.m_IsEmpty = invoker.m_IsEmpty - 1; } // Removes the check now that you are reloading.
+		TNT1 A 0 { invoker.m_IsEmpty = false; } // Removes the check now that you are reloading.
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;
@@ -198,16 +198,10 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	AltFire:
-		TNT1 A 0 A_JumpIf((invoker.m_FireSelect == 1), "SemiAuto");
-		TNT1 A 0 A_Print("Full Auto");
-		TNT1 A 0 { invoker.m_FireSelect = invoker.m_FireSelect + 1; }
-		TNT1 A 0 A_StartSound("weapons/firemode", 1);
-		FNCF DEF 2;
-		Goto Ready;
-
-	SemiAuto:
-		TNT1 A 0 A_Print("Semi Auto");
-		TNT1 A 0 { invoker.m_FireSelect = invoker.m_FireSelect - 1; }
+		TNT1 A 0 {
+			invoker.m_FireSelect = !invoker.m_FireSelect;
+		}
+		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto": "Semi Auto");
 		TNT1 A 0 A_StartSound("weapons/firemode", 1);
 		FNCF DEF 2;
 		Goto Ready;

@@ -101,7 +101,7 @@ actor greenlittleguy replaces Zombieman
 
 	Missile:
 		GGLG EF 6 A_FaceTarget
-		TNT1 A 0 A_Spawnprojectile("RockProjectile",48)
+		TNT1 A 0 A_Spawnprojectile("RockProjectile",56)
 		TNT1 A 0 A_PlaySound("GLG/Attack")		
 		GGLG G 6 
 		Goto See	
@@ -134,21 +134,22 @@ actor RockProjectile
 	Alpha 1
 	Radius 8
 	Height 8
-	Gravity 0.5
+	Gravity 0.1
 	Projectile
 	+BLOODSPLATTER
 	 +DoomBounce
 	-NOGRAVITY
 	Seesound "rock/bounce"
-	Scale 0.3
+	Scale 0.7
 	MissileHeight 8
 	Damage (3)
 	DamageType "Normal"
-	Speed 20
+	Speed 25
 	States
 	{
 	Spawn:
-		PROC ABCDEGH 3 
+		PROC ABCDEGHABCDEGH 3 
+		TNT1 A 0 A_Setgravity(0.5)
 		loop
 	XDeath:
 		TNT1 A 0 A_playsound("rock/ow")

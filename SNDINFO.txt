@@ -33,7 +33,7 @@ ric2	RIC02
 ric3	RIC03
 ric4	RIC04
 
-weeapon/pickup PICKUP
+weapon/pickup PICKUP
 
 world/drip dsempty
 $random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }

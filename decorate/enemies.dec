@@ -1,4 +1,4 @@
-actor Grarg replaces Doomimp
+actor Grarg replaces DoomImp
 {
 	Health 100
 	Radius 16

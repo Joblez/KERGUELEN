@@ -4,7 +4,7 @@ strictpatches = 0;
 
 maps
 {
-	
+
 	MAP01
 	{
 		defaultwalltexture = "ROCK5";
@@ -13,10 +13,10 @@ maps
 		overrideceiltexture = false;
 		custombrightness = 196;
 		scriptcompiler = "zdoom_acs.cfg";
-		
+
 		resources
 		{
-			
+
 			resource0
 			{
 				type = 1;
@@ -29,7 +29,7 @@ maps
 		}
 		viewpositiony = -975.8653f;
 		viewpositionx = -209.3879f;
-		
+
 		testprecommand
 		{
 			autocloseonsuccess = true;
@@ -38,7 +38,7 @@ maps
 		}
 		customceilheight = 128;
 		customfloorheight = 0;
-		
+
 		grid
 		{
 			backoffsetx = 0;
@@ -53,7 +53,7 @@ maps
 			backoffsety = 0;
 		}
 		viewscale = 0.1456122f;
-		
+
 		reloadresourceprecommand
 		{
 			autocloseonsuccess = true;
@@ -66,7 +66,7 @@ maps
 		defaultfloortexture = "BGRASS_2";
 		overrideceilheight = false;
 		overridebrightness = false;
-		
+
 		testpostcommand
 		{
 			autocloseonsuccess = true;
@@ -77,7 +77,7 @@ maps
 		overridetoptexture = false;
 		uselongtexturenames = false;
 		overridefloortexture = false;
-		
+
 		reloadresourcepostcommand
 		{
 			autocloseonsuccess = true;

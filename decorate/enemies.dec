@@ -101,10 +101,10 @@ actor greenlittleguy replaces Zombieman
 
 	Missile:
 		GGLG EF 6 A_FaceTarget
-		TNT1 A 0 A_Spawnprojectile("RockProjectile",56)
-		TNT1 A 0 A_PlaySound("GLG/Attack")		
-		GGLG G 6 
-		Goto See	
+		TNT1 A 0 A_SpawnProjectile("RockProjectile",56)
+		TNT1 A 0 A_PlaySound("GLG/Attack")
+		GGLG G 6
+		Goto See
 	Melee:
 		TNT1 A 0 A_PlaySound("GLG/Attack")
 		GGLG EF 6 A_FaceTarget
@@ -129,7 +129,7 @@ actor greenlittleguy replaces Zombieman
 	}
 }
 
-actor RockProjectile 
+actor RockProjectile
 {
 	Alpha 1
 	Radius 8
@@ -148,14 +148,14 @@ actor RockProjectile
 	States
 	{
 	Spawn:
-		PROC ABCDEGHABCDEGH 3 
+		PROC ABCDEGHABCDEGH 3
 		TNT1 A 0 A_Setgravity(0.5)
 		loop
 	XDeath:
 		TNT1 A 0 A_playsound("rock/ow")
-		Stop		
+		Stop
 	Death:
-		PROC A 12 
+		PROC A 12
 		Stop
 	}
 }

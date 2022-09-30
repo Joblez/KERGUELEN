@@ -46,8 +46,8 @@ actor Sheep 11000
 	Death:
 		TNT1 A 0 A_Scream
 		TNT1 A 0 A_PlaySound("sheep/sight")
-		SHED ABCDEFG 4
-		SHED G -1
+		SHED ABCDEF 4
+		SHED F -1
 		Stop
 
 	Baa:

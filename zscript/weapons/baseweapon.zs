@@ -35,7 +35,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	{
 		Weapon.BobRangeX 0.3;
 		Weapon.BobRangeY 0.3;
-		Weapon.BobSpeed 2.3;
+		Weapon.BobSpeed 1.7;
 		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
 
@@ -47,8 +47,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		BaseWeapon.MaxLookSwayTranslationY 0.0;
 
 		Inventory.PickupSound "weapon/pickup";
-
-		Tag "Weapon";
 		+WEAPON.NOAUTOFIRE;
 		+WEAPON.NOALERT;
 	}

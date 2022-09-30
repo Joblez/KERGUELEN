@@ -33,6 +33,8 @@ ric2	RIC02
 ric3	RIC03
 ric4	RIC04
 
+weeapon/pickup PICKUP
+
 world/drip dsempty
 $random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }
 
@@ -156,6 +158,10 @@ Grarg/Idle BPGRUMBL
 $random Grarg/Barks { BPBark BPBark2 }
 BPBark	BPBark
 BPBark2 BPBark2
+
+rock/bounce DSRCKGD
+
+rock/ow DSRCKOW
 
 GLG/Idle DGLGIDL
 

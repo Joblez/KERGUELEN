@@ -1,4 +1,4 @@
-actor Grarg replaces Doomimp
+actor Grarg replaces DoomImp
 {
 	Health 100
 	Radius 16
@@ -37,7 +37,7 @@ actor Grarg replaces Doomimp
 		TNT1 A 0 A_PlaySound("Grarg/Bite")
 		GRRG F 3 A_FaceTarget
 		TNT1 A 0 ThrustThingZ(0, 32, 0, 0)
-		TNT1 A 0 ThrustThing (angle * 256 / 360, 18, 0, 0)
+		TNT1 A 0 ThrustThing(angle * 256 / 360, 18, 0, 0)
 	Jumpup:
 		GRRG G 5
 		GRRG H 2 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
@@ -70,7 +70,7 @@ actor Grarg replaces Doomimp
 	}
 }
 
-actor greenlittleguy replaces Zombieman
+actor GreenLittleGuy replaces ZombieMan
 {
 	Health 40
 	Radius 16
@@ -101,7 +101,7 @@ actor greenlittleguy replaces Zombieman
 
 	Missile:
 		GGLG EF 6 A_FaceTarget
-		TNT1 A 0 A_SpawnProjectile("RockProjectile",56)
+		TNT1 A 0 A_SpawnProjectile("RockProjectile", 56)
 		TNT1 A 0 A_PlaySound("GLG/Attack")
 		GGLG G 6
 		Goto See
@@ -136,23 +136,24 @@ actor RockProjectile
 	Height 8
 	Gravity 0.1
 	Projectile
-	+BLOODSPLATTER
-	 +DoomBounce
-	-NOGRAVITY
-	Seesound "rock/bounce"
 	Scale 0.7
 	MissileHeight 8
+	Speed 25
 	Damage (3)
 	DamageType "Normal"
-	Speed 25
+	SeeSound "rock/bounce"
+	+BLOODSPLATTER
+	+DOOMBOUNCE
+	-NOGRAVITY
+
 	States
 	{
 	Spawn:
 		PROC ABCDEGHABCDEGH 3
-		TNT1 A 0 A_Setgravity(0.5)
+		TNT1 A 0 A_SetGravity(0.5)
 		loop
 	XDeath:
-		TNT1 A 0 A_playsound("rock/ow")
+		TNT1 A 0 A_PlaySound("rock/ow")
 		Stop
 	Death:
 		PROC A 12

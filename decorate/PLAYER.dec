@@ -14,7 +14,7 @@ actor NewPlayer : PlayerPawn
 	Player.WeaponSlot 5, ""
 	Player.WeaponSlot 6, ""
 	Player.JumpZ 10.0
-	Gravity 0.95  
+	Gravity 0.95
 	Speed 0.7
 	+NOSKIN
 

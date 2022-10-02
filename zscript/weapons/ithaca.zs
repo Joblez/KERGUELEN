@@ -46,7 +46,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Goto Empty;
 
 		TNT1 A 0 { invoker.m_Chambered = false; }
-		TNT1 A 0 A_FireBullets(4.5, 4, 12, 3, "BulletPuff");
+		TNT1 A 0 A_FireBullets(5, 4, 12, 3, "BulletPuff");
 		ITAF A 2 Bright {
 			A_ShotgunRecoil();
 			A_AlertMonsters();
@@ -56,8 +56,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_StartSound("shotgun/fire", 1);
 		}
 		ITAF B 1 Bright;
-		ITAF CDE 1;
-		ITAF FGHI 2;
+		ITAF CDEF 1;
+		ITAF GHI 2;
 		TNT1 A 0 {
 			if (CountInv("Sh12Tube") == 0) {
 				return ResolveState("Ready");
@@ -140,7 +140,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
 		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
-		ITRL M 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{

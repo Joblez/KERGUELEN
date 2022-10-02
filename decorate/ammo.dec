@@ -36,7 +36,7 @@ actor 9mmBigBox : Ammo9mm 2048
 
 //223 Remington / 5.56 NATO
 
-actor Ammo223: Ammo 2047
+actor Ammo223: Ammo replaces Clip
 {
 	//$Category Ammunition
 	Inventory.Amount 30
@@ -52,7 +52,7 @@ actor Ammo223: Ammo 2047
 	}
 }
 
-actor Ammo223bigbox : Ammo223 17
+actor Ammo223bigbox : Ammo223 replaces Clipbox
 {
 	//$Category Ammunition
 	Inventory.Amount 60

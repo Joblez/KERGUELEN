@@ -60,7 +60,7 @@ class Revolver : BaseWeapon
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
 			A_StartSound("sw/fire", 1);
-			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 20, "BulletPuff");
+			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 23, "BulletPuff");
 			A_PistolRecoil();
 			A_ShotgunSmoke(3, 3);
 		}
@@ -71,7 +71,7 @@ class Revolver : BaseWeapon
 		SWAF A 1 Bright;
 		SWAF B 2 Bright;
 		SWAF C 2;
-		SWAF D 2;
+		SWAF D 1;
 		SWAF E 1;
 		SWAF F 1;
 		SWAF G 1;
@@ -94,7 +94,7 @@ class Revolver : BaseWeapon
 		Loop;
 
 	Ready:
-		TNT1 A 0 { invoker.m_Spread = (4, 3); }
+		TNT1 A 0 { invoker.m_Spread = (3, 3); }
 		SWAI A 4 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
@@ -126,20 +126,20 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO);
 		SWEJ FG 2;
 		SWEJ HI 1;
-		SWEJ JK 1;
+		SWEJ JKL 1;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO);
 		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
-		SWEJ LMN 2;
+		SWEJ M 2;
 		TNT1 A 0 {
-			A_CasingRevolver(0, -28);
-			A_CasingRevolver(0, -28);
-			A_CasingRevolver(0, -28);
-			A_CasingRevolverL(0, -28);
-			A_CasingRevolverL(0, -28);
-			A_CasingRevolverL(0, -28);
+			A_CasingRevolver(random(-4,4), random(-30,-34));
+			A_CasingRevolver(random(-4,4), random(-30,-34));
+			A_CasingRevolver(random(-4,4), random(-30,-34));
+			A_CasingRevolver(random(-4,4), random(-30,-34));
+			A_CasingRevolver(random(-4,4), random(-30,-34));
+			A_CasingRevolver(random(-4,4), random(-30,-34));
 		}
-		SWEJ O 2;
-		SWEJ P 2;
+		SWEJ NO 2;
+		SWEJ P 1;
 		SWEJ Q 2;
 		SWEJ R 1;
 		SWEJ ST 1;
@@ -165,8 +165,8 @@ class Revolver : BaseWeapon
 	Load:
 		SWLD ABCD 1;
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO);
-		SWLD EFG 2;
-		SWLD HIJ 1;
+		SWLD EF 2;
+		SWLD GHIJ 1;
 		Goto Loading;
 
 	ReloadFinish:

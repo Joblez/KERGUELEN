@@ -27,8 +27,8 @@ maps
 				requiredarchives = "";
 			}
 		}
-		viewpositiony = 3579.404f;
-		viewpositionx = 6128.182f;
+		viewpositiony = 3912.745f;
+		viewpositionx = 4831.144f;
 		
 		testprecommand
 		{

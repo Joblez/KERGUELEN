@@ -37,6 +37,14 @@ weapon/pickup PICKUP
 
 pickup/ammo DSTNAMO
 
+Forest DAMBNTR
+Waterfall DAMBWTR
+Cave DAMBCAV
+$ambient 1 Forest Point Continuous 1.0
+$ambient 2 Forest Surround Continuous 1.0
+$ambient 3 Waterfall Point Continuous 1.0
+$ambient 4 Cave Point Continuous 1.0
+$ambient 5 Cave Surround Continuous 1.0
 world/drip dsempty
 $random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }
 

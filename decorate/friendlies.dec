@@ -62,3 +62,20 @@ actor Sheep 11000
 		Goto See
 	}
 }
+
+actor Star 11001
+{
+	Health 1
+	Radius 1
+	Height 4
+	Scale 1
+	+NOGRAVITY
+	+Solid
+	States
+	{
+		Spawn:
+		STRC ABCDEFGHIJKL 8 Bright
+		Loop
+		}
+
+}

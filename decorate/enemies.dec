@@ -88,6 +88,7 @@ actor GreenLittleGuy replaces ZombieMan
 	Obituary "%o was slashed to bits."
 	+FLOORCLIP
 	+SEEFRIENDLYMONSTERS
+	+JUMPDOWN
 
 	States
 	{
@@ -95,6 +96,16 @@ actor GreenLittleGuy replaces ZombieMan
 		TNT1 A 0 A_Jump(10, "Grumble")
 		GGLG A 4 A_Look()
 		Loop
+
+	JumpDown:
+		GGLG C 1 A_CheckFloor("Land")
+		GGLG C 1
+		GGLG C 1 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+		Loop
+
+	Land:
+		GGLG FA 2 A_Stop
+		Goto See
 
 	See:
 		TNT1 A 0 A_SetSpeed(15)

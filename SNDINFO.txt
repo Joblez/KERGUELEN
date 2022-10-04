@@ -198,3 +198,8 @@ sight5	sight5
 sight6	sight6
 
 sheep/eat SHEEPNOM
+
+$random penguin/noot { DPNGRT1 DPNGRT2 }
+
+DPNGRT1 DPNGRT1
+DPNGRT2 DPNGRT2

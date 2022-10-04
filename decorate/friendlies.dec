@@ -70,12 +70,13 @@ actor Star 11001
 	Height 4
 	Scale 1
 	+NOGRAVITY
-	+Solid
+	+SOLID
+
 	States
 	{
-		Spawn:
+	Spawn:
 		STRC ABCDEFGHIJKL 8 Bright
 		Loop
-		}
+	}
 
 }

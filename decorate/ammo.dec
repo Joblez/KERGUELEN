@@ -52,7 +52,7 @@ actor Ammo223: Ammo replaces Clip
 	}
 }
 
-actor Ammo223bigbox : Ammo223 replaces Clipbox
+actor Ammo223BigBox : Ammo223 replaces ClipBox
 {
 	//$Category Ammunition
 	Inventory.Amount 60

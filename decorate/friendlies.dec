@@ -128,20 +128,19 @@ actor Penguin 11002
 
 	Death:
 		TNT1 A 0 A_Scream
-		TNT1 A 0 A_PlaySound("sheep/sight")
+		TNT1 A 0 A_PlaySound("penguin/sight")
 		PENG ABCDEF 4
 		PENG G -1
 		Stop
 
 	Squawk:
-		TNT1 A 0 A_PlaySound("sheep/sight")
+		TNT1 A 0 A_PlaySound("penguin/sight")
 		Goto See
 
 	Noot:
-		SHEP G 6 A_PlaySound("sheep/eat")
-		SHEP HI 6
-		SHEP I 50
-		SHEP HG 6
+		PENG A 6 A_PlaySound("penguin/noot")
+		PENG F 6
+		PENG A 6
 		Goto See
 	}
 }

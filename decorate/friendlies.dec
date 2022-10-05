@@ -25,7 +25,7 @@ actor Sheep 11000
 	See:
 		TNT1 A 0 A_Jump(10, "Baa")
 		SHEP BBBCCCDDDEEE 2 A_Wander
-		TNT1 A 0 A_Jump(10, "Eatgrass")
+		TNT1 A 0 A_Jump(10, "EatGrass")
 		Loop
 
 	Pain:
@@ -42,8 +42,8 @@ actor Sheep 11000
 		SHEP BBCCDDEE 1 A_Chase
 		SHEP BBCCDDEE 1 A_Chase
 		SHEP BBCCDDEE 1 A_Chase
-		SHEP BBCCDDEE 1 A_Chase		
-		TNT1 A 0 A_ChangeFlag("Friendly", true)		
+		SHEP BBCCDDEE 1 A_Chase
+		TNT1 A 0 A_ChangeFlag("Friendly", true)
 		TNT1 A 0 A_SetSpeed(3, AAPTR_DEFAULT)
 		Goto See
 
@@ -51,8 +51,8 @@ actor Sheep 11000
 		SHEP IH 3
 		SHEP GF 2 A_CustomMeleeAttack(40, "imp/melee", "Melee", true)
 		SHEP A 2
-		goto see
-		
+		Goto See
+
 	Death:
 		TNT1 A 0 A_Scream
 		TNT1 A 0 A_PlaySound("sheep/sight")
@@ -104,7 +104,7 @@ actor Penguin 11002
 	Scale 0.8
 	PainChance 200
 	+FRIENDLY
-	PainSound "penguin/pain"	
+	PainSound "penguin/pain"
 	+DONTFOLLOWPLAYERS
 	-COUNTKILL
 

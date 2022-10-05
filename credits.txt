@@ -1,6 +1,6 @@
 Mod Concept by Joblez
 
-MBase created by Magdiel,
+MBase created by Magdiel, creator of various features and bug fixes (also king of formatting fixes)
 
 Specifics:
 
@@ -12,3 +12,10 @@ FNC bolt sound effects - Polenar Tactical, TFB TV
 
 Explosion Sprites - Rogue Software
 
+Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+
+Shark credits:
+Submitted: Krispy
+Decorate: Krispy, zrrion the insect, IOP team (gibs)
+Sounds: 3D Realms
+Sprites: 3D Realms

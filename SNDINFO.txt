@@ -203,3 +203,12 @@ $random penguin/noot { DPNGRT1 DPNGRT2 }
 
 DPNGRT1 DPNGRT1
 DPNGRT2 DPNGRT2
+
+penguin/death DPNGDTH
+penguin/pain DPNGPAN
+
+shark/sight DETECT
+shark/death SQUISH
+shark/active ROAMING
+CHOMP CHOMP
+SWIPE SWIPE

@@ -1,4 +1,4 @@
-actor RockSpawner : RandomSpawner 10255
+actor LRockSpawner : RandomSpawner 10255
 {
 	//$Category Props
 	DropItem "SROCC1", 255, 1
@@ -6,6 +6,12 @@ actor RockSpawner : RandomSpawner 10255
 	DropItem "SROCC3", 255, 1
 	DropItem "SROCC4", 255, 1
 	DropItem "SROCC5", 255, 1
+	States
+	{
+	Spawn:
+		ROCC A -1
+		Stop	
+	}		
 }
 
 actor SROCC1
@@ -63,29 +69,145 @@ actor SROCC5 : SROCC1
 	}
 }
 
-
-actor DeadTree 10265
+actor MRockSpawner : RandomSpawner 10265
 {
 	//$Category Props
-	Height 100
-	Radius 16
+	DropItem "MROCC1", 255, 1
+	DropItem "MROCC2", 255, 1
+	DropItem "MROCC3", 255, 1
+	DropItem "MROCC4", 255, 1
+	DropItem "MROCC5", 255, 1
+	States
+	{
+	Spawn:
+		MRCC A -1
+		Stop	
+	}		
+}
+
+actor MROCC1
+{
+	//$Category Props
+	Height 64
+	Radius 24
 	+SOLID
 
 	States
 	{
 	Spawn:
-		TREE A -1
+		MRCC A -1
 		Stop
 	}
 }
 
-actor DeadTree2: DeadTree 10266
+actor MROCC2 : MROCC1
 {
 	States
 	{
 	Spawn:
-		TREE B -1
-		stop
+		MRCC B -1
+		Stop
+	}
+}
+
+actor MROCC3 : MROCC1
+{
+	States
+	{
+	Spawn:
+		MRCC C -1
+		Stop
+	}
+}
+
+actor MROCC4 : MROCC1
+{
+	States
+	{
+	Spawn:
+		MRCC D -1
+		Stop
+	}
+}
+
+actor MROCC5 : MROCC1
+{
+	States
+	{
+	Spawn:
+		MRCC E -1
+		Stop
+	}
+}
+
+actor BRockSpawner : RandomSpawner 10266
+{
+	//$Category Props
+	DropItem "BROCC1", 255, 1
+	DropItem "BROCC2", 255, 1
+	DropItem "BROCC3", 255, 1
+	DropItem "BROCC4", 255, 1
+	DropItem "BROCC5", 255, 1
+	States
+	{
+	Spawn:
+		BRCC A -1
+		Stop	
+	}	
+}
+
+actor BROCC1
+{
+	//$Category Props
+	Height 72
+	Radius 32
+	+SOLID
+
+	States
+	{
+	Spawn:
+		BRCC A -1
+		Stop
+	}
+}
+
+actor BROCC2 : BROCC1
+{
+	States
+	{
+	Spawn:
+		BRCC B -1
+		Stop
+	}
+}
+
+actor BROCC3 : BROCC1
+{
+	States
+	{
+	Spawn:
+		BRCC C -1
+		Stop
+	}
+}
+
+actor BROCC4 : BROCC1
+{
+	States
+	{
+	Spawn:
+		BRCC D -1
+		Stop
+	}
+}
+
+actor BROCC5 : BROCC1
+{
+	States
+	{
+	Spawn:
+		BRCC E -1
+		Stop
 	}
 }
 

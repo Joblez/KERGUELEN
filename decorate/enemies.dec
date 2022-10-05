@@ -176,3 +176,5 @@ actor RockProjectile
 		Stop
 	}
 }
+
+actor Shark replaces Painelemental

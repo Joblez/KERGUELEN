@@ -76,8 +76,8 @@ class Revolver : BaseWeapon
 		SWAF F 1;
 		SWAF G 1;
 	PostPostShot:
-		SWAF I 1;
 		TNT1 A 0 A_ReFire("PostPostShot");
+		SWAF I 1;		
 		Goto Ready;
 
 	AltFire:

@@ -3,7 +3,7 @@
 
 //9x19mm Parabellum
 
-actor Ammo9mm: Ammo 2007
+actor Ammo9mm: Ammo 20007
 {
 	//$Category Decorate
 	Inventory.Amount 8
@@ -19,7 +19,7 @@ actor Ammo9mm: Ammo 2007
 	}
 }
 
-actor 9mmBigBox : Ammo9mm 2048
+actor 9mmBigBox : Ammo9mm 20048
 {
 	//$Category Decorate
 	Inventory.Amount 24

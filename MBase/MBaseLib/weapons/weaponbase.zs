@@ -104,8 +104,8 @@ class WeaponBase : DoomWeapon abstract
 	protected WeaponSwayer m_WeaponLookSwayer;
 	protected InterpolatedPSpriteTransform m_WeaponBobber;
 
-	protected Interpolateddouble m_BobAmplitude;
-	protected Interpolateddouble m_BobPlaybackSpeed;
+	protected InterpolatedDouble m_BobAmplitude;
+	protected InterpolatedDouble m_BobPlaybackSpeed;
 
 	private bool m_Initialized;
 
@@ -190,20 +190,28 @@ class WeaponBase : DoomWeapon abstract
 		m_PSpriteScale.SetBaseValue((1.0, 1.0));
 
 		m_WeaponRecoilSwayer = new("WeaponSwayer");
-		m_WeaponRecoilSwayer.SwayerInit(1.0 / m_RecoilResponseSpeed, 1.0 / m_RecoilReturnSpeed,
-			'RecoilTranslation', 'RecoilScale', (m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
+		m_WeaponRecoilSwayer.SwayerInit(
+			1.0 / m_RecoilResponseSpeed,
+			1.0 / m_RecoilReturnSpeed,
+			'RecoilTranslation',
+			'RecoilScale',
+			(m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
 			(m_RecoilMaxScaleX, m_RecoilMaxScaleY));
 		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
 
 		m_WeaponLookSwayer = new("WeaponSwayer");
-		m_WeaponLookSwayer.SwayerInit(1.0 / m_LookSwayResponseSpeed, 1.0 / m_LookSwayReturnSpeed,
-			'LookSwayTranslation', 'LookSwayScale', (m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
+		m_WeaponLookSwayer.SwayerInit(
+			1.0 / m_LookSwayResponseSpeed,
+			1.0 / m_LookSwayReturnSpeed,
+			'LookSwayTranslation',
+			'LookSwayScale',
+			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
 			(0, 0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
 
-		m_BobAmplitude = new("Interpolateddouble");
+		m_BobAmplitude = new("InterpolatedDouble");
 		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
-		m_BobPlaybackSpeed = new("Interpolateddouble");
+		m_BobPlaybackSpeed = new("InterpolatedDouble");
 		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
 
 		m_WeaponBobber = new("InterpolatedPSpriteTransform");
@@ -435,8 +443,8 @@ class WeaponBase : DoomWeapon abstract
 		vector3 zxyOffset = (spawnOffset.z, -spawnOffset.x, -spawnOffset.y);
 
 		// Rotate offset to view direction
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vector3Util.Left(), pawn.Pitch);
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vector3Util.Up(), pawn.Angle);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle);
 
 		let position = spawnPoint + zxyOffset;
 
@@ -595,8 +603,8 @@ class WeaponBase : DoomWeapon abstract
 	private void WeaponLookSway()
 	{
 		let swayForce = (
-				(owner.Angle - m_PreviousPlayerYaw) * (M_PI / 180) * -m_LookSwayStrengthX,
-				(owner.Pitch - m_PreviousPlayerPitch) * (M_PI / 180) * m_LookSwayStrengthY);
+			(owner.Angle - m_PreviousPlayerYaw) * (M_PI / 180) * -m_LookSwayStrengthX,
+			(owner.Pitch - m_PreviousPlayerPitch) * (M_PI / 180) * m_LookSwayStrengthY);
 
 		m_WeaponLookSwayer.AddForce(swayForce);
 	}
@@ -683,8 +691,8 @@ class WeaponBase : DoomWeapon abstract
 		vector3 zxyOffset = (spawnOffset.z, -spawnOffset.x, -spawnOffset.y);
 
 		// Rotate offset to view direction
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vector3Util.Left(), pawn.Pitch);
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vector3Util.Up(), pawn.Angle);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle);
 
 		let position = spawnPoint + zxyOffset;
 
@@ -777,8 +785,8 @@ class WeaponBase : DoomWeapon abstract
 			if (owner.ViewPos) originPosition += owner.ViewPos.Offset;
 			vector3 targetPosition = (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0));
 
-			vector3 lookDirection = Vector3Util.FromAngles(yaw, pitch);
-			vector3 targetDirection = Vector3Util.Direction(originPosition, targetPosition);
+			vector3 lookDirection = Vec3Util.FromAngles(yaw, pitch);
+			vector3 targetDirection = Vec3Util.Direction(originPosition, targetPosition);
 
 			double alignment = lookDirection dot targetDirection; // Name is incorrect, but meh.
 
@@ -802,8 +810,8 @@ class WeaponBase : DoomWeapon abstract
 				if (owner.ViewPos) originPosition += owner.ViewPos.Offset;
 				vector3 targetPosition = (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0));
 
-				vector3 lookDirection = Vector3Util.FromAngles(yaw, pitch);
-				vector3 targetDirection = Vector3Util.Direction(originPosition, targetPosition);
+				vector3 lookDirection = Vec3Util.FromAngles(yaw, pitch);
+				vector3 targetDirection = Vec3Util.Direction(originPosition, targetPosition);
 
 				double alignment = lookDirection dot targetDirection;
 

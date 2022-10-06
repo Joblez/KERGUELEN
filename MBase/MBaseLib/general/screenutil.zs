@@ -41,7 +41,7 @@ struct ScreenUtil
 		}
 
 		vector2 topLeft, topRight, bottomLeft, bottomRight;
-		[topLeft, topRight, bottomLeft, bottomRight] = Vector2Util.RectFromTopLeft(origin, w, h);
+		[topLeft, topRight, bottomLeft, bottomRight] = Vec2Util.RectFromTopLeft(origin, w, h);
 
 		return topLeft, topRight, bottomLeft, bottomRight;
 	}

@@ -17,6 +17,16 @@ struct Math
 		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
 	}
 
+	static double PosMod(double a, double b)
+	{
+		b = abs(b);
+
+		if (b == 0.0) ThrowAbortException("\"a mod 0\" is undefined.");
+
+		double remainder = a % b;
+		return remainder < 0 ? remainder + b : remainder;
+	}
+
 	static double Wrap(double value, double start, double end)
 	{
 		if (value < start)
@@ -90,6 +100,16 @@ struct MathF
 		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
 	}
 
+	static float PosMod(float a, float b)
+	{
+		b = abs(b);
+
+		if (b == 0.0) ThrowAbortException("\"a mod 0\" is undefined.");
+
+		float remainder = a % b;
+		return remainder < 0.0 ? remainder + b : remainder;
+	}
+
 	static float Wrap(float value, float start, float end)
 	{
 		if (value < start)
@@ -143,6 +163,48 @@ struct MathF
 		}
 
 		return result;
+	}
+}
+
+struct MathI
+{
+	static int Sign(int num)
+	{
+		return num >= 0 ? 1 : -1;
+	}
+
+	static int Lerp(int start, int end, int step)
+	{
+		return start + (end - start) * step;
+	}
+
+	static int Remap(int value, int aMin, int aMax, int bMin, int bMax)
+	{
+		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
+	}
+
+	static int PosMod(int a, int b)
+	{
+		b = abs(b);
+
+		if (b == 0) ThrowAbortException("\"a mod 0\" is undefined.");
+
+		int remainder = a % b;
+		return remainder < 0 ? remainder + b : remainder;
+	}
+
+	static int Wrap(int value, int start, int end)
+	{
+		if (value < start)
+		{
+			value = end - (start - value) % (end - start);
+		}
+		else
+		{
+			value = start + (value - start) % (end - start);
+		}
+
+		return value;
 	}
 }
 

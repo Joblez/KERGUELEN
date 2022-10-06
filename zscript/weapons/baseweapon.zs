@@ -112,50 +112,31 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		invoker.SetBaseOffset(x, y);
 	}
 
-	// Recoil.
+	//Visual Recoil (Zoomfactor)
 
-	action void A_AutoRecoil()
-	{
+	action void A_VRecoil(double zf, int quakeint, int quaketrem) {
+	
 		if (GetCvar("recoil_toggle") == 1)
 		{
-			A_SetPitch(pitch - 0.3);
-			//A_Recoil(0.1);
-			A_Quake(2, 1, 0, 4);
+			A_ZoomFactor(zf,ZOOM_NOSCALETURNING); 
+			A_Quake(quakeint, 1, 0, quaketrem);			
 		}
+	
 	}
 
-	action void A_ShotgunRecoil()
-	{
-		if (GetCVar("recoil_toggle") == 1)
-		{
-			//A_Recoil(0.4);
-			A_SetPitch(pitch - 2);
-			A_Quake(6, 4,0, 10);
-		}
+	// Felt Recoil.
+
+	action void A_FRecoil(double sp) {
+	
+		A_SetPitch(pitch - sp);
+
 	}
-
-	action void A_RifleRecoil()
-	{
-		if (GetCVar("recoil_toggle") == 1)
-		{
-			//A_Recoil(0.1);
-			A_SetPitch(pitch - 0.4);
-			A_Quake(3, 2, 0, 10);
-		}
-	}
-
-	action void A_PistolRecoil()
-	{
-		if (GetCVar("recoil_toggle") == 1)
-		{
-			A_WeaponReady(WRF_NOPRIMARY);
-
-			//A_Recoil(0.1);
-			A_SetPitch(pitch - 1);
-			A_Quake(3, 2, 0, 4);
-		}
-	}
-
+	
+/*	action void A_Frecoilr(double rp) {
+		A_WeaponReady(WRF_NOPRIMARY);	
+		A_SetPitch(pitch - rp);		
+	}*/
+	
 	// Casings.
 
 	action void A_CasingRifle(double x, double y)

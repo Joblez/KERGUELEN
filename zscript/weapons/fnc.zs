@@ -70,7 +70,10 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_StartSound("weapons/empty", 10);
 		FNCF DEF 2;
 		Goto Ready;
-
+	ZF:
+		TNT1 A 1 A_VRecoil(0.99,1,4);
+		TNT1 A 1 A_VRecoil(1.0,1,4);
+		stop;
 	Fire:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
@@ -78,13 +81,13 @@ class FNC : BaseWeapon replaces Chaingun
 	Single:
 		TNT1 A 0 A_FireBullets(3, 1, -1, 8, "BulletPuff");
 		FNFL A 1 Bright {
-			A_RifleRecoil();
+			A_FRecoil(0.8);
 			A_CasingRifle(16 ,-3);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_StartSound("fnc/fire", 1);
 			A_AlertMonsters();
-
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_WEAPON);
 			if (psp) psp.frame = random(0, 3);
 		}
@@ -99,13 +102,13 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Finalshot;
 		TNT1 A 0 A_FireBullets(5, 2, -1, 8, "Bulletpuff");
 		FNFL A 1 Bright {
-			A_RifleRecoil();
+			A_FRecoil(0.8);
 			A_CasingRifle(16,-3);
 			A_SingleSmoke(5,-3);
 			A_TakeInventory("RifleMag",1);
 			A_AlertMonsters();
 			A_StartSound("fnc/loop",1,CHANF_LOOPING);
-
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
 			psp.frame = random(0,3);

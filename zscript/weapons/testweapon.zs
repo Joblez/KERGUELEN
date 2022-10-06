@@ -45,6 +45,10 @@ class Revolver : BaseWeapon
 		PICK A -1;
 		Stop;
 
+	ZF:
+		TNT1 A 1 A_VRecoil(0.95,1,4);
+		TNT1 A 1 A_VRecoil(1.0,1,4);
+		stop;
 	Fire:
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
@@ -60,8 +64,9 @@ class Revolver : BaseWeapon
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
 			A_StartSound("sw/fire", 1);
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 23, "BulletPuff");
-			A_PistolRecoil();
+			A_FRecoil(1);
 			A_ShotgunSmoke(3, 3);
 		}
 		TNT1 A 0 { invoker.m_SingleAction = false; }

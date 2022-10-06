@@ -40,7 +40,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		ITAI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
-
+	ZF:
+		TNT1 A 1 A_VRecoil(0.9,1,4);
+		TNT1 A 1 A_VRecoil(0.95,1,4);
+		TNT1 A 1 A_VRecoil(1.0,1,4);
+		stop;
 	Fire:
 		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If empty.
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loaded.
@@ -50,12 +54,13 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 { invoker.m_Chambered = false; }
 		TNT1 A 0 A_FireBullets(5, 4, 12, 3, "BulletPuff");
 		ITAF A 2 Bright {
-			A_ShotgunRecoil();
+			A_FRecoil(2);
 			A_AlertMonsters();
 			A_ShotgunSmoke(4, -4);
 			A_ShotgunSmoke(4, -4);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", 1);
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);			
 		}
 		ITAF B 1 Bright;
 		ITAF CDEF 1;

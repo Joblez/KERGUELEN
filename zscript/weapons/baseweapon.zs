@@ -112,24 +112,23 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		invoker.SetBaseOffset(x, y);
 	}
 
-	//Visual Recoil (Zoomfactor)
+	// Visual Recoil (Zoomfactor).
 
-	action void A_VRecoil(double zf, int quakeint, int quaketrem) {
+	action void A_VRecoil(double zf, int quakeInt, int quakeTrem) {
 
-		if (GetCvar("recoil_toggle") == 1)
+		if (GetCVar("recoil_toggle") == 1)
 		{
-			A_ZoomFactor(zf,ZOOM_NOSCALETURNING);
-			A_Quake(quakeint, 1, 0, quaketrem);
+			A_ZoomFactor(zf, ZOOM_NOSCALETURNING);
+			A_Quake(quakeInt, 1, 0, quakeTrem);
 		}
 
 	}
 
 	// Felt Recoil.
 
-	action void A_FRecoil(double sp) {
-
+	action void A_FRecoil(double sp)
+	{
 		A_SetPitch(pitch - sp);
-
 	}
 
 /*	action void A_Frecoilr(double rp) {

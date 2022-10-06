@@ -1,6 +1,6 @@
 // TODO: [Long-term] Learn way more math.
 
-struct Math
+class Math
 {
 	static double Sign(double num)
 	{
@@ -83,7 +83,7 @@ struct Math
 	}
 }
 
-struct MathF
+class MathF
 {
 	static float Sign(float num)
 	{
@@ -166,7 +166,7 @@ struct MathF
 	}
 }
 
-struct MathI
+class MathI
 {
 	static int Sign(int num)
 	{
@@ -208,7 +208,7 @@ struct MathI
 	}
 }
 
-struct MathVec2
+class MathVec2
 {
 	static vector2 Clamp(vector2 vector, double minLength, double maxLength)
 	{
@@ -301,7 +301,7 @@ struct MathVec2
 	}
 }
 
-struct MathVec3
+class MathVec3
 {
 	static vector3 Clamp(vector3 vector, double minLength, double maxLength)
 	{

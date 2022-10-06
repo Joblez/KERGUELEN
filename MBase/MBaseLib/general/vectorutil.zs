@@ -1,4 +1,4 @@
-struct Vec2Util
+class Vec2Util
 {
 	//====================== Directions ======================//
 
@@ -84,7 +84,7 @@ struct Vec2Util
 	}
 }
 
-struct Vec3Util
+class Vec3Util
 {
 	//====================== Directions ======================//
 

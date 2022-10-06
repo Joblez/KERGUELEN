@@ -33,6 +33,13 @@ ric2	RIC02
 ric3	RIC03
 ric4	RIC04
 
+$random weapons/hitflesh { ricf1 ricf2 ricf3 ricf4}
+
+ricf1 RICF1
+ricf2 RICF2
+ricf3 RICF3
+ricf4 RICF4
+
 weapon/pickup PICKUP
 
 pickup/ammo DSTNAMO
@@ -45,7 +52,9 @@ $ambient 2 Forest Surround Continuous 1.0
 $ambient 3 Waterfall Point Continuous 1.0
 $ambient 4 Cave Point Continuous 1.0
 $ambient 5 Cave Surround Continuous 1.0
+
 world/drip dsempty
+
 $random world/watersplash { dssplas1 dssplas2 dssplas3 dssplas4 dssplas5 }
 
 dssplas1 dssplas1

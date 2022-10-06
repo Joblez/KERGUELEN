@@ -79,7 +79,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Finalshot;
 		TNT1 A 0 A_JumpIf((invoker.m_FireSelect), "Automatic"); //Goes to automatic fire if the selector is on full auto
 	Single:
-		TNT1 A 0 A_FireBullets(3, 1, -1, 8, "BulletPuff");
+		TNT1 A 0 A_FireBullets(3, 1, -1, 5, "Bullet_Puff");
 		FNFL A 1 Bright {
 			A_FRecoil(0.8);
 			A_CasingRifle(16 ,-3);
@@ -100,7 +100,7 @@ class FNC : BaseWeapon replaces Chaingun
 	Automatic:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
-		TNT1 A 0 A_FireBullets(5, 2, -1, 8, "Bulletpuff");
+		TNT1 A 0 A_FireBullets(5, 2, -1, 5, "Bullet_puff");
 		FNFL A 1 Bright {
 			A_FRecoil(0.8);
 			A_CasingRifle(16,-3);

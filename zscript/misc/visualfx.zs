@@ -244,37 +244,35 @@ class Bullet_Puff : Actor replaces BulletPuff
 		+NOGRAVITY;
 		+RANDOMIZE;
 		+FLOORCLIP;
+		+PUFFONACTORS;
 		+NOEXTREMEDEATH;
 	}
 
 	States
 	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SetScale(0.2);
-		TNT1 A 1 A_SetTranslucent(0.25);
-		TNT1 A 0 A_StartSound("weapons/ricochet", 2);
-		FX57 A 1 Bright;
-		FX57 BC 1 Bright A_SetTranslucent(.8, 1);
-		FX57 DE 1 Bright A_SetTranslucent(.6, 1);
+	Xdeath:
+		TNT1 A 0 A_SetRenderStyle(200,STYLE_None);
+		TNT1 A 0 A_StartSound("weapons/hitflesh", 11,0,0.5);	
+		CLOD ABC 3;
 		Stop;
 
 	Crash:
 		TNT1 A 0 A_Jump(128, "Crash2", "Crash3");
-		TNT1 A 0 A_StartSound("weapons/ricochet", 2);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
 		FX57 A 1 Bright;
 		FX57 BC 1 Bright;
 		FX57 D 1 Bright;
 		FX57 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash2:
-		TNT1 A 0 A_StartSound("weapons/ricochet", 2);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
 		FX57 J 1 Bright;
 		FX57 KL 1 Bright;
 		FX57 M 1 Bright;
 		FX57 N 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash3:
-		TNT1 A 0 A_StartSound("weapons/ricochet", 2);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
 		FX57 F 1 Bright;
 		FX57 GH 1 Bright;
 		FX57 I 1 Bright;
@@ -284,6 +282,10 @@ class Bullet_Puff : Actor replaces BulletPuff
 
 class Melee_Puff: Bullet_Puff
 {
+	Default
+	{
+	-PUFFONACTORS;
+	}
 	States
 	{
 	Spawn:

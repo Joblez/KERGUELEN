@@ -84,6 +84,8 @@ DSREVO4	DSREVO4
 
 sw/cock DSHAMR
 
+sw/cock2 DSHAM2
+
 sw/open DSRVOPN
 
 sw/close DSRVCLS

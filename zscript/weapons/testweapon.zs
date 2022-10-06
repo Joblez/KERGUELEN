@@ -48,7 +48,7 @@ class Revolver : BaseWeapon
 	Fire:
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
-		TNT1 A 0 A_StartSound("sw/cock", 3);
+		TNT1 A 0 A_StartSound("sw/cock2", 9);
 		SWDA A 1;
 		SWDA B 1;
 		SWDA C 1;
@@ -76,8 +76,8 @@ class Revolver : BaseWeapon
 		SWAF F 1;
 		SWAF G 1;
 	PostPostShot:
-		TNT1 A 0 A_ReFire("PostPostShot");
-		SWAF I 1;		
+		SWAF I 1;
+		TNT1 A 0 A_ReFire("PostPostShot");		
 		Goto Ready;
 
 	AltFire:

@@ -10,8 +10,8 @@ actor LRockSpawner : RandomSpawner 10255
 	{
 	Spawn:
 		ROCC A -1
-		Stop	
-	}		
+		Stop
+	}
 }
 
 actor SROCC1
@@ -81,8 +81,8 @@ actor MRockSpawner : RandomSpawner 10265
 	{
 	Spawn:
 		MRCC A -1
-		Stop	
-	}		
+		Stop
+	}
 }
 
 actor MROCC1
@@ -152,8 +152,8 @@ actor BRockSpawner : RandomSpawner 10266
 	{
 	Spawn:
 		BRCC A -1
-		Stop	
-	}	
+		Stop
+	}
 }
 
 actor BROCC1

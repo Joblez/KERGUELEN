@@ -115,28 +115,28 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	//Visual Recoil (Zoomfactor)
 
 	action void A_VRecoil(double zf, int quakeint, int quaketrem) {
-	
+
 		if (GetCvar("recoil_toggle") == 1)
 		{
-			A_ZoomFactor(zf,ZOOM_NOSCALETURNING); 
-			A_Quake(quakeint, 1, 0, quaketrem);			
+			A_ZoomFactor(zf,ZOOM_NOSCALETURNING);
+			A_Quake(quakeint, 1, 0, quaketrem);
 		}
-	
+
 	}
 
 	// Felt Recoil.
 
 	action void A_FRecoil(double sp) {
-	
+
 		A_SetPitch(pitch - sp);
 
 	}
-	
+
 /*	action void A_Frecoilr(double rp) {
-		A_WeaponReady(WRF_NOPRIMARY);	
-		A_SetPitch(pitch - rp);		
+		A_WeaponReady(WRF_NOPRIMARY);
+		A_SetPitch(pitch - rp);
 	}*/
-	
+
 	// Casings.
 
 	action void A_CasingRifle(double x, double y)

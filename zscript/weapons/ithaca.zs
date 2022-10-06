@@ -60,7 +60,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_ShotgunSmoke(4, -4);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", 1);
-			A_GunFlash("ZF",GFF_NOEXTCHANGE);			
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 		}
 		ITAF B 1 Bright;
 		ITAF CDEF 1;

@@ -26,7 +26,7 @@ struct Vec2Util
 	//======================= Swizzles =======================//
 
 	static vector2 XX(vector2 v) { return (v.x, v.x); }
-	static vector2 XY(vector2 v) => v;
+	static vector2 XY(vector2 v) { return v; }
 
 	static vector2 YY(vector2 v) { return (v.y, v.y); }
 	static vector2 YX(vector2 v) { return (v.y, v.x); }

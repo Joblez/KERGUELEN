@@ -1,4 +1,4 @@
-struct ActorUtil
+class ActorUtil
 {
 	static vector3 PosRelativeToActor(Actor this, Actor other)
 	{

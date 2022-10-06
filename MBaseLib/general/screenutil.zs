@@ -1,4 +1,4 @@
-struct ScreenUtil
+class ScreenUtil
 {
 	static vector2 NormalizedPositionToView(vector2 pos)
 	{

@@ -1,1 +1,0 @@
-texture B_WAT1 range B_WAT8 tics 8

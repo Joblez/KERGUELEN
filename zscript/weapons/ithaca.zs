@@ -23,7 +23,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.SlotNumber 3;
 		Weapon.AmmoType2 "Ammo12";
 		Weapon.AmmoType1 "Sh12Tube";
-		Weapon.Kickback 100;		
+		Weapon.Kickback 100;
+
 		Inventory.PickupMessage "(3)";
 		DamageType "Shotgun";
 		Tag "Ithaca";

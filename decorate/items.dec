@@ -51,7 +51,7 @@ actor MedKit : Health replaces MediKit
 actor AMRShard : BasicArmorBonus replaces Armorbonus
 {
 	Inventory.PickupMessage "Armor Bonus - (+2 Armor)"
-	Inventory.PickupSound "pickup/armor2"
+	Inventory.PickupSound "pickup/armor"
 
 	Armor.SavePercent 33.335
 	Armor.SaveAmount 2

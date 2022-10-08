@@ -40,7 +40,7 @@ actor Ammo223: Ammo replaces Clip
 {
 	//$Category Ammunition
 	Inventory.Amount 30
-	Inventory.MaxAmount 150
+	Inventory.MaxAmount 180
 	Inventory.PickupMessage "An M16 magazine."
 	Inventory.PickupSound "pickup/ammo"
 
@@ -106,10 +106,8 @@ actor Ammo357: Ammo replaces Cell
 {
 	//$Category Decorate
 	Ammo.BackpackAmount 6
-	Ammo.BackpackMaxAmount 36
-
 	Inventory.Amount 6
-	Inventory.MaxAmount 24
+	Inventory.MaxAmount 36
 	Inventory.PickupMessage "A few revolver bullets."
 	Inventory.PickupSound "pickup/ammo"
 
@@ -198,7 +196,7 @@ actor Ammo12 : Ammo 2008
 actor 12GaugeBox : Ammo12 2049
 {
 	//$Category Decorate
-	Inventory.Amount 20
+	Inventory.Amount 24
 	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A box of shotgun shells."
 

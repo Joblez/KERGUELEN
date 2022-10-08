@@ -7,10 +7,10 @@ actor NewPlayer : PlayerPawn
 	Player.StartItem "Hatchet", 1
 	Player.StartItem "Ammo357", 24
 	Player.SoundClass "player"
-	Player.WeaponSlot 1, ""
-	Player.WeaponSlot 2, ""
-	Player.WeaponSlot 3, ""
-	Player.WeaponSlot 4, ""
+	Player.WeaponSlot 1, "Hatchet"
+	Player.WeaponSlot 2, "Revolver"
+	Player.WeaponSlot 3, "Ithaca"
+	Player.WeaponSlot 4, "FNC"
 	Player.WeaponSlot 5, ""
 	Player.WeaponSlot 6, ""
 	Player.JumpZ 9.0

@@ -4,7 +4,7 @@ actor Grarg replaces DoomImp
 	Radius 16
 	Height 56
 	Speed 5
-	PainChance 200
+	PainChance 240
 	Mass 100
 	Scale 0.7
 	Monster
@@ -36,20 +36,20 @@ actor Grarg replaces DoomImp
 
 	Missile:
 		TNT1 A 0 A_PlaySound("Grarg/Bite")
-		GRRG F 3 A_FaceTarget
-		TNT1 A 0 ThrustThingZ(0, 32, 0, 0)
-		TNT1 A 0 ThrustThing(angle * 256 / 360, 18, 0, 0)
+		GRRG A 6 A_FaceTarget
+		TNT1 A 0 ThrustThingZ(0, 40, 0, 0)
+		TNT1 A 0 ThrustThing(angle * 256 / 360, 20, 0, 0)
 	Jumpup:
 		GRRG G 5
-		GRRG H 2 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+		GRRG H 2 A_CustomMeleeAttack(random(2, 4) * 5, "imp/melee", "Melee", true)
 	JumpDown:
-		GRRG H 1 A_CheckFloor("Land")
-		GRRG H 1
-		GRRG H 1 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+		GRRG H 2 A_CheckFloor("Land")
+		GRRG H 2
+		GRRG H 3 A_CustomMeleeAttack(random(2, 4) * 5, "imp/melee", "Melee", true)
 		Loop
 
 	Land:
-		GRRG FA 2 A_Stop
+		GRRG A 8 A_Stop
 		Goto See
 
 	Grumble:
@@ -75,11 +75,11 @@ actor Grarg replaces DoomImp
 
 actor GLG replaces ZombieMan
 {
-	Health 40
+	Health 50
 	Radius 16
 	Height 48
-	Speed 8
-	PainChance 200
+	Speed 4
+	PainChance 255
 	Mass 100
 	Scale 0.7
 	Monster

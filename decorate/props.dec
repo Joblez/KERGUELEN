@@ -289,28 +289,6 @@ actor NFTree2 : NFTree1 10273
 	}
 }
 
-actor NFTree3 : NFTree1 10274
-{
-	//$Category Props
-	States
-	{
-	Spawn:
-		TRNF C -1
-		Stop
-	}
-}
-
-actor NFTree4 : NFTree1 10275
-{
-	//$Category Props
-	States
-	{
-	Spawn:
-		TRNF D -1
-		Stop
-	}
-}
-
 actor Cabbage 10276
 {
 	//$Category Props

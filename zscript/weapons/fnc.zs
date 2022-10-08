@@ -82,7 +82,7 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBullets(3, 1, -1, 5, "Bullet_Puff");
 		FNFL A 1 Bright {
 			A_FRecoil(0.8);
-			A_CasingRifle(16 ,-3);
+			A_CasingRifle(18,-5);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_StartSound("fnc/fire", 1);
@@ -103,7 +103,7 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBullets(5, 2, -1, 5, "Bullet_puff");
 		FNFL A 1 Bright {
 			A_FRecoil(0.8);
-			A_CasingRifle(16,-3);
+			A_CasingRifle(18,-5);
 			A_SingleSmoke(5,-3);
 			A_TakeInventory("RifleMag",1);
 			A_AlertMonsters();

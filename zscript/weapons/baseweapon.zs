@@ -131,13 +131,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		A_SetPitch(pitch - sp);
 	}
 
-/*	action void A_Frecoilr(double rp) {
-		A_WeaponReady(WRF_NOPRIMARY);
-		A_SetPitch(pitch - rp);
-	}*/
-
-	// Casings.
-
 	action void A_CasingRifle(double x, double y)
 	{
 		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RifleSpawnerR", 0, 0, x, y);

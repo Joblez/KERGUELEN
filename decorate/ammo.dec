@@ -102,7 +102,7 @@ actor Ammo45bigbox : Ammo45 303
 
 //.357 Magnum
 
-actor Ammo357: Ammo 300
+actor Ammo357: Ammo replaces Cell
 {
 	//$Category Decorate
 	Ammo.BackpackAmount 6
@@ -123,7 +123,7 @@ actor Ammo357: Ammo 300
 	}
 }
 
-actor 357BigBox : Ammo357 301
+actor 357BigBox : Ammo357 replaces Cellpack
 {
 	//$Category Decorate
 	Inventory.Amount 12

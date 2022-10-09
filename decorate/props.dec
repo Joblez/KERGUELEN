@@ -215,7 +215,7 @@ actor BROCC5 : BROCC1
 actor Shrub1 10268
 {
 	//$Category Props
-	Height 60
+	Height 32
 	Radius 8
 	+SOLID
 

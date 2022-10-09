@@ -53,7 +53,7 @@ actor Grarg replaces DoomImp
 		Goto See
 
 	Grumble:
-		TNT1 A 0 A_PlaySound("Grarg/Idle")
+		TNT1 A 0 A_PlaySound("Grarg/Idle",CHAN_AUTO,0.25)
 		Goto Spawn
 
 	Pain:
@@ -128,7 +128,7 @@ actor GLG replaces ZombieMan
 		Goto See
 
 	Grumble:
-		TNT1 A 0 A_PlaySound("GLG/Idle")
+		TNT1 A 0 A_PlaySound("GLG/Idle",CHAN_AUTO,0.25)
 		Goto Spawn
 
 	Pain:

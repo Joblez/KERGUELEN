@@ -1,18 +1,17 @@
-Mod by Joblez
+Mod by Joe 'Joblez' Salem
 
 MBase created by Magdiel, creator of various features, assisted in development (king of formatting fixes)
 
+This mod uses Nashgore by Nash Muhandes
+
 Specifics:
 
-'Grarg' Enemy - 3D Realms, Ultimecia
+1.Enemies/NPCs
+'Grarg' Enemy - 3D Realms, Ultimecia, Obsidian
 
-'Greenlittleguy' Enemy - Bethesda
+'Greenlittleguy' Enemy - Bethesda, Obsidian
 
-FNC bolt sound effects - Polenar Tactical, TFB TV
-
-Explosion Sprites - Rogue Software
-
-Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+'Wyvern' - Raven Software, Obsidian
 
 Shark credits:
 Submitted: Krispy
@@ -20,4 +19,13 @@ Decorate: Krispy, zrrion the insect, IOP team (gibs)
 Sounds: 3D Realms
 Sprites: 3D Realms
 
-This mod uses Nashgore by Nash Muahndes.
+Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+
+2.Weapons
+
+Selecting weapon sounds - CS:GO
+
+FNC bolt sound effects - Polenar Tactical, TFB TV
+
+Explosion Sprites - Rogue Software
+

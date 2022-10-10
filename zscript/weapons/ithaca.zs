@@ -24,7 +24,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.AmmoType2 "Ammo12";
 		Weapon.AmmoType1 "Sh12Tube";
 		Weapon.Kickback 100;
-
+		Weapon.Upsound("shotgun/draw");
 		Inventory.PickupMessage "(3)";
 		DamageType "Shotgun";
 		Tag "Ithaca";
@@ -104,11 +104,12 @@ class Ithaca : BaseWeapon replaces Shotgun
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		ITAI A 1 A_SetBaseOffset(67, 100);
-		ITAI A 1 A_SetBaseOffset(54, 81);
-		ITAI A 1 A_SetBaseOffset(32, 69);
-		ITAI A 1 A_SetBaseOffset(22, 58);
-		ITAI A 2 A_SetBaseOffset(2, 34);
+		ITRS F 1 A_SetBaseOffset(70, 100);
+		ITRS E 1 A_SetBaseOffset(60, 80);
+		ITRS D 1 A_SetBaseOffset(40, 60);
+		ITRS C 1 A_SetBaseOffset(20, 40);
+		ITRS B 1 A_SetBaseOffset(10, 30); 
+		ITRS A 1 A_SetBaseOffset(2, 30);
 		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		ITAF FGH 2;
 		ITAI A 1 A_Raise(16);

@@ -185,18 +185,17 @@ actor Wyvern replaces Cacodemon
 {
 
 	Health 350
-	Mass 100
+	Mass 150
 	Speed 14
 	Height 56
 	Radius 32
-	Painchance 200
+	Painchance 220
 	Monster
 	Obituary "Amerigo met a wyvern."
 	Seesound "Wyvern/pain"
 	Deathsound "Wyvern/death"
 	painsound "Wyvern/pain"
 	+FLOORCLIP
-	//+NOBLOOD
 	+FLOAT	
 	+NOGRAVITY
 	States
@@ -207,6 +206,8 @@ actor Wyvern replaces Cacodemon
 		WYVN DCB 5 A_Look
 		Loop
 	See:
+		TNT1 A 0 A_JumpIf (health <= 100, "Rage")	
+		TNT1 A 0 A_Setspeed(14)	
 		WYVN ABC 3 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 3 A_Chase
@@ -223,8 +224,8 @@ actor Wyvern replaces Cacodemon
 		WYVN ABC 2 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 2 A_Chase
-		TNT1 A 0 A_Setspeed(14)
 		goto see
+		
 	Missile:
 		WYVN F 5 A_FaceTarget
 		WYVN E 5 A_FaceTarget
@@ -234,7 +235,6 @@ actor Wyvern replaces Cacodemon
 		WYVN F 3
 		WYVN F 3 A_Pain
 		WYVN F 6
-		TNT1 A 0 A_Jump(96,"Rage")
 		Goto See
 	Death:
 		WYVD A 8 A_Playsound("Wyvern/scream",CHAN_AUTO)

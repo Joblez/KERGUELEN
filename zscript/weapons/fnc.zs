@@ -26,7 +26,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.AmmoType2 "Ammo223";
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 10;
-
+		Weapon.Upsound("fnc/draw");
 		DamageType "Normal";
 		Tag "FNC";
 	}
@@ -44,22 +44,22 @@ class FNC : BaseWeapon replaces Chaingun
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		FNCI A 1 A_SetBaseOffset(67, 100);
-		FNCI A 1 A_SetBaseOffset(54, 81);
-		FNCI A 1 A_SetBaseOffset(32, 69);
-		FNCI A 1 A_SetBaseOffset(22, 58);
-		FNCI A 1 A_SetBaseOffset(2, 34);
-		FNCF CDE 1;
+		FNRS F 1 A_SetBaseOffset(60, 100);
+		FNRS E 1 A_SetBaseOffset(50, 80);
+		FNRS D 1 A_SetBaseOffset(40, 60);
+		FNRS C 1 A_SetBaseOffset(20, 40);
+		FNRS BA 1 A_SetBaseOffset(2, 30);
+		FNCF DE 1;
 		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		FNCI A 1 A_Raise(16);
 		Goto Ready;
 
 	Deselect:
-		FNCI A 1 A_SetBaseOffset(2, 34);
-		FNCI A 1 A_SetBaseOffset(22, 58);
-		FNCI A 1 A_SetBaseOffset(32, 69);
-		FNCI A 1 A_SetBaseOffset(54, 81);
-		FNCI A 1 A_SetBaseOffset(67, 100);
+		FNRS AB 1 A_SetBaseOffset(2, 30);
+		FNRS C 1 A_SetBaseOffset(20, 40);
+		FNRS D 1 A_SetBaseOffset(40, 60);
+		FNRS E 1 A_SetBaseOffset(50, 80);
+		FNRS F 1 A_SetBaseOffset(60, 100);
 		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		TNT1 A 4;
 		FNCI A 1 A_Lower(16);

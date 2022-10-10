@@ -39,8 +39,8 @@ actor 9mmBigBox : Ammo9mm 20048
 actor Ammo223: Ammo replaces Clip
 {
 	//$Category Ammunition
-	Inventory.Amount 30
-	Inventory.MaxAmount 180
+	Inventory.Amount 35
+	Inventory.MaxAmount 210
 	Inventory.PickupMessage "An M16 magazine."
 	Inventory.PickupSound "pickup/ammo"
 
@@ -55,7 +55,7 @@ actor Ammo223: Ammo replaces Clip
 actor Ammo223BigBox : Ammo223 replaces ClipBox
 {
 	//$Category Ammunition
-	Inventory.Amount 60
+	Inventory.Amount 70
 	Inventory.PickupMessage "A box of M16 magazines."
 	Inventory.PickupSound "pickup/ammo"
 

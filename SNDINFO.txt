@@ -138,6 +138,8 @@ DWKHIT3 DWKHIT3
 
 hatchet/hitwall DSHITWL
 
+hatchet/draw DSHATGB
+
 //ITHACA
 
 $random shotgun/fire { DSSHTG1 DSSHTG2 DSSHTG3 }
@@ -154,6 +156,8 @@ $random shotgun/load { DSLODH1 DSLODH2 DSLODH3 }
 DSLODH1 DSLODH1
 DSLODH2 DSLODH2
 DSLODH3 DSLODH3
+
+shotgun/draw DSSHTGB
 
 //FNC
 
@@ -179,6 +183,8 @@ fnc/loopend DSMCHED
 weapons/empty DRYFIRE
 
 weapons/firemode DSWEPCK
+
+fnc/draw DSFNCGB
 
 //GRARG
 

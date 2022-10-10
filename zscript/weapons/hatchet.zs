@@ -20,7 +20,7 @@ class Hatchet : BaseWeapon
 		Weapon.SlotNumber 1;
 
 		BaseWeapon.LookSwayResponse 0.0;
-
+		Weapon.Upsound("hatchet/draw");
 		DamageType "Hatchet";
 		+WEAPON.MELEEWEAPON;
 		+WEAPON.AMMO_OPTIONAL;
@@ -43,13 +43,12 @@ class Hatchet : BaseWeapon
 		Goto Ready;
 
 	Select:
-		TNT1 A 0 A_SetBaseOffset(1, 30);
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
-		TNT1 A 1 A_SetBaseOffset(67, 100);
-		HATI A 1 A_SetBaseOffset(67, 100);
-		HATI A 1 A_SetBaseOffset(54, 81);
-		HATI A 1 A_SetBaseOffset(32, 69);
-		HATI A 1 A_SetBaseOffset(22, 58);
+		TNT1 A 1 A_SetBaseOffset(60, 80);
+		HAF1 G 1 A_SetBaseOffset(40, 60);
+		HAF1 H 1 A_SetBaseOffset(20, 50);
+		HAF1 I 1 A_SetBaseOffset(2, 40);
+		HAF1 JKLM 1 A_SetBaseOffset(1, 30);
 		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		CRWI A 0 A_Raise(16);
 		Goto Ready;
@@ -75,7 +74,8 @@ class Hatchet : BaseWeapon
 		HAF2 C 1;
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF2 D 1;
-		HAF2 EFGH 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
+		HAF2 E 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
+		HAF2 FGH 1;
 		HAF2 IJKLMNOP 2 A_WeaponReady();
 		Goto Ready;
 

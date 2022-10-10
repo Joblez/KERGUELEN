@@ -52,7 +52,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Goto Empty;
 
 		TNT1 A 0 { invoker.m_Chambered = false; }
-		TNT1 A 0 A_FireBullets(5, 4, 12, 3, "Bullet_Puff");
+		TNT1 A 0 A_FireBullets(5, 4, 12, 4, "Bullet_Puff");
 		ITAF A 2 Bright {
 			A_FRecoil(2);
 			A_AlertMonsters();

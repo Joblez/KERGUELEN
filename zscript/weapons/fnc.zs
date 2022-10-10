@@ -1,4 +1,4 @@
-const RMAG = 30;
+const RMAG = 35;
 
 class RifleMag : Ammo
 {
@@ -21,7 +21,7 @@ class FNC : BaseWeapon replaces Chaingun
 
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
-		Weapon.AmmoGive2 30;
+		Weapon.AmmoGive2 RMAG;
 		Weapon.AmmoType1 "RifleMag";
 		Weapon.AmmoType2 "Ammo223";
 		Weapon.SlotNumber 4;

@@ -160,7 +160,7 @@ actor BROCC1
 {
 	//$Category Props
 	Height 72
-	Radius 32
+	Radius 48
 	+SOLID
 
 	States

@@ -133,7 +133,7 @@ class Revolver : BaseWeapon
 		SWEJ HI 1;
 		SWEJ JKL 1;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO);
-		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
+		//TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
 		SWEJ M 2;
 		TNT1 A 0 {
 			A_CasingRevolver(random(-4,4), random(-30,-34));

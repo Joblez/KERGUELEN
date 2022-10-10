@@ -1,4 +1,4 @@
-$pitchshiftrange 0
+//CASINGS
 $Random weapons/shell2 { DS76C1 DS76C2 DS76C3 DS76C4 }
 
 DS76C1	DS76C1
@@ -40,6 +40,8 @@ ricf2 RICF2
 ricf3 RICF3
 ricf4 RICF4
 
+//PICKUPS
+
 weapon/pickup PICKUP
 
 pickup/health DSHLTUP
@@ -49,6 +51,8 @@ pickup/armor DSAMRUP
 pickup/misc DSITEMUP
 
 pickup/ammo DSTNAMO
+
+//AMBIENT/WORLD SOUNDS
 
 Forest DAMBNTR
 Waterfall DAMBWTR
@@ -90,6 +94,8 @@ dslvsi5 dslvsi5
 world/lavsiz2			dslvsiz2
 world/lavasizzlesmall	dslavsml
 
+//MOD.19
+
 $random sw/fire { DSREVO1 DSREVO2 DSREVO3 DSREVO4 }
 
 DSREVO1	DSREVO1
@@ -116,6 +122,8 @@ DSRLOD4 DSRLOD4
 
 sw/raise DSREGRB
 
+//HATCHET
+
 $random hatchet/swing { DSFISW1 DSFISW2 DSFISW3 }
 
 DSFISW1 DSFISW1
@@ -129,6 +137,8 @@ DWKHIT2 DWKHIT2
 DWKHIT3 DWKHIT3
 
 hatchet/hitwall DSHITWL
+
+//ITHACA
 
 $random shotgun/fire { DSSHTG1 DSSHTG2 DSSHTG3 }
 
@@ -144,6 +154,8 @@ $random shotgun/load { DSLODH1 DSLODH2 DSLODH3 }
 DSLODH1 DSLODH1
 DSLODH2 DSLODH2
 DSLODH3 DSLODH3
+
+//FNC
 
 $random fnc/fire { DSFNCF1 DSFNCF2 DSFNCF3 DSFNCF4 }
 
@@ -168,6 +180,8 @@ weapons/empty DRYFIRE
 
 weapons/firemode DSWEPCK
 
+//GRARG
+
 $random Grarg/Death { BPDEAT1 BPDEAT2 }
 
 BPDEAT1 BPDEAT1
@@ -185,6 +199,8 @@ Grarg/Idle BPGRUMBL
 $random Grarg/Barks { BPBark BPBark2 }
 BPBark	BPBark
 BPBark2 BPBark2
+
+//GLG
 
 rock/bounce DSRCKGD
 
@@ -206,6 +222,28 @@ DGLGPN1 DGLGPN1
 DGLGPN2 DGLGPN2
 DGLGPN3 DGLGPN3
 
+//WYVERN
+
+$random Wyvern/pain { DWYPAN1 DWYPAN2 DWYPAN3 DWYPAN4}
+
+DWYPAN1 DWYPAN1
+DWYPAN2 DWYPAN2
+DWYPAN3 DWYPAN3
+DWYPAN4 DWYPAN4
+
+Wyvern/death dwydeth
+
+Wyvern/fall DWYDLND
+
+$random Wyvern/flap { DWYFLP1 DWYFLP2 DWYFLP3 DWYFLP4 }
+
+DWYFLP1 DWYFLP1
+DWYFLP2 DWYFLP2
+DWYFLP3 DWYFLP3
+DWYFLP4 DWYFLP4
+
+//SHEEP
+
 $random sheep/sight { sight1 sight2 sight3 sight4 sight5 sight6 }
 sight1	sight1
 sight2	sight2
@@ -216,6 +254,8 @@ sight6	sight6
 
 sheep/eat SHEEPNOM
 
+//PENGUIN
+
 $random penguin/noot { DPNGRT1 DPNGRT2 }
 
 DPNGRT1 DPNGRT1
@@ -223,6 +263,8 @@ DPNGRT2 DPNGRT2
 
 penguin/death DPNGDTH
 penguin/pain DPNGPAN
+
+//SHARK
 
 shark/sight DETECT
 shark/death SQUISH

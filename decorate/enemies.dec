@@ -8,11 +8,12 @@ actor Grarg replaces DoomImp
 	Mass 100
 	Scale 0.7
 	Monster
+	Dropitem "Ammo357",64
 	SeeSound "Grarg/Sight"
 	DeathSound "Grarg/Death"
 	ActiveSound "Grarg/Barks"
 	PainSound "Grarg/Pain"
-	Obituary "%o was ripped to pieces."
+	Obituary "Amerigo was ripped to pieces."
 	+FLOORCLIP
 	+SEEFRIENDLYMONSTERS
 
@@ -87,7 +88,7 @@ actor GLG replaces ZombieMan
 	DeathSound "GLG/Death"
 	ActiveSound "GLG/Idle"
 	PainSound "GLG/Pain"
-	Obituary "%o was slashed to bits."
+	Obituary "Amerigo was slashed to ribbons."
 	+FLOORCLIP
 	+SEEFRIENDLYMONSTERS
 	+JUMPDOWN
@@ -180,6 +181,70 @@ actor RockProjectile
 	}
 }
 
+actor Wyvern replaces Cacodemon
+{
+
+	Health 350
+	Mass 100
+	Speed 14
+	Height 56
+	Radius 32
+	Painchance 200
+	Monster
+	Obituary "Amerigo met a wyvern."
+	Seesound "Wyvern/pain"
+	Deathsound "Wyvern/death"
+	painsound "Wyvern/pain"
+	+FLOORCLIP
+	+NOBLOOD
+	+FLOAT	
+	+NOGRAVITY
+	States
+	{
+	Spawn:
+		WYVN ABC 5 A_Look
+		TNT1 A 0 A_Playsound("Wyvern/flap")	
+		WYVN DCB 5 A_Look
+		Loop
+	See:
+		WYVN ABC 3 A_Chase	
+		TNT1 A 0 A_Playsound("Wyvern/flap")
+		WYVN DCB 3 A_Chase
+		Loop
+	Missile:
+		WYVN F 5 A_FaceTarget
+		WYVN E 5 A_FaceTarget
+		WYVN A 5 BRIGHT A_HeadAttack
+		Goto See
+	Pain:
+		WYVN F 3
+		WYVN F 3 A_Pain
+		WYVN F 6
+		Goto See
+	Death:
+		WYVD A 8
+		WYVD B 8 A_Scream
+		WYVD C 8
+		WYVD D 8
+		WYVD D 8 A_NoBlocking
+		WYVD D 4 A_JumpIf (z <= floorz, "Crash")
+		Wait
+	Crash:
+		TNT1 A 0 A_Playsound("Wyvern/fall")	
+		WYVD DE 5
+		WYVD F -1
+		Stop
+	
+	
+	
+	Raise:
+		WYVD F 8 A_UnSetFloorClip
+		WYVD EDCBA 8
+		Goto See
+	}
+
+}
+
 actor Shark replaces PainElemental
 {
 	Health 100
@@ -188,7 +253,7 @@ actor Shark replaces PainElemental
 	Radius 30
 	Height 30
 	Monster
-	Obituary "%o was shredded by a shark."
+	Obituary "Amerigo was eaten by a shark."
 	SeeSound "shark/sight"
 	DeathSound "shark/death"
 	ActiveSound "shark/active"

@@ -131,7 +131,6 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Goto Ready;
 
 	ReloadStart:
-		TNT1 A 0 A_StartSound("weapon/cloth2", 9);
 		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE);
 		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE);
 		TNT1 A 0 { invoker.m_IsLoading = true; }
@@ -144,7 +143,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_WeaponReady(WRF_NOSWITCH);
 		ITRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("shotgun/load", 10);
-		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRL G 3 A_WeaponReady(WRF_NOSWITCH);
 		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);

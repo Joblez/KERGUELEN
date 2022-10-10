@@ -3,6 +3,8 @@ version "4.8.2"
 // MBase
 #include "MBase/MBaseLib/zscript.zs"
 
+//Weapons
+
 #include "zscript/weapons/BaseWeapon.zs"
 
 #include "zscript/misc/Barrel.zs"
@@ -19,3 +21,6 @@ version "4.8.2"
 
 // Second-level includes.
 #include "zscript_postinc.zs"
+
+#include "zscript_nashgore.zs"
+

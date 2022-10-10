@@ -2,6 +2,7 @@
 GameInfo
 {
 	AddEventHandlers = "HUDExtensionRegistry"
+	AddEventHandlers = "NashGoreHandler"	
 }
 
 Map "MAP01" "KERG01"

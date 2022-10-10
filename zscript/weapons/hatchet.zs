@@ -58,25 +58,25 @@ class Hatchet : BaseWeapon
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 2),"Punch1");
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 3),"Punch2"); // LPunch.
 	Punch0:
-		//TNT1 A 0 A_ComboCheck();
+
 		HAF1 A 1 A_StartSound("hatchet/swing");
 		HAF1 B 1;
 		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF1 D 1;
-		HAF1 E 1;
-		HAF1 FGHIJKLM 2 A_WeaponReady();
+		HAF1 EFGH 1;
+		HAF1 HIJKLM 2 A_WeaponReady();
 		Goto Ready;
 
 	Punch1:
-		//TNT1 A 0 A_ComboCheck();
+
 		HAF2 A 1 A_StartSound("hatchet/swing");
 		HAF2 B 1;
 		HAF2 C 1;
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF2 D 1;
-		HAF2 E 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
-		HAF2 FGHIJKLMNOP 2 A_WeaponReady();
+		HAF2 EFGH 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
+		HAF2 IJKLMNOP 2 A_WeaponReady();
 		Goto Ready;
 
 	Punch2:
@@ -86,8 +86,8 @@ class Hatchet : BaseWeapon
 		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);
 		TNT1 A 0 { invoker.m_FistCheck = invoker.m_FistCheck + 1; }
 		HAF1 D 1;
-		HAF1 E 1;
-		HAF1 FGHIJKLM 2 A_WeaponReady();
+		HAF1 EFGH 1;
+		HAF1 IJKLM 2 A_WeaponReady();
 		Goto Ready;
 	}
 }

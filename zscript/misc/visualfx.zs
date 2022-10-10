@@ -253,7 +253,7 @@ class Bullet_Puff : Actor replaces BulletPuff
 	Xdeath:
 		TNT1 A 0 A_SetRenderStyle(200,STYLE_None);
 		TNT1 A 0 A_StartSound("weapons/hitflesh", 11,0,0.5);	
-		CLOD ABC 3;
+		NBL2 ABCD 3;
 		Stop;
 
 	Crash:

@@ -1,6 +1,6 @@
-Mod Concept by Joblez
+Mod by Joblez
 
-MBase created by Magdiel, creator of various features and bug fixes (also king of formatting fixes)
+MBase created by Magdiel, creator of various features, assisted in development (king of formatting fixes)
 
 Specifics:
 
@@ -19,3 +19,5 @@ Submitted: Krispy
 Decorate: Krispy, zrrion the insect, IOP team (gibs)
 Sounds: 3D Realms
 Sprites: 3D Realms
+
+This mod uses Nashgore by Nash Muahndes.

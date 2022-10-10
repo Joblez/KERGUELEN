@@ -196,27 +196,34 @@ actor Wyvern replaces Cacodemon
 	Deathsound "Wyvern/death"
 	painsound "Wyvern/pain"
 	+FLOORCLIP
-	+NOBLOOD
+	//+NOBLOOD
 	+FLOAT	
 	+NOGRAVITY
 	States
 	{
 	Spawn:
 		WYVN ABC 5 A_Look
-		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)	
+		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 5 A_Look
 		Loop
 	See:
-		WYVN ABC 3 A_Chase	
+		WYVN ABC 3 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 3 A_Chase
 		Loop
 		
-	Evade:	
+	Rage:	
 		TNT1 A 0 A_Setspeed(20)
-		WYVN ABC 2 A_Chase	
+		WYVN ABC 2 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 2 A_Chase
+		WYVN ABC 2 A_Chase
+		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
+		WYVN DCB 2 A_Chase	
+		WYVN ABC 2 A_Chase
+		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
+		WYVN DCB 2 A_Chase
+		TNT1 A 0 A_Setspeed(14)
 		goto see
 	Missile:
 		WYVN F 5 A_FaceTarget
@@ -227,19 +234,19 @@ actor Wyvern replaces Cacodemon
 		WYVN F 3
 		WYVN F 3 A_Pain
 		WYVN F 6
-		TNT1 A 0 A_Jump(96,"Evade")
+		TNT1 A 0 A_Jump(96,"Rage")
 		Goto See
 	Death:
 		WYVD A 8 A_Playsound("Wyvern/scream",CHAN_AUTO)
 		WYVD B 8 A_Scream
 		WYVD C 8
 		WYVD D 8
-		WYVD D 8 A_NoBlocking
+		WYVD D 8 
 		WYVD D 4 A_JumpIf (z <= floorz, "Crash")
 		Wait
 	Crash:
 		TNT1 A 0 A_Playsound("Wyvern/fall",CHAN_AUTO)	
-		WYVD DE 5
+		WYVD DE 5 A_NoBlocking
 		WYVD F -1
 		Stop
 	

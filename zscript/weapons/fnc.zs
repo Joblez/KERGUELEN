@@ -45,10 +45,10 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
 		FNRS F 1 A_SetBaseOffset(60, 100);
-		FNRS E 1 A_SetBaseOffset(50, 80);
-		FNRS D 1 A_SetBaseOffset(40, 60);
-		FNRS C 1 A_SetBaseOffset(20, 40);
-		FNRS BA 1 A_SetBaseOffset(2, 30);
+		#### E 1 A_SetBaseOffset(50, 80);
+		#### D 1 A_SetBaseOffset(40, 60);
+		#### C 1 A_SetBaseOffset(20, 40);
+		#### BA 1 A_SetBaseOffset(2, 30);
 		FNCF DE 1;
 		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		FNCI A 1 A_Raise(16);
@@ -56,10 +56,10 @@ class FNC : BaseWeapon replaces Chaingun
 
 	Deselect:
 		FNRS AB 1 A_SetBaseOffset(2, 30);
-		FNRS C 1 A_SetBaseOffset(20, 40);
-		FNRS D 1 A_SetBaseOffset(40, 60);
-		FNRS E 1 A_SetBaseOffset(50, 80);
-		FNRS F 1 A_SetBaseOffset(60, 100);
+		#### C 1 A_SetBaseOffset(20, 40);
+		#### D 1 A_SetBaseOffset(40, 60);
+		#### E 1 A_SetBaseOffset(50, 80);
+		#### F 1 A_SetBaseOffset(60, 100);
 		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
 		TNT1 A 4;
 		FNCI A 1 A_Lower(16);

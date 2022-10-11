@@ -16,7 +16,7 @@ actor NewPlayer : PlayerPawn
 	Player.JumpZ 9.0
 	Player.viewbob 0.65
 	Gravity 1
-	Speed 0.7
+	Speed 0.65
 	+NOSKIN
 
 	States

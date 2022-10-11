@@ -3,8 +3,8 @@ actor Grarg replaces DoomImp
 	Health 100
 	Radius 16
 	Height 56
-	Speed 5
-	PainChance 240
+	Speed 14
+	PainChance 200
 	Mass 100
 	Scale 0.7
 	Monster
@@ -13,26 +13,25 @@ actor Grarg replaces DoomImp
 	DeathSound "Grarg/Death"
 	ActiveSound "Grarg/Barks"
 	PainSound "Grarg/Pain"
-	Obituary "Amerigo was ripped to pieces."
+	Obituary "Amerigo was ripped to pieces by a Grarg."
 	+FLOORCLIP
 	+SEEFRIENDLYMONSTERS
 
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_Jump(10, "Grumble")
+		TNT1 A 0 A_Jump(20, "Grumble")
 		GRRG A 4 A_Look()
 		Loop
 
 	See:
-		TNT1 A 0 A_SetSpeed(15)
 		GRRG BBCCDDEE 2 A_Chase
 		Loop
 
 	Melee:
 		TNT1 A 0 A_PlaySound("Grarg/Bite")
 		GRRG FG 6 A_FaceTarget
-		GRRG H 6 A_CustomMeleeAttack(random(3, 9) * 5, "imp/melee", "Melee", true)
+		GRRG H 6 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
 		Goto See
 
 	Missile:
@@ -58,7 +57,7 @@ actor Grarg replaces DoomImp
 		Goto Spawn
 
 	Pain:
-		GRGD A 2 A_Pain
+		GRRG I 2 A_Pain
 		Goto See
 
 	Death:
@@ -79,7 +78,7 @@ actor GLG replaces ZombieMan
 	Health 50
 	Radius 16
 	Height 48
-	Speed 4
+	Speed 10
 	PainChance 255
 	Mass 100
 	Scale 0.7
@@ -88,7 +87,7 @@ actor GLG replaces ZombieMan
 	DeathSound "GLG/Death"
 	ActiveSound "GLG/Idle"
 	PainSound "GLG/Pain"
-	Obituary "Amerigo was slashed to ribbons."
+	Obituary "Amerigo was slashed to ribbons by a Lesco."
 	+FLOORCLIP
 	+SEEFRIENDLYMONSTERS
 	+JUMPDOWN
@@ -96,7 +95,7 @@ actor GLG replaces ZombieMan
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_Jump(10, "Grumble")
+		TNT1 A 0 A_Jump(20, "Grumble")
 		GGLG A 4 A_Look()
 		Loop
 
@@ -111,7 +110,6 @@ actor GLG replaces ZombieMan
 		Goto See
 
 	See:
-		TNT1 A 0 A_SetSpeed(15)
 		GGLG AABBCCDD 2 A_Chase
 		Loop
 
@@ -191,7 +189,7 @@ actor Wyvern replaces Cacodemon
 	Radius 32
 	Painchance 220
 	Monster
-	Obituary "Amerigo met a wyvern."
+	Obituary "Amerigo met a Wyvern."
 	Seesound "Wyvern/pain"
 	Deathsound "Wyvern/death"
 	painsound "Wyvern/pain"

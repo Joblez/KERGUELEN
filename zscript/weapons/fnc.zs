@@ -25,7 +25,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.AmmoType1 "RifleMag";
 		Weapon.AmmoType2 "Ammo223";
 		Weapon.SlotNumber 4;
-		Weapon.Kickback 10;
+		Weapon.Kickback 5;
 		Weapon.Upsound("fnc/draw");
 		DamageType "Normal";
 		Tag "FNC";

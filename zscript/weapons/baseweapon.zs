@@ -38,14 +38,12 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		Weapon.BobSpeed 1.7;
 		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
-
 		BaseWeapon.LookSwayResponse 20.0;
 		BaseWeapon.LookSwayRigidity 8.0;
 		BaseWeapon.LookSwayStrengthX 8.0;
 		BaseWeapon.LookSwayStrengthY 0.0;
 		BaseWeapon.MaxLookSwayTranslationX 26.0;
 		BaseWeapon.MaxLookSwayTranslationY 0.0;
-
 		Inventory.PickupSound "weapon/pickup";
 		+WEAPON.NOAUTOFIRE;
 		+WEAPON.NOALERT;

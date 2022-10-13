@@ -1,10 +1,10 @@
 actor Grarg replaces DoomImp
 {
-	Health 100
+	Health 120
 	Radius 16
 	Height 56
 	Speed 14
-	PainChance 200
+	PainChance 240
 	Mass 100
 	Scale 0.7
 	Monster

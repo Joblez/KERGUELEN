@@ -18,7 +18,6 @@ class Hatchet : BaseWeapon
 	{
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
-
 		BaseWeapon.LookSwayResponse 0.0;
 		Weapon.Upsound("hatchet/draw");
 		DamageType "Hatchet";
@@ -56,8 +55,6 @@ class Hatchet : BaseWeapon
 	Fire:
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 2),"Punch1");
 		TNT1 A 0 A_JumpIf((invoker.m_FistCheck == 3),"Punch2"); // LPunch.
-	Punch0:
-
 		HAF1 A 1 A_StartSound("hatchet/swing");
 		HAF1 B 1;
 		HAF1 C 1 A_CustomPunch(10, 0, 0, "Melee_Puff", 96);

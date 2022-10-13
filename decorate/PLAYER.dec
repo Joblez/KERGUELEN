@@ -32,18 +32,15 @@ actor NewPlayer : PlayerPawn
 		PLAY D 4
 		Goto Spawn
 
-	Missile:
+	Melee:
 		PLAY E 2
-		PLAY F 2
-		PLAY F 2
+		PLAY F 6 Bright
 		PLAY E 2
 		Goto Spawn
 
-	Melee:
-		PLAY E 2
-		PLAY F 2
-		PLAY F 2
-		PLAY E 2
+	Missile:
+		PLAY E 4
+		PLAY E 4
 		Goto Spawn
 
 	Pain:

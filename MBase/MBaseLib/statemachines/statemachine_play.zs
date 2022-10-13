@@ -17,27 +17,34 @@ class SMTransitionPlay play
 	private bool m_FromSet;
 	private class<SMStatePlay> m_To;
 	private bool m_ToSet;
+
 	virtual bool CanPerform(Object data) const
 	{
 		return true;
 	}
+
 	virtual void OnTransitionPerformed(SMStatePlay inState) const { }
+
 	name GetEventId() const
 	{
 		return m_EventId;
 	}
+
 	class<SMStatePlay> GetFrom() const
 	{
 		return m_From;
 	}
+
 	class<SMStatePlay> GetTo() const
 	{
 		return m_To;
 	}
+
 	bool DoesResumeBranch() const
 	{
 		return m_ResumesBranch;
 	}
+
 	SMTransitionPlay From(class<SMStatePlay> _from)
 	{
 		if (m_FromSet)
@@ -92,6 +99,7 @@ class SMStatePlay play
 	private SMStatePlay m_ActiveChild;
 	private array<SMStatePlay> m_Children;
 	private array<SMTransitionPlay> m_Transitions;
+
 	protected void Reset()
 	{
 		SMStatePlay activeChild = m_ActiveChild;
@@ -105,21 +113,28 @@ class SMStatePlay play
 			m_ActiveChild.EnterState();
 		}
 	}
+
 	protected virtual void EnterState() { }
+
 	protected virtual void UpdateState() { }
+
 	protected virtual void ExitState() { }
+
 	protected virtual bool TryHandleEvent(name eventId)
 	{
 		return false;
 	}
+
 	SMStatePlay GetParent() const
 	{
 		return m_Parent;
 	}
+
 	SMMachinePlay GetMachine() const
 	{
 		return m_Machine;
 	}
+
 	SMStatePlay GetChild(class<SMStatePlay> childClass) const
 	{
 		if (childClass == null) return null;
@@ -134,12 +149,14 @@ class SMStatePlay play
 			GetClassName(), childClass.GetClassName());
 		return null;
 	}
+
 	SMTransitionPlay GetTransition(name eventId, class<SMStatePlay> from) const
 	{
 		if (eventId == 'None' && from == null) return null;
 		for (uint i = 0u; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionPlay transition = m_Transitions[i];
+
 			if (transition.GetEventId() == eventId && transition.GetFrom() == from)
 			{
 				return transition;
@@ -149,19 +166,23 @@ class SMStatePlay play
 			.."originating from the %s state.", GetClassName(), eventId, from.GetClassName());
 		return null;
 	}
+
 	SMStatePlay GetActiveChild() const
 	{
 		return m_ActiveChild;
 	}
+
 	class<SMStatePlay> GetActiveChildClass() const
 	{
 		return m_ActiveChildClass;
 	}
+
 	Object GetData() const
 	{
 		if (!m_Machine) return null;
 		return m_Machine.m_Data;
 	}
+
 	SMStatePlay AddChild(SMStatePlay newState)
 	{
 		for (uint i = 0u; i < m_Children.Size(); ++i)
@@ -176,10 +197,12 @@ class SMStatePlay play
 		m_Children.Push(newState);
 		newState.m_Parent = self;
 		newState.m_Machine = m_Machine;
+
 		newState.UpdateHierarchyReferences();
 		UpdateDefaultAndActiveStates();
 		return self;
 	}
+
 	SMStatePlay RemoveChild(class<SMStatePlay> childClass)
 	{
 		if (childClass == m_DefaultChildClass && m_Children.Size() > 1u)
@@ -210,6 +233,7 @@ class SMStatePlay play
 			GetClassName(), childClass.GetClassName());
 		return null;
 	}
+
 	SMStatePlay AddTransition(SMTransitionPlay newTransition)
 	{
 		if (newTransition.GetEventID() == 'None' && newTransition.GetFrom() == null)
@@ -219,6 +243,7 @@ class SMStatePlay play
 		for (uint i = 0u; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionPlay transition = m_Transitions[i];
+
 			if (transition.GetEventID() == newTransition.GetEventID()
 				&& transition.GetFrom() == newTransition.GetFrom())
 			{
@@ -243,6 +268,7 @@ class SMStatePlay play
 		m_Transitions.Push(newTransition);
 		return self;
 	}
+
 	SMStatePlay RemoveTransition(name eventId, class<SMStatePlay> from)
 	{
 		if (eventId == 'None' && from == null)
@@ -253,6 +279,7 @@ class SMStatePlay play
 		for (uint i = 0u; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionPlay transition = m_Transitions[i];
+
 			if (transition.GetEventID() == eventId && transition.GetFrom() == from)
 			{
 				m_Transitions.Delete(i);
@@ -276,6 +303,7 @@ class SMStatePlay play
 		}
 		return null;
 	}
+
 	SMStatePlay RemoveLiveTransition(class<SMStatePlay> from)
 	{
 		if (from == null)
@@ -285,6 +313,7 @@ class SMStatePlay play
 		}
 		return RemoveTransition('None', from);
 	}
+
 	SMStatePlay RemoveUnboundTransition(name eventId)
 	{
 		if (eventId == 'None')
@@ -294,6 +323,7 @@ class SMStatePlay play
 		}
 		return RemoveTransition(eventId, null);
 	}
+
 	protected SMStatePlay SetDefaultChild(class<SMStatePlay> newDefault)
 	{
 		if (!IsBuilding())
@@ -311,16 +341,19 @@ class SMStatePlay play
 		}
 		stateArray.Copy(m_Children);
 	}
+
 	void FireEvent(name eventId)
 	{
 		if (TryConsumeEvent(eventId) || m_Parent == null) return;
 		m_Parent.FireEvent(eventId);
 	}
+
 	void DrillEvent(name eventId)
 	{
 		if (TryConsumeEvent(eventId) || m_ActiveChild == null) return;
 		m_ActiveChild.DrillEvent(eventId);
 	}
+
 	protected void SetActiveState(class<SMStatePlay> newActiveClass)
 	{
 		let newActive = GetChild(newActiveClass);
@@ -328,6 +361,7 @@ class SMStatePlay play
 		m_ActiveChildClass = newActiveClass;
 		m_ActiveChild = newActive;
 	}
+
 	protected void UpdateHierarchyReferences()
 	{
 		for (uint i = 0u; i < m_Children.Size(); ++i)
@@ -338,18 +372,22 @@ class SMStatePlay play
 			m_Children[i].UpdateHierarchyReferences();
 		}
 	}
+
 	protected void CallEnter()
 	{
 		EnterState();
 		if (m_ActiveChild == null) return;
 		m_ActiveChild.CallEnter();
 	}
+
 	protected void CallUpdate()
 	{
 		UpdateState();
-		TryPerformTransition('None');		if (m_ActiveChild == null) return;
+		TryPerformTransition('None');
+		if (m_ActiveChild == null) return;
 		m_ActiveChild.CallUpdate();
 	}
+
 	protected void CallExit()
 	{
 		if (m_ActiveChild != null) m_ActiveChild.CallExit();
@@ -413,6 +451,7 @@ class SMStatePlay play
 			m_ActiveChildClass = null;
 			m_DefaultChildClass = null;
 		}
+
 		if (m_Children.Size() == 1u)
 		{
 			m_ActiveChildClass = m_Children[0].GetClass();
@@ -433,6 +472,7 @@ class SMStatePlay play
 			childrenClasses.Push(m_Children[i].GetClass());
 		}
 		uint classCount = childrenClasses.Size();
+
 		for (int i = m_Transitions.Size() - 1; i >= 0 ; --i)
 		{
 			if (childrenClasses.Find(m_Transitions[i].GetFrom()) == classCount
@@ -456,34 +496,42 @@ class SMMachinePlay : SMStatePlay abstract
 	{
 		return m_IsBuilding;
 	}
+
 	protected abstract void Build();
+
 	void CallBuild()
 	{
 		m_IsBuilding = true;
 		m_Parent = null;
 		m_Machine = self;
 		Build();
+
 		UpdateHierarchyReferences();
 		m_IsBuilding = false;
 	}
+
 	void SendEvent(name eventId)
 	{
 		DrillEvent(eventId);
 	}
+
 	void Start()
 	{
 		CallEnter();
 		m_IsActive = true;
 	}
+
 	void Update()
 	{
 		if (m_IsActive) CallUpdate();
 	}
+
 	void Shutdown()
 	{
 		m_IsActive = false;
 		CallExit();
 	}
+
 	SMStatePlay GetState(string statePath)
 	{
 		uint pathLength = statePath.Length();
@@ -499,6 +547,7 @@ class SMMachinePlay : SMStatePlay abstract
 		}
 		return GetStateFromClasses(pathNodes);
 	}
+
 	SMStatePlay GetStateFromClasses(array<string> childClasses)
 	{
 		if (childClasses == null) ThrowAbortException("Array of child classes must not be null.");

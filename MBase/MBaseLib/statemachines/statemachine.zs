@@ -881,18 +881,18 @@ class SMMachine : SMState abstract
 	 *
 	 * override void Build()
 	 * {
-	 * 	Super.Build();
+	 *	Super.Build();
 
-	 * 	SMState enemySuspiciousState = GetState("SMEnemyNeutral/SMEnemySuspicious");
+	 *	SMState enemySuspiciousState = GetState("SMEnemyNeutral/SMEnemySuspicious");
 
-	 * 	enemySuspiciousState
-	 * 		.RemoveChild("SMEnemyExaminingSuspiciousArea"
-	 * 		)
-	 * 		.AddChild(new("SMEnemySettingUpDrone")
-	 * 		)
-	 * 		.AddTransition(new("SMTransition").Init(
-	 * 			'ReachedDestination', "SMEnemyMovingToDestination", "SMEnemySettingUpDrone"
-	 * 		));
+	 *	enemySuspiciousState
+	 *		.RemoveChild("SMEnemyExaminingSuspiciousArea"
+	 *		)
+	 *		.AddChild(new("SMEnemySettingUpDrone")
+	 *		)
+	 *		.AddTransition(new("SMTransition").Init(
+	 *			'ReachedDestination', "SMEnemyMovingToDestination", "SMEnemySettingUpDrone"
+	 *		));
 	 * }
 	**/
 	protected abstract void Build();

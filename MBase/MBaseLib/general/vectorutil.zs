@@ -22,6 +22,10 @@ class Vec2Util
 	{
 		return (0, 0);
 	}
+	static vector2 Inf()
+	{
+		return (double.Infinity, double.Infinity);
+	}
 
 	//======================= Swizzles =======================//
 

@@ -408,3 +408,270 @@ class MathVec3
 		return (xResult, yResult, zResult);
 	}
 }
+
+class Geometry
+{
+	/**
+	 * Returns the bounding box of a shape, where the first value is the
+	 * bottom-left corner and the second value is the top-right corner.
+	**/
+	static vector2, vector2 GetBoundingBox(array<BoxedVector2> points)
+	{
+		if (points.Size() < 2)
+		{
+			ThrowAbortException("Cannot determine boinding box of less than two points.");
+		}
+
+		vector2 min = (points[0].X(), points[0].Y());
+		vector2 max = min;
+
+		for (int i = 1; i < points.Size(); ++i)
+		{
+			vector2 point = points[i].m_Value;
+			if (point.x < min.x) min.x = point.x;
+			if (point.x > max.x) max.x = point.x;
+			if (point.y < min.y) min.y = point.y;
+			if (point.y > max.y) max.y = point.y;
+		}
+
+		return min, max;
+	}
+
+	/**
+	 * Returns whether or not the given point is within the bounding box, defined
+	 * as bottom-left and top-right corners.
+	**/
+	static bool IsPointInBounds(vector2 point, vector2 bottomLeft, vector2 topRight)
+	{
+		return point.x > bottomLeft.x
+			&& point.y > bottomLeft.y
+			&& point.x < topRight.x
+			&& point.y < topRight.y;
+	}
+
+	static bool IsBoxInBounds(vector2 bottomLeft, vector2 topRight, vector2 boundsBottomLeft, vector2 boundsTopRight)
+	{
+		return bottomLeft.x < topRight.x
+			&& bottomLeft.y < topRight.y
+			&& bottomLeft.x > boundsBottomLeft.x
+			&& bottomLeft.y > boundsBottomLeft.y
+			&& topRight.x < boundsTopRight.x
+			&& topRight.y < boundsTopRight.y;
+	}
+
+	static bool IsPointInPolygon(vector2 point, array<Edge> shape)
+	{
+		array<BoxedVector2> vertices;
+
+		// Deconstruct lines.
+		for (int i = 0; i < shape.Size(); ++i)
+		{
+			vertices.Push(BoxedVector2.Create(shape[i].m_V1));
+		}
+
+		vector2 tl, br;
+		[tl, br] = GetBoundingBox(vertices);
+		if (!IsPointInBounds(point, tl, br)) return false;
+
+		bool inside = false;
+
+		for (int i = 0; i < shape.Size(); ++i)
+		{
+			Edge line = shape[i];
+
+			if ((line.m_V1.y <= point.y) && (line.m_V2.y > point.y)
+				|| (line.m_V2.y <= point.y) && (line.m_V1.y > point.y))
+			{
+				double intersection =
+					(line.m_V2.x - line.m_V1.x) * (point.y - line.m_V1.y) / (line.m_V2.y - line.m_V1.y) + line.m_V1.x;
+
+				if (intersection < point.x)
+					inside = !inside;
+			}
+		}
+
+		return inside;
+	}
+
+	/**
+	 * Returns whether or not lines A and B intersect.
+	 * NOTE:
+		* Currently does not detect intersections between colinear segments.
+	**/
+	static bool LinesIntersect(vector2 aStart, vector2 aEnd, vector2 bStart, vector2 bEnd)
+	{
+		// Adapted from answer by @Gavin at StackOverflow (https://stackoverflow.com/a/1968345).
+		vector2 s1, s2;
+		s1.x = aEnd.x - aStart.x;
+		s1.y = aEnd.y - aStart.y;
+		s2.x = bEnd.x - bStart.x;
+		s2.y = bEnd.y - bStart.y;
+
+		float s, t;
+		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / (-s2.x * s1.y + s1.x * s2.y);
+		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / (-s2.x * s1.y + s1.x * s2.y);
+
+		vector2 result = (double.Infinity, double.Infinity);
+
+		return s > 0 && s < 1 && t > 0 && t < 1;
+	}
+
+	/**
+	 * Returns the intersection point between lines A and B, or a vector with
+	 * coordinates at infinity if no intersection is found.
+	 * NOTE:
+		* Collinear segments are considered non-intersecting.
+	**/
+	static vector2 IntersectionOf(vector2 aStart, vector2 aEnd, vector2 bStart, vector2 bEnd)
+	{
+		// Adapted from answer by @Gavin at StackOverflow (https://stackoverflow.com/a/1968345).
+		vector2 s1, s2;
+		s1.x = aEnd.x - aStart.x;
+		s1.y = aEnd.y - aStart.y;
+		s2.x = bEnd.x - bStart.x;
+		s2.y = bEnd.y - bStart.y;
+
+		float s, t;
+		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / (-s2.x * s1.y + s1.x * s2.y);
+		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / (-s2.x * s1.y + s1.x * s2.y);
+
+		vector2 result = (double.Infinity, double.Infinity);
+
+		if (s > 0 && s < 1 && t > 0 && t < 1)
+		{
+			result.x = aStart.x + (t * s1.x);
+			result.y = aStart.y + (t * s1.y);
+		}
+
+		return result;
+	}
+
+	static bool IsClockwise(array<BoxedVector2> vertices)
+	{
+		if (vertices.Size() < 3)
+		{
+			ThrowAbortException("Cannot determine winding order of less than three edges.");
+		}
+
+		vector2 lowest = vertices[0].m_Value;
+		int index = 0;
+
+		// Find lowest vertex.
+		for (int i = 1; i < vertices.Size(); i++)
+		{
+			vector2 point = vertices[i].m_Value;
+			if (point.y < lowest.y || (point.y == lowest.y && point.x > lowest.x))
+			{
+				lowest = point;
+				index = i;
+			}
+		}
+
+		vector3 a = Vec2Util.XY_(vertices[MathI.PosMod(index - 1, vertices.Size())].Sub(lowest));
+		vector3 b = Vec2Util.XY_(vertices[(index + 1) % vertices.Size()].Sub(lowest));
+		vector3 result = a cross b;
+		return result.z < 0.0;
+	}
+
+	static double GetTriangleArea(vector2 a, vector2 b, vector2 c)
+	{
+		return abs((a.x * b.y - a.y * b.x) + (b.x * c.y - b.y * c.x) + (c.x * a.y - c.y * a.x)) * 0.5;
+	}
+
+	static double GetPolygonArea(array<BoxedVector2> vertices)
+	{
+		if (vertices.Size() < 3)
+		{
+			ThrowAbortException("Cannot determine area of less than three edges.");
+		}
+
+		double area = 0.0;
+
+		int count = vertices.Size();
+		for (int i = 0; i < vertices.Size(); ++i)
+		{
+			vector2 m_V1 = vertices[i].m_Value;
+			vector2 m_V2 = vertices[(i + 1) % count].m_Value;
+
+			area += m_V1.x * m_V2.y - m_V1.y * m_V2.x;
+		}
+
+		return abs(area) * 0.5;
+	}
+
+	static void Triangulate(Triangulatable t)
+	{
+		DTSweepContext ctx = new("DTSweepContext");
+
+		ctx.PrepareTriangulation(t);
+		DTSweep.Triangulate(ctx);
+	}
+}
+
+class BoxedVector2
+{
+	vector2 m_Value;
+
+	static BoxedVector2 Create(vector2 v)
+	{
+		BoxedVector2 bV = new("BoxedVector2");
+		bV.m_Value = v;
+
+		return bV;
+	}
+
+	static BoxedVector2 FromVertex(Vertex v)
+	{
+		return BoxedVector2.Create(v.p);
+	}
+
+	double X() const { return m_Value.x; }
+	double Y() const { return m_Value.y; }
+
+	vector2 Add(vector2 v) const { return (m_Value.x + v.x, m_Value.y + v.y); }
+	BoxedVector2 AddBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Add(bV.m_Value)); }
+
+	vector2 Sub(vector2 v) const { return (m_Value.x - v.x, m_Value.y - v.y); }
+	BoxedVector2 SubBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Sub(bV.m_Value)); }
+	
+	vector2 Mul(vector2 v) const { return (m_Value.x * v.x, m_Value.y * v.y); }
+	BoxedVector2 MulBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Mul(bV.m_Value)); }
+
+	vector2 Div(vector2 v) { return (m_Value.x / v.x, m_Value.y / v.y); }
+	BoxedVector2 DivBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Div(bV.m_Value)); }
+
+	double Length() const { return m_Value.Length(); }
+
+	vector2 Unit() const { return m_Value.Unit(); }
+	BoxedVector2 UnitBoxed() const { return BoxedVector2.Create(m_Value.Unit()); }
+
+	double DotProduct(vector2 other) const { return m_Value dot other; }
+	double DotProductBoxed(BoxedVector2 other) const { return m_Value dot other.m_Value; }
+}
+
+class Edge
+{
+	vector2 m_V1;
+	vector2 m_V2;
+
+	static Edge Create(vector2 v1, vector2 v2)
+	{
+		Edge e = new("Edge");
+		e.m_V1 = v1;
+		e.m_V2 = v2;
+		return e;
+	}
+
+	static Edge FromLine(Line l)
+	{
+		return Edge.Create(l.v1.p, l.v2.p);
+	}
+
+	static void LinesToEdges(array<Line> lines, out array<Edge> edges)
+	{
+		for (int i = 0; i < lines.Size(); ++i)
+		{
+			edges.Push(Edge.FromLine(lines[i]));
+		}
+	}
+}

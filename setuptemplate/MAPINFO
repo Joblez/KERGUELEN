@@ -1,5 +1,5 @@
 // MBase EventHandlers
 GameInfo
 {
-	AddEventHandlers = "HUDExtensionRegistry"
+	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry"
 }

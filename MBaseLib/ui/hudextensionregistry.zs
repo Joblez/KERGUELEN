@@ -13,7 +13,6 @@ class HUDExtensionRegistry : EventHandler
 			return;
 		}
 
-
 		array<string> stringArgEvent;
 		e.Name.Split(stringArgEvent, ":");
 

@@ -1,8 +1,9 @@
-// MBase EventHandlers
 GameInfo
 {
-	AddEventHandlers = "HUDExtensionRegistry"
-	AddEventHandlers = "NashGoreHandler"	
+	// MBase EventHandlers
+	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WeatherHandler"
+
+	AddEventHandlers = "NashGoreHandler"
 }
 
 Map "MAP01" "KERG01"

@@ -16,7 +16,7 @@ class WeatherHandler : EventHandler
 		while ((i = iterator.Next()) >= 0)
 		{
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(35, Level.Sectors[i], "RainDrop"));
+				WeatherSpawner.Create(90, Level.Sectors[i], "RainDrop"));
 		}
 	}
 }

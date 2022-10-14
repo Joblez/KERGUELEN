@@ -30,12 +30,17 @@ class WeatherSpawner : Thinker
 	{
 		m_Time += 1.0 / TICRATE;
 
+		Console.Printf("m_Time: %f", m_Time);
+
 		if (m_Time >= 1.0 / m_Frequency)
 		{
-			for (m_Time; m_Time > 1.0 / TICRATE; m_Time -= 1.0 / m_Frequency)
+			do
 			{
 				SpawnWeatherParticle();
+				Console.Printf("Particle spawned.");
+				m_Time -= 1.0 / m_Frequency;
 			}
+			while (m_Time > 1.0 / TICRATE)
 			m_Time = 0.0;
 		}
 	}

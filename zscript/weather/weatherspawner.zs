@@ -30,10 +30,9 @@ class WeatherSpawner : Thinker
 	{
 		m_Time += 1.0 / TICRATE;
 
-		Console.Printf("%f", m_Time);
 		if (m_Time >= 1.0 / m_Frequency)
 		{
-			for (m_Time; m_Time > 0.0; m_Time -= 1.0 / m_Frequency)
+			for (m_Time; m_Time > 0.0; m_Time -= max(1.0 / m_Frequency, m_Frequency))
 			{
 				SpawnWeatherParticle();
 			}
@@ -48,8 +47,9 @@ class WeatherSpawner : Thinker
 			m_Triangulation = SectorDataRegistry.GetTriangulation(m_Sector);
 		}
 		vector2 point = m_Triangulation.GetRandomPoint();
-		vector3 position = (point.x, point.y, m_Sector.HighestCeilingAt(point));
+		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - 6));
 
+		// Console.Printf("Spawning weather particle at [%f, %f, %f]", position.x, position.y, position.z);
 		Actor.Spawn(m_ParticleType, position);
 	}
 }

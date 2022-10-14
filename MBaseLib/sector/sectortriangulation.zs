@@ -188,6 +188,13 @@ class SectorTriangulation
 					continue;
 				}
 
+				// Ignore internal lines.
+				if (checkedLine.sidedef[0].sector == checkedLine.sidedef[1].sector)
+				{
+					lines.Delete(i);
+					continue;
+				}
+
 				bool connected = false;
 
 				// Check if any vertex on the checked line connects to the current line.

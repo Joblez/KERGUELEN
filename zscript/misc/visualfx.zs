@@ -361,7 +361,7 @@ class PistolCasing : BaseCasing
 
 }
 
-class RevolverCasing : Basecasing
+class RevolverCasing : BaseCasing
 {
 	Default
 	{
@@ -394,8 +394,8 @@ class RevolverCasing : Basecasing
 	}
 }
 
-class RifleCasing : BaseCasing {
-
+class RifleCasing : BaseCasing
+{
 	Default
 	{
 		Height 8;
@@ -471,7 +471,7 @@ class GrenadeCasing : BaseCasing
 		Height 8;
 		Radius 6;
 		Speed 4;
-		Scale 0.5 ;
+		Scale 0.5;
 		BounceSound "weapons/shell3";
 	}
 
@@ -540,7 +540,7 @@ class BaseSpawner: Actor
 	}
 }
 
-Class PistolSpawnerR : BaseSpawner
+class PistolSpawnerR : BaseSpawner
 {
 	States
 	{
@@ -550,7 +550,7 @@ Class PistolSpawnerR : BaseSpawner
 	}
 }
 
-Class PistolSpawnerL : BaseSpawner
+class PistolSpawnerL : BaseSpawner
 {
 	States
 	{
@@ -560,7 +560,7 @@ Class PistolSpawnerL : BaseSpawner
 	}
 }
 
-Class RevolverSpawnerR : BaseSpawner
+class RevolverSpawnerR : BaseSpawner
 {
 	States
 	{
@@ -570,7 +570,7 @@ Class RevolverSpawnerR : BaseSpawner
 	}
 }
 
-Class RevolverSpawnerL : BaseSpawner
+class RevolverSpawnerL : BaseSpawner
 {
 	States
 	{
@@ -580,7 +580,7 @@ Class RevolverSpawnerL : BaseSpawner
 	}
 }
 
-Class ShellSpawnerR : BaseSpawner
+class ShellSpawnerR : BaseSpawner
 {
 	States
 	{
@@ -590,7 +590,7 @@ Class ShellSpawnerR : BaseSpawner
 	}
 }
 
-Class ShellSpawnerL : BaseSpawner
+class ShellSpawnerL : BaseSpawner
 {
 	States
 	{
@@ -600,7 +600,7 @@ Class ShellSpawnerL : BaseSpawner
 	}
 }
 
-Class RifleSpawnerR : BaseSpawner
+class RifleSpawnerR : BaseSpawner
 {
 	States
 	{
@@ -610,7 +610,7 @@ Class RifleSpawnerR : BaseSpawner
 	}
 }
 
-Class RifleSpawnerL : BaseSpawner
+class RifleSpawnerL : BaseSpawner
 {
 	States
 	{
@@ -620,7 +620,7 @@ Class RifleSpawnerL : BaseSpawner
 	}
 }
 
-Class GrenadeSpawnerR : Basespawner
+class GrenadeSpawnerR : Basespawner
 {
 	States
 	{
@@ -630,7 +630,7 @@ Class GrenadeSpawnerR : Basespawner
 	}
 }
 
-Class GrenadeSpawnerL : Basespawner
+class GrenadeSpawnerL : Basespawner
 {
 	States
 	{
@@ -640,7 +640,7 @@ Class GrenadeSpawnerL : Basespawner
 	}
 }
 
-Class RocketSpawnerR : Basespawner
+class RocketSpawnerR : Basespawner
 {
 	States
 	{

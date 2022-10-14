@@ -496,7 +496,7 @@ class Geometry
 	/**
 	 * Returns whether or not lines A and B intersect.
 	 * NOTE:
-		* Currently does not detect intersections between colinear segments.
+		* Currently does not detect intersections between collinear segments.
 	**/
 	static bool LinesIntersect(vector2 aStart, vector2 aEnd, vector2 bStart, vector2 bEnd)
 	{
@@ -507,11 +507,13 @@ class Geometry
 		s2.x = bEnd.x - bStart.x;
 		s2.y = bEnd.y - bStart.y;
 
-		float s, t;
-		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / (-s2.x * s1.y + s1.x * s2.y);
-		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / (-s2.x * s1.y + s1.x * s2.y);
+		double denominator = -s2.x * s1.y + s1.x * s2.y;
 
-		vector2 result = (double.Infinity, double.Infinity);
+		if (denominator == 0.0) return false;
+
+		float s, t;
+		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / denominator;
+		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / denominator;
 
 		return s > 0 && s < 1 && t > 0 && t < 1;
 	}
@@ -531,11 +533,15 @@ class Geometry
 		s2.x = bEnd.x - bStart.x;
 		s2.y = bEnd.y - bStart.y;
 
-		float s, t;
-		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / (-s2.x * s1.y + s1.x * s2.y);
-		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / (-s2.x * s1.y + s1.x * s2.y);
-
 		vector2 result = (double.Infinity, double.Infinity);
+
+		double denominator = -s2.x * s1.y + s1.x * s2.y;
+
+		if (denominator == 0.0) return result;
+
+		double s, t;
+		s = (-s1.y * (aStart.x - bStart.x) + s1.x * (aStart.y - bStart.y)) / denominator;
+		t = (s2.x * (aStart.y - bStart.y) - s2.y * (aStart.x - bStart.x)) / denominator;
 
 		if (s > 0 && s < 1 && t > 0 && t < 1)
 		{

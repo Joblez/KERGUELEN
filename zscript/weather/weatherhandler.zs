@@ -10,14 +10,13 @@ class WeatherHandler : EventHandler
 
 	private void CreateWeatherSpawners()
 	{
-		Console.Printf("Creating weather spawners...");
 		let iterator = Level.CreateSectorTagIterator(WEATHER_TAG);
 		int i;
 
 		while ((i = iterator.Next()) >= 0)
 		{
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(3.0, Level.Sectors[i], "RainDrop"));
+				WeatherSpawner.Create(35, Level.Sectors[i], "RainDrop"));
 		}
 	}
 }

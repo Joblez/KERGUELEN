@@ -6,9 +6,8 @@ class WeatherParticle : Actor
 		Radius 2;
 		Height 4;
 		Gravity 1.5;
-		Speed 0;
+		// +CANPASS;
 		+NOBLOCKMAP;
-		+CANPASS;
 		+NOSPRITESHADOW;
 		+NOTELEPORT;
 		+THRUSPECIES;
@@ -32,7 +31,8 @@ class RainDrop : WeatherParticle
 {
 	Default
 	{
-		VSpeed -1.5;
+		Scale 0.6;
+		Gravity 2.5;
 		RenderStyle "Add";
 	}
 
@@ -41,5 +41,10 @@ class RainDrop : WeatherParticle
 	Spawn:
 		RAIN A 1;
 		Loop;
+	Death:
+		TNT1 A 0 {
+			Console.Printf("Died at %i, %i, %i", Pos.x, Pos.y, Pos.z);
+		}
+		Stop;
 	}
 }

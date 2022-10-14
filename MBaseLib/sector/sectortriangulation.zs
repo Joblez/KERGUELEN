@@ -189,7 +189,9 @@ class SectorTriangulation
 				}
 
 				// Ignore internal lines.
-				if (checkedLine.sidedef[0].sector == checkedLine.sidedef[1].sector)
+				if (!!(checkedLine.sidedef[0])
+					&& !!(checkedLine.sidedef[1])
+					&& checkedLine.sidedef[0].sector == checkedLine.sidedef[1].sector)
 				{
 					lines.Delete(i);
 					continue;

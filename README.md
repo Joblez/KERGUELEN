@@ -1,9 +1,9 @@
 # MBase
 
 MBase is a ZScript library that attempts to provide a highly-flexible foundation for
-GZDoom mods, including a robust state machine implementation to manage complex logic
-and a generic system for displaying UI elements without custom status bars, among
-other utilities.
+GZDoom mods, including a robust state machine implementation to manage complex logic,
+a generic system for displaying UI elements without custom status bars, tools for
+triangulating sector geometry, among other utilities.
 
 ## Setup
 
@@ -50,12 +50,11 @@ You will need to make edits to certain lumps in your project, or add them if mis
 
 ##### MAPINFO
 
-You will need to add the `HUDExtensionRegistry` event handler in the `GameInfo` block.
-This is needed for the HUD extension system to function.
+You will need to add the follwoing event handlers in the `GameInfo` block.
 ```cs
 GameInfo
 {
-	AddEventHandlers = "HUDExtensionRegistry"
+	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry"
 }
 ```
 > If starting a new project, you may use the premade files in the `setuptemplate`

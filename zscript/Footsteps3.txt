@@ -66,7 +66,7 @@ class Footsteps : Actor
         if ((CVar.GetCvar("fs_enabled").GetInt() > 0) && (player_speed2d > 0.1) && (self.toFollow.pos.z - self.toFollow.floorz <= 0)) {
             
              //trace
-             //Console.PrintF("Speed2d = %f",player_speed2d);
+             Console.PrintF("Speed2d = %f",player_speed2d);
              
             //current floopic id for player:
             int player_floor_tx_id = int(self.toFollow.floorpic);
@@ -80,13 +80,13 @@ class Footsteps : Actor
             if (foundIndex != fstep_textures.Size()) {
     
                 //3-1) play the sound
-                S_Sound(fstep_sounds[foundIndex], CHAN_AUTO, soundLevel);
+                S_StartSound(fstep_sounds[foundIndex], CHAN_AUTO, soundLevel);
                 //Console.PrintF("Found tx = %s, play snd = %s",fstep_textures_names_debug[foundIndex], fstep_sounds[foundIndex]); 
             }
             else {
             
                 //3-2) Play default sound if no match was found
-                S_Sound(fstep_default_sound,  CHAN_AUTO, soundLevel);
+                S_StartSound(fstep_default_sound,  CHAN_AUTO, soundLevel);
                 //Console.PrintF("Not found Tx ! , play default snd = %s",fstep_default_sound); 
             }
                           

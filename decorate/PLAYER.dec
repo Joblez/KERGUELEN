@@ -14,7 +14,7 @@ actor NewPlayer : PlayerPawn
 	Player.WeaponSlot 5, ""
 	Player.WeaponSlot 6, ""
 	Player.JumpZ 9.0
-	Player.viewbob 0.65
+	Player.viewbob 0.75
 	Gravity 1
 	Speed 0.65
 	+NOSKIN

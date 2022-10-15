@@ -34,16 +34,12 @@ class WeatherSpawner : Thinker
 
 		if (m_Time >= 1.0 / m_Frequency)
 		{
-			int iterationCount = 0;
 			do
 			{
 				SpawnWeatherParticle();
 				m_Time -= 1.0 / m_Frequency;
-				iterationCount++;
 			}
 			while (m_Time > 0.0);
-
-			Console.Printf("Particles spawned this tick: %i", iterationCount);
 			m_Time = 0.0;
 		}
 	}

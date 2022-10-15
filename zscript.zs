@@ -23,3 +23,6 @@ version "4.8.2"
 #include "zscript_postinc.zs"
 #include "zscript_nashgore.zs"
 
+//Footsteps
+#include "zscript/Footsteps3.txt"
+

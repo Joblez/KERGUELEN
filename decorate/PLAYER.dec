@@ -26,10 +26,10 @@ actor NewPlayer : PlayerPawn
 		Loop
 
 	See:
-		PLAY A 4
-		PLAY B 4
-		PLAY C 4
-		PLAY D 4
+		PLAY A 6
+		PLAY B 6
+		PLAY C 6
+		PLAY D 6
 		Goto Spawn
 
 	Melee:

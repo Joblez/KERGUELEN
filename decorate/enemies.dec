@@ -564,7 +564,8 @@ actor Dryad replaces Stealthdoomimp
 	goto See
 
 	Death:
-		DRYD E 1 A_Scream
+		TNT1 A 0 A_Playsound("Dryad/death")
+		DRYD E 1 A_XScream
 		DRYD FGHIJK 4 
 		DRYD K -1 A_Noblocking
 		Stop

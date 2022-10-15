@@ -41,7 +41,16 @@ class RainDrop : WeatherParticle
 		RAIN A 1;
 		Loop;
 	Death:
-		TNT1 A 0;
+		Death:
+			RAIN A 1;
+			TNT1 A 0
+			{
+				scale = (0.5,0.5);
+				bForceYBillboard = false;
+				bForceXYBillboard = true;
+			}
+			RAIN BCDE 1;
+			Stop;
 		Stop;
 	}
 }

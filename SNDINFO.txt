@@ -57,11 +57,15 @@ pickup/ammo DSTNAMO
 Forest DAMBNTR
 Waterfall DAMBWTR
 Cave DAMBCAV
+Rain DAMBRAN
 $ambient 1 Forest Point Continuous 1.0
 $ambient 2 Forest Surround Continuous 1.0
 $ambient 3 Waterfall Point Continuous 1.0
 $ambient 4 Cave Point Continuous 1.0
 $ambient 5 Cave Surround Continuous 1.0
+$ambient 6 Rain Point Continuous 1.0
+$ambient 7 Rain Surround Continuous 1.0
+
 
 world/drip dsempty
 

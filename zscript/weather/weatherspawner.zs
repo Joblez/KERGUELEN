@@ -1,19 +1,21 @@
 class WeatherSpawner : Thinker
 {
-	private double m_Frequency;
 	private Sector m_Sector;
 	private class<WeatherParticle> m_ParticleType;
 
+	private double m_Frequency;
 	private double m_Time;
 	private SectorTriangulation m_Triangulation;
 
-	static WeatherSpawner Create(double frequency, Sector sec, class<WeatherParticle> particleType)
+	static WeatherSpawner Create(double density, Sector sec, class<WeatherParticle> particleType)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
-		spawner.m_Frequency = frequency;
 		spawner.m_Sector = sec;
 		spawner.m_ParticleType = particleType;
+		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
+		spawner.m_Frequency = sqrt(density * spawner.m_Triangulation.GetArea()) / TICRATE;
 
+		Console.Printf("Sector: %i, Frequency: %f", sec.Index(), spawner.m_Frequency);
 		return spawner;
 	}
 
@@ -32,22 +34,22 @@ class WeatherSpawner : Thinker
 
 		if (m_Time >= 1.0 / m_Frequency)
 		{
+			int iterationCount = 0;
 			do
 			{
 				SpawnWeatherParticle();
 				m_Time -= 1.0 / m_Frequency;
+				iterationCount++;
 			}
-			while (m_Time > 1.0 / TICRATE)
+			while (m_Time > 0.0);
+
+			Console.Printf("Particles spawned this tick: %i", iterationCount);
 			m_Time = 0.0;
 		}
 	}
 
 	void SpawnWeatherParticle()
 	{
-		if (!m_Triangulation)
-		{
-			m_Triangulation = SectorDataRegistry.GetTriangulation(m_Sector);
-		}
 		vector2 point = m_Triangulation.GetRandomPoint();
 		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - 6));
 

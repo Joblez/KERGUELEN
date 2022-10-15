@@ -74,10 +74,10 @@ class Ithaca : BaseWeapon replaces Shotgun
 			}
 		}
 	Pump:
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9);
+		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.75);
 		ITAP ABC 2;
 		ITAP DE 2;
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.75);
 		TNT1 A 0 A_CasingShotgunL(10, -22);
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
@@ -85,17 +85,17 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Goto Ready;
 
 	Empty:
-		TNT1 A 0 A_StartSound("weapons/empty", 10);
+		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
 		ITAF FGH 2;
 		Goto Ready;
 
 	Charge:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9);
+		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.75);
 		ITAP ABC 2;
 		ITAP DE 2;
 		TNT1 A 0 A_CasingShotgunL(10, -22);
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.75);
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
@@ -143,7 +143,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 	ProperReload:
 		TNT1 A 0 A_WeaponReady(WRF_NOSWITCH);
 		ITRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_StartSound("shotgun/load", 10);
+		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
 		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
 		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);

@@ -253,7 +253,8 @@ actor Shrub3 : Shrub1 10270
 
 actor Shrub4 : Shrub1 10271
 {
-	Height 118
+	Height 48
+	Radius 24
 
 	States
 	{
@@ -266,7 +267,7 @@ actor Shrub4 : Shrub1 10271
 actor NFTree1 10272
 {
 	//$Category Props
-	Height 100
+	Height 48
 	Radius 16
 	+SOLID
 
@@ -281,8 +282,11 @@ actor NFTree1 10272
 actor NFTree2 : NFTree1 10273
 {
 	//$Category Props
+	Height 32
+	Radius 16
 	States
 	{
+	
 	Spawn:
 		TRNF B -1
 		Stop

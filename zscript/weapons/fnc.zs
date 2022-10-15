@@ -67,7 +67,7 @@ class FNC : BaseWeapon replaces Chaingun
 
 	Empty:
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("weapons/empty", 10);
+		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
 		FNCF DEF 2;
 		Goto Ready;
 	ZF:
@@ -137,24 +137,23 @@ class FNC : BaseWeapon replaces Chaingun
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;
 		FNRO AB 1 ;
-		TNT1 A 0 A_StartSound("fnc/magout", 9);
+		TNT1 A 0 A_StartSound("fnc/magout", 9,0,0.5);
 		FNRO CD 1;
-		TNT1 A 0 A_StartSound("Weapon/cloth2", 10);
 		FNRO EFGHI 2;
 		FNIN A 2 ;
 		FNIN BC 1;
 		FNIN D 2;
-		TNT1 A 0 A_StartSound("fnc/magins", 9);
+		TNT1 A 0 A_StartSound("fnc/magins", 9,0,0.5);
 		FNIN EFG 2;
 		FNIN HIJ 2;
 		FNBT ABC 1;
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");
 		FNBT DE 2;
 		FNBT FG 2;
-		TNT1 A 0 A_StartSound("fnc/boltback", 9);
+		TNT1 A 0 A_StartSound("fnc/boltback", 9,0,0.75);
 		FNBT H 1;
 		FNBT IJKL 2;
-		TNT1 A 0 A_StartSound("fnc/boltrel", 9);
+		TNT1 A 0 A_StartSound("fnc/boltrel", 9,0,0.75);
 		FNBT M 2;
 		FNBT NO 2;
 		FNBT P 1;
@@ -206,7 +205,7 @@ class FNC : BaseWeapon replaces Chaingun
 			invoker.m_FireSelect = !invoker.m_FireSelect;
 		}
 		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto": "Semi Auto");
-		TNT1 A 0 A_StartSound("weapons/firemode", 1);
+		TNT1 A 0 A_StartSound("weapons/firemode", 1,0,0.5);
 		FNCF DEF 2;
 		Goto Ready;
 	}

@@ -90,7 +90,7 @@ class Revolver : BaseWeapon
 	AltFire:
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
 		SWSA ABCD 2;
-		TNT1 A 0 A_StartSound("sw/cock", 10);
+		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
 		SWSA EFGHIJKLMN 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
@@ -107,7 +107,7 @@ class Revolver : BaseWeapon
 
 	Empty:
 		SWAI A 2 {
-			A_StartSound("weapons/empty", 1);
+			A_StartSound("weapons/empty", 1,0,0.5);
 			invoker.m_SingleAction = false;
 		}
 		Goto Ready;
@@ -130,11 +130,11 @@ class Revolver : BaseWeapon
 		}
 		SWEJ ABCD 1;
 		SWEJ E 2;
-		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO);
+		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
 		SWEJ FG 2;
 		SWEJ HI 1;
 		SWEJ JKL 1;
-		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO);
+		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
 		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
 		SWEJ M 2;
 		TNT1 A 0 { invoker.m_IsLoading = true; }		
@@ -172,7 +172,7 @@ class Revolver : BaseWeapon
 		}
 	Load:
 		SWLD ABCD 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO);
+		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO,0,0.5);
 		SWLD EF 2 A_WeaponReady(WRF_NOSWITCH);
 		SWLD GHIJ 1 A_WeaponReady(WRF_NOSWITCH);
 		Goto Loading;
@@ -180,7 +180,7 @@ class Revolver : BaseWeapon
 	ReloadEnd:
 	Close:
 		SWCL ABCD 2;
-		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO);
+		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
 		TNT1 A 0 { invoker.m_IsLoading = false; }		
 		SWCL EFGHIJKLMN 2;
 		TNT1 A 0 { invoker.m_SingleAction = false; }

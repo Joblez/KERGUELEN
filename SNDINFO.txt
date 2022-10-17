@@ -450,9 +450,8 @@ step/dirt1			DSDIRT1
 step/dirt2			DSDIRT2
 step/dirt3			DSDIRT3
 step/dirt4			DSDIRT4
-step/dirt5			DSDIRT5
-step/dirt6			DSDIRT6
-$random step/dirt { step/dirt1 step/dirt2 step/dirt3 step/dirt4 step/dirt5 step/dirt6 }
+
+$random step/dirt { step/dirt1 step/dirt2 step/dirt3 step/dirt4 }
 
 // Gravel
 step/gravel1			DSGRAV1

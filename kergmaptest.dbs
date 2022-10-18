@@ -27,8 +27,8 @@ maps
 				requiredarchives = "";
 			}
 		}
-		viewpositiony = 3989.501f;
-		viewpositionx = 25158.85f;
+		viewpositiony = 4656.34f;
+		viewpositionx = 20385.78f;
 		
 		testprecommand
 		{
@@ -52,7 +52,7 @@ maps
 			background = "";
 			backoffsety = 0;
 		}
-		viewscale = 0.8650393f;
+		viewscale = 0.1378581f;
 		
 		reloadresourceprecommand
 		{
@@ -142,9 +142,9 @@ maps
 		overrideceilheight = false;
 		overridebrightness = false;
 		uselongtexturenames = false;
-		viewpositionx = 2604.767f;
-		viewpositiony = -2093.573f;
-		viewscale = 0.6156257f;
+		viewpositionx = -691.1885f;
+		viewpositiony = -2108.302f;
+		viewscale = 0.03435102f;
 		scriptcompiler = "zdoom_acs.cfg";
 		
 		grid

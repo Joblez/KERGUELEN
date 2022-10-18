@@ -47,9 +47,9 @@ class SectorTriangulation
 		{
 			SectorTriangle secTriangle = SectorTriangle.FromDelaunay(triangles[i], sec);
 			triangulation.m_Area += Geometry.GetTriangleArea(
-				secTriangle.GetPoint(0).p,
-				secTriangle.GetPoint(1).p,
-				secTriangle.GetPoint(2).p);
+				secTriangle.GetPoint(0),
+				secTriangle.GetPoint(1),
+				secTriangle.GetPoint(2));
 
 			triangulation.m_Triangles.Push(secTriangle);
 		}
@@ -60,9 +60,9 @@ class SectorTriangulation
 			double previous = i > 0 ? triangulation.m_CumulativeDistribution[i - 1] : 0.0;
 			double next = (
 				Geometry.GetTriangleArea(
-					secTriangle.GetPoint(0).p,
-					secTriangle.GetPoint(1).p,
-					secTriangle.GetPoint(2).p)
+					secTriangle.GetPoint(0),
+					secTriangle.GetPoint(1),
+					secTriangle.GetPoint(2))
 				/ triangulation.m_Area) + previous;
 
 			triangulation.m_CumulativeDistribution.Push(next);
@@ -441,9 +441,9 @@ class SectorTriangle
 		double t = 0.5 * (x + y - q);
 		double u = 1 - 0.5 * (q + x + y);
 
-		vector2 a = m_Points[0].p;
-		vector2 b = m_Points[1].p;
-		vector2 c = m_Points[2].p;
+		vector2 a = m_Points[0];
+		vector2 b = m_Points[1];
+		vector2 c = m_Points[2];
 
 		return (s * a.x + t * b.x + u * c.x, s * a.y + t * b.y + u * c.y);
 	}

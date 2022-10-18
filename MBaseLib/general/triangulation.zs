@@ -349,9 +349,9 @@ class Polygon : Triangulatable
 	{
 		array<PolygonPoint> points;
 
-		for (int i = 0; i < shape.m_Vertices.Size(); ++i)
+		for (int i = 0; i < shape.m_Points.Size(); ++i)
 		{
-			points.Push(PolygonPoint.FromVertex(shape.m_Vertices[i]));
+			points.Push(PolygonPoint.FromVertex(shape.m_Points[i]));
 		}
 
 		Polygon poly = Polygon.Create(points);

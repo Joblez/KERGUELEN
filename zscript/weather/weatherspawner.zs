@@ -13,7 +13,7 @@ class WeatherSpawner : Thinker
 		spawner.m_Sector = sec;
 		spawner.m_ParticleType = particleType;
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		spawner.m_Frequency = sqrt(density * spawner.m_Triangulation.GetArea()) / TICRATE;
+		spawner.m_Frequency = density * sqrt(spawner.m_Triangulation.GetArea()) / TICRATE;
 
 		Console.Printf("Sector: %i, Frequency: %f", sec.Index(), spawner.m_Frequency);
 		return spawner;
@@ -47,6 +47,7 @@ class WeatherSpawner : Thinker
 	void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
+		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > 1536 * 1536) return;
 		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - 6));
 
 		Actor.Spawn(m_ParticleType, position);

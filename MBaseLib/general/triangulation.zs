@@ -99,16 +99,14 @@ class TriangulationPoint
 {
 	double m_X;
 	double m_Y;
-	int m_Index;
 
 	array<DTSweepConstraint> m_Edges;
 
-	static TriangulationPoint Create(double x, double y, int index = -1)
+	static TriangulationPoint Create(double x, double y)
 	{
 		TriangulationPoint p = new("TriangulationPoint");
 		p.m_X = x;
 		p.m_Y = y;
-		p.m_Index = index;
 		return p;
 	}
 
@@ -122,7 +120,6 @@ class TriangulationPoint
 		TriangulationPoint p = new("TriangulationPoint");
 		p.m_X = v.p.x;
 		p.m_Y = v.p.y;
-		p.m_Index = v.Index();
 		return p;
 	}
 
@@ -321,7 +318,6 @@ class PolygonPoint : TriangulationPoint
 		PolygonPoint p = new("PolygonPoint");
 		p.m_X = v.p.x;
 		p.m_Y = v.p.y;
-		p.m_Index = v.Index();
 		return p;
 	}
 
@@ -468,7 +464,7 @@ class Polygon : Triangulatable
 		m_Triangles.Clear();
 		int count = m_Points.Size();
 
-		JitterCollinearPoints();
+		ShiftCollinearPoints();
 
 		// Outer constraints
 		for (int i = 0; i < count - 1; i++)
@@ -494,7 +490,7 @@ class Polygon : Triangulatable
 		tcx.m_Points.Append(m_SteinerPoints);
 	}
 
-	private void JitterCollinearPoints()
+	private void ShiftCollinearPoints()
 	{
 		int count = m_Points.Size();
 		for (int i = 0; i < count; ++i)
@@ -505,9 +501,8 @@ class Polygon : Triangulatable
 
 			if (TriangulationUtil.Orient2d(a, b, c) == ORI_Collinear)
 			{
-				Console.Printf("Jittering...");
-				b.m_X += TriangulationUtil.EPSILON;
-				b.m_Y += TriangulationUtil.EPSILON;
+				b.m_X += TriangulationUtil.EPSILON * 2;
+				b.m_Y += TriangulationUtil.EPSILON * 2;
 			}
 		}
 	}

@@ -47,9 +47,9 @@ class SectorTriangulation
 		{
 			SectorTriangle secTriangle = SectorTriangle.FromDelaunay(triangles[i], sec);
 			triangulation.m_Area += Geometry.GetTriangleArea(
-				secTriangle.GetVertex(0).p,
-				secTriangle.GetVertex(1).p,
-				secTriangle.GetVertex(2).p);
+				secTriangle.GetPoint(0).p,
+				secTriangle.GetPoint(1).p,
+				secTriangle.GetPoint(2).p);
 
 			triangulation.m_Triangles.Push(secTriangle);
 		}
@@ -60,9 +60,9 @@ class SectorTriangulation
 			double previous = i > 0 ? triangulation.m_CumulativeDistribution[i - 1] : 0.0;
 			double next = (
 				Geometry.GetTriangleArea(
-					secTriangle.GetVertex(0).p,
-					secTriangle.GetVertex(1).p,
-					secTriangle.GetVertex(2).p)
+					secTriangle.GetPoint(0).p,
+					secTriangle.GetPoint(1).p,
+					secTriangle.GetPoint(2).p)
 				/ triangulation.m_Area) + previous;
 
 			triangulation.m_CumulativeDistribution.Push(next);
@@ -301,7 +301,7 @@ class SectorTriangulation
 
 class SectorShape
 {
-	array<Vertex> m_Vertices;
+	array<Vertex> m_Points;
 	array<Line> m_Lines;
 	array<SectorShape> m_Children;
 
@@ -310,7 +310,7 @@ class SectorShape
 	static SectorShape Create(out array<Vertex> vertices, out array<Line> lines)
 	{
 		SectorShape node = new("SectorShape");
-		node.m_Vertices.Move(vertices);
+		node.m_Points.Move(vertices);
 		node.m_Lines.Move(lines);
 		node.m_Inner = false;
 		return node;
@@ -318,7 +318,7 @@ class SectorShape
 
 	bool TryAddChild(SectorShape other)
 	{
-		if (other.m_Vertices.Size() == 0) return false;
+		if (other.m_Points.Size() == 0) return false;
 
 		for (int i = 0; i < m_Children.Size(); ++i)
 		{
@@ -338,7 +338,7 @@ class SectorShape
 
 	bool IsInsideShape(SectorShape outer)
 	{
-		int vertexCount = m_Vertices.Size();
+		int vertexCount = m_Points.Size();
 		int lineCount = m_Lines.Size();
 		if (outer.m_Lines.Size() < 3 || vertexCount == 0) return false;
 
@@ -377,16 +377,16 @@ class SectorShape
 		}
 
 		// If no lines intersect, check that at least one point is inside.
-		return Geometry.IsPointInPolygon(m_Vertices[0].p, outerEdges);
+		return Geometry.IsPointInPolygon(m_Points[0].p, outerEdges);
 	}
 
 	vector2, vector2 GetBoundingBox()
 	{
 		array<BoxedVector2> points;
 
-		for (int i = 0; i < m_Vertices.Size(); ++i)
+		for (int i = 0; i < m_Points.Size(); ++i)
 		{
-			points.Push(BoxedVector2.FromVertex(m_Vertices[i]));
+			points.Push(BoxedVector2.FromVertex(m_Points[i]));
 		}
 
 		vector2 bl, tr;
@@ -397,15 +397,15 @@ class SectorShape
 
 class SectorTriangle
 {
-	private Vertex[3] m_Vertices;
+	private vector2[3] m_Points;
 	private Sector m_Sector;
 
-	static SectorTriangle Create(Vertex a, Vertex b, Vertex c, Sector sec)
+	static SectorTriangle Create(vector2 a, vector2 b, vector2 c, Sector sec)
 	{
 		SectorTriangle triangle = new("SectorTriangle");
-		triangle.m_Vertices[0] = a;
-		triangle.m_Vertices[1] = b;
-		triangle.m_Vertices[2] = c;
+		triangle.m_Points[0] = a;
+		triangle.m_Points[1] = b;
+		triangle.m_Points[2] = c;
 		triangle.m_Sector = sec;
 
 		return triangle;
@@ -413,25 +413,16 @@ class SectorTriangle
 
 	static SectorTriangle FromDelaunay(DelaunayTriangle triangle, Sector sec)
 	{
-		Vertex a, b, c;
-
-		[a, b, c] = FindSectorVertices(
-			triangle.m_Points[0].m_Index,
-			triangle.m_Points[1].m_Index,
-			triangle.m_Points[2].m_Index,
-			sec);
-
-		if (a == null || b == null || c == null)
-		{
-			ThrowAbortException("Sector triangle must have exactly 3 vertices from the sector.");
-		}
+		vector2 a = (triangle.m_Points[0].m_X, triangle.m_Points[0].m_Y);
+		vector2 b = (triangle.m_Points[1].m_X, triangle.m_Points[1].m_Y);
+		vector2 c = (triangle.m_Points[2].m_X, triangle.m_Points[2].m_Y);
 
 		return SectorTriangle.Create(a, b, c, sec);
 	}
 
-	Vertex GetVertex(int index) const
+	vector2 GetPoint(int index) const
 	{
-		return m_Vertices[index];
+		return m_Points[index];
 	}
 
 	Sector GetSector() const
@@ -450,67 +441,10 @@ class SectorTriangle
 		double t = 0.5 * (x + y - q);
 		double u = 1 - 0.5 * (q + x + y);
 
-		vector2 a = m_Vertices[0].p;
-		vector2 b = m_Vertices[1].p;
-		vector2 c = m_Vertices[2].p;
+		vector2 a = m_Points[0].p;
+		vector2 b = m_Points[1].p;
+		vector2 c = m_Points[2].p;
 
 		return (s * a.x + t * b.x + u * c.x, s * a.y + t * b.y + u * c.y);
-	}
-
-	private static Vertex, Vertex, Vertex FindSectorVertices(int index1, int index2, int index3, Sector sec)
-	{
-		Vertex a = null;
-		Vertex b = null;
-		Vertex c = null;
-
-		if (index1 < 0 || index2 < 0 || index3 < 0)
-		{
-			ThrowAbortException("Cannot find vertex with negative index.");
-		}
-		for (int i = 0; i < sec.lines.Size(); ++i)
-		{
-			if (a && b && c)
-			{
-				break;
-			}
-
-			Line l = sec.lines[i];
-
-			if (a == null)
-			{
-				if (l.v1.Index() == index1)
-				{
-					a = l.v1;
-				}
-				else if (l.v2.Index() == index1)
-				{
-					a = l.v2;
-				}
-			}
-			if (b == null)
-			{
-				if (l.v1.Index() == index2)
-				{
-					b = l.v1;
-				}
-				else if (l.v2.Index() == index2)
-				{
-					b = l.v2;
-				}
-			}
-			if (c == null)
-			{
-				if (l.v1.Index() == index3)
-				{
-					c = l.v1;
-				}
-				else if (l.v2.Index() == index3)
-				{
-					c = l.v2;
-				}
-			}
-		}
-
-		return a, b, c;
 	}
 }

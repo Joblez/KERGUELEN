@@ -76,3 +76,36 @@ class RainDrop : WeatherParticle
 		Stop;
 	}
 }
+
+class Snowflake : WeatherParticle
+{
+	Default
+	{
+		VSpeed -3.0;
+		Scale 0.3;
+		Gravity 0.1;
+		RenderStyle "Add";
+		+NOINTERACTION;
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			Pitch = -90.0;
+		}
+	Alive:
+		SNOW A 1 A_Weave(8, 0, 0.2, 0);
+		TNT1 A 0 {
+			if (Pos.z <= FloorZ)
+			{
+				return ResolveState("Death");
+			}
+			return ResolveState(null);
+		}
+		Loop;
+	Death:
+		SNOW A 1;
+		Stop;
+	}
+}

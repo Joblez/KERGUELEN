@@ -234,6 +234,16 @@ class MathVec2
 		return vector = (vector.x * (targetLength / length), vector.y * (targetLength / length));
 	}
 
+	static double DistanceBetween(vector2 a, vector2 b)
+	{
+		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+	}
+
+	static double SquareDistanceBetween(vector2 a, vector2 b)
+	{
+		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
+	}
+
 	static vector2 Rotate(vector2 vector, double angle)
 	{
 		return (vector.x * cos(angle) - vector.y * sin(angle), vector.x * sin(angle) + vector.y * cos(angle));
@@ -323,6 +333,17 @@ class MathVec3
 		}
 
 		return vector = (vector.x * (targetLength / length), vector.y * (targetLength / length), vector.z * (targetLength / length));
+	}
+
+	
+	static double DistanceBetween(vector2 a, vector2 b)
+	{
+		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
+	}
+
+	static double SquareDistanceBetween(vector2 a, vector2 b)
+	{
+		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z);
 	}
 
 	static vector3 Rotate(vector3 vector, vector3 axis, double angle)

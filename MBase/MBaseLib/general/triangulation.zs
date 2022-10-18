@@ -502,7 +502,6 @@ class Polygon : Triangulatable
 			TriangulationPoint a = m_Points[i];
 			TriangulationPoint b = m_Points[(i + 1) % count];
 			TriangulationPoint c = m_Points[(i + 2) % count];
-
 			if (TriangulationUtil.Orient2d(a, b, c) == ORI_Collinear)
 			{
 				Console.Printf("Jittering...");

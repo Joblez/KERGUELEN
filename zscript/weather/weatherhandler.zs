@@ -26,7 +26,7 @@ class WeatherHandler : EventHandler
 		{
 			Console.Printf("Creating snow spawner at %i", Level.Sectors[i].Index());
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(6, 1024, Level.Sectors[i], "Snowflake"));
+				WeatherSpawner.Create(2, 1536, Level.Sectors[i], "Snowflake"));
 		}
 	}
 }

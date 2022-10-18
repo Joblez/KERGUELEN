@@ -506,8 +506,8 @@ class Polygon : Triangulatable
 			if (TriangulationUtil.Orient2d(a, b, c) == ORI_Collinear)
 			{
 				Console.Printf("Jittering...");
-				b.m_X += EPSILON;
-				b.m_Y += EPSILON;
+				b.m_X += TriangulationUtil.EPSILON;
+				b.m_Y += TriangulationUtil.EPSILON;
 			}
 		}
 	}

@@ -82,7 +82,7 @@ class Snowflake : WeatherParticle
 	Default
 	{
 		VSpeed -3.0;
-		Scale 0.3;
+		Scale 0.5;
 		Gravity 0.1;
 		RenderStyle "Add";
 		+NOINTERACTION;
@@ -95,7 +95,7 @@ class Snowflake : WeatherParticle
 			Pitch = -90.0;
 		}
 	Alive:
-		SNOW A 1 A_Weave(8, 0, 0.2, 0);
+		SNOW A 1 A_Weave(2, 0, 0.3, 0);
 		TNT1 A 0 {
 			if (Pos.z <= FloorZ)
 			{

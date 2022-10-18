@@ -13,6 +13,8 @@ server int fade_toggle = 0;
 
 server int recoil_toggle = 1;
 
+server int special_particle_toggle = 1;
+
 //NASHGORE
 
 server int nashgore_maxgore = 1024;

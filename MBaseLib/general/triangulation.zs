@@ -496,7 +496,7 @@ class Polygon : Triangulatable
 
 	private void JitterCollinearPoints()
 	{
-		int count = m_Points.Size()
+		int count = m_Points.Size();
 		for (int i = 0; i < count; ++i)
 		{
 			TriangulationPoint a = m_Points[i];

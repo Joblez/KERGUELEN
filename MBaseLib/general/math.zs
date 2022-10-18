@@ -336,12 +336,12 @@ class MathVec3
 	}
 
 	
-	static double DistanceBetween(vector2 a, vector2 b)
+	static double DistanceBetween(vector3 a, vector3 b)
 	{
 		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
 	}
 
-	static double SquareDistanceBetween(vector2 a, vector2 b)
+	static double SquareDistanceBetween(vector3 a, vector3 b)
 	{
 		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z);
 	}

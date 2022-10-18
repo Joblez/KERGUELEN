@@ -468,6 +468,8 @@ class Polygon : Triangulatable
 		m_Triangles.Clear();
 		int count = m_Points.Size();
 
+		JitterCollinearPoints();
+
 		// Outer constraints
 		for (int i = 0; i < count - 1; i++)
 		{
@@ -490,6 +492,24 @@ class Polygon : Triangulatable
 		}
 
 		tcx.m_Points.Append(m_SteinerPoints);
+	}
+
+	private void JitterCollinearPoints()
+	{
+		int count = m_Points.Size()
+		for (int i = 0; i < count; ++i)
+		{
+			TriangulationPoint a = m_Points[i];
+			TriangulationPoint b = m_Points[(i + 1) % count];
+			TriangulationPoint c = m_Points[(i + 2) % count];
+
+			if (TriangulationUtil.Orient2d(a, b, c) == ORI_Collinear)
+			{
+				Console.Printf("Jittering...");
+				b.m_X += FRandom(-8.0, 8.0);
+				b.m_Y += FRandom(-8.0, 8.0);
+			}
+		}
 	}
 }
 

@@ -123,7 +123,9 @@ Option "Particles from Projectiles", "weapon_particle_toggle","OnOff"
 
 Option "Fade-Ins/Fade-Outs", "fade_toggle", "OffOn"
 
-Option "Recoil", "recoil_toggle", "OnOff"
+Option "Visual Recoil", "recoil_toggle", "OnOff"
+
+Option "Weather Particles", "special_particle_toggle", "OnOff"
 
 }
 

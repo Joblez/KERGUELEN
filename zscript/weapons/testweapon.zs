@@ -51,7 +51,7 @@ class Revolver : BaseWeapon
 		TNT1 A 1 A_VRecoil(1.0,1,4);
 		stop;
 	Fire:
-		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.	
+		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
 		TNT1 A 0 A_StartSound("sw/cock2", 9);
@@ -107,7 +107,7 @@ class Revolver : BaseWeapon
 
 	Empty:
 		SWAI A 2 {
-			A_StartSound("weapons/empty", 1,0,0.5);
+			A_StartSound("weapons/empty", CHAN_AUTO,0,0.5);
 			invoker.m_SingleAction = false;
 		}
 		Goto Ready;

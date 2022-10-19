@@ -14,7 +14,7 @@ class WeatherSpawner : Thinker
 		spawner.m_Sector = sec;
 		spawner.m_ParticleType = particleType;
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		spawner.m_Frequency = density * sqrt(spawner.m_Triangulation.GetArea()) / TICRATE;
+		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
 		spawner.m_Range = range;
 
 		return spawner;

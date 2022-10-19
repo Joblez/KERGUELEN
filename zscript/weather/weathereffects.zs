@@ -30,7 +30,7 @@ class RainDrop : WeatherParticle
 {
 	Default
 	{
-		VSpeed -15.0;
+		VSpeed -20.0;
 		XScale 0.4;
 		YScale 0.7;
 		Gravity 2.5;
@@ -81,8 +81,8 @@ class Snowflake : WeatherParticle
 {
 	Default
 	{
-		VSpeed -3.0;
-		Scale 0.5;
+		VSpeed -7.0;
+		Scale 0.575;
 		Gravity 0.1;
 		RenderStyle "Add";
 		+NOINTERACTION;
@@ -93,9 +93,11 @@ class Snowflake : WeatherParticle
 	Spawn:
 		TNT1 A 0 NoDelay {
 			Pitch = -90.0;
+			Scale += (FRandom(-0.1, 0.1), FRandom(-0.1, 0.1));
+			WeaveIndexXY = Random(0, 63);
 		}
 	Alive:
-		SNOW A 1 A_Weave(2, 0, 0.3, 0);
+		SNOW A 1 A_Weave(2, 0, 0.6, 0);
 		TNT1 A 0 {
 			if (Pos.z <= FloorZ)
 			{

@@ -46,7 +46,7 @@ class Hatchet : BaseWeapon
 		TNT1 A 1 A_SetBaseOffset(60, 80);
 		HAF1 G 1 A_SetBaseOffset(40, 60);
 		HAF1 H 1 A_SetBaseOffset(20, 50);
-		HAF1 I 1 A_SetBaseOffset(2, 40);
+		HAF1 I 1 A_SetBaseOffset(5, 40);
 		HAF1 JKLM 1 A_SetBaseOffset(1, 30);
 		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		CRWI A 0 A_Raise(16);

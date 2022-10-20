@@ -19,7 +19,7 @@ class Hatchet : BaseWeapon
 		Weapon.Kickback 50;
 		Weapon.SlotNumber 1;
 		BaseWeapon.LookSwayResponse 0.0;
-		Weapon.Upsound("hatchet/draw");
+		Weapon.UpSound("hatchet/draw");
 		DamageType "Hatchet";
 		+WEAPON.MELEEWEAPON;
 		+WEAPON.AMMO_OPTIONAL;

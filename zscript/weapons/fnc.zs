@@ -26,7 +26,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.AmmoType2 "Ammo223";
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
-		Weapon.Upsound("fnc/draw");
+		Weapon.UpSound("fnc/draw");
 		DamageType "Normal";
 		Tag "FNC";
 	}
@@ -67,12 +67,12 @@ class FNC : BaseWeapon replaces Chaingun
 
 	Empty:
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
 		FNCF DEF 2;
 		Goto Ready;
 	ZF:
-		TNT1 A 1 A_VRecoil(0.99,1,4);
-		TNT1 A 1 A_VRecoil(1.0,1,4);
+		TNT1 A 1 A_VRecoil(0.99, 1, 4);
+		TNT1 A 1 A_VRecoil(1.0, 1, 4);
 		stop;
 	Fire:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
@@ -103,15 +103,15 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBullets(5, 2, -1, 8, "Bullet_puff");
 		FNFL A 1 Bright {
 			A_FRecoil(0.8);
-			A_CasingRifle(18,-5);
-			A_SingleSmoke(5,-3);
-			A_TakeInventory("RifleMag",1);
+			A_CasingRifle(18, -5);
+			A_SingleSmoke(5, -3);
+			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
-			A_StartSound("fnc/loop",1,CHANF_LOOPING);
-			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_StartSound("fnc/loop", 1, CHANF_LOOPING);
+			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
-			psp.frame = random(0,3);
+			psp.frame = random(0, 3);
 		}
 		FNCF A 1;
 		FNCF B 1;
@@ -137,23 +137,23 @@ class FNC : BaseWeapon replaces Chaingun
 		FNRS ABCDEFG 2;
 		FNRS HI 1 ;
 		FNRO AB 1 ;
-		TNT1 A 0 A_StartSound("fnc/magout", 9,0,0.5);
+		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);
 		FNRO CD 1;
 		FNRO EFGHI 2;
 		FNIN A 2 ;
 		FNIN BC 1;
 		FNIN D 2;
-		TNT1 A 0 A_StartSound("fnc/magins", 9,0,0.5);
+		TNT1 A 0 A_StartSound("fnc/magins", 9, 0, 0.5);
 		FNIN EFG 2;
 		FNIN HIJ 2;
 		FNBT ABC 1;
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");
 		FNBT DE 2;
 		FNBT FG 2;
-		TNT1 A 0 A_StartSound("fnc/boltback", 9,0,0.75);
+		TNT1 A 0 A_StartSound("fnc/boltback", 9, 0, 0.75);
 		FNBT H 1;
 		FNBT IJKL 2;
-		TNT1 A 0 A_StartSound("fnc/boltrel", 9,0,0.75);
+		TNT1 A 0 A_StartSound("fnc/boltrel", 9, 0, 0.75);
 		FNBT M 2;
 		FNBT NO 2;
 		FNBT P 1;
@@ -204,8 +204,8 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 {
 			invoker.m_FireSelect = !invoker.m_FireSelect;
 		}
-		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto": "Semi Auto");
-		TNT1 A 0 A_StartSound("weapons/firemode", 1,0,0.5);
+		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto" : "Semi Auto"); 
+	 	TNT1 A 0 A_StartSound("weapons/firemode", CHAN_AUTO, 0, 0.5);
 		FNCF DEF 2;
 		Goto Ready;
 	}

@@ -30,7 +30,7 @@ class RainDrop : WeatherParticle
 {
 	Default
 	{
-		VSpeed -20.0;
+		VSpeed -24.0;
 		XScale 0.4;
 		YScale 0.7;
 		Gravity 2.5;
@@ -46,31 +46,30 @@ class RainDrop : WeatherParticle
 		RAIN A 1;
 		TNT1 A 0 {
 			if (GetCVar("special_particle_toggle") == 1)
+			{
+				scale = (0.5,0.5);
+				bForceYBillboard = false;
+				bForceXYBillboard = true;
+				if (Distance2DSquared(players[consoleplayer].mo) <= 512 ** 2)
 				{
-					scale = (0.5,0.5);
-					bForceYBillboard = false;
-					bForceXYBillboard = true;
-					 if (Distance2DSquared(players[consoleplayer].mo) <= 512 * 512)
-					 {
-					 	for (int i = 0; i < Random(2, 4); ++i)
-					 	{
-					 		A_SpawnParticle(
-					 			0xFFFFFFFF,
-					 			SPF_RELVEL,
-					 			lifetime: 18,
-					 			size: 6,
-					 			angle: FRandom(0.0, 360.0),
-					 			zoff: 4.0,
-					 			velx: FRandom(1.0, 4.0),
-					 			velz: FRandom(0.5, 1.0),
-					 			accelz: -0.25,
-					 			fadestepf: 0,
-					 			sizestep: -0.5
-					 		);
-					 	}
-					}		
-				}		
-
+					for (int i = 0; i < Random(2, 4); ++i)
+					{
+						A_SpawnParticle(
+							0xFFFFFFFF,
+							SPF_RELVEL,
+							lifetime: 22,
+							size: FRandom(3.5, 7.5),
+							angle: FRandom(0.0, 360.0),
+							zoff: 2.0,
+							velx: FRandom(1.0, 4.0),
+							velz: FRandom(0.5, 1.5),
+							accelz: -0.25,
+							fadestepf: 0,
+							sizestep: -0.5
+						);
+					}
+				}
+			}
 		}
 		RAIN BCDE 1;
 		Stop;

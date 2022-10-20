@@ -20,15 +20,6 @@ class WeatherSpawner : Thinker
 		return spawner;
 	}
 
-	// static WeatherSpawner GetSpawnerOfType(name type)
-	// {
-	// 	switch (type)
-	// 	{
-	// 		case 'LightRain':
-
-	// 	}
-	// }
-
 	override void Tick()
 	{
 		m_Time += 1.0 / TICRATE;
@@ -45,10 +36,15 @@ class WeatherSpawner : Thinker
 		}
 	}
 
-	void SpawnWeatherParticle()
+	void SetDensity(double density)
+	{
+		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
+	}
+
+	private void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
-		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > m_Range * m_Range) return;
+		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > m_Range ** 2) return;
 		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
 		Actor.Spawn(m_ParticleType, position);

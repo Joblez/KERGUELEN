@@ -1,8 +1,8 @@
 DEFAULTLISTMENU
 {
-    Font "BIGFONT", "Grey", "Red"
-    Selector "M_SKULL1", -32, -5
-    Linespacing 16
+	Font "BIGFONT", "Grey", "Red"
+	Selector "M_SKULL1", -32, -5
+	Linespacing 16
 }
 
 
@@ -10,35 +10,34 @@ LISTMENU "MainMenu"
 {
 	StaticPatch 94, 2, "M_DOOM"
 
-
-    Position 115, 68
-    TextItem "Play", "n", "PlayerclassMenu"
-    ifOption(SwapMenu)
-    {
-        Position 115, 84
-        TextItem "Load Game",     "l", "LoadGameMenu"
-        Position 115, 100
-        TextItem "Save Game",     "s", "SaveGameMenu"
-        Position 115, 116
-        TextItem "Options",       "o", "OptionsMenu"
-        Position 115, 132
-        TextItem "Mod Options",   "d", "VisualEffects"
-    }
-    else
-    {
-        Position 115, 84
-        TextItem "Options",       "o", "OptionsMenu"
-        Position 115, 100
-        TextItem "Mod Options",   "d", "VisualEffects"
-        Position 115, 116
-        TextItem "Load Game",     "l", "LoadGameMenu"
-        Position 115, 132
-        TextItem "Save Game",     "s", "SaveGameMenu"
-    }
-    Position 115, 148
-    TextItem "Tips & Credits",     "r", "ReadThisMenu"
-    Position 115, 164
-    TextItem "Quit Game", "q", "QuitMenu"
+	Position 115, 68
+	TextItem "Play", "n", "PlayerclassMenu"
+	ifOption(SwapMenu)
+	{
+		Position 115, 84
+		TextItem "Load Game",	"l", "LoadGameMenu"
+		Position 115, 100
+		TextItem "Save Game",	"s", "SaveGameMenu"
+		Position 115, 116
+		TextItem "Options",		"o", "OptionsMenu"
+		Position 115, 132
+		TextItem "Mod Options",	"d", "VisualEffects"
+	}
+	else
+	{
+		Position 115, 84
+		TextItem "Options",		"o", "OptionsMenu"
+		Position 115, 100
+		TextItem "Mod Options",	"d", "VisualEffects"
+		Position 115, 116
+		TextItem "Load Game",	"l", "LoadGameMenu"
+		Position 115, 132
+		TextItem "Save Game",	"s", "SaveGameMenu"
+	}
+	Position 115, 148
+	TextItem "Tips & Credits",	"r", "ReadThisMenu"
+	Position 115, 164
+	TextItem "Quit Game",		"q", "QuitMenu"
 }
 
 ListMenu "PlayerclassMenu"
@@ -85,18 +84,16 @@ ListMenu "PlayerclassMenu"
 
 ListMenu "EpisodeMenu"
 {
-		NetgameMessage "$NEWGAME"
-		Position 48, 63
-		StaticPatch 54, 38, "M_EPISOD", 0 , "$MNU_EPISODE"
+	NetgameMessage "$NEWGAME"
+	Position 48, 63
+	StaticPatch 54, 38, "M_EPISOD", 0 , "$MNU_EPISODE"
 }
 
 ListMenu "SkillMenu"
 {
-
-		StaticText 74, 16, "Difficulty"
-		Position 160, 44
-		centermenu
-
+	StaticText 74, 16, "Difficulty"
+	Position 160, 44
+	centermenu
 }
 
 
@@ -109,23 +106,23 @@ AddOptionMenu "OptionsMenu"
 
 OptionMenu "VisualEffects"
 {
-title "Mod Options"
+	title "Mod Options"
 
-StaticText " "
+	StaticText " "
 
-StaticText "Visual Effects"
+	StaticText "Visual Effects"
 
-Option "Bullet Casings", "casing_toggle","OnOff"
+	Option "Bullet Casings", "casing_toggle","OnOff"
 
-Option "Muzzle Smoke", "smoke_toggle","OnOff"
+	Option "Muzzle Smoke", "smoke_toggle","OnOff"
 
-Option "Particles from Projectiles", "weapon_particle_toggle","OnOff"
+	Option "Particles from Projectiles", "weapon_particle_toggle","OnOff"
 
-Option "Fade-Ins/Fade-Outs", "fade_toggle", "OffOn"
+	Option "Fade-Ins/Fade-Outs", "fade_toggle", "OffOn"
 
-Option "Visual Recoil", "recoil_toggle", "OnOff"
+	Option "Visual Recoil", "recoil_toggle", "OnOff"
 
-Option "Weather Particles", "special_particle_toggle", "OnOff"
+	Option "Weather Particles", "special_particle_toggle", "OnOff"
 
 }
 

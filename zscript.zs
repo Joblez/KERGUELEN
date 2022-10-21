@@ -3,10 +3,8 @@ version "4.8.2"
 // MBase
 #include "MBase/MBaseLib/zscript.zs"
 
-//Footsteps
-#include "zscript/footsteps.zs"
-
 // Miscellaneous
+#include "zscript/misc/footsteps.zs"
 #include "zscript/misc/Barrel.zs"
 #include "zscript/misc/visualfx.zs"
 

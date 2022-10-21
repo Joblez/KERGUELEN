@@ -61,7 +61,7 @@ class StepAudioPlayer : Thinker
 		double movementSpeed = m_PlayerPawn.Vel.xy.Length();
 		double maxSpeed = m_PlayerPawn.Speed * 8.3333333 * m_PlayerPawn.ForwardMove1;
 
-		double speedPercentage = min(movementSpeed / maxSpeed, 1.99);
+		double speedPercentage = min(movementSpeed / maxSpeed, 1.85);
 		int forwardMove = m_PlayerPawn.GetPlayerInput(MODINPUT_FORWARDMOVE);
 		int sideMove = m_PlayerPawn.GetPlayerInput(MODINPUT_SIDEMOVE);
 

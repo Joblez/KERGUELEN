@@ -24,16 +24,16 @@ class ActorUtil
 		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force);
 	}
 
-	static play void RadiusThrust3D(vector3 origin, double force, double radius, bool targetCenter = true, array<Actor> exclusions)
+	static play void Explode3D(vector3 origin, int damage, double thrustForce, double radius, bool targetCenter = true, array<Actor> exclusions = null)
 	{
-		let iterator = BlockThingsIterator.Create(origin.x, origin.y, origin.z, radius, radius, false);
+		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
 		while (iterator.Next())
 		{
 			Actor mo = iterator.thing;
 
 			if (!mo.bSolid || !mo.bShootable) continue;
-			if (exclusions.Size() > 0 && exclusions.Find(mo) == exclusions.Size()) continue;
+			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) == exclusions.Size()) continue;
 
 			vector3 position = targetCenter ? (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0)) : mo.Pos;
 			vector3 toTarget = position - origin;
@@ -49,9 +49,42 @@ class ActorUtil
 				return;
 			}
 
-			double dampenedForce = (radius - distance) / radius * force / (2 * mass);
+			int attenuatedDamage = int(round((radius - distance) / radius * damage));
+			double attenuatedForce = (radius - distance) / radius * thrustForce / (2 * mo.mass);
 
-			Thrust3D(mo, toTarget, dampenedForce);
+			mo.Health -= attenuatedDamage;
+			Thrust3D(mo, toTarget, attenuatedForce);
+		}
+	}
+
+	static play void RadiusThrust3D(vector3 origin, double force, double radius, bool targetCenter = true, array<Actor> exclusions = null)
+	{
+		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
+
+		while (iterator.Next())
+		{
+			Actor mo = iterator.thing;
+
+			if (!mo.bSolid || !mo.bShootable) continue;
+			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) == exclusions.Size()) continue;
+
+			vector3 position = targetCenter ? (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0)) : mo.Pos;
+			vector3 toTarget = position - origin;
+			double distance = toTarget.Length();
+
+			if (distance > radius) continue;
+
+			TraceResults result;
+			LineTracer tracer = new("LineTracer");
+			if (!tracer.Trace(position, mo.cursector, toTarget.Unit(), distance, TRACE_NoSky)
+				|| result.HitActor != mo)
+			{
+				return;
+			}
+
+			double attenuatedForce = (radius - distance) / radius * force / (2 * mo.mass);
+
+			Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}
 }

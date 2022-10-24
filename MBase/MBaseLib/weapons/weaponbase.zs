@@ -871,9 +871,10 @@ class WeaponBase : DoomWeapon abstract
 	private bool CheckShouldAutoAim() const
 	{
 		double autoaim = owner.Player.GetAutoaim();
+		bool allowAutoaim = GetCVar('sv_autoaim') == 1;
 		bool freelook = CVar.GetCVar('freelook', owner.player).GetBool();
 
-		return (autoaim > 0.5 && !bNoAutoAim) || (freelook && !level.IsFreelookAllowed());
+		return allowAutoaim && (autoaim > 0.5 && !bNoAutoAim) || (freelook && !level.IsFreelookAllowed());
 	}
 
 	private bool CheckIfAutoAimable(Actor mo, double targetRange, int smartAimMode, bool ignoreNotAutoAimed) const

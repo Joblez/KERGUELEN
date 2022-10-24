@@ -120,6 +120,10 @@ class Vec3Util
 	{
 		return (0, 0, 0);
 	}
+	static vector3 Inf()
+	{
+		return (double.Infinity, double.Infinity, double.Infinity);
+	}
 
 	//======================= Swizzles =======================//
 

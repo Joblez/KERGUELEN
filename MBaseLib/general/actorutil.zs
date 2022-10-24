@@ -24,35 +24,34 @@ class ActorUtil
 		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force);
 	}
 
-	static play void Explode3D(vector3 origin, int damage, double thrustForce, double radius, bool targetCenter = true, array<Actor> exclusions = null)
+	static play void Explode3D(Actor origin, int damage, double thrustForce, double radius, bool targetCenter = true, array<Actor> exclusions = null)
 	{
-		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
+		let iterator = BlockThingsIterator.CreateFromPos(origin.Pos.x, origin.Pos.y, origin.Pos.z, radius, radius, false);
 
 		while (iterator.Next())
 		{
 			Actor mo = iterator.thing;
 
 			if (!mo.bSolid || !mo.bShootable) continue;
-			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) == exclusions.Size()) continue;
+			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) != exclusions.Size()) continue;
 
 			vector3 position = targetCenter ? (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0)) : mo.Pos;
-			vector3 toTarget = position - origin;
+			vector3 toTarget = position - origin.Pos;
 			double distance = toTarget.Length();
 
 			if (distance > radius) continue;
 
-			TraceResults result;
 			LineTracer tracer = new("LineTracer");
 			if (!tracer.Trace(position, mo.cursector, toTarget.Unit(), distance, TRACE_NoSky)
-				|| result.HitActor != mo)
+				|| tracer.results.HitActor != mo)
 			{
 				return;
 			}
 
 			int attenuatedDamage = int(round((radius - distance) / radius * damage));
-			double attenuatedForce = (radius - distance) / radius * thrustForce / (2 * mo.mass);
+			double attenuatedForce = (radius - distance) / radius * thrustForce / (mo.Mass * 0.5);
 
-			mo.Health -= attenuatedDamage;
+			int prev = mo.Health;
 			Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}
@@ -66,7 +65,7 @@ class ActorUtil
 			Actor mo = iterator.thing;
 
 			if (!mo.bSolid || !mo.bShootable) continue;
-			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) == exclusions.Size()) continue;
+			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) != exclusions.Size()) continue;
 
 			vector3 position = targetCenter ? (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0)) : mo.Pos;
 			vector3 toTarget = position - origin;
@@ -74,15 +73,14 @@ class ActorUtil
 
 			if (distance > radius) continue;
 
-			TraceResults result;
 			LineTracer tracer = new("LineTracer");
 			if (!tracer.Trace(position, mo.cursector, toTarget.Unit(), distance, TRACE_NoSky)
-				|| result.HitActor != mo)
+				|| tracer.results.HitActor != mo)
 			{
 				return;
 			}
 
-			double attenuatedForce = (radius - distance) / radius * force / (2 * mo.mass);
+			double attenuatedForce = (radius - distance) / radius * thrustForce / (mo.Mass * 0.5);
 
 			Thrust3D(mo, toTarget, attenuatedForce);
 		}

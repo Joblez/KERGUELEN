@@ -6,6 +6,7 @@ actor NewPlayer : PlayerPawn
 	Player.StartItem "Revolver", 1	
 	Player.StartItem "Hatchet", 1
 	Player.StartItem "Ammo357", 24
+	Player.Startitem "RevoCylinder",6
 	Player.SoundClass "player"
 	Player.WeaponSlot 1, "Hatchet"
 	Player.WeaponSlot 2, "Revolver"

@@ -151,7 +151,7 @@ actor Penguin 11002
 
 	Noot:
 		PENG A 10
-		PENG F 60 A_PlaySound("penguin/noot")
+		PENG F 60 A_PlaySound("penguin/noot",CHAN_AUTO,0.25)
 		PENG A 10
 		Goto See
 	}

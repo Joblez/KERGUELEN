@@ -286,7 +286,7 @@ actor NFTree2 : NFTree1 10273
 	Radius 16
 	States
 	{
-	
+
 	Spawn:
 		TRNF B -1
 		Stop

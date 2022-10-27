@@ -204,7 +204,7 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 {
 			invoker.m_FireSelect = !invoker.m_FireSelect;
 		}
-		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto" : "Semi Auto"); 
+		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto" : "Semi Auto");
 	 	TNT1 A 0 A_StartSound("weapons/firemode", CHAN_AUTO, 0, 0.5);
 		FNCF DEF 2;
 		Goto Ready;

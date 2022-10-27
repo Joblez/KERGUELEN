@@ -21,7 +21,7 @@ class WeatherHandler : EventHandler
 		}
 
 		iterator = Level.CreateSectorTagIterator(SNOW_TAG);
-		
+
 		while ((i = iterator.Next()) >= 0)
 		{
 			Console.Printf("Creating snow spawner at %i", Level.Sectors[i].Index());

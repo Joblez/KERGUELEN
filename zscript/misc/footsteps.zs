@@ -10,7 +10,7 @@ class StepAudioPlayer : Thinker
 	array<string> m_StepSounds;
 	array<int> m_StepTextures;
 	string m_DefaultStepSound;
-	
+
 	double m_StepInterval;
 
 	//VSO: only needed for debug.
@@ -36,11 +36,11 @@ class StepAudioPlayer : Thinker
 			if (singleFLAT_Sound.Length() != 0)
 			{
 				TextureID texID = TexMan.CheckForTexture(sSTEP_FLATS_List[i], TexMan.TYPE_ANY);
-				
+
 				if (texID.Exists()) {
 					stepAudioPlayer.m_StepSounds.Push(singleFLAT_Sound);
 					stepAudioPlayer.m_StepTextures.Push(int(texID));
-					
+
 					stepAudioPlayer.m_StepTextureNames.Push(sSTEP_FLATS_List[i]);
 				}
 			}
@@ -78,12 +78,12 @@ class StepAudioPlayer : Thinker
 			m_PreviousPlayerVel = m_PlayerPawn.Vel;
 			return;
 		}
-		
+
 		double soundLevel = CVar.GetCvar("fs_volume_mul").GetFloat() * speedPercentage;
 
 		int floorTextureID = int(self.m_PlayerPawn.floorpic);
 		int foundIndex = m_StepTextures.Find(floorTextureID);
-		
+
 		if (foundIndex != m_StepTextures.Size())
 		{
 			S_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, soundLevel);

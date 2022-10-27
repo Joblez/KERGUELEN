@@ -85,7 +85,7 @@ actor GLG replaces ZombieMan
 	Mass 100
 	Scale 0.7
 	Monster
-	Bloodcolor "e8 00 21"	
+	Bloodcolor "e8 00 21"
 	SeeSound "GLG/Attack"
 	DeathSound "GLG/Death"
 	ActiveSound "GLG/Idle"
@@ -191,14 +191,14 @@ actor Wyvern replaces Cacodemon
 	Height 56
 	Radius 32
 	Painchance 220
-	Bloodcolor "e8 00 21"	
+	Bloodcolor "e8 00 21"
 	Monster
 	Obituary "Amerigo met a Wyvern."
 	Seesound "Wyvern/pain"
 	Deathsound "Wyvern/death"
 	painsound "Wyvern/pain"
 	+FLOORCLIP
-	+FLOAT	
+	+FLOAT
 	+NOGRAVITY
 	States
 	{
@@ -208,26 +208,26 @@ actor Wyvern replaces Cacodemon
 		WYVN DCB 5 A_Look
 		Loop
 	See:
-		TNT1 A 0 A_JumpIf (health <= 100, "Rage")	
-		TNT1 A 0 A_Setspeed(14)	
+		TNT1 A 0 A_JumpIf (health <= 100, "Rage")
+		TNT1 A 0 A_Setspeed(14)
 		WYVN ABC 3 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 3 A_Chase
 		Loop
-		
-	Rage:	
+
+	Rage:
 		TNT1 A 0 A_Setspeed(20)
 		WYVN ABC 2 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 2 A_Chase
 		WYVN ABC 2 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
-		WYVN DCB 2 A_Chase	
+		WYVN DCB 2 A_Chase
 		WYVN ABC 2 A_Chase
 		TNT1 A 0 A_Playsound("Wyvern/flap",CHAN_AUTO)
 		WYVN DCB 2 A_Chase
 		goto see
-		
+
 	Missile:
 		WYVN F 5 A_FaceTarget
 		WYVN E 5 A_FaceTarget
@@ -243,17 +243,17 @@ actor Wyvern replaces Cacodemon
 		WYVD B 8 A_Scream
 		WYVD C 8
 		WYVD D 8
-		WYVD D 8 
+		WYVD D 8
 		WYVD D 4 A_JumpIf (z <= floorz, "Crash")
 		Wait
 	Crash:
-		TNT1 A 0 A_Playsound("Wyvern/fall",CHAN_AUTO)	
+		TNT1 A 0 A_Playsound("Wyvern/fall",CHAN_AUTO)
 		WYVD DE 5 A_NoBlocking
 		WYVD F -1
 		Stop
-	
-	
-	
+
+
+
 	Raise:
 		WYVD F 8 A_UnSetFloorClip
 		WYVD EDCBA 8
@@ -297,8 +297,8 @@ actor Dryad replaces Stealthdoomimp
 	Monster
 	Health 400
 	+LOOKALLAROUND
-	+NOINFIGHTING	
-	+STANDSTILL	
+	+NOINFIGHTING
+	+STANDSTILL
 	+SEEFRIENDLYMONSTERS
 	BloodColor "42 97 51"
 	Deathsound "Dryad/death"
@@ -312,7 +312,7 @@ actor Dryad replaces Stealthdoomimp
 	See:
 		DRYD A 1 A_Chase
 		loop
-		
+
 	Missile:
 	TNT1 A 0 A_Jump(64,"Altmissile")
 	DRYD B 4 A_Facetarget
@@ -320,14 +320,14 @@ actor Dryad replaces Stealthdoomimp
 	DRYD CD 4
 	DRYD B 4
 	goto see
-	
+
 	AltMissile:
 	DRYD B 4 A_Facetarget
 	TNT1 A 0 A_SpawnProjectile("Dryadvinespawner",56)
 	DRYD CD 4
 	DRYD B 4
-	goto see	
-		
+	goto see
+
 	Pain:
 	DRYD C 8 A_Pain
 	goto See
@@ -335,7 +335,7 @@ actor Dryad replaces Stealthdoomimp
 	Death:
 		TNT1 A 0 A_Playsound("Dryad/death")
 		DRYD E 1 A_XScream
-		DRYD FGHIJK 4 
+		DRYD FGHIJK 4
 		DRYD K -1 A_Noblocking
 		Stop
 	}
@@ -388,12 +388,12 @@ actor Dryadvinespawner : Dryadseed
 		TNT1 A 0 A_JumpIf (z <= floorz, "SpawnVine")
 		SDAD ABC 6
 		Stop
-		
+
 	SpawnVine:
 		TNT1 A 0 A_SpawnProjectile("DryadVine",0)
 		SDAD ABC 6
 		stop
-		
+
 	}
 }
 
@@ -414,11 +414,11 @@ actor DryadVine
 	Spawn:
 	VINR ABCD 4
 	goto See
-	
+
 	See:
 	VIDL ABCDEFGHIJKLM 4 A_CustomMeleeattack(1)
 	loop
-	
+
 	Death:
 	VDTH A 4 A_XScream
 	VDTH BCDE 4

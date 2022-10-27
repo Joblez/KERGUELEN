@@ -10,7 +10,7 @@ class sniperammo: ammo
 
 class Enfield : baseweapon {
 	bool m_Shouldered;
-	bool m_IsLoading;	
+	bool m_IsLoading;
 
 	Default
 	{
@@ -25,7 +25,7 @@ class Enfield : baseweapon {
 		Inventory.PickupMessage "[6]";
 		Tag "Enfield Sniper";
 	}
-	
+
 	States
 	{
 	}

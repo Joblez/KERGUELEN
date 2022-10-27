@@ -4,8 +4,8 @@ GameInfo
 	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WeatherHandler"
 
 	AddEventHandlers = "NashGoreHandler"
-	
-	AddEventHandlers = "FootstepEventHandler"	
+
+	AddEventHandlers = "FootstepEventHandler"
 }
 
 Map "MAP01" "KERG01"

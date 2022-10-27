@@ -18,7 +18,7 @@ class Revolver : BaseWeapon
 {
 	bool m_SingleAction;
 	vector2 m_Spread;
-	bool m_IsLoading;	
+	bool m_IsLoading;
 
 	Default
 	{
@@ -136,7 +136,7 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
 		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
 		SWEJ M 2;
-		TNT1 A 0 { invoker.m_IsLoading = true; }		
+		TNT1 A 0 { invoker.m_IsLoading = true; }
 		TNT1 A 0 {
 			A_CasingRevolver(random(-4,4), random(-30,-34));
 			A_CasingRevolver(random(-4,4), random(-30,-34));
@@ -180,7 +180,7 @@ class Revolver : BaseWeapon
 	Close:
 		SWCL ABCD 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
-		TNT1 A 0 { invoker.m_IsLoading = false; }		
+		TNT1 A 0 { invoker.m_IsLoading = false; }
 		SWCL EFGHIJKLMN 2;
 		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto Ready;

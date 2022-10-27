@@ -3,7 +3,7 @@ actor NewPlayer : PlayerPawn
 	Player.ViewHeight 50
 	Player.AttackZOffset 22
 	Player.DisplayName "Amerigo"
-	Player.StartItem "Revolver", 1	
+	Player.StartItem "Revolver", 1
 	Player.StartItem "Hatchet", 1
 	Player.StartItem "Ammo357", 24
 	Player.Startitem "RevoCylinder",6

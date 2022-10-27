@@ -108,7 +108,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		ITRS E 1 A_SetBaseOffset(60, 80);
 		ITRS D 1 A_SetBaseOffset(40, 60);
 		ITRS C 1 A_SetBaseOffset(20, 40);
-		ITRS B 1 A_SetBaseOffset(10, 30); 
+		ITRS B 1 A_SetBaseOffset(10, 30);
 		ITRS A 1 A_SetBaseOffset(2, 30);
 		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		ITAF FGH 2;

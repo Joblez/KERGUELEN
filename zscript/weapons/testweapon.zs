@@ -31,8 +31,7 @@ class Revolver : BaseWeapon
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.UpSound("sw/raise");
 		Inventory.PickupMessage "[2].357 Revolver";
-		Tag "Model 19";
-		Obituary "%o was smoked by %k.";
+		Tag "Model 15";
 	}
 
 	override void Travelled()

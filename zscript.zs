@@ -14,6 +14,7 @@ version "4.8.2"
 #include "zscript/weapons/hatchet.zs"
 #include "zscript/weapons/ithaca.zs"
 #include "zscript/weapons/fnc.zs"
+#include "zscript/weapons/dynamite.zs"
 
 // Weather
 #include "zscript/weather/weathereffects.zs"

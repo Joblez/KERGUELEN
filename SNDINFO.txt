@@ -190,6 +190,25 @@ weapons/firemode DSWEPCK
 
 fnc/draw DSFNCGB
 
+//Dynamite
+
+$random dynamite/explode { DEXPLD1 DEXPLD2 DEXPLD3 DEXPLD4 }
+
+DEXPLD1 DEXPLD1
+DEXPLD2 DEXPLD2
+DEXPLD3 DEXPLD3
+DEXPLD4 DEXPLD4
+
+dynamite/open DSLITR1
+
+dynamite/light DSLITR2
+
+dynamite/close DSLITR3
+
+dynamite/fuse DSFUSE
+
+dynamite/fuseloop DSFUSE2
+
 //GRARG
 
 $random Grarg/Death { BPDEAT1 BPDEAT2 }

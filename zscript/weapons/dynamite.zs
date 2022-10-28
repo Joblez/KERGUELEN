@@ -122,7 +122,7 @@ class DynamiteStick : Actor
 				A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
 			}
 		}
-		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 512.0, 384.0); }
+		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 768.0, 384.0); }
 		BOOM A 2 Bright A_Explode(int(100 * FRandom(1.0, 2.0)), 192.0);
 		BOOM BCDEFGHIJKLMOPQRSTUVWXY 2 Bright;
 		Stop;

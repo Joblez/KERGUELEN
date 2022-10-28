@@ -9,7 +9,7 @@ class sniperammo: ammo
 	}
 }
 
-class Enfield : baseweapon {
+class Enfield : baseweapon replaces Plasmarifle {
 	bool m_shouldered;
 	bool m_isloading;	
 	Default
@@ -28,6 +28,10 @@ class Enfield : baseweapon {
 
 	States
 	{
+
+	Spawn:
+		PICK E -1;
+		Stop;
 
 	ZF:
 		TNT1 A 1 A_VRecoil(0.9,1,4);
@@ -52,41 +56,45 @@ class Enfield : baseweapon {
 		TNT1 A 0 A_JumpIf((invoker.m_shouldered), "Shoulderedfire");
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", 1, 1);
 		Goto Empty;			
-		TNT1 A 0 A_FireBullets(5, 1, -1, 60, "Bullet_Puff");
+		TNT1 A 0 A_FireBullets(5, 1, -1, 80, "Bullet_Puff");
 		ISHF A 1 Bright {
 			A_FRecoil(0.8);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("Sniperammo", 1);
-			A_StartSound("fnc/fire", 1);
+			A_StartSound("sniper/fire", 1);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_SetBaseOffset(8, 36);
 		}
-		ISHF BCDEF 2;
+		ISHF A 1 A_SetBaseOffset(4, 33);
+		ISHF B 1 ;
+		ISHF CDEF 2 A_SetBaseOffset(0, 30);
 	Bolt:
 		ISHB ABC 2;
-		TNT1 A 0 A_startsound("sniper/boltback");
+		TNT1 A 0 A_startsound("sniper/boltback",9);
 		ISHB DEFG 2;
 		ISHB HIJ 1;
 		TNT1 A 0 A_CasingRifle(18,-5);
 		ISHB KL 2;
-		TNT1 A 0 A_startsound("sniper/boltfor");		
+		TNT1 A 0 A_startsound("sniper/boltfor",9);		
 		ISHB MN 1;
 		ISHB OPQRSTUV 2;
 		goto ready;
 	
 	Reload:
-		ISRS ABCDE 2;
-		ISRS FGHI 2;
-		TNT1 A 0 A_startsound("sniper/boltback");
-		ISRS JKLMNOPQRSTUV 2;
+		ISRS ABCDE 1;
+		ISRS FGHI 1;
+		TNT1 A 0 A_startsound("sniper/boltback",9);
+		ISRS JKL 1;
+		ISRS MNOPQRSTUV 2;
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo3006", 1, "ProperReload");
 		Goto ReloadEnd;
 
 	ProperReload:
-		ISRL ABCDEF 2;
-		TNT1 A 0 A_startsound("sniper/load");
+		ISRL ABCDEF 1;
+		TNT1 A 0 A_startsound("sniper/load",10);
 		ISRL GHIJKLMN 2;
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -106,10 +114,10 @@ class Enfield : baseweapon {
 			return ResolveState("ReloadRepeat");
 		}	
 	ReloadEnd:
-
-		ISRE ABC 2;
-		TNT1 A 0 A_startsound("sniper/boltfor");		
-		ISRE DEFGHIJKLMNOPQRS 2;
+		ISRE ABC 1;
+		TNT1 A 0 A_startsound("sniper/boltfor",9);
+		ISRE DEF 1;
+		ISRE GHIJKLMNOPQRS 2;
 		goto ready;
 	
 	Altfire:
@@ -128,8 +136,8 @@ class Enfield : baseweapon {
 	wait;
 
 	Shoulder:
-		TNT1 A 0 A_ZoomFactor(3.0);
-		TNT1 A 0 A_SetCrosshair(3);
+		TNT1 A 0 A_ZoomFactor(4.0);
+		TNT1 A 0 A_SetCrosshair(58);
 		ISAS ABCDE 2;
 		TNT1 A 0 {invoker.m_shouldered = true;}
 		goto altready;
@@ -146,46 +154,59 @@ class Enfield : baseweapon {
 		loop;	
 
 		EmptyScoped:
-		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);		
+		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
 		ISAF EF 2;
 		goto altready;
 
 	Shoulderedfire:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", 1, 1);
-		Goto EmptyScoped;		
-		TNT1 A 0 A_FireBullets(1, 1, -1, 60, "Bullet_Puff");	
+		Goto EmptyScoped;
+		TNT1 A 0 A_FireBullets(1, 1, -1, 80, "Bullet_Puff");
 		ISAF A 2 BRIGHT {
-			A_FRecoil(2.5); 
+			A_FRecoil(2.5);
 			A_SingleSmoke(0,0);
 			A_TakeInventory("Sniperammo", 1);
-			A_StartSound("fnc/fire", 1);
+			A_StartSound("sniper/fire", 1);
 			A_AlertMonsters();
 			A_Gunflash("ZFScoped");
 		}
 		ISAF BCDEF 2;
 	
 	ShoulderedBolt:
-		TNT1 A 0 A_ZoomFactor(1.0);	
+		TNT1 A 0 A_ZoomFactor(1.0);
 		ISRD ABCDEFGHIJ 2;
-		TNT1 A 0 A_startsound("sniper/boltback");
+		TNT1 A 0 A_startsound("sniper/boltback",9);
 		ISRD KLMNOPQ 1;
-		TNT1 A 0 A_CasingRifle(-18,-5);		
+		TNT1 A 0 A_CasingRifle(-18,-5);
 		ISRD RSTUV 2;
-		TNT1 A 0 A_startsound("sniper/boltfor");	
+		TNT1 A 0 A_startsound("sniper/boltfor",9);
 		ISRD WXYZ 2;
 		ISR2 ABCDE 2;
-		TNT1 A 0 A_ZoomFactor(3.0);		
+		TNT1 A 0 A_ZoomFactor(4.0);
 		ISR2 FGHIJKL 2;
 		goto altready;
 
 	Select:
 		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
+		TNT1 A 4 A_SetBaseOffset(-65, 81);
+		ISR2 C 1 A_SetBaseOffset(-65, 81);
+		ISR2 D 1 A_SetBaseOffset(-35, 55);
+		ISR2 E 1 A_SetBaseOffset(-28, 39);
+		ISR2 F 1 A_SetBaseOffset(-12, 37);
+		ISR2 G 1 A_SetBaseOffset(1, 34);	
+		ISHB TUV 1 A_SetBaseOffset(0, 30);	
 		SWAI A 0 A_Raise(16);
 		Goto Ready;	
 	Deselect:
 		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
-		TNT1 A 4;
-		ITAI A 1 A_Lower(16);
+		ISHI A 1 A_SetBaseOffset(1, 34);	
+		ISR2 G 1 A_SetBaseOffset(-12, 38);		
+		ISR2 F 1 A_SetBaseOffset(-28, 39);
+		ISR2 E 1 A_SetBaseOffset(-35, 55);
+		ISR2 D 1 A_SetBaseOffset(-65, 81);	
+		ISR2 C 1 A_SetBaseOffset(-65, 81);					
+		TNT1 A 4 A_SetBaseOffset(-65, 81);					
+		ITAI A 0 A_Lower(16);
 		wait;	
 
 	}

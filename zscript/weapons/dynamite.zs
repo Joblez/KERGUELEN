@@ -1,4 +1,4 @@
-class Dynamite : BaseWeapon
+class Dynamite : BaseWeapon replaces Rocketlauncher
 {
 	bool m_IsThrowing;
 	double m_Throw;

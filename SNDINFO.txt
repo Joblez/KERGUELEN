@@ -223,6 +223,14 @@ DSRFOD4 DSRFOD4
 sniper/boltback DSMSNBT1
 sniper/boltfor DSMSNBT2
 
+$random sniper/fire { DSSNIPR1 DSSNIPR2 DSSNIPR3 }
+
+DSSNIPR1 DSSNIPR1
+DSSNIPR2 DSSNIPR2
+DSSNIPR3 DSSNIPR3 
+
+sniper/raise DSSNSEL
+
 //GRARG
 
 $random Grarg/Death { BPDEAT1 BPDEAT2 }

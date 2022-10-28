@@ -9,11 +9,14 @@ this also usese vsonnier's port of thezombiekiller's footsteps
 Specifics:
 
 1.Enemies/NPCs
+
 'Grarg' Enemy - 3D Realms, Ultimecia, Obsidian
 
 'Greenlittleguy' Enemy - Bethesda, Obsidian
 
 'Wyvern' - Raven Software, Obsidian
+
+''
 
 Shark credits:
 Submitted: Krispy

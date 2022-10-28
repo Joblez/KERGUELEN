@@ -88,7 +88,7 @@ class DynamiteStick : Actor
 		Radius 8;
 		Height 8;
 		Speed 10;
-		Damage 20;
+		DamageFunction 100 * FRandom(1.0, 2.0);
 		Gravity 0.7;
 		Scale 0.5;
 		BounceType "Doom";
@@ -98,7 +98,7 @@ class DynamiteStick : Actor
 		Projectile;
 		-NOGRAVITY;
 		+RANDOMIZE;
-		+FORCEXYBILLBOARD
+		+FORCEXYBILLBOARD;
 		+DEHEXPLOSION;
 	}
 	States
@@ -110,7 +110,7 @@ class DynamiteStick : Actor
 	Death:
 		TNT1 A 0 A_StopSound(7);
 		TNT1 A 0 A_NoGravity();
-		TNT1 A 0 A_StartSound("dynamite/explode",CHAN_AUTO);
+		TNT1 A 0 A_StartSound("dynamite/explode", CHAN_AUTO);
 		TNT1 A 0 A_SetScale(1,1);
 		TNT1 AAAAAAAAA 0 {
 			if (GetCvar("weapon_particle_toggle") == 1)
@@ -121,10 +121,8 @@ class DynamiteStick : Actor
 				A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
 			}
 		}
-		BOOM A 2 Bright {
-			A_Explode();
-			ActorUtil.RadiusThrust3D(Pos, 64.0, 96.0);
-		}
+		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 600.0, 256.0); }
+		BOOM A 2 Bright A_Detonate();
 		BOOM BCDEFGHIJKLMOPQRSTUVWXY 2 Bright;
 		Stop;
 	Grenade:

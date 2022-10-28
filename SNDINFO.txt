@@ -209,6 +209,20 @@ dynamite/fuse DSFUSE
 
 dynamite/fuseloop DSFUSE2
 
+dynamite/equip DSLITSL
+
+//Sniper
+
+$Random sniper/load { DSRFOD1 DSRFOD2 DSRFOD3 DSRFOD4 }
+
+DSRFOD1 DSRFOD1
+DSRFOD2 DSRFOD2
+DSRFOD3 DSRFOD3
+DSRFOD4 DSRFOD4
+
+sniper/boltback DSMSNBT1
+sniper/boltfor DSMSNBT2
+
 //GRARG
 
 $random Grarg/Death { BPDEAT1 BPDEAT2 }

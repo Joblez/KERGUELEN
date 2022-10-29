@@ -82,7 +82,7 @@ actor GLG replaces ZombieMan
 	Height 48
 	Speed 10
 	PainChance 255
-	Mass 100
+	Mass 75
 	Scale 0.7
 	Monster
 	Bloodcolor "e8 00 21"

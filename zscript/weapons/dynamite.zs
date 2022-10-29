@@ -125,7 +125,7 @@ class DynamiteStick : Actor
 			}
 		}
 		TNT1 A 0 A_SetTranslucent(0.2);
-		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 100.0, 384.0); }
+		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 62.5, 400.0); }
 		BOOM A 2 Bright {
 			A_Explode(100 * FRandom(1.0, 2.0), 200.0);
 			A_AlertMonsters(4096.0);

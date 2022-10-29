@@ -71,7 +71,7 @@ class ActorUtil
 		{
 			Actor mo = iterator.thing;
 
-			if (!mo.bSolid || !mo.bShootable) continue;
+			if (!mo.bSolid || !mo.bShootable || mo.bDontThrust) continue;
 			if (exclusions && exclusions.Find(mo) != exclusions.Size()) continue;
 
 			vector3 position;

@@ -110,7 +110,12 @@ class DynamiteStick : Actor
 		DYNP ABCDEFGH 2 Bright;
 		Loop;
 	Death:
-		TNT1 A 0 { A_StopSound(7); A_NoGravity(); A_SetScale(1,1); A_StartSound("dynamite/explode",CHAN_AUTO);}
+		TNT1 A 0 {
+			A_StopSound(7);
+			A_NoGravity();
+			A_SetScale(1,1);
+			A_StartSound("dynamite/explode",CHAN_AUTO);
+		}
 		TNT1 AAAAAAAAA 0 {
 			if (GetCvar("weapon_particle_toggle") == 1)
 			{

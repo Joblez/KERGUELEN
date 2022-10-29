@@ -144,7 +144,7 @@ actor Ammo40mm : Ammo 2010
 {
 	//$Category Ammunition
 	Inventory.Amount 1
-	Inventory.MaxAmount 10
+	Inventory.MaxAmount 25
 	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A Grenade."
 

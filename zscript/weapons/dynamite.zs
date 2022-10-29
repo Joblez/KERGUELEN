@@ -90,9 +90,8 @@ class DynamiteStick : Actor
 		Height 8;
 		Speed 20;
 		Damage 0;
-		Gravity 0.7;
+		Gravity 0.9;
 		Scale 0.5;
-		BounceType "Doom";
 		DeathSound "";
 		Obituary "$OB_GRENADE"; // "%o caught %k's grenade."
 		DamageType "Explosive";

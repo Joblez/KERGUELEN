@@ -437,7 +437,7 @@ class Polygon : Triangulatable
 		prev = p.m_Previous;
 		prev.m_Next = next;
 		next.m_Previous = prev;
-		
+
 		int index = m_Points.Find(p);
 
 		if (index = m_Points.Size()) ThrowAbortException("m_Point not in polygon.");
@@ -1245,7 +1245,7 @@ class DTSweep
 			default:
 				ThrowAbortException("Orientation not handled");
 		}
-		
+
 		// Only here so the compiler doesn't complain.
 		return null;
 	}
@@ -1520,11 +1520,11 @@ class DTSweep
 		t.m_Neighbors[0] = null;
 		t.m_Neighbors[1] = null;
 		t.m_Neighbors[2] = null;
-		
+
 		ot.m_Neighbors[0] = null;
 		ot.m_Neighbors[1] = null;
 		ot.m_Neighbors[2] = null;
-		
+
 		if (n1 != null) ot.MarkNeighbor(n1);
 		if (n2 != null) t.MarkNeighbor(n2);
 		if (n3 != null) t.MarkNeighbor(n3);

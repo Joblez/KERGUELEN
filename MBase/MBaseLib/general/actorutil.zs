@@ -114,7 +114,7 @@ class ActorUtil
 				continue;
 			}
 
-			double attenuatedForce = (radius - distance) / radius * force - mo.Mass * 0.5;
+			double attenuatedForce = max(0.0, ((radius - distance) / radius * force) - mo.Mass * 0.5);
 
 			Thrust3D(mo, toTarget, attenuatedForce);
 		}

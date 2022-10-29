@@ -136,18 +136,34 @@ class Enfield : baseweapon replaces Plasmarifle {
 	wait;
 
 	Shoulder:
-		TNT1 A 0 A_ZoomFactor(4.0);
 		TNT1 A 0 A_SetCrosshair(58);
-		ISAS ABCDE 2;
-		TNT1 A 0 {invoker.m_shouldered = true;}
+		ISAS A 1 A_ZoomFactor(1.0, ZOOM_INSTANT);
+		ISAS A 1 A_ZoomFactor(1.33, ZOOM_INSTANT);
+		ISAS B 1 A_ZoomFactor(1.67, ZOOM_INSTANT);
+		ISAS B 1 A_ZoomFactor(2.0, ZOOM_INSTANT);
+		ISAS C 1 A_ZoomFactor(2.33, ZOOM_INSTANT);
+		ISAS C 1 A_ZoomFactor(2.67, ZOOM_INSTANT);
+		ISAS D 1 A_ZoomFactor(3.0, ZOOM_INSTANT);
+		ISAS D 1 A_ZoomFactor(3.33, ZOOM_INSTANT);
+		ISAS E 1 A_ZoomFactor(3.67, ZOOM_INSTANT);
+		ISAS E 1 A_ZoomFactor(4.0, ZOOM_INSTANT);
+		TNT1 A 0 { invoker.m_shouldered = true; }
 		goto altready;
 	
 	Deshoulder:
-		TNT1 A 0 A_ZoomFactor(1.0);
-		TNT1 A 0 A_SetCrosshair(0);		
-		ISAS EDCBA 2;
+		ISAS E 1 A_ZoomFactor(4.0, ZOOM_INSTANT);
+		ISAS E 1 A_ZoomFactor(3.67, ZOOM_INSTANT);
+		ISAS D 1 A_ZoomFactor(3.33, ZOOM_INSTANT);
+		ISAS D 1 A_ZoomFactor(3.0, ZOOM_INSTANT);
+		ISAS C 1 A_ZoomFactor(2.67, ZOOM_INSTANT);
+		ISAS C 1 A_ZoomFactor(2.33, ZOOM_INSTANT);
+		ISAS B 1 A_ZoomFactor(2.0, ZOOM_INSTANT);
+		ISAS B 1 A_ZoomFactor(1.67, ZOOM_INSTANT);
+		ISAS A 1 A_ZoomFactor(1.33, ZOOM_INSTANT);
+		ISAS A 1 A_ZoomFactor(1.0, ZOOM_INSTANT);
+		TNT1 A 0 A_SetCrosshair(0);
 		TNT1 A 0 {invoker.m_shouldered = false;}
-		goto ready;	
+		goto ready;
 	
 	Altready:
 		ISAI A 1 A_Weaponready();	

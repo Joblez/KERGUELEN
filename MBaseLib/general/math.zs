@@ -335,7 +335,6 @@ class MathVec3
 		return vector = (vector.x * (targetLength / length), vector.y * (targetLength / length), vector.z * (targetLength / length));
 	}
 
-	
 	static double DistanceBetween(vector3 a, vector3 b)
 	{
 		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
@@ -660,7 +659,7 @@ class BoxedVector2
 
 	vector2 Sub(vector2 v) const { return (m_Value.x - v.x, m_Value.y - v.y); }
 	BoxedVector2 SubBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Sub(bV.m_Value)); }
-	
+
 	vector2 Mul(vector2 v) const { return (m_Value.x * v.x, m_Value.y * v.y); }
 	BoxedVector2 MulBoxed(BoxedVector2 bV) const { return BoxedVector2.Create(Mul(bV.m_Value)); }
 

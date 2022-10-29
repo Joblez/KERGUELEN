@@ -1,5 +1,12 @@
 class ActorUtil
 {
+	enum EThrustTarget
+	{
+		THRTARGET_Origin,
+		THRTARGET_Center,
+		THRTARGET_Top
+	}
+
 	static vector3 PosRelativeToActor(Actor this, Actor other)
 	{
 		return this.PosRelative(other.cursector);
@@ -56,7 +63,7 @@ class ActorUtil
 	// 	}
 	// }
 
-	static play void RadiusThrust3D(vector3 origin, double force, double radius, bool targetCenter = true, array<Actor> exclusions = null)
+	static play void RadiusThrust3D(vector3 origin, double force, double radius, EThrustTarget thrustTarget = THRTARGET_Top, array<Actor> exclusions = null)
 	{
 		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
@@ -67,7 +74,19 @@ class ActorUtil
 			if (!mo.bSolid || !mo.bShootable) continue;
 			if (exclusions && exclusions.Find(mo) != exclusions.Size()) continue;
 
-			vector3 position = targetCenter ? (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0)) : mo.Pos;
+			vector3 position;
+			switch (thrustTarget)
+			{
+				case THRTARGET_Center:
+					position = (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0));
+					break;
+				case THRTARGET_Top:
+					position = (mo.Pos.xy, mo.Pos.z + mo.Height);
+				case THRTARGET_Origin:
+				default:
+					position = mo.Pos;
+					break;
+			}
 			vector3 toTarget = position - origin;
 			double distance = toTarget.Length();
 

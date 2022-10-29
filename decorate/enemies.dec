@@ -408,6 +408,7 @@ actor DryadVine
 	+LOOKALLAROUND
 	+NOINFIGHTING
 	+STANDSTILL
+	+DONTTHRUST
 	BloodColor "42 97 51"
 	States
 	{

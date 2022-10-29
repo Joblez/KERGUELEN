@@ -50,7 +50,9 @@ class Enfield : baseweapon replaces Plasmarifle {
 		
 		Empty:
 		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);		
-		ISHF EF 2;
+		TNT1 A 0 A_SetBaseOffset(2, 32);
+		ISHF FF 2;
+		TNT1 A 0 A_SetBaseOffset(0, 30);
 		goto ready;
 	Fire:
 		TNT1 A 0 A_JumpIf((invoker.m_shouldered), "Shoulderedfire");
@@ -66,36 +68,49 @@ class Enfield : baseweapon replaces Plasmarifle {
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_SetBaseOffset(8, 36);
 		}
-		ISHF A 1 A_SetBaseOffset(4, 33);
-		ISHF B 1 ;
+		ISHF A 1 ;
+		ISHF B 1 A_SetBaseOffset(4, 33);
 		ISHF CDEF 2 A_SetBaseOffset(0, 30);
 	Bolt:
-		ISHB ABC 2;
+		TNT1 A 0 A_SetBaseOffset(4, 34);	
+		ISHB ABC 1;
 		TNT1 A 0 A_startsound("sniper/boltback",9);
+		TNT1 A 0 A_SetBaseOffset(3, 33);		
 		ISHB DEFG 2;
+		TNT1 A 0 A_SetBaseOffset(2, 32);		
 		ISHB HIJ 1;
 		TNT1 A 0 A_CasingRifle(18,-5);
-		ISHB KL 2;
+		ISHB KL 2;	
 		TNT1 A 0 A_startsound("sniper/boltfor",9);		
 		ISHB MN 1;
-		ISHB OPQRSTUV 2;
+		TNT1 A 0 A_SetBaseOffset(1, 31);			
+		ISHB OPQR 2;
+		ISHB STUV 2 A_Weaponready();
+		TNT1 A 0 A_SetBaseOffset(0, 30);		
 		goto ready;
 	
 	Reload:
 		ISRS ABCDE 1;
 		ISRS FGHI 1;
 		TNT1 A 0 A_startsound("sniper/boltback",9);
-		ISRS JKL 1;
-		ISRS MNOPQRSTUV 2;
+		ISRS JKLMNOPQ 1;
+		ISRS RSTUV 2;
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo3006", 1, "ProperReload");
 		Goto ReloadEnd;
 
-	ProperReload:
+	ProperReload:	
 		ISRL ABCDEF 1;
 		TNT1 A 0 A_startsound("sniper/load",10);
-		ISRL GHIJKLMN 2;
+		TNT1 A 0 A_SetBaseOffset(-1, 33);		
+		ISRL GH 2;
+		TNT1 A 0 A_SetBaseOffset(-1, 32);
+		ISRL IJ 2;
+		TNT1 A 0 A_SetBaseOffset(-1, 31);		
+		ISRL KL 2;
+		TNT1 A 0 A_SetBaseOffset(0, 30);	
+		ISRL MN 2;
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
@@ -116,8 +131,13 @@ class Enfield : baseweapon replaces Plasmarifle {
 	ReloadEnd:
 		ISRE ABC 1;
 		TNT1 A 0 A_startsound("sniper/boltfor",9);
+		TNT1 A 0 A_SetBaseOffset(-2, 32);		
 		ISRE DEF 1;
-		ISRE GHIJKLMNOPQRS 2;
+		TNT1 A 0 A_SetBaseOffset(-1, 31);		
+		ISRE GHIJKLMN 2;
+		TNT1 A 0 A_SetBaseOffset(0, 30);			
+		ISRE OP 2;
+		ISRE QRS 2 A_Weaponready(); 
 		goto ready;
 	
 	Altfire:
@@ -190,7 +210,8 @@ class Enfield : baseweapon replaces Plasmarifle {
 	
 	ShoulderedBolt:
 		TNT1 A 0 A_ZoomFactor(1.0);
-		ISRD ABCDEFGHIJ 2;
+		ISRD ABC 2;
+		ISRD DEFGHIJ 2;
 		TNT1 A 0 A_startsound("sniper/boltback",9);
 		ISRD KLMNOPQ 1;
 		TNT1 A 0 A_CasingRifle(-18,-5);

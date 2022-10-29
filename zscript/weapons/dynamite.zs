@@ -37,12 +37,12 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNH OP 1 BRIGHT;
 	Hold:
 		TNT1 A 0 {
-			if (invoker.m_Throw >= 7.5)
+			if (invoker.m_Throw >= 5)
 			{
 				Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
-				stick.Vel = Vec3Util.Zero();
+				stick.Vel = Vec3Util.Zero();	
 				stick.SetState(stick.ResolveState("Death"));
-				return ResolveState("NewStick");
+				return ResolveState("DIE");							
 			}
 			return ResolveState(null);
 		}
@@ -69,6 +69,10 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_StartSound("dynamite/light", 10);
 		DYNS EFGHI 2;
 		Goto Ready;
+
+	DIE:
+		DYNS FEDCB 2;	
+		wait;
 
 	Select:
 		DYNS A 2 A_SetBaseOffset(1, 85);

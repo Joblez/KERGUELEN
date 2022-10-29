@@ -146,7 +146,7 @@ actor Ammo40mm : Ammo 2010
 	Inventory.Amount 1
 	Inventory.MaxAmount 25
 	Inventory.PickupSound "pickup/ammo"
-	Inventory.PickupMessage "A Grenade."
+	Inventory.PickupMessage "A stick of dynamite!"
 
 	Scale 1.0
 
@@ -162,7 +162,7 @@ actor 40mmBox : Ammo40mm 2046
 {
 	//$Category Ammunition
 	Inventory.Amount 5
-	Inventory.PickupMessage "A box of grenades."
+	Inventory.PickupMessage "A bundle of dynamite sticks!"
 
 	Scale 1.0
 

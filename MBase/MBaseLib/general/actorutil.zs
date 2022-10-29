@@ -82,6 +82,7 @@ class ActorUtil
 					break;
 				case THRTARGET_Top:
 					position = (mo.Pos.xy, mo.Pos.z + mo.Height);
+					break;
 				case THRTARGET_Origin:
 				default:
 					position = mo.Pos;
@@ -113,7 +114,7 @@ class ActorUtil
 				continue;
 			}
 
-			double attenuatedForce = (radius - distance) / radius * force / (mo.Mass * 0.5);
+			double attenuatedForce = (radius - distance) / radius * force - mo.Mass * 0.5;
 
 			Thrust3D(mo, toTarget, attenuatedForce);
 		}

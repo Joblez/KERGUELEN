@@ -224,27 +224,27 @@ class Enfield : baseweapon replaces Plasmarifle {
 		goto altready;
 
 	Select:
-		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
 		TNT1 A 4 A_SetBaseOffset(-65, 81);
 		ISR2 C 1 A_SetBaseOffset(-65, 81);
 		ISR2 D 1 A_SetBaseOffset(-35, 55);
 		ISR2 E 1 A_SetBaseOffset(-28, 39);
 		ISR2 F 1 A_SetBaseOffset(-12, 37);
-		ISR2 G 1 A_SetBaseOffset(1, 34);	
-		ISHB TUV 1 A_SetBaseOffset(0, 30);	
-		SWAI A 0 A_Raise(16);
-		Goto Ready;	
+		ISR2 G 1 A_SetBaseOffset(1, 34);
+		ISHB TUV 1 A_SetBaseOffset(0, 30);
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONTOP);
+		TNT1 A 0 A_Raise(16);
+		Goto Ready;
 	Deselect:
-		ITAI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
-		ISHI A 1 A_SetBaseOffset(1, 34);	
-		ISR2 G 1 A_SetBaseOffset(-12, 38);		
+		ISHI A 1 A_SetBaseOffset(1, 34);
+		ISR2 G 1 A_SetBaseOffset(-12, 38);
 		ISR2 F 1 A_SetBaseOffset(-28, 39);
 		ISR2 E 1 A_SetBaseOffset(-35, 55);
-		ISR2 D 1 A_SetBaseOffset(-65, 81);	
-		ISR2 C 1 A_SetBaseOffset(-65, 81);					
-		TNT1 A 4 A_SetBaseOffset(-65, 81);					
+		ISR2 D 1 A_SetBaseOffset(-65, 81);
+		ISR2 C 1 A_SetBaseOffset(-65, 81);
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
+		TNT1 A 4;
 		ITAI A 0 A_Lower(16);
-		wait;	
+		Wait;
 
 	}
 }

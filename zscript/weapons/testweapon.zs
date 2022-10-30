@@ -197,7 +197,7 @@ class Revolver : BaseWeapon
 		SWCL K 1 A_SetBaseOffset(3, 34);
 		SWCL K 1 A_SetBaseOffset(3, 34);
 		SWCL LMN 1;
-		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
+		SWAF A 0 A_SetBaseOffset(0, WEAPONTOP);
 		SWAI A 1 A_Raise(16);
 		Goto Ready;
 
@@ -207,7 +207,7 @@ class Revolver : BaseWeapon
 		SWCL J 1 A_SetBaseOffset(-28, 39);
 		SWCL J 1 A_SetBaseOffset(-35, 55);
 		SWCL J 1 A_SetBaseOffset(-65, 81);
-		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Loop;

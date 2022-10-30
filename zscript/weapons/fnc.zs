@@ -50,7 +50,7 @@ class FNC : BaseWeapon replaces Chaingun
 		#### C 1 A_SetBaseOffset(20, 40);
 		#### BA 1 A_SetBaseOffset(2, 30);
 		FNCF DE 1;
-		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
+		FNCI A 0 A_SetBaseOffset(0, WEAPONTOP);
 		FNCI A 1 A_Raise(16);
 		Goto Ready;
 
@@ -60,7 +60,7 @@ class FNC : BaseWeapon replaces Chaingun
 		#### D 1 A_SetBaseOffset(40, 60);
 		#### E 1 A_SetBaseOffset(50, 80);
 		#### F 1 A_SetBaseOffset(60, 100);
-		FNCI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
+		FNCI A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		FNCI A 1 A_Lower(16);
 		Loop;

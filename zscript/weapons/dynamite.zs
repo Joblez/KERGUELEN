@@ -3,6 +3,8 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 	bool m_IsThrowing;
 	double m_Throw;
 
+	private bool m_Died;
+
 	property BaseThrowFactor: m_Throw;
 
 	Default
@@ -36,19 +38,24 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_StartSound("dynamite/close", 10);
 		DYNH OP 1 BRIGHT;
 	Hold:
-		TNT1 A 0 {
+		DYNH S 1 BRIGHT {
 			if (invoker.m_Throw >= 5)
 			{
 				Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
-				stick.Vel = Vec3Util.Zero();	
-				stick.SetState(stick.ResolveState("Death"));
-				return ResolveState("DIE");							
+				invoker.m_Throw = 0.0;
+				if (stick)
+				{
+					stick.Vel = Vec3Util.Zero();
+					stick.SetState(stick.ResolveState("Death"));
+				}
+				return ResolveState("NewStick");
 			}
 			return ResolveState(null);
 		}
-		TNT1 A 0 { invoker.m_IsThrowing = true; }
-		DYNH S 1 BRIGHT{ invoker.m_Throw += 1.0 / TICRATE; }
-		TNT1 A 0 { Console.Printf("invoker.m_Throw = %f",invoker.m_Throw); }
+		TNT1 A 0 {
+			invoker.m_IsThrowing = true;
+			invoker.m_Throw += 1.0 / TICRATE;
+		}
 		TNT1 A 0 A_Refire();
 	Release:
 		TNT1 A 0 A_StartSound("hatchet/swing",10);
@@ -62,17 +69,24 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_JumpIfInventory("Ammo40mm", 1, 1);
 		Goto Deselect;
 	NewStick:
-		TNT1 A 0 { invoker.m_IsThrowing = false; }
-		TNT1 A 0 { invoker.m_Throw = invoker.default.m_Throw; }
-		TNT1 A 0 A_StartSound("dynamite/open", 10);
-		DYNS ABCD 2;
-		TNT1 A 0 A_StartSound("dynamite/light", 10);
-		DYNS EFGHI 2;
+		TNT1 A 0 {
+			invoker.m_IsThrowing = false;
+			invoker.m_Throw = invoker.default.m_Throw;
+			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
+
+			return ResolveState(null);
+		}
+		DYNS A 2 A_StartSound("dynamite/open", 10);
+		DYNS BCD 2;
+		DYNS E 2 A_StartSound("dynamite/light", 10);
+		DYNS FGHI 2;
+		TNT1 A 0 A_Refire("Fire");
 		Goto Ready;
 
 	DIE:
-		DYNS FEDCB 2;	
-		wait;
+		DYNS FFEEDDCC 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 8);
+		DYNS B 2 A_Lower(1);
+		Wait;
 
 	Select:
 		DYNS A 2 A_SetBaseOffset(1, 85);
@@ -80,18 +94,16 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_StartSound("dynamite/open", 10);
 		DYNS CDE 2 A_SetBaseOffset(1, 50);
 		TNT1 A 0 A_StartSound("dynamite/light", 10);
-		DYNS FGHI 2 A_SetBaseOffset(1, 30);
-		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
-		SWAI A 0 A_Raise(16);
-		Goto Ready;
+		DYNS FGH 2 A_SetBaseOffset(1, 30);
+		DYNS I 2 A_SetBaseOffset(0, WEAPONTOP);
+		TNT1 A 0 A_Raise(16);
 
 	Deselect:
 		DYNS FEDCB 2;
 		TNT1 A 0 A_StartSound("dynamite/close", 10);
 		DYNS A 2;
-		SWAF A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
-		SWAI A 0 A_Lower(16);
-		Goto Ready;
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
+		TNT1 A 0 A_Lower(16);
 	}
 }
 
@@ -126,24 +138,25 @@ class DynamiteStick : Actor
 			A_StopSound(7);
 			A_NoGravity();
 			A_SetScale(1,1);
-			A_StartSound("dynamite/explode",CHAN_AUTO);
-		}
-		TNT1 AAAAAAAAA 0 {
+			A_SetTranslucent(0.2);
+			A_StartSound("dynamite/explode", CHAN_AUTO);
+
+			A_Explode(200 * FRandom(1.0, 1.33), 200.0);
+			A_AlertMonsters(4096.0);
+			ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0);
+
 			if (GetCvar("weapon_particle_toggle") == 1)
 			{
-				A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-				A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
-				A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-				A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+				for (int i = 0; i < 9; ++i)
+				{
+					A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+				}
 			}
 		}
-		TNT1 A 0 A_SetTranslucent(0.2);
-		TNT1 A 0 { ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0); }
-		BOOM A 2 Bright {
-			A_Explode(160 * FRandom(1.0, 1.33), 200.0);
-			A_AlertMonsters(4096.0);
-		}
-		BOOM BCDEFGHIJKLMOPQRSTUVWXY 2 Bright A_Quake(4, 4, 0, 4);
+		BOOM ABCDEFGHIJKLMOPQRSTUVWXY 2 Bright A_Quake(4, 4, 0, 4);
 		Stop;
 	Grenade:
 		DYPP ABC 10 A_Die;

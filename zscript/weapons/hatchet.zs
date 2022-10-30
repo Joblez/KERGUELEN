@@ -37,8 +37,8 @@ class Hatchet : BaseWeapon
 		HATI A 1 A_SetBaseOffset(32, 69);
 		HATI A 1 A_SetBaseOffset(54, 81);
 		HATI A 1 A_SetBaseOffset(67, 100);
-		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONBOTTOM); }
-		CRWI A 0 A_Lower(16);
+		HATI A 1 A_SetBaseOffset(0, WEAPONBOTTOM);
+		TNT1 A 0 A_Lower(16);
 		Goto Ready;
 
 	Select:
@@ -47,9 +47,9 @@ class Hatchet : BaseWeapon
 		HAF1 G 1 A_SetBaseOffset(40, 60);
 		HAF1 H 1 A_SetBaseOffset(20, 50);
 		HAF1 I 1 A_SetBaseOffset(5, 40);
-		HAF1 JKLM 1 A_SetBaseOffset(1, 30);
-		HATI A 0 { invoker.m_PSpritePosition.SetBaseY(WEAPONTOP); }
-		CRWI A 0 A_Raise(16);
+		HAF1 JKL 1 A_SetBaseOffset(1, 30);
+		HAF1 M 1 A_SetBaseOffset(0, WEAPONTOP);
+		TNT1 A 0 A_Raise(16);
 		Goto Ready;
 
 	Fire:

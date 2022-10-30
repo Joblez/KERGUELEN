@@ -90,7 +90,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Goto Ready;
 
 	DIE:
-		DYNS FFEEDDCC 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 6);
+		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 		DYNS B 2 A_Lower(1);
 		Wait;
 

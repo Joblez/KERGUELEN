@@ -9,7 +9,7 @@ class sniperammo: ammo
 	}
 }
 
-class Enfield : baseweapon replaces Plasmarifle {
+class Ishapore : baseweapon replaces Plasmarifle {
 	bool m_shouldered;
 	bool m_isloading;	
 	Default
@@ -20,10 +20,10 @@ class Enfield : baseweapon replaces Plasmarifle {
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 10;
 		Weapon.AmmoType1 "Sniperammo";
-		Weapon.AmmoType2 "Ammo3006"; //still gotta rename this to .308
+		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
-		Inventory.PickupMessage "[6]";
-		Tag "Enfield Sniper";
+		Inventory.PickupMessage "[6].308 Hunting Rifle";
+		Tag "Ishapore";
 	}
 
 	States
@@ -97,7 +97,7 @@ class Enfield : baseweapon replaces Plasmarifle {
 		ISRS RSTUV 2;
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
-		TNT1 A 0 A_JumpIfInventory("Ammo3006", 1, "ProperReload");
+		TNT1 A 0 A_JumpIfInventory("Ammo308", 1, "ProperReload");
 		Goto ReloadEnd;
 
 	ProperReload:	

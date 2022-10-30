@@ -17,8 +17,7 @@ class FNC : BaseWeapon replaces Chaingun
 
 	Default
 	{
-		Inventory.PickupMessage "(4)";
-
+		Inventory.PickupMessage "(4)5.56 Assault Rifle";
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 RMAG;

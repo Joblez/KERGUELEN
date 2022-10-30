@@ -30,7 +30,7 @@ class Revolver : BaseWeapon
 		Weapon.AmmoType1 "RevoCylinder";
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.UpSound("sw/raise");
-		Inventory.PickupMessage "[2].357 Revolver";
+		Inventory.PickupMessage "[2].357 Magnum Revolver";
 		Tag "Model 15";
 	}
 

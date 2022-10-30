@@ -11,11 +11,11 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 	{
 		Weapon.Kickback 100;
 		Weapon.SlotNumber 5;
-		Weapon.AmmoUse 1;
+		Weapon.AmmoUse 0;
 		Weapon.AmmoGive 1;
-		Weapon.AmmoType "Ammo40mm"; //still gotta rename this ammo type
+		Weapon.AmmoType "Dynamiteammo";
 		Weapon.UpSound("dynamite/equip");
-		Inventory.PickupMessage "[5]";
+		Inventory.PickupMessage "[5]Dynamite Stick";
 		Dynamite.BaseThrowFactor 1.0;
 		Tag "Dynamite";
 	}
@@ -59,6 +59,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_Refire();
 	Release:
 		TNT1 A 0 A_StartSound("hatchet/swing",10);
+		TNT1 A 0 A_Takeinventory("Dynamiteammo",1);
 		DYNT ABC 1;
 		TNT1 A 0 {
 			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
@@ -66,16 +67,9 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		DYNT DE 2;
 		DYNT FGHIJK 1;
-		TNT1 A 0 A_JumpIfInventory("Ammo40mm", 1, 1);
+		TNT1 A 0 A_JumpIfInventory("Dynamiteammo", 1, 1);
 		Goto Deselect;
 
-	SelfDetonate:
-		TNT1 A 0 {
-			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
-
-			return ResolveState(null);
-		}
-		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 	NewStick:
 		TNT1 A 0 {
 			invoker.m_IsThrowing = false;
@@ -88,7 +82,13 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS FGHI 2;
 		TNT1 A 0 A_Refire("Fire");
 		Goto Ready;
+	SelfDetonate:
+		TNT1 A 0 {
+			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
 
+			return ResolveState(null);
+		}
+		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 	DIE:
 		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 		DYNS B 2 A_Lower(1);

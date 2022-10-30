@@ -138,39 +138,50 @@ actor 357BigBox : Ammo357 replaces Cellpack
 	}
 }
 
-//40mm Contact Grenades
+//Dynamite
 
-actor Ammo40mm : Ammo 2010
+actor Dynamiteammo : Ammo 
 {
 	//$Category Ammunition
 	Inventory.Amount 1
 	Inventory.MaxAmount 25
+	Scale 1.0
+}
+
+actor Dynamitedummy : CustomInventory 2010
+{
+	//$Category Ammunition
 	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A stick of dynamite!"
-
-	Scale 1.0
-
+	Scale 1.0	
 	States
 	{
 	Spawn:
 		PICK D -1
-		stop
+		stop	
+	Pickup:
+		TNT1 A 0 A_Giveinventory("Dynamite")
+		stop	
 	}
-}
 
-actor 40mmBox : Ammo40mm 2046
+}
+actor DynamiteBox : CustomInventory 2046
 {
 	//$Category Ammunition
-	Inventory.Amount 5
+	Inventory.PickupSound "pickup/ammo"	
 	Inventory.PickupMessage "A bundle of dynamite sticks!"
-
 	Scale 1.0
-
 	States
 	{
 	Spawn:
 		M79A B -1
 		stop
+	
+	Pickup:
+		TNT1 A 0 A_Giveinventory("Dynamiteammo",5)	
+		TNT1 A 0 A_Giveinventory("Dynamite")
+		stop
+		
 	}
 }
 //12 Gauge Shells
@@ -210,9 +221,9 @@ actor 12GaugeBox : Ammo12 2049
 	}
 }
 
-// 30.06
+// .308 Winchester
 
-actor Ammo3006 : Ammo 304
+actor Ammo308 : Ammo 304
 {
 	//$Category Ammunition
 	Inventory.Amount 6
@@ -230,7 +241,7 @@ actor Ammo3006 : Ammo 304
 	}
 }
 
-actor 3006Box : Ammo3006 305
+actor 308Box : Ammo308 305
 {
 	//$Category Ammunition
 	Inventory.Amount 12

@@ -25,7 +25,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.AmmoType1 "Sh12Tube";
 		Weapon.Kickback 50;
 		Weapon.UpSound("shotgun/draw");
-		Inventory.PickupMessage "(3)";
+		Inventory.PickupMessage "(3)12 Gauge Hunting Shotgun";
 		DamageType "Shotgun";
 		Tag "Ithaca";
 	}
@@ -146,13 +146,15 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		ITRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
-		TNT1 A 0 A_SetBaseOffset(4, 34);		
+		TNT1 A 0 A_SetBaseOffset(2, 32);		
 		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(3, 33);			
 		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(2, 32);			
+		TNT1 A 0 A_SetBaseOffset(4, 34);			
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
+		TNT1 A 0 A_SetBaseOffset(3, 33);		
 		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);		
+		TNT1 A 0 A_SetBaseOffset(2, 32);		
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{

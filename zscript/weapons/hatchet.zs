@@ -1,15 +1,3 @@
-class Kick_Puff: Melee_Puff
-{
-	States
-	{
-	Melee:
-		FIPP A 0 Bright A_StartSound("kick/hit", 11);
-		FIPP AB 2 Bright;
-		TNT1 A 0 A_SetScale(0.5);
-		Stop;
-	}
-}
-
 class Hatchet : BaseWeapon
 {
 	int m_FistCheck;

@@ -60,7 +60,7 @@ class Enfield : baseweapon replaces Plasmarifle {
 		Goto Empty;			
 		TNT1 A 0 A_FireBullets(5, 1, -1, 80, "Bullet_Puff");
 		ISHF A 1 Bright {
-			A_FRecoil(0.8);
+			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("Sniperammo", 1);
 			A_StartSound("sniper/fire", 1);
@@ -197,7 +197,7 @@ class Enfield : baseweapon replaces Plasmarifle {
 	Shoulderedfire:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", 1, 1);
 		Goto EmptyScoped;
-		TNT1 A 0 A_FireBullets(1, 1, -1, 80, "Bullet_Puff");
+		TNT1 A 0 A_FireBullets(0, 0, -1, 80, "Bullet_Puff");
 		ISAF A 2 BRIGHT {
 			A_FRecoil(2.5);
 			A_SingleSmoke(0,0);

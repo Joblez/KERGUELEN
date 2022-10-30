@@ -48,7 +48,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 					stick.Vel = Vec3Util.Zero();
 					stick.SetState(stick.ResolveState("Death"));
 				}
-				return ResolveState("NewStick");
+				return ResolveState("SelfDetonate");
 			}
 			return ResolveState(null);
 		}
@@ -68,13 +68,19 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNT FGHIJK 1;
 		TNT1 A 0 A_JumpIfInventory("Ammo40mm", 1, 1);
 		Goto Deselect;
+
+	SelfDetonate:
+		TNT1 A 0 {
+			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
+
+			return ResolveState(null);
+		}
+		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 	NewStick:
 		TNT1 A 0 {
 			invoker.m_IsThrowing = false;
 			invoker.m_Throw = invoker.default.m_Throw;
-			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
-
-			return ResolveState(null);
+			A_SetBaseOffset(0, WEAPONTOP);
 		}
 		DYNS A 2 A_StartSound("dynamite/open", 10);
 		DYNS BCD 2;
@@ -84,7 +90,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Goto Ready;
 
 	DIE:
-		DYNS FFEEDDCC 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 8);
+		DYNS FFEEDDCC 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 6);
 		DYNS B 2 A_Lower(1);
 		Wait;
 
@@ -141,9 +147,9 @@ class DynamiteStick : Actor
 			A_SetTranslucent(0.2);
 			A_StartSound("dynamite/explode", CHAN_AUTO);
 
+			ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0);
 			A_Explode(200 * FRandom(1.0, 1.33), 200.0);
 			A_AlertMonsters(4096.0);
-			ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0);
 
 			if (GetCvar("weapon_particle_toggle") == 1)
 			{

@@ -13,11 +13,13 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Weapon.SlotNumber 5;
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive 1;
-		Weapon.AmmoType "Dynamiteammo";
+		Dynamite.BaseThrowFactor 1.0;
+		Weapon.AmmoType "DynamiteAmmo";
 		Weapon.UpSound("dynamite/equip");
 		Inventory.PickupMessage "[5] Dynamite Stick";
-		Dynamite.BaseThrowFactor 1.0;
 		Tag "Dynamite";
+		+WEAPON.EXPLOSIVE;
+		-WEAPON.AMMO_OPTIONAL;
 	}
 
 	States
@@ -59,7 +61,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_Refire();
 	Release:
 		TNT1 A 0 A_StartSound("hatchet/swing",9);
-		TNT1 A 0 A_Takeinventory("Dynamiteammo",1);
+		TNT1 A 0 A_TakeInventory("DynamiteAmmo",1);
 		DYNT ABC 1;
 		TNT1 A 0 {
 			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
@@ -67,7 +69,8 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		DYNT DE 2;
 		DYNT FGHIJK 1;
-		TNT1 A 0 A_JumpIfInventory("Dynamiteammo", 1, 1);
+		TNT1 A 0 A_JumpIfInventory("DynamiteAmmo", 1, 1);
+		TNT1 A 0 A_SelectWeapon(null, SWF_SELECTPRIORITY);
 		Goto Deselect;
 
 	NewStick:
@@ -96,6 +99,13 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Wait;
 
 	Select:
+		TNT1 A 0 {
+			if (CountInv("DynamiteAmmo") <= 0)
+			{
+				A_SelectWeapon(null, SWF_SELECTPRIORITY);
+				A_Lower(32);
+			}
+		}
 		DYNS A 2 A_SetBaseOffset(1, 85);
 		DYNS B 2 A_SetBaseOffset(1, 60);
 		TNT1 A 0 A_StartSound("dynamite/open", 10);
@@ -131,6 +141,7 @@ class DynamiteStick : Actor
 		Projectile;
 		//+DOOMBOUNCE;
 		-NOGRAVITY;
+		+NOEXTREMEDEATH;
 		+NODAMAGETHRUST;
 		+RANDOMIZE;
 		+FORCEXYBILLBOARD;

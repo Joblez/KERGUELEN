@@ -55,7 +55,7 @@ class ActorUtil
 
 			vector2 angleAndPitch = MathVec3.ToYawAndPitch(toTarget.Unit());
 
-			Actor a = origin.LineAttack(angleAndPitch.x, distance, angleAndPitch.y, attenuatedDamage);
+			Actor a = origin.LineAttack(angleAndPitch.x, distance, angleAndPitch.y, attenuatedDamage, 'None');
 			if (a) Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}

@@ -22,7 +22,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.AmmoType1 "Sniperammo";
 		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
-		Inventory.PickupMessage "[6].308 Hunting Rifle";
+		Inventory.PickupMessage "[6] 7.62 Hunting Rifle";
 		Tag "Ishapore";
 	}
 

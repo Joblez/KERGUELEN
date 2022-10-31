@@ -207,6 +207,8 @@ dynamite/close DSLITR3
 
 dynamite/fuse DSFUSE
 
+dynamite/fuseend DSFUS3
+
 dynamite/fuseloop DSFUSE2
 
 dynamite/equip DSLITSL

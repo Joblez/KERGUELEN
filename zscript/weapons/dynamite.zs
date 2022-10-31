@@ -15,7 +15,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Weapon.AmmoGive 1;
 		Weapon.AmmoType "Dynamiteammo";
 		Weapon.UpSound("dynamite/equip");
-		Inventory.PickupMessage "[5]Dynamite Stick";
+		Inventory.PickupMessage "[5] Dynamite Stick";
 		Dynamite.BaseThrowFactor 1.0;
 		Tag "Dynamite";
 	}
@@ -58,7 +58,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		TNT1 A 0 A_Refire();
 	Release:
-		TNT1 A 0 A_StartSound("hatchet/swing",10);
+		TNT1 A 0 A_StartSound("hatchet/swing",9);
 		TNT1 A 0 A_Takeinventory("Dynamiteammo",1);
 		DYNT ABC 1;
 		TNT1 A 0 {
@@ -124,9 +124,11 @@ class DynamiteStick : Actor
 		Gravity 0.9;
 		Scale 0.5;
 		DeathSound "";
+		Seesound "dynamite/fuseloop";
 		Obituary "$OB_GRENADE"; // "%o caught %k's grenade."
 		DamageType "Explosive";
 		Projectile;
+		//+DOOMBOUNCE;
 		-NOGRAVITY;
 		+NODAMAGETHRUST;
 		+RANDOMIZE;
@@ -136,8 +138,7 @@ class DynamiteStick : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_StartSound("dynamite/fuseloop", CHAN_AUTO, CHANF_LOOP, 0.5);
-		DYNP ABCDEFGH 2 Bright;
+		DYNP ABCDEFGH 2 BRIGHT;
 		Loop;
 	Death:
 		TNT1 A 0 {
@@ -146,11 +147,9 @@ class DynamiteStick : Actor
 			A_SetScale(1,1);
 			A_SetTranslucent(0.2);
 			A_StartSound("dynamite/explode", CHAN_AUTO);
-
 			ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0);
-			A_Explode(200 * FRandom(1.0, 1.33), 200.0);
+			A_Explode(300 * FRandom(1.0, 1.33), 200.0);
 			A_AlertMonsters(4096.0);
-
 			if (GetCvar("weapon_particle_toggle") == 1)
 			{
 				for (int i = 0; i < 9; ++i)
@@ -162,7 +161,7 @@ class DynamiteStick : Actor
 				}
 			}
 		}
-		BOOM ABCDEFGHIJKLMOPQRSTUVWXY 2 Bright A_Quake(4, 4, 0, 4);
+		BOOM ABCDEFGHIJKLMOPQRSTUVWXY 2 Bright Radius_Quake(100,8,0,15,0);
 		Stop;
 	Grenade:
 		DYPP ABC 10 A_Die;

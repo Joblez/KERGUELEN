@@ -86,9 +86,12 @@ class RainDrop : WeatherParticle
 	WaterDeath:
 		TNT1 A 0 {
 			invoker.bFlatSprite = true;
-			scale = (1.0, 1.0);
+			Scale = (1.0, 1.0);
 		}
-		RAIN FGHIJKL 2 A_SetTranslucent(max(0.0, invoker.Alpha - 0.1), 1);
+		RAIN FFGGHHIIJJKKLL 1 Bright {
+			A_SetTranslucent(max(0.0, invoker.Alpha - 0.075), 1);
+			Scale += (0.075, 0.075);
+		}
 		Stop;
 	}
 }

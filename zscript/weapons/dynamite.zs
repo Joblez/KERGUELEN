@@ -69,10 +69,14 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		DYNT DE 2;
 		DYNT FGHIJK 1;
-		TNT1 A 0 A_JumpIfInventory("DynamiteAmmo", 1, 1);
-		TNT1 A 0 A_SelectWeapon(null, SWF_SELECTPRIORITY);
-		Goto Deselect;
-
+		TNT1 A 0 {
+			if (CountInv("DynamiteAmmo") <= 0)
+			{
+				A_SelectWeapon(null, SWF_SELECTPRIORITY);
+				return ResolveState("Deselect");
+			}
+			return ResolveState(null);
+		}
 	NewStick:
 		TNT1 A 0 {
 			invoker.m_IsThrowing = false;

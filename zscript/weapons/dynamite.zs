@@ -64,18 +64,14 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_TakeInventory("DynamiteAmmo",1);
 		DYNT ABC 1;
 		TNT1 A 0 {
-			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
+			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12, 0, 0);
 			stick.Vel *= min(invoker.m_Throw, 2.5);
 		}
 		DYNT DE 2;
 		DYNT FGHIJK 1;
 		TNT1 A 0 {
-			if (CountInv("DynamiteAmmo") <= 0)
-			{
-				A_SelectWeapon(null, SWF_SELECTPRIORITY);
-				return ResolveState("Deselect");
-			}
-			return ResolveState(null);
+			invoker.AmmoUse1 = CountInv("DynamiteAmmo") > 0 ? 0 : 1;
+			A_CheckReload();
 		}
 	NewStick:
 		TNT1 A 0 {
@@ -89,6 +85,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS FGHI 2;
 		TNT1 A 0 A_Refire("Fire");
 		Goto Ready;
+
 	SelfDetonate:
 		TNT1 A 0 {
 			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
@@ -103,13 +100,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Wait;
 
 	Select:
-		TNT1 A 0 {
-			if (CountInv("DynamiteAmmo") <= 0)
-			{
-				A_SelectWeapon(null, SWF_SELECTPRIORITY);
-				A_Lower(32);
-			}
-		}
+		TNT1 A 0 { invoker.AmmoUse1 = CountInv("DynamiteAmmo") > 0 ? 0 : 1; }
 		DYNS A 2 A_SetBaseOffset(1, 85);
 		DYNS B 2 A_SetBaseOffset(1, 60);
 		TNT1 A 0 A_StartSound("dynamite/open", 10);

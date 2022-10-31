@@ -89,6 +89,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 			return ResolveState(null);
 		}
 		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
+		Goto NewStick;
 	DIE:
 		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 		DYNS B 2 A_Lower(1);

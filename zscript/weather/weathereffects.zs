@@ -11,6 +11,7 @@ class WeatherParticle : Actor
 		+NOTELEPORT;
 		+THRUSPECIES;
 		+DONTGIB;
+		+DONTSPLASH;
 		+FORCEYBILLBOARD;
 		+MISSILE;
 	}
@@ -30,11 +31,12 @@ class RainDrop : WeatherParticle
 {
 	Default
 	{
-		VSpeed -24.0;
+		VSpeed -32.0;
+		Height 3;
 		XScale 0.4;
 		YScale 0.7;
-		Gravity 2.5;
 		RenderStyle "Add";
+		-NOGRAVITY;
 	}
 
 	States
@@ -45,6 +47,11 @@ class RainDrop : WeatherParticle
 	Death:
 		RAIN A 1;
 		TNT1 A 0 {
+			if (invoker.cursector.GetFloorTerrain(Sector.floor).IsLiquid)
+			{
+				return ResolveState("WaterDeath");
+			}
+
 			if (GetCVar("special_particle_toggle") == 1)
 			{
 				scale = (0.5,0.5);
@@ -70,8 +77,18 @@ class RainDrop : WeatherParticle
 					}
 				}
 			}
+
+			return ResolveState(null);
 		}
 		RAIN BCDE 1;
+		Stop;
+	
+	WaterDeath:
+		TNT1 A 0 {
+			invoker.bFlatSprite = true;
+			scale = (1.0, 1.0);
+		}
+		RAIN FGHIJKL 2 A_SetTranslucent(max(0.0, invoker.Alpha - 0.1), 1);
 		Stop;
 	}
 }

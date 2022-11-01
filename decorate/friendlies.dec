@@ -6,7 +6,7 @@ actor Sheep 11000
 	Radius 20
 	Height 32
 	Speed 3
-	Mass 50
+	Mass 70
 	Scale 0.7
 	PainChance 255
 	SeeSound "sheep/sight"
@@ -100,7 +100,7 @@ actor Penguin 11002
 	Radius 12
 	Height 48
 	Speed 3
-	Mass 50
+	Mass 60
 	Scale 0.8
 	PainChance 200
 	PainSound "penguin/pain"

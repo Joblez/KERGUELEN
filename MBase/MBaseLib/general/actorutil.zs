@@ -28,7 +28,7 @@ class ActorUtil
 
 	static play void Thrust3D(Actor target, vector3 direction, double force, bool overrideMomentum = false, bool ignoreMass = false)
 	{
-		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force / ignoreMass ? 1 : target.Mass * 0.175);
+		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force / (ignoreMass ? 1 : target.Mass * 0.175));
 	}
 
 	// static play void Explode3D(Actor origin, int damage, double thrustForce, double radius, EThrustTarget thrustTarget = THRTARGET_Top, array<Actor> exclusions = null)

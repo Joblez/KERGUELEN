@@ -5,7 +5,7 @@ actor Grarg replaces DoomImp
 	Height 56
 	Speed 12
 	PainChance 240
-	Mass 100
+	Mass 85
 	Scale 0.7
 	Bloodcolor "e8 00 21"
 	Monster
@@ -86,7 +86,7 @@ actor GLG replaces ZombieMan
 	Height 48
 	Speed 10
 	PainChance 255
-	Mass 75
+	Mass 65
 	Scale 0.7
 	Monster
 	Bloodcolor "e8 00 21"
@@ -272,47 +272,25 @@ actor Wyvern replaces Cacodemon
 
 }
 
-actor Chase_Water : CustomInventory
-{
-	Inventory.MaxAmount 0
-	+INVENTORY.AUTOACTIVATE
-
-	States
-	{
-	Spawn:
-		TNT1 A 1
-		Fail
-
-	Use:
-		TNT1 A 0 A_JumpIf(waterlevel < 3, "WaterLimit")
-		TNT1 A 0 A_Chase
-		Stop
-
-	WaterLimit:
-		TNT1 A 0 ThrustThingZ(0, 10, 1, 1)
-		TNT1 A 0 A_Chase
-		Stop
-
-	}
-}
-
 actor Dryad replaces Stealthdoomimp
 {
+	Monster
 	Radius 28
 	Height 36
 	Scale 1
-	Species "Plant"
-	Mass 1000
+	Mass 100
 	Painchance 220
-	Monster
 	Health 400
+	BloodColor "42 97 51"
+	DeathSound "Dryad/death"
+	PainSound "seed/hit"
+	Species "Plant"
 	+LOOKALLAROUND
 	+NOINFIGHTING
 	+STANDSTILL
 	+SEEFRIENDLYMONSTERS
-	BloodColor "42 97 51"
-	Deathsound "Dryad/death"
-	Painsound "seed/hit"
+	+DONTTHRUST
+
 	States
 	{
 	Spawn:
@@ -409,32 +387,33 @@ actor Dryadvinespawner : Dryadseed
 
 actor DryadVine
 {
+	Monster
+	Health 60
+	Mass 100
 	Radius 24
 	Height 36
 	Scale 1
-	Mass 1000
-	Monster
-	Health 60
+	BloodColor "42 97 51"
 	+LOOKALLAROUND
 	+NOINFIGHTING
 	+STANDSTILL
 	+DONTTHRUST
-	BloodColor "42 97 51"
+
 	States
 	{
 	Spawn:
-	VINR ABCD 4
-	goto See
+		VINR ABCD 4
+		Goto See
 
 	See:
-	VIDL ABCDEFGHIJKLM 4 A_CustomMeleeattack(1)
-	loop
+		VIDL ABCDEFGHIJKLM 4 A_CustomMeleeAttack(1)
+		Loop
 
 	Death:
-	VDTH A 4 A_XScream
-	VDTH BCDE 4
-	TNT1 A 0 A_Noblocking
-	VDTH E -1
-	stop
+		VDTH A 4 A_XScream
+		VDTH BCDE 4
+		TNT1 A 0 A_NoBlocking
+		VDTH E -1
+		Stop
 	}
 }

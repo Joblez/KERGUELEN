@@ -167,10 +167,10 @@ class DynamiteStick : Actor
 			{
 				for (int i = 0; i < 9; ++i)
 				{
-					A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile ("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile ("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
 				}
 			}
 		}

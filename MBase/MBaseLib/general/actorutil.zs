@@ -26,9 +26,9 @@ class ActorUtil
 		return -VectorAngle((target.xy - origin.xy).Length(), target.z - origin.z);
 	}
 
-	static play void Thrust3D(Actor target, vector3 direction, double force, bool overrideMomentum = false)
+	static play void Thrust3D(Actor target, vector3 direction, double force, bool overrideMomentum = false, bool ignoreMass = false)
 	{
-		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force);
+		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force / ignoreMass ? 1 : target.Mass * 0.175);
 	}
 
 	// static play void Explode3D(Actor origin, int damage, double thrustForce, double radius, EThrustTarget thrustTarget = THRTARGET_Top, array<Actor> exclusions = null)
@@ -63,7 +63,7 @@ class ActorUtil
 	// 		if (distance > radius) continue;
 
 	// 		int attenuatedDamage = int(round((radius - distance) / radius * damage));
-	// 		double attenuatedForce = (radius - distance) / radius * thrustForce / (mo.Mass * 0.5);
+	// 		double attenuatedForce = (radius - distance) / radius * thrustForce;
 
 	// 		vector2 angleAndPitch = MathVec3.ToYawAndPitch(toTarget.Unit());
 
@@ -123,7 +123,7 @@ class ActorUtil
 				continue;
 			}
 
-			double attenuatedForce = (radius - distance) / radius * force / (mo.Mass * 0.175);
+			double attenuatedForce = (radius - distance) / radius * force;
 
 			Thrust3D(mo, toTarget, attenuatedForce);
 		}

@@ -87,7 +87,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 					if (t.HitActor)
 					{
-						double force = Math.Remap(dotProduct, 0.835, 1.012, 0.0, 240.0);
+						double force = Math.Remap(dotProduct, 0.835, 1.035, 0.0, 240.0);
 						force *= 1.0 - Math.Remap(distance, 16.0, 384.0, 0.0, 1.0);
 						Console.Printf("Force: %f", force);
 						ActorUtil.Thrust3D(mo, toTarget.Unit(), force, true);

@@ -22,7 +22,14 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.AmmoType1 "Sniperammo";
 		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
+
+		BaseWeapon.MaxLookSwayTranslationX 40.0;
+		BaseWeapon.LookSwayStrengthX 14.0;
+		BaseWeapon.LookSwayResponse 4.0;
+		BaseWeapon.LookSwayRigidity 11.0;
+
 		Inventory.PickupMessage "[6] 7.62 Hunting Rifle";
+
 		Tag "Ishapore";
 	}
 
@@ -64,11 +71,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHF A 1 Bright {
 			FLineTraceData t;
 
-			LineTrace(angle, 8192.0, pitch, offsetz: self.Height / 2.0, data: t);
+			LineTrace(angle, 8192.0, pitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
-			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 80.0);
+			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 180.0, true);
 
-			A_FireBullets(5, 1, -1, 80, "Bullet_Puff");
+			A_FireBullets(2, 2, -1, 80, "Bullet_Puff");
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("Sniperammo", 1);

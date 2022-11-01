@@ -28,6 +28,8 @@ class ActorUtil
 
 	static play void Thrust3D(Actor target, vector3 direction, double force, bool overrideMomentum = false, bool ignoreMass = false)
 	{
+		if (target.bDontThrust) return;
+
 		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel) + (direction.Unit() * force / (ignoreMass ? 1 : target.Mass * 0.175));
 	}
 

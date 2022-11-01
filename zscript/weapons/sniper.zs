@@ -64,7 +64,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHF A 1 Bright {
 			FLineTraceData t;
 
-			LineTrace(angle, 8192.0, pitch, offsetz: Height / 2, data: t);
+			LineTrace(angle, 8192.0, pitch, offsetz: self.Height / 2.0, data: t);
 
 			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 80.0);
 

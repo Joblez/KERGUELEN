@@ -155,7 +155,7 @@ class DynamiteStick : Actor
 			A_SetTranslucent(0.2);
 			A_StartSound("dynamite/explode", CHAN_AUTO);
 
-			ActorUtil.RadiusThrust3D(Pos, 250.0, 400.0);
+			ActorUtil.RadiusThrust3D(Pos, 300.0, 400.0);
 			A_Explode(300 * FRandom(1.0, 1.33), 200.0);
 			A_AlertMonsters(4096.0);
 

@@ -40,27 +40,69 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		ITAI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
+
 	ZF:
 		TNT1 A 1 A_VRecoil(0.9,1,4);
 		TNT1 A 1 A_VRecoil(0.95,1,4);
 		TNT1 A 1 A_VRecoil(1.0,1,4);
-		stop;
+		Stop;
+
 	Fire:
 		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If empty.
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loaded.
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		Goto Empty;
 
-		TNT1 A 0 { invoker.m_Chambered = false; }
-		TNT1 A 0 A_FireBullets(5, 4, 12, 4, "Bullet_Puff");
 		ITAF A 2 Bright {
+			invoker.m_Chambered = false;
+
+			let iterator = BlockThingsIterator.Create(self, 256.0);
+
+			while (iterator.Next())
+			{
+				Actor mo = iterator.thing;
+
+				if (mo == self || !mo.bSolid || !mo.bShootable) continue;
+
+				vector3 origin = (self.Pos.xy, self.Player.viewz);
+				vector3 position = (mo.Pos.xy, mo.Pos.z + mo.Height / 2.0);
+				vector3 toTarget = position - origin;
+				double distance = toTarget.Length();
+
+				if (distance > 384.0) continue;
+
+				double dotProduct = toTarget.Unit() dot Vec3Util.FromAngles(self.angle, self.pitch);
+				Console.Printf("Dot: %f", dotProduct);
+
+				if (dotProduct >= 0.81)
+				{
+					FLineTraceData t;
+
+					LineTrace(
+						AngleTo(mo),
+						distance + 1.0,
+						ActorUtil.PitchTo(self, mo),
+						offsetz: self.Height / 2.0,
+						data: t);
+
+					if (t.HitActor)
+					{
+						double force = Math.Remap(dotProduct, 0.81, 1.012, 0.0, 240.0);
+						force *= 1.0 - Math.Remap(distance, 16.0, 384.0, 0.0, 1.0);
+						Console.Printf("Force: %f", force);
+						ActorUtil.Thrust3D(mo, toTarget.Unit(), force);
+					}
+				}
+			}
+
+			A_FireBullets(5, 4, 12, 4, "Bullet_Puff");
 			A_FRecoil(2);
 			A_AlertMonsters();
 			A_ShotgunSmoke(4, -4);
 			A_ShotgunSmoke(4, -4);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", 1);
-			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(4, 34);
 		}
 		ITAF B 1 Bright A_SetBaseOffset(2, 32);

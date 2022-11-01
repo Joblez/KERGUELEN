@@ -51,7 +51,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		Goto Empty;
 
-		TNT1 A 0 { invoker.m_Chambered = false; }		
+		TNT1 A 0 { invoker.m_Chambered = false; }
 		TNT1 A 0 A_FireBullets(5, 4, 12, 4, "Bullet_Puff");
 		ITAF A 2 Bright {
 			A_FRecoil(2);
@@ -61,7 +61,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", 1);
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
-			A_SetBaseOffset(4, 34);			
+			A_SetBaseOffset(4, 34);
 		}
 		ITAF B 1 Bright A_SetBaseOffset(2, 32);
 		ITAF CDEF 1;
@@ -81,7 +81,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		ITAP DE 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.75);
 		TNT1 A 0 A_CasingShotgunL(10, -22);
-		ITAP FG 2;		
+		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
@@ -146,15 +146,15 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		ITRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
-		TNT1 A 0 A_SetBaseOffset(2, 32);		
+		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(3, 33);			
+		TNT1 A 0 A_SetBaseOffset(3, 33);
 		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(4, 34);			
+		TNT1 A 0 A_SetBaseOffset(4, 34);
 		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(3, 33);		
-		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);		
-		TNT1 A 0 A_SetBaseOffset(2, 32);		
+		TNT1 A 0 A_SetBaseOffset(3, 33);
+		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);
+		TNT1 A 0 A_SetBaseOffset(2, 32);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
@@ -174,11 +174,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 		}
 	ReloadEnd:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		TNT1 A 0 A_SetBaseOffset(2, 32);		
+		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ITRE ABCDEF 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(1, 31);		
+		TNT1 A 0 A_SetBaseOffset(1, 31);
 		ITRE GHIJ 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(0, 30);		
+		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered), "Ready");
 		Goto Charge;
 	}

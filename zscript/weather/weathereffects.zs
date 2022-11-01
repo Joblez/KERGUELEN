@@ -82,7 +82,7 @@ class RainDrop : WeatherParticle
 		}
 		RAIN BCDE 1;
 		Stop;
-	
+
 	WaterDeath:
 		TNT1 A 0 {
 			invoker.bFlatSprite = true;

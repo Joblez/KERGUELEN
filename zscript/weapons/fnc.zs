@@ -114,7 +114,7 @@ class FNC : BaseWeapon replaces Chaingun
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
 			psp.frame = random(0, 3);
-			
+
 		}
 		FNCF A 1;
 		FNCF B 1;
@@ -141,7 +141,7 @@ class FNC : BaseWeapon replaces Chaingun
 		FNRS ABCDEFG 2;
 		FNRS HI 1;
 		FNRO AB 1;
-		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);	
+		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);
 		TNT1 A 0 A_SetBaseOffset(-4, 34);
 		FNRO CD 1;
 		TNT1 A 0 A_SetBaseOffset(-3, 33);

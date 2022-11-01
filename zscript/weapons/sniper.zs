@@ -73,7 +73,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			LineTrace(angle, 8192.0, pitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
-			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 180.0, true);
+			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 220.0, true);
 
 			A_FireBullets(2, 2, -1, 80, "Bullet_Puff");
 			A_FRecoil(2);

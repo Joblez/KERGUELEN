@@ -74,7 +74,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 				double dotProduct = toTarget.Unit() dot Vec3Util.FromAngles(self.angle, self.pitch);
 				Console.Printf("Dot: %f", dotProduct);
 
-				if (dotProduct >= 0.835)
+				if (dotProduct >= 0.75)
 				{
 					FLineTraceData t;
 
@@ -87,7 +87,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 					if (t.HitActor)
 					{
-						double force = Math.Remap(dotProduct, 0.835, 1.035, 0.0, 240.0);
+						double force = Math.Remap(dotProduct, 0.75, 1.035, 0.0, 220.0);
 						force *= 1.0 - Math.Remap(distance, 16.0, 384.0, 0.0, 1.0);
 						Console.Printf("Force: %f", force);
 						ActorUtil.Thrust3D(mo, toTarget.Unit(), force, true);
@@ -95,7 +95,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 				}
 			}
 
-			A_FireBullets(5, 4, 12, 4, "Bullet_Puff");
+			A_FireBullets(7, 7, 12, 4, "Bullet_Puff");
 			A_FRecoil(2);
 			A_AlertMonsters();
 			A_ShotgunSmoke(4, -4);

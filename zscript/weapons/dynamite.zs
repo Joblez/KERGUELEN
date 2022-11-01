@@ -13,9 +13,13 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Weapon.SlotNumber 5;
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive 1;
-		Dynamite.BaseThrowFactor 1.0;
 		Weapon.AmmoType "DynamiteAmmo";
 		Weapon.UpSound("dynamite/equip");
+
+		Dynamite.BaseThrowFactor 1.0;
+
+		BaseWeapon.LookSwayResponse 0.0;
+
 		Inventory.PickupMessage "[5] Dynamite Stick";
 		Tag "Dynamite";
 		+WEAPON.EXPLOSIVE;

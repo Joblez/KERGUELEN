@@ -4,7 +4,7 @@ MBase created by Magdiel, creator of various features, assisted in development (
 
 This mod uses Nashgore by Nash Muhandes
 
-this also usese vsonnier's port of thezombiekiller's footsteps
+this also uses vsonnier's port of thezombiekiller's footsteps, modified by Magdiel
 
 Specifics:
 

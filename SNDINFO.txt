@@ -66,6 +66,9 @@ $ambient 5 Cave Surround Continuous 1.0
 $ambient 6 Rain Point Continuous 1.0
 $ambient 7 Rain Surround Continuous 1.0
 
+wooddoor/open DSDORPN
+wooddoor/close DSDORCLS
+
 
 world/drip dsempty
 

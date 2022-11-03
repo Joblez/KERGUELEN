@@ -86,11 +86,11 @@ class StepAudioPlayer : Thinker
 
 		if (foundIndex != m_StepTextures.Size())
 		{
-			S_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, soundLevel);
+			S_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, 0, soundLevel);
 		}
 		else
 		{
-			S_StartSound(m_DefaultStepSound, CHAN_AUTO, soundLevel);
+			S_StartSound(m_DefaultStepSound, CHAN_AUTO,0, soundLevel);
 		}
 
 		m_StepPlayback = 0.0;

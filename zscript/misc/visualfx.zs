@@ -302,7 +302,7 @@ class Melee_Puff: Bullet_Puff
 		FX57 HIJ 1 Bright A_SetTranslucent(.2, 1);
 		Stop;
 	Melee:
-		FX57 A 0 Bright A_StartSound("hatchet/hit");
+		FX57 A 0 Bright A_StartSound("hatchet/hit", CHAN_AUTO);
 		TNT1 A 0 A_SetScale(0.5);
 		Stop;
 	}

@@ -104,6 +104,17 @@ AddOptionMenu "OptionsMenu"
 	SubMenu "Effects", "VisualEffects"
 }
 
+OptionValue "GraphicsSettings"
+{
+	0, "Off"
+	1, "Very Low"
+	2, "Low"
+	3, "Medium"
+	4, "High"
+	5, "Very High"
+	6, "Ultra"
+}
+
 OptionMenu "VisualEffects"
 {
 	title "Mod Options"
@@ -122,8 +133,11 @@ OptionMenu "VisualEffects"
 
 	Option "Visual Recoil", "recoil_toggle", "OnOff"
 
-	Option "Weather Particles", "special_particle_toggle", "OnOff"
+	StaticText ""
+	StaticText "Graphics"
 
+	Option "Weather Amount", "weather_amount", "GraphicsSettings"
+	Option "Weather Particles", "weather_particles", "GraphicsSettings"
 }
 
 //NASHGORE

@@ -25,6 +25,11 @@ class WeatherParticle : Actor
 		TNT1 A 0;
 		Stop;
 	}
+
+	double GetParticleDrawDistance()
+	{
+		return 128 * GetCVar("weather_particles");
+	}
 }
 
 class RainDrop : WeatherParticle
@@ -52,20 +57,21 @@ class RainDrop : WeatherParticle
 				return ResolveState("WaterDeath");
 			}
 
-			if (GetCVar("special_particle_toggle") == 1)
+			int weatherParticleSetting = invoker.GetCVar("weather_particles");
+			if (weatherParticleSetting > 0)
 			{
 				scale = (0.5,0.5);
 				bForceYBillboard = false;
 				bForceXYBillboard = true;
-				if (Distance2DSquared(players[consoleplayer].mo) <= 512 ** 2)
+				if (Distance2DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
 				{
-					for (int i = 0; i < Random(2, 4); ++i)
+					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting + 2); ++i)
 					{
 						A_SpawnParticle(
 							0xFFFFFFFF,
 							SPF_RELVEL,
 							lifetime: 22,
-							size: FRandom(3.5, 7.5),
+							size: FRandom(2.5, 7.5),
 							angle: FRandom(0.0, 360.0),
 							zoff: 2.0,
 							velx: FRandom(1.0, 4.0),

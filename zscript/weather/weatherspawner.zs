@@ -47,12 +47,12 @@ class WeatherSpawner : Thinker
 		{
 			case 0: return 0;
 			case 1: return m_Frequency * 0.1;
-			case 2: return m_Frequency * 0.4;
-			case 3: return m_Frequency * 0.7;
+			case 2: return m_Frequency * 0.45;
+			case 3: return m_Frequency * 0.8;
 			case 4:
 			default: return m_Frequency;
-			case 5: return m_Frequency * 1.75;
-			case 6: return m_Frequency * 2.5;
+			case 5: return m_Frequency * 2;
+			case 6: return m_Frequency * 4;
 		}
 	}
 

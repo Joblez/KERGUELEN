@@ -28,7 +28,9 @@ class WeatherParticle : Actor
 
 	double GetParticleDrawDistance()
 	{
-		return 128 * GetCVar("weather_particles");
+		int setting = GetCVar("weather_particles");
+		if (setting == 0) return 0.0;
+		return 128 * setting + 128;
 	}
 }
 
@@ -65,7 +67,7 @@ class RainDrop : WeatherParticle
 				bForceXYBillboard = true;
 				if (Distance2DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
 				{
-					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting + 2); ++i)
+					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting * 2); ++i)
 					{
 						A_SpawnParticle(
 							0xFFFFFFFF,

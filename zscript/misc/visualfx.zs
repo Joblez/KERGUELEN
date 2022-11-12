@@ -295,7 +295,7 @@ class Melee_Puff: Bullet_Puff
 
 	Crash:
 		TNT1 A 0 A_SetScale(0.5);
-		FX57 A 1 Bright A_StartSound("hatchet/hitwall", 12);
+		FX57 A 1 Bright A_StartSound("hatchet/hitwall", CHAN_AUTO);
 		FX57 BC 1 Bright A_SetTranslucent(.8, 1);
 		FX57 DE 1 Bright A_SetTranslucent(.6, 1);
 		FX57 FG 1 Bright A_SetTranslucent(.4, 1);

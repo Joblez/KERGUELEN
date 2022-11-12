@@ -196,7 +196,7 @@ actor Wyvern replaces Cacodemon
 {
 
 	Health 350
-	Mass 150
+	Mass 120
 	Speed 14
 	Height 56
 	Radius 32
@@ -278,7 +278,7 @@ actor Dryad replaces Stealthdoomimp
 	Radius 28
 	Height 36
 	Scale 1
-	Mass 100
+	Mass 180
 	Painchance 220
 	Health 400
 	BloodColor "42 97 51"
@@ -389,7 +389,7 @@ actor DryadVine
 {
 	Monster
 	Health 60
-	Mass 100
+	Mass 40
 	Radius 24
 	Height 36
 	Scale 1

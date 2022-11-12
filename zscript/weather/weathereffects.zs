@@ -52,7 +52,7 @@ class RainDrop : WeatherParticle
 		RAIN A 1;
 		Loop;
 	Death:
-		RAIN A 1;
+		RAIN A 2;
 		TNT1 A 0 {
 			if (invoker.cursector.GetFloorTerrain(Sector.floor).IsLiquid)
 			{
@@ -65,19 +65,39 @@ class RainDrop : WeatherParticle
 				scale = (0.5,0.5);
 				bForceYBillboard = false;
 				bForceXYBillboard = true;
-				if (Distance2DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
+				if (Distance3DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
 				{
-					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting * 2); ++i)
+					if (weatherParticleSetting == 6) // Extra detail for Ultra
+					{
+						for (int i = 0; i < Random(8, 12); ++i)
+						{
+							A_SpawnParticle(
+								0xFFFFFFFF,
+								SPF_RELVEL,
+								lifetime: 22,
+								size: FRandom(1.5, 2.5),
+								angle: FRandom(0.0, 360.0),
+								zoff: 1.0,
+								velx: FRandom(1.5, 4.0),
+								velz: FRandom(0.25, 1.5),
+								accelz: -0.25,
+								fadestepf: 0,
+								sizestep: -0.15
+							);
+						}
+					}
+
+					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting + 2); ++i)
 					{
 						A_SpawnParticle(
 							0xFFFFFFFF,
 							SPF_RELVEL,
 							lifetime: 22,
-							size: FRandom(2.5, 7.5),
+							size: FRandom(2.5, 6.0),
 							angle: FRandom(0.0, 360.0),
 							zoff: 2.0,
-							velx: FRandom(1.0, 4.0),
-							velz: FRandom(0.5, 1.5),
+							velx: FRandom(0.75, 2.25),
+							velz: FRandom(0.5, 2.5),
 							accelz: -0.25,
 							fadestepf: 0,
 							sizestep: -0.5
@@ -99,7 +119,7 @@ class RainDrop : WeatherParticle
 			Alpha = 0.9;
 		}
 		RAIN FFGGHHIIJJKKLL 1 Bright {
-			A_SetTranslucent(max(0.0, invoker.Alpha - 0.075), 1);
+			A_SetTranslucent(max(0.0, invoker.Alpha - 0.9 / 14.0), 1);
 			Scale += (0.075, 0.075);
 		}
 		Stop;

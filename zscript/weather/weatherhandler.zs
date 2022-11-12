@@ -17,7 +17,7 @@ class WeatherHandler : EventHandler
 		while ((i = iterator.Next()) >= 0)
 		{
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(16, 2048, Level.Sectors[i], "RainDrop"));
+				WeatherSpawner.Create(16, Level.Sectors[i], "RainDrop"));
 		}
 
 		iterator = Level.CreateSectorTagIterator(SNOW_TAG);
@@ -26,7 +26,7 @@ class WeatherHandler : EventHandler
 		{
 			Console.Printf("Creating snow spawner at %i", Level.Sectors[i].Index());
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(4, 2048, Level.Sectors[i], "Snowflake"));
+				WeatherSpawner.Create(4, Level.Sectors[i], "Snowflake"));
 		}
 	}
 }

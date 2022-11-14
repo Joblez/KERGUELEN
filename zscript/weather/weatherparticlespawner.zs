@@ -4,6 +4,8 @@ class WeatherParticleSpawner : WeatherSpawner
 	TextureID m_Texture;
 	int m_RenderStyle;
 	int m_Lifetime;
+	double m_Alpha;
+	double m_FadeStep;
 	double m_Size;
 	double m_SizeDeviation;
 	vector3 m_InitialVelocity;
@@ -31,6 +33,8 @@ class WeatherParticleSpawner : WeatherSpawner
 		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 0.0),
 		vector3 particleAcceleration = (0.0, 0.0, 0.0),
 		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
+		double particleAlpha = 1.0,
+		double particleFadeStep = 0.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false,
 		Actor spawnAgent = null)
@@ -50,6 +54,8 @@ class WeatherParticleSpawner : WeatherSpawner
 		spawner.m_InitialVelocityDeviation = initialParticleVelocityDeviation;
 		spawner.m_Acceleration = particleAcceleration;
 		spawner.m_AccelerationDeviation = particleAccelerationDeviation;
+		spawner.m_Alpha = particleAlpha;
+		spawner.m_FadeStep = particleFadeStep;
 		spawner.m_SpawnAgent = spawnAgent ? spawnAgent : Actor.Spawn("NilActor", Vec3Util.Zero());
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
@@ -122,7 +128,8 @@ class WeatherParticleSpawner : WeatherSpawner
 			accelx: acceleration.x,
 			accely: acceleration.y,
 			accelz: acceleration.z,
-			fadestepf: 0.0
+			startalphaf: m_Alpha,
+			fadestepf: m_FadeStep
 		);
 
 		m_SpawnAgent.SetXYZ(Vec3Util.Zero());

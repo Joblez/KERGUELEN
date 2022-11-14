@@ -246,6 +246,7 @@ class Bullet_Puff : Actor replaces BulletPuff
 		+FLOORCLIP;
 		+PUFFONACTORS;
 		+NOEXTREMEDEATH;
+		+FORCEXYBILLBOARD;
 	}
 
 	States
@@ -284,7 +285,8 @@ class Melee_Puff: Bullet_Puff
 {
 	Default
 	{
-	-PUFFONACTORS;
+		+FORCEXYBILLBOARD;
+		-PUFFONACTORS;
 	}
 	States
 	{

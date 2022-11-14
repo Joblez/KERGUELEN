@@ -1,4 +1,4 @@
-version "4.8.2"
+version "4.9.0"
 
 // MBase
 #include "MBase/MBaseLib/zscript.zs"

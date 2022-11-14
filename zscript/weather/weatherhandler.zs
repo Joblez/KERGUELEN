@@ -20,7 +20,7 @@ class WeatherHandler : EventHandler
 		while ((i = iterator.Next()) >= 0)
 		{
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(16, Level.Sectors[i], "RainDrop"));
+				WeatherSpawner.Create(14, Level.Sectors[i], "RainDrop"));
 		}
 
 		iterator = Level.CreateSectorTagIterator(SNOW_TAG);
@@ -38,6 +38,7 @@ class WeatherHandler : EventHandler
 					initialParticleVelocity: (0.0, 0.0, -7.0),
 					initialParticleVelocityDeviation: (0.0, 0.0, 3.0),
 					particleAcceleration: (0.0, 0.0, -0.1),
+					particleAlpha: 0.575,
 					shouldSimulateParticles: true,
 					spawnAgent: m_SpawnAgent));
 		}

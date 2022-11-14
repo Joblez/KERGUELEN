@@ -137,7 +137,7 @@ OptionMenu "VisualEffects"
 	StaticText "Graphics"
 
 	Option "Weather Amount", "weather_amount", "GraphicsSettings"
-	Option "Weather Particles", "weather_particles", "GraphicsSettings"
+	Option "Splash Particles", "splash_particles", "GraphicsSettings"
 }
 
 //NASHGORE

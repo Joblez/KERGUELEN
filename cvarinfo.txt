@@ -13,7 +13,7 @@ server int fade_toggle = 1;
 
 server int recoil_toggle = 1;
 
-server int weather_particles = 1;
+server int splash_particles = 1;
 
 server int weather_amount = 2;
 

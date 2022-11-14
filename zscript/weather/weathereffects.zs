@@ -28,7 +28,7 @@ class WeatherParticle : Actor
 
 	double GetParticleDrawDistance()
 	{
-		int setting = GetCVar("weather_particles");
+		int setting = GetCVar("splash_particles");
 		if (setting == 0) return 0.0;
 		return 128 * setting + 128;
 	}
@@ -59,15 +59,15 @@ class RainDrop : WeatherParticle
 				return ResolveState("WaterDeath");
 			}
 
-			int weatherParticleSetting = invoker.GetCVar("weather_particles");
-			if (weatherParticleSetting > 0)
+			int splashParticleSetting = invoker.GetCVar("splash_particles");
+			if (splashParticleSetting > 0)
 			{
 				scale = (0.5,0.5);
 				bForceYBillboard = false;
 				bForceXYBillboard = true;
 				if (Distance3DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
 				{
-					if (weatherParticleSetting == 6) // Extra detail for Ultra
+					if (splashParticleSetting == 6) // Extra detail for Ultra
 					{
 						for (int i = 0; i < Random(8, 12); ++i)
 						{
@@ -87,7 +87,7 @@ class RainDrop : WeatherParticle
 						}
 					}
 
-					for (int i = 0; i < Random(weatherParticleSetting, weatherParticleSetting + 2); ++i)
+					for (int i = 0; i < Random(splashParticleSetting, splashParticleSetting + 2); ++i)
 					{
 						A_SpawnParticle(
 							0xFFFFFFFF,

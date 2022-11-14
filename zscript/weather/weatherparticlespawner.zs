@@ -30,7 +30,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 0.0),
 		vector3 particleAcceleration = (0.0, 0.0, 0.0),
 		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
-		bool shouldSimulateParticles = false
+		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false,
 		Actor spawnAgent = null)
 	{

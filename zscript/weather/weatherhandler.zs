@@ -4,8 +4,11 @@ class WeatherHandler : EventHandler
 	const SNOW_TAG = 3571;
 	array<WeatherSpawner> m_WeatherSpawners;
 
+	private Actor m_SpawnAgent;
+
 	override void WorldLoaded(WorldEvent e)
 	{
+		if (!m_SpawnAgent) m_SpawnAgent = Actor.Spawn("NilActor", Vec3Util.Zero());
 		CreateWeatherSpawners();
 	}
 
@@ -24,9 +27,19 @@ class WeatherHandler : EventHandler
 
 		while ((i = iterator.Next()) >= 0)
 		{
-			Console.Printf("Creating snow spawner at %i", Level.Sectors[i].Index());
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(4, Level.Sectors[i], "Snowflake"));
+				WeatherParticleSpawner.Create(
+					10,
+					Level.Sectors[i],
+					particleRenderStyle: STYLE_Add,
+					particleTextureName: "SNOWA0",
+					particleSize: 12.0,
+					particleSizeDeviation: 3.0,
+					initialParticleVelocity: (0.0, 0.0, -7.0),
+					initialParticleVelocityDeviation: (0.0, 0.0, 3.0),
+					particleAcceleration: (0.0, 0.0, -0.1),
+					shouldSimulateParticles: true,
+					spawnAgent: m_SpawnAgent));
 		}
 	}
 }

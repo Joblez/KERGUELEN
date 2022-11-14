@@ -1,19 +1,21 @@
 class WeatherSpawner : Thinker
 {
-	private Sector m_Sector;
-	private class<WeatherParticle> m_ParticleType;
+	protected Sector m_Sector;
+	protected class<WeatherParticle> m_ParticleType;
 
-	private double m_Frequency;
+	protected double m_Frequency;
+	protected SectorTriangulation m_Triangulation;
+	protected CVar m_WeatherAmountCVar;
+
 	private double m_Time;
-	private SectorTriangulation m_Triangulation;
-	private CVar m_WeatherAmountCVar;
 
 	static WeatherSpawner Create(double density, Sector sec, class<WeatherParticle> particleType)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
-		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
+
 		spawner.m_Sector = sec;
 		spawner.m_ParticleType = particleType;
+		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
 
@@ -37,6 +39,16 @@ class WeatherSpawner : Thinker
 			while (m_Time > 0.0);
 			m_Time = 0.0;
 		}
+	}
+
+	Sector GetSector() const
+	{
+		return m_Sector;
+	}
+
+	CVar GetWeatherAmountCVar() const
+	{
+		return m_WeatherAmountCVar;
 	}
 
 	double GetAdjustedRange() const
@@ -64,7 +76,7 @@ class WeatherSpawner : Thinker
 		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
 	}
 
-	private void SpawnWeatherParticle()
+	protected virtual void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
 		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > GetAdjustedRange() ** 2) return;

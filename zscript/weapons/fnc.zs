@@ -8,12 +8,13 @@ class RifleMag : Ammo
 	}
 }
 
-// FN FNC.
+// FN FNC
 
 class FNC : BaseWeapon replaces Chaingun
 {
 	bool m_FireSelect; // Fire selector.
 	bool m_IsEmpty; // Checks if the gun is empty.
+	int burstfire;
 
 	Default
 	{
@@ -85,14 +86,14 @@ class FNC : BaseWeapon replaces Chaingun
 			A_CasingRifle(18,-5);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
-			A_StartSound("fnc/fire", 1);
+			A_StartSound("fnc/fire", 1,0,0.9);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_WEAPON);
 			if (psp) psp.frame = random(0, 3);
 		}
 		FNCF A 1;
-		FNCF B 1;
+		FNCF B 1;			
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		FNCF C 2 A_WeaponReady(WRF_NOSWITCH);
 		FNCF DEF 2 A_WeaponReady(WRF_NOSWITCH);
@@ -143,9 +144,9 @@ class FNC : BaseWeapon replaces Chaingun
 		FNRO AB 1;
 		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);
 		TNT1 A 0 A_SetBaseOffset(-4, 34);
-		FNRO CD 1;
+		FNRO CDE 1;
 		TNT1 A 0 A_SetBaseOffset(-3, 33);
-		FNRO EFGHI 2;
+		FNRO FGHI 2;
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
 		FNIN A 2;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);

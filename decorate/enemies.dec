@@ -79,7 +79,7 @@ actor Grarg replaces DoomImp
 	}
 }
 
-actor GLG replaces ZombieMan
+actor Lesco replaces ZombieMan
 {
 	Health 50
 	Radius 16

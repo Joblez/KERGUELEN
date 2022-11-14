@@ -12,10 +12,10 @@ actor NewPlayer : PlayerPawn
 	Player.WeaponSlot 2, "Revolver"
 	Player.WeaponSlot 3, "Ithaca"
 	Player.WeaponSlot 4, "FNC"
-	Player.WeaponSlot 5, ""
-	Player.WeaponSlot 6, ""
+	Player.WeaponSlot 5, "Dynamite"
+	Player.WeaponSlot 6, "Ishapore"
 	Player.JumpZ 9.0
-	Player.viewbob 0.75
+	Player.viewbob 0.85
 	Player.crouchsprite "PLYC"
 	Gravity 1
 	Speed 0.65

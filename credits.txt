@@ -30,7 +30,7 @@ Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
 
 Selecting weapon sounds - CS:GO
 
-FNC bolt sound effects - Polenar Tactical, TFB TV
+FNC sound effects - Polenar Tactical, TFB TV, NWI
 
 Explosion Sprites - Rogue Software
 

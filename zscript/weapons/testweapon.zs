@@ -16,9 +16,9 @@ Class RevoCylinder : Ammo
 
 class Revolver : BaseWeapon
 {
-	bool m_SingleAction;
-	vector2 m_Spread;
-	bool m_IsLoading;
+	bool m_SingleAction; //Checks if you're firing in Single action.
+	vector2 m_Spread; //Weapon Spread.
+	bool m_IsLoading; //checks if you are reloading.
 
 	Default
 	{
@@ -55,7 +55,7 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
 		TNT1 A 0 A_StartSound("sw/cock2", 9);
-		SWDA A 1;
+		SWDA A 1;		
 		SWDA B 1;
 		SWDA C 1;
 	Shoot:
@@ -89,7 +89,7 @@ class Revolver : BaseWeapon
 
 	AltFire:
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
-		SWSA ABCD 2;
+		SWSA ABCD 1;
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
 		SWSA EFGHIJKLMN 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
@@ -97,12 +97,12 @@ class Revolver : BaseWeapon
 
 	AltReady:
 		TNT1 A 0 { invoker.m_Spread = (1, 1); }
-		SWSA N 4 A_WeaponReady(WRF_ALLOWRELOAD);
+		SWSA N 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Ready:
 		TNT1 A 0 { invoker.m_Spread = (3, 3); }
-		SWAI A 4 A_WeaponReady(WRF_ALLOWRELOAD);
+		SWAI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Empty:
@@ -128,15 +128,15 @@ class Revolver : BaseWeapon
 			}
 			return ResolveState(null);
 		}
-		SWEJ ABCD 1;
-		SWEJ E 2;
+		SWEJ ABC 1;
+		SWEJ DE 2;
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
-		SWEJ FG 2;
+		SWEJ FG 1;
 		SWEJ HI 1;
 		SWEJ JKL 1;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
 		TNT1 A 0 A_TakeInventory("RevoCylinder", BCYN);
-		SWEJ M 2;
+		SWEJ M 3;
 		TNT1 A 0 { invoker.m_IsLoading = true; }
 		TNT1 A 0 {
 			A_CasingRevolver(random(-4,4), random(-30,-34));
@@ -146,12 +146,12 @@ class Revolver : BaseWeapon
 			A_CasingRevolver(random(-4,4), random(-30,-34));
 			A_CasingRevolver(random(-4,4), random(-30,-34));
 		}
-		SWEJ NO 2;
-		SWEJ P 1;
-		SWEJ Q 2;
+		SWEJ N 1;
+		SWEJ O 3;
+		SWEJ PQ 1;
 		SWEJ R 1;
 		SWEJ ST 1;
-		SWEJ U 2;
+		SWEJ UV 2;
 	Loading:
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -171,18 +171,19 @@ class Revolver : BaseWeapon
 			return ResolveState("Load");
 		}
 	Load:
-		SWLD ABCD 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD ABCDE 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO,0,0.5);
-		SWLD EF 2 A_WeaponReady(WRF_NOSWITCH);
-		SWLD GHIJ 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
+		SWLD HIJ 1 A_WeaponReady(WRF_NOSWITCH);
 		Goto Loading;
 
 	ReloadEnd:
 	Close:
-		SWCL ABCD 2;
+		SWCL ABCDE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		SWCL EFGHIJKLMN 2;
+		SWCL FGH 3;
+		SWCL IJKLMN 2;
 		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto Ready;
 

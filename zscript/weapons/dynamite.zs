@@ -1,9 +1,9 @@
 class Dynamite : BaseWeapon replaces Rocketlauncher
 {
-	bool m_IsThrowing;
-	double m_Throw;
-
-	private bool m_Died;
+	bool m_IsThrowing; //checks if the player is holding down the button to throw.
+	double m_Throw; //multiplier for how far the dynamite is thrown.
+	
+	private bool m_Died; //check for when the dynamite explodes in the player's hands.
 
 	property BaseThrowFactor: m_Throw;
 

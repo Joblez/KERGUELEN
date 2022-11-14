@@ -10,8 +10,8 @@ class sniperammo: ammo
 }
 
 class Ishapore : baseweapon replaces Plasmarifle {
-	bool m_Shouldered;
-	bool m_isloading;
+	bool m_Shouldered; //checks if you are aiming down the Scope.
+	bool m_isloading; //checks if you are reloading.
 	Default
 	{
 		Weapon.Kickback 20;
@@ -109,7 +109,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRS ABCDE 1;
 		ISRS FGHI 1;
 		TNT1 A 0 A_StartSound("sniper/boltback",9);
-		ISRS JKLMNOPQ 1;
+		ISRS J 1;
+		ISRS KL 2;
+		ISRS MNOPQ 1;
 		ISRS RSTUV 2;
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
@@ -148,9 +150,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRE ABC 1;
 		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
-		ISRE DEF 1;
+		ISRE DEFGH 1;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
-		ISRE GHIJKLMN 2;
+		ISRE IJKLMN 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		ISRE OP 2;
 		ISRE QRS 2 A_WeaponReady();

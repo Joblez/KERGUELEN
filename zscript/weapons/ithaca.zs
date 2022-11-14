@@ -12,8 +12,8 @@ class Sh12Tube : Ammo
 
 class Ithaca : BaseWeapon replaces Shotgun
 {
-	bool m_Chambered;
-	bool m_IsLoading;
+	bool m_Chambered; //checks if the gun is chambered.
+	bool m_IsLoading; //checks if you are reloading.
 
 	Default
 	{
@@ -118,10 +118,10 @@ class Ithaca : BaseWeapon replaces Shotgun
 			}
 		}
 	Pump:
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.75);
-		ITAP ABC 2;
+		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
+		ITAP ABC 1;
 		ITAP DE 2;
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.75);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
 		TNT1 A 0 A_CasingShotgunL(10, -22);
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
@@ -135,11 +135,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	Charge:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.75);
-		ITAP ABC 2;
+		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
+		ITAP ABC 1;
 		ITAP DE 2;
 		TNT1 A 0 A_CasingShotgunL(10, -22);
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.75);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
@@ -186,16 +186,14 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	ProperReload:
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		ITRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRL ABCD 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
-		TNT1 A 0 A_SetBaseOffset(2, 32);
-		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL HIJ 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL EF 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL GHI 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		ITRL KL 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL M 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRL M 4 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -217,9 +215,9 @@ class Ithaca : BaseWeapon replaces Shotgun
 	ReloadEnd:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		ITRE ABCDEF 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRE ABCDE 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(1, 31);
-		ITRE GHIJ 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRE FGHI 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered), "Ready");
 		Goto Charge;

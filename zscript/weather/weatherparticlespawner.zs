@@ -14,7 +14,8 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	private Actor m_SpawnAgent;
+	protected Actor m_SpawnAgent;
+
 	private array<WeatherParticleCallbackData> pendingCallbackData;
 
 	static WeatherParticleSpawner Create(

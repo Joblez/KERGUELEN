@@ -75,13 +75,9 @@ class FNC : BaseWeapon replaces Chaingun
 		stop;
 	Fire:
 		TNT1 A 0 {
-			if (CheckInventory("RifleMag", 2))
+			if (CheckInventory("RifleMag", 1))
 			{
 				return ResolveState(null);
-			}
-			else if (CheckInventory("RifleMag", 1))
-			{
-				return ResolveState("FinalShot");
 			}
 			else
 			{

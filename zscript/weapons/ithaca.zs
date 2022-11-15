@@ -193,7 +193,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_SetBaseOffset(4, 34);
 		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL M 4 A_WeaponReady(WRF_NOSWITCH);
+		ITRL M 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))

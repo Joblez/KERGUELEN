@@ -98,14 +98,18 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHB HI 1;
 		ISHB J 1 {
 			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 5, 0, 7000, "");
+			A_Quake(force, 3, 0, 7000, "");
 		}
 		TNT1 A 0 A_CasingRifle(18,-5);
 		ISHB KL 2;
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
 		ISHB MN 1;
 		TNT1 A 0 A_SetBaseOffset(1, 31);
-		ISHB OPQR 2;
+		ISHB O 2 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 3, 0, 7000, "");
+		}
+		ISHB PQR 2;
 		ISHB STUV 2 A_Weaponready();
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		goto ready;
@@ -116,7 +120,12 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_StartSound("sniper/boltback",9);
 		ISRS J 1;
 		ISRS KL 2;
-		ISRS MNOPQ 1;
+		ISRS MN 1;
+		ISRS O 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 3, 0, 7000, "");
+		}
+		ISRS PQ 1;
 		ISRS RSTUV 2;
 		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
@@ -129,10 +138,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_StartSound("sniper/load",10);
 		TNT1 A 0 A_SetBaseOffset(-1, 33);
 		ISRL G 2 {
-			{
 			int force = 3 + int(self.Vel.xy.Length() / 3);
 			A_Quake(force, 5, 0, 7000, "");
-		}
 			A_WeaponReady(WRF_NOSWITCH);
 		}
 		ISRL H 2 A_WeaponReady(WRF_NOSWITCH);

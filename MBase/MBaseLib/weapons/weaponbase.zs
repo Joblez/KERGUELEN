@@ -633,9 +633,19 @@ class WeaponBase : DoomWeapon abstract
 		double speedPercentage = movementSpeed / maxSpeed;
 
 		m_BobAmplitude.m_Target = m_BobIntensity * owner.Player.GetMoveBob() * min(1.0, min(moveInputStrength, speedPercentage));
-		m_BobAmplitude.m_SmoothTime = previousMovementSpeed < movementSpeed
-			? m_BobIntensityResponseTime * 0.7
-			: m_BobIntensityResponseTime; // TODO: Make these properties.
+
+		// Ease out of bob animation when movement input stops.
+		if (moveInputStrength ~== 0.0)
+		{
+			m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime * 3.0;
+		}
+		else
+		{
+			m_BobAmplitude.m_SmoothTime = previousMovementSpeed < movementSpeed
+				? m_BobIntensityResponseTime * 0.7
+				: m_BobIntensityResponseTime; // TODO: Make these properties.
+		}
+
 		m_BobAmplitude.Update();
 		m_BobPlaybackSpeed.m_Target = speedPercentage;
 		m_BobPlaybackSpeed.Update();
@@ -646,7 +656,7 @@ class WeaponBase : DoomWeapon abstract
 
 		if (!m_BobAnim)
 		{
-			FallbackWeaponBob(speedPercentage);
+			ProceduralWeaponBob(speedPercentage);
 		}
 		else
 		{
@@ -656,7 +666,7 @@ class WeaponBase : DoomWeapon abstract
 		}
 	}
 
-	private void FallbackWeaponBob(double speedPercentage)
+	private void ProceduralWeaponBob(double speedPercentage)
 	{
 		double amplitude = m_BobAmplitude.GetValue() * 4.0;
 		double frequency = m_BobSpeed * 0.75;

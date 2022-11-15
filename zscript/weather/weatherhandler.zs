@@ -19,6 +19,7 @@ class WeatherHandler : EventHandler
 
 		while ((i = iterator.Next()) >= 0)
 		{
+			// TODO: Replace with particle spawner once particle billboarding can be disabled.
 			m_WeatherSpawners.Push(
 				WeatherSpawner.Create(14, 256.0, Level.Sectors[i], "RainDrop"));
 		}

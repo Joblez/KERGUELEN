@@ -33,12 +33,12 @@ class WeatherHandler : EventHandler
 					Level.Sectors[i],
 					particleRenderStyle: STYLE_Add,
 					particleTextureName: "SNOWA0",
-					particleSize: 12.0,
+					particleSize: 8.0,
 					particleSizeDeviation: 3.0,
-					initialParticleVelocity: (0.0, 0.0, -7.0),
-					initialParticleVelocityDeviation: (2.0, 2.0, 3.0),
+					initialParticleVelocity: (0.0, 0.0, -2.5),
+					initialParticleVelocityDeviation: (2.0, 2.0, 1.0),
 					particleAcceleration: (0.0, 0.0, -0.1),
-					particleAlpha: 0.575,
+					particleAlpha: 0.635,
 					shouldSimulateParticles: true,
 					spawnAgent: m_SpawnAgent));
 		}

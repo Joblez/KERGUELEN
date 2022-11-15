@@ -80,7 +80,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("Sniperammo", 1);
-			A_StartSound("sniper/fire", 1);
+			A_StartSound("sniper/fire", CHAN_AUTO);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_SetBaseOffset(8, 36);

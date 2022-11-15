@@ -36,7 +36,7 @@ class WeatherHandler : EventHandler
 					particleSize: 12.0,
 					particleSizeDeviation: 3.0,
 					initialParticleVelocity: (0.0, 0.0, -7.0),
-					initialParticleVelocityDeviation: (0.0, 0.0, 3.0),
+					initialParticleVelocityDeviation: (2.0, 2.0, 3.0),
 					particleAcceleration: (0.0, 0.0, -0.1),
 					particleAlpha: 0.575,
 					shouldSimulateParticles: true,

@@ -1,12 +1,5 @@
 class LevelUtil play
 {
-	enum EThrustTarget
-	{
-		THRTARGET_Origin,
-		THRTARGET_Center,
-		THRTARGET_Top
-	}
-
 	static play void Explode3D(
 		vector3 origin,
 		int damage,
@@ -110,4 +103,11 @@ class LevelUtil play
 			ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}
+}
+
+enum EThrustTarget
+{
+	THRTARGET_Origin,
+	THRTARGET_Center,
+	THRTARGET_Top
 }

@@ -2,6 +2,11 @@ class WorldAgentHandler : EventHandler
 {
 	private Agent m_WorldAgent;
 
+	override void OnRegister()
+	{
+		SetOrder(-100000);
+	}
+
 	override void WorldLoaded(WorldEvent e)
 	{
 		m_WorldAgent = Agent(Actor.Spawn("Agent"));

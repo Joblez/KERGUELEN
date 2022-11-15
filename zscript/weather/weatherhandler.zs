@@ -4,11 +4,11 @@ class WeatherHandler : EventHandler
 	const SNOW_TAG = 3571;
 	array<WeatherSpawner> m_WeatherSpawners;
 
-	private Actor m_SpawnAgent;
+	private Agent m_SpawnAgent;
 
 	override void WorldLoaded(WorldEvent e)
 	{
-		if (!m_SpawnAgent) m_SpawnAgent = Actor.Spawn("NilActor", Vec3Util.Zero());
+		if (!m_SpawnAgent) m_SpawnAgent = WorldAgentHandler.GetWorldAgent();
 		CreateWeatherSpawners();
 	}
 

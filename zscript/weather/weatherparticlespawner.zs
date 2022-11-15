@@ -16,7 +16,7 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	protected Actor m_SpawnAgent;
+	protected Agent m_SpawnAgent;
 
 	private array<WeatherParticleCallbackData> pendingCallbackData;
 
@@ -39,7 +39,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false,
-		Actor spawnAgent = null)
+		Agent spawnAgent = null)
 	{
 		WeatherParticleSpawner spawner = new("WeatherParticleSpawner");
 
@@ -59,7 +59,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		spawner.m_AccelerationDeviation = particleAccelerationDeviation;
 		spawner.m_Alpha = particleAlpha;
 		spawner.m_FadeStep = particleFadeStep;
-		spawner.m_SpawnAgent = spawnAgent ? spawnAgent : Actor.Spawn("NilActor", Vec3Util.Zero());
+		spawner.m_SpawnAgent = spawnAgent ? spawnAgent : WorldAgentHandler.GetWorldAgent();
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;

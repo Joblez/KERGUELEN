@@ -16,7 +16,7 @@ class LevelUtil play
 		array<Actor> exclusions = null,
 		Actor inflictor = null)
 	{
-		let iterator = BlockThingsIterator.CreateFromPos(origin.Pos.x, origin.Pos.y, origin.Pos.z, radius, radius, false);
+		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
 		while (iterator.Next())
 		{
@@ -58,7 +58,7 @@ class LevelUtil play
 			Actor a = inflictor.LineAttack(angleAndPitch.x, radius, angleAndPitch.y, attenuatedDamage, 'None', null, offsetz: 1.0);
 			inflictor.SetXYZ(oldPosition);
 
-			if (a == mo) Thrust3D(mo, toTarget, attenuatedForce);
+			if (a == mo) ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}
 
@@ -97,7 +97,7 @@ class LevelUtil play
 
 			if (distance > radius) continue;
 
-			LineTracer tracer = new("LogLineTracer");
+			LineTracer tracer = new("LineTracer");
 			bool traceHit = tracer.Trace(origin, Level.PointInSector(origin.xy), toTarget.Unit(), distance, 0);
 
 			if (!traceHit || tracer.Results.HitType != TRACE_HitActor || tracer.Results.HitActor != mo)

@@ -4,7 +4,7 @@ class WorldAgentHandler : EventHandler
 
 	override void WorldLoaded(WorldEvent e)
 	{
-		m_WorldAgent = Actor.Spawn("Agent");
+		m_WorldAgent = Agent(Actor.Spawn("Agent"));
 	}
 
 	static Agent GetWorldAgent()

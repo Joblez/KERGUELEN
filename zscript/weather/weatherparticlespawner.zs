@@ -143,13 +143,11 @@ class WeatherParticleSpawner : WeatherSpawner
 		m_SpawnAgent.SetXYZ(Vec3Util.Zero());
 	}
 
+	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }
+
 	protected Actor GetSpawnAgent() const
 	{
 		return m_SpawnAgent;
-	}
-
-	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data)
-	{
 	}
 
 	protected void SimulateParticle(

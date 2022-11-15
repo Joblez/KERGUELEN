@@ -130,9 +130,9 @@ class Snowflake : WeatherParticle
 {
 	Default
 	{
-		VSpeed -7.0;
+		VSpeed -2.5;
 		Scale 0.575;
-		Gravity 0.1;
+		Gravity 0.05;
 		RenderStyle "Add";
 		+NOINTERACTION;
 	}
@@ -146,7 +146,7 @@ class Snowflake : WeatherParticle
 			WeaveIndexXY = Random(0, 63);
 		}
 	Alive:
-		SNOW A 1 A_Weave(2, 0, 0.6, 0);
+		SNOW A 1 A_Weave(1, 0, 0.9, 0);
 		TNT1 A 0 {
 			if (Pos.z <= FloorZ)
 			{

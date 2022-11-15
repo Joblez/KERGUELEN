@@ -23,10 +23,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
 
-		BaseWeapon.MaxLookSwayTranslationX 40.0;
-		BaseWeapon.LookSwayStrengthX 14.0;
+		BaseWeapon.MaxLookSwayTranslationX 56.0;
+		BaseWeapon.LookSwayStrengthX 16.0;
 		BaseWeapon.LookSwayResponse 4.0;
-		BaseWeapon.LookSwayRigidity 11.0;
+		BaseWeapon.LookSwayRigidity 6.0;
 
 		Inventory.PickupMessage "[6] 7.62 Hunting Rifle";
 
@@ -95,7 +95,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_SetBaseOffset(3, 33);
 		ISHB DEFG 2;
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		ISHB HIJ 1;
+		ISHB HI 1;
+		ISHB J 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
 		TNT1 A 0 A_CasingRifle(18,-5);
 		ISHB KL 2;
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
@@ -114,7 +118,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRS KL 2;
 		ISRS MNOPQ 1;
 		ISRS RSTUV 2;
-		TNT1 A 0 { invoker.m_IsLoading = true; }		
+		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo308", 1, "ProperReload");
@@ -124,7 +128,14 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("sniper/load",10);
 		TNT1 A 0 A_SetBaseOffset(-1, 33);
-		ISRL GH 2 A_WeaponReady(WRF_NOSWITCH);
+		ISRL G 2 {
+			{
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
+			A_WeaponReady(WRF_NOSWITCH);
+		}
+		ISRL H 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(-1, 32);
 		ISRL IJ 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
@@ -153,7 +164,12 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRE ABC 1;
 		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
-		ISRE DEFGH 1;
+		ISRE DE 1;
+		ISRE F 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
+		ISRE GH 1;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
 		ISRE IJKLMN 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
@@ -232,9 +248,18 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRD ABC 2;
 		ISRD DEFGHIJ 2;
 		TNT1 A 0 A_StartSound("sniper/boltback",9);
-		ISRD KLMNOPQ 1;
+		ISRD KLMNO 1;
+		ISRD P 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
+		ISRD Q 1;
 		TNT1 A 0 A_CasingRifle(-18,-5);
-		ISRD RSTUV 2;
+		ISRD RSTU 2;
+		ISRD V 2 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
 		ISRD WXYZ 2;
 		ISR2 ABCDE 2;

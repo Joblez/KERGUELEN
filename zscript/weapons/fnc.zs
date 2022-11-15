@@ -145,7 +145,11 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1;
-		FNRO AB 1;
+		FNRO A 1;
+		FNRO B 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
 		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);
 		TNT1 A 0 A_SetBaseOffset(-4, 34);
 		FNRO CDE 1;
@@ -159,7 +163,10 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		FNIN EF 1;
 		TNT1 A 0 A_StartSound("fnc/magins", 9, 0, 0.5);
-		FNIN G 2;
+		FNIN G 2 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
 		TNT1 A 0 A_SetBaseOffset(3, 33);
 		FNIN HIJ 2;
 		TNT1 A 0 A_SetBaseOffset(2, 32);
@@ -170,8 +177,16 @@ class FNC : BaseWeapon replaces Chaingun
 		FNBT FG 2;
 		TNT1 A 0 A_StartSound("fnc/boltback", 9, 0, 0.75);
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		FNBT HI 1 ;
-		FNBT JKL 2;
+		FNBT H 1;
+		FNBT I 1 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
+		FNBT JK 2;
+		FNBT L 2 {
+			int force = 3 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+		}
 		TNT1 A 0 A_StartSound("fnc/boltrel", 9, 0, 0.75);
 		FNBT M 2 A_SetBaseOffset(0, 30);
 		FNBT NO 2;

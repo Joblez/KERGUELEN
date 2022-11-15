@@ -171,7 +171,13 @@ class Revolver : BaseWeapon
 			return ResolveState("Load");
 		}
 	Load:
-		SWLD ABCDE 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD ABC 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD D 1 {
+			int force = 2 + int(self.Vel.xy.Length() / 3);
+			A_Quake(force, 5, 0, 7000, "");
+			A_WeaponReady(WRF_NOSWITCH);
+		}
+		SWLD E 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO,0,0.5);
 		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
 		SWLD HIJ 1 A_WeaponReady(WRF_NOSWITCH);

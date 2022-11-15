@@ -55,7 +55,7 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
 		TNT1 A 0 A_StartSound("sw/cock2", 9);
-		SWDA A 1;		
+		SWDA A 1;
 		SWDA B 1;
 		SWDA C 1;
 	Shoot:

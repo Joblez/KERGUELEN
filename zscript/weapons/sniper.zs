@@ -65,6 +65,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	Fire:
 		TNT1 A 0 A_JumpIf((invoker.m_Shouldered), "Shoulderedfire");
+		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If empty.
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", 1, 1);
 		Goto Empty;
 		TNT1 A 0;
@@ -113,22 +114,23 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRS KL 2;
 		ISRS MNOPQ 1;
 		ISRS RSTUV 2;
+		TNT1 A 0 { invoker.m_IsLoading = true; }		
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo308", 1, "ProperReload");
 		Goto ReloadEnd;
 
 	ProperReload:
-		ISRL ABCDEF 1;
+		ISRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_StartSound("sniper/load",10);
 		TNT1 A 0 A_SetBaseOffset(-1, 33);
-		ISRL GH 2;
+		ISRL GH 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(-1, 32);
-		ISRL IJ 2;
+		ISRL IJ 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
-		ISRL KL 2;
+		ISRL KL 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		ISRL MN 2;
+		ISRL MN 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
@@ -145,8 +147,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			TakeInventory(invoker.AmmoType2, 1);
 
 			return ResolveState("ReloadRepeat");
-		}
+		}	
 	ReloadEnd:
+		TNT1 A 0 { invoker.m_IsLoading = false; }	
 		ISRE ABC 1;
 		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
 		TNT1 A 0 A_SetBaseOffset(-2, 32);

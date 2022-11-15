@@ -1,4 +1,4 @@
-class NilActor : Actor
+class Agent : Actor
 {
 	Default
 	{
@@ -7,8 +7,5 @@ class NilActor : Actor
 		+NODAMAGE;
 		+INVULNERABLE;
 		+NOSECTOR;
-
-		// Wouldn't want explosives moving this.
-		+DONTTHRUST;
 	}
 }

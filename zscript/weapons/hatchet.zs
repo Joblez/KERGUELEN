@@ -9,6 +9,7 @@ class Hatchet : BaseWeapon
 		BaseWeapon.LookSwayResponse 0.0;
 		Weapon.UpSound("hatchet/draw");
 		DamageType "Hatchet";
+		+WEAPON.NOALERT;
 		+WEAPON.MELEEWEAPON;
 		+WEAPON.AMMO_OPTIONAL;
 	}
@@ -53,7 +54,6 @@ class Hatchet : BaseWeapon
 		Goto Ready;
 
 	Punch1:
-
 		HAF2 A 1 A_StartSound("hatchet/swing");
 		HAF2 B 1;
 		HAF2 C 1;

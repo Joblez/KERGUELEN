@@ -7,7 +7,8 @@ class LevelUtil play
 		double radius,
 		EThrustTarget thrustTarget = THRTARGET_Top,
 		array<Actor> exclusions = null,
-		Actor inflictor = null)
+		Actor source = null,
+		vector3 thrustOffset = (0.0, 0.0, 0.0))
 	{
 		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
@@ -41,17 +42,23 @@ class LevelUtil play
 			int attenuatedDamage = int(round((radius - distance) / radius * damage));
 			double attenuatedForce = (radius - distance) / radius * thrustForce;
 
-			vector2 angleAndPitch = MathVec3.ToYawAndPitch(toTarget.Unit());
+			if (!source) source = WorldAgentHandler.GetWorldAgent();
 
-			if (!inflictor) inflictor = WorldAgentHandler.GetWorldAgent();
+			vector3 oldPosition = source.Pos;
 
-			vector3 oldPosition = inflictor.Pos;
+			source.SetOrigin(origin, false);
 
-			inflictor.SetXYZ(origin);
-			Actor a = inflictor.LineAttack(angleAndPitch.x, radius, angleAndPitch.y, attenuatedDamage, 'None', null, offsetz: 1.0);
-			inflictor.SetXYZ(oldPosition);
+			FLineTraceData traceData;
+			source.LineTrace(source.AngleTo(mo), radius, ActorUtil.PitchTo(source, mo), data: traceData);
 
-			if (a == mo) ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
+			source.SetOrigin(oldPosition, false);
+
+			if (traceData.HitActor != mo) continue;
+
+			mo.DamageMobj(null, source, attenuatedDamage, 'Explosive', DMG_THRUSTLESS | DMG_EXPLOSION);
+
+			toTarget = position - (origin + thrustOffset);
+			ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
 		}
 	}
 

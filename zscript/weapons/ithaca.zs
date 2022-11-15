@@ -69,9 +69,9 @@ class Ithaca : BaseWeapon replaces Shotgun
 				vector3 toTarget = position - origin;
 				double distance = toTarget.Length();
 
-				if (distance > 384.0) continue;
+				if (distance > 290.0) continue;
 
-				double dotProduct = min(0.95, toTarget.Unit() dot Vec3Util.FromAngles(self.angle, self.pitch));
+				double dotProduct = min(0.925, toTarget.Unit() dot Vec3Util.FromAngles(self.angle, self.pitch));
 				Console.Printf("Dot: %f", dotProduct);
 
 				if (dotProduct >= 0.8)
@@ -87,8 +87,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 					if (t.HitActor)
 					{
-						double force = Math.Remap(dotProduct, 0.8, 0.95, 100.0, 240.0);
-						force *= 1.0 - Math.Remap(distance, 32.0, 384.0, 0.0, 0.85);
+						double force = Math.Remap(dotProduct, 0.8, 0.925, 100.0, 260.0);
+						force *= 1.0 - Math.Remap(distance, 32.0, 290.0, 0.0, 0.85);
 						Console.Printf("Force: %f", force);
 						ActorUtil.Thrust3D(mo, toTarget.Unit(), force, true);
 					}

@@ -22,6 +22,7 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	static WeatherParticleSpawner Create(
 		double density,
+		double range,
 		Sector sec,
 		color particleColor = 0xFFFFFFFF,
 		int particleRenderStyle = STYLE_Normal,
@@ -35,6 +36,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
 		double particleAlpha = 1.0,
 		double particleFadeStep = 0.0,
+		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false,
 		Actor spawnAgent = null)
@@ -42,6 +44,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		WeatherParticleSpawner spawner = new("WeatherParticleSpawner");
 
 		spawner.m_Sector = sec;
+		spawner.m_Range = range;
 		spawner.m_Color = particleColor;
 		spawner.m_Texture = TexMan.CheckForTexture(particleTextureName);
 		spawner.m_RenderStyle = particleRenderStyle;
@@ -60,6 +63,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
+		spawner.m_ProjectionLength = projectionTime * TICRATE;
 
 		return spawner;
 	}
@@ -85,7 +89,11 @@ class WeatherParticleSpawner : WeatherSpawner
 	override void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
-		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > GetAdjustedRange() ** 2) return;
+
+		// Project the player's position forward to ensure particles are in view.
+		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
+
+		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
 		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
 		int lifetime;

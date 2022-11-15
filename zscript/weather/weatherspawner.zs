@@ -4,20 +4,24 @@ class WeatherSpawner : Thinker
 	protected class<WeatherParticle> m_ParticleType;
 
 	protected double m_Frequency;
+	protected double m_Range;
+	protected double m_ProjectionLength;
 	protected SectorTriangulation m_Triangulation;
 	protected CVar m_WeatherAmountCVar;
 
 	private double m_Time;
 
-	static WeatherSpawner Create(double density, Sector sec, class<WeatherParticle> particleType)
+	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherParticle> particleType, double projectionTime = 1.0)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
 
+		spawner.m_Range = range;
 		spawner.m_Sector = sec;
 		spawner.m_ParticleType = particleType;
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
+		spawner.m_ProjectionLength = projectionTime * TICRATE;
 
 		return spawner;
 	}
@@ -53,7 +57,7 @@ class WeatherSpawner : Thinker
 
 	double GetAdjustedRange() const
 	{
-		return 256.0 * m_WeatherAmountCVar.GetInt() + 256.0;
+		return (m_Range / 2) * m_WeatherAmountCVar.GetInt() + m_Range;
 	}
 
 	double GetAdjustedFrequency() const
@@ -67,7 +71,7 @@ class WeatherSpawner : Thinker
 			case 4:
 			default: return m_Frequency;
 			case 5: return m_Frequency * 1.75;
-			case 6: return m_Frequency * 3.0;
+			case 6: return m_Frequency * 2.5;
 		}
 	}
 
@@ -79,7 +83,11 @@ class WeatherSpawner : Thinker
 	protected virtual void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
-		if (MathVec2.SquareDistanceBetween(point, players[consoleplayer].mo.Pos.xy) > GetAdjustedRange() ** 2) return;
+
+		// Project the player's position forward to ensure particles fall into view.
+		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
+
+		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
 		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
 		Actor.Spawn(m_ParticleType, position);

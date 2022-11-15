@@ -122,7 +122,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRS KL 2;
 		ISRS MN 1;
 		ISRS O 1 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
+			int force = 2 + int(self.Vel.xy.Length() / 3);
 			A_Quake(force, 3, 0, 7000, "");
 		}
 		ISRS PQ 1;

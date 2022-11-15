@@ -13,9 +13,9 @@ server int fade_toggle = 1;
 
 server int recoil_toggle = 1;
 
-server int splash_particles = 1;
+server int splash_particles = 3;
 
-server int weather_amount = 2;
+server int weather_amount = 3;
 
 //NASHGORE
 

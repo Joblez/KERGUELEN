@@ -13,7 +13,6 @@ class RifleMag : Ammo
 class FNC : BaseWeapon replaces Chaingun
 {
 	bool m_FireSelect; // Fire selector.
-	bool m_IsEmpty; // Checks if the gun is empty.
 	int burstfire;
 
 	Default
@@ -75,8 +74,20 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 1 A_VRecoil(1.0, 1, 4);
 		stop;
 	Fire:
-		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
-		Goto Finalshot;
+		TNT1 A 0 {
+			if (CheckInventory("RifleMag", 2))
+			{
+				return ResolveState(null);
+			}
+			else if (CheckInventory("RifleMag", 1))
+			{
+				return ResolveState("FinalShot");
+			}
+			else
+			{
+				return ResolveState("Empty");
+			}
+		}
 		TNT1 A 0 A_JumpIf((invoker.m_FireSelect), "Automatic"); //Goes to automatic fire if the selector is on full auto
 	Single:
 		TNT1 A 0 A_FireBullets(3, 1, -1, 12, "Bullet_Puff");
@@ -93,7 +104,7 @@ class FNC : BaseWeapon replaces Chaingun
 			if (psp) psp.frame = random(0, 3);
 		}
 		FNCF A 1;
-		FNCF B 1;			
+		FNCF B 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		FNCF C 2 A_WeaponReady(WRF_NOSWITCH);
 		FNCF DEF 2 A_WeaponReady(WRF_NOSWITCH);
@@ -127,8 +138,6 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	FinalShot:
-		TNT1 A 0 A_JumpIf((invoker.m_IsEmpty), "Empty"); //Goes to empty now that the gun has fired its last shot.
-		TNT1 A 0 { invoker.m_IsEmpty = true; } // Adds the check.
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("fnc/loopend", 11);
 		FNCF CDEF 2;
@@ -137,7 +146,6 @@ class FNC : BaseWeapon replaces Chaingun
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
-		TNT1 A 0 { invoker.m_IsEmpty = false; } // Removes the check now that you are reloading.
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		FNRS ABCDEFG 2;
 		FNRS HI 1;

@@ -154,23 +154,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		{
 			ThrowAbortException("Particle does not move, cannot simulate lifetime.");
 		}
-		else if (velocity.xy ~== Vec2Util.Zero() && acceleration.xy ~== Vec2Util.Zero())
-		{
-			// No lateral movement, use simple plane crossing check.
-			SimulateParticle1D(result, position, velocity.z, acceleration.z);
-		}
-		// else
-		// {
-		// 	SimulateParticle3D(result, position, velocity, acceleration);
-		// }
-	}
 
-	private void SimulateParticle1D(
-		out WeatherParticleSimulationResult result,
-		vector3 position,
-		double velocity,
-		double acceleration = 0.0)
-	{
 		int tics = 1;
 		double nextPlaneZ;
 		vector3 currentPosition = position;
@@ -179,17 +163,17 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		while (true)
 		{
-			currentPosition.z += velocity;
+			currentPosition += velocity;
 
-			if (velocity < 0.0 && currentPosition.z <= nextPlaneZ) break;
-			if (velocity > 0.0 && currentPosition.z >= nextPlaneZ) break;
+			if (velocity.z < 0.0 && currentPosition.z <= nextPlaneZ) break;
+			if (velocity.z > 0.0 && currentPosition.z >= nextPlaneZ) break;
 
-			if ((acceleration != 0.0))
+			if ((acceleration != Vec3Util.Zero()))
 			{
 				velocity += acceleration;
 				
 				// Recheck next plane Z in case acceleration changed the trajectory.
-				nextPlaneZ = GetApproachingPlaneZ(position, velocity);
+				nextPlaneZ = GetApproachingPlaneZ(currentPosition, velocity);
 			}
 
 			tics++;
@@ -197,27 +181,29 @@ class WeatherParticleSpawner : WeatherSpawner
 		
 		result.m_Lifetime = tics;
 		result.m_EndPosition = (position.xy, nextPlaneZ);
-		result.m_EndVelocity = (0.0, 0.0, velocity);
+		result.m_EndVelocity = velocity;
 	}
 
-	// protected void SimulateParticleLifetime3D(
-	// 	out WeatherParticleSimulationResult result,
-	// 	vector3 position,
-	// 	vector3 velocity,
-	// 	vector3 acceleration = (0.0, 0.0, 0.0))
-	// {
-
-	// }
-
-	private double GetApproachingPlaneZ(vector3 position, double velocity)
+	private double GetApproachingPlaneZ(vector3 position, vector3 velocity)
 	{
-		if (velocity < 0.0)
+		Sector sec;
+		
+		if (velocity.xy ~== Vec2Util.Zero())
 		{
-			return GetSector().NextLowestFloorAt(position.x, position.y, position.z);
+			sec = GetSector();
 		}
 		else
 		{
-			return GetSector().NextHighestCeilingAt(position.x, position.y, position.z, position.z);
+			sec = Level.PointInSector(position.xy);
+		}
+
+		if (velocity.z < 0.0)
+		{
+			return sec.NextLowestFloorAt(position.x, position.y, position.z);
+		}
+		else
+		{
+			return sec.NextHighestCeilingAt(position.x, position.y, position.z, position.z);
 		}
 	}
 }
@@ -246,4 +232,18 @@ class WeatherParticleCallbackData
 	int m_Lifetime;
 	vector3 m_EndPosition;
 	vector3 m_EndVelocity;
+}
+
+class WeatherParticleLineTracer : LineTracer
+{
+	override ETraceStatus TraceCallback()
+	{
+		if (Results.HitType != TRACE_HitFloor
+			&& Results.HitType != TRACE_HitCeiling
+			&& Results.HitType != TRACE_HitWall)
+		{
+			return TRACE_Skip;
+		}
+		return TRACE_Stop;
+	}
 }

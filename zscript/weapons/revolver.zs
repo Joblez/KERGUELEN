@@ -181,7 +181,12 @@ class Revolver : BaseWeapon
 			return ResolveState(null);
 		}
 		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 { HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID()); }
+		TNT1 A 0 {
+			if (!CheckInventory(invoker.AmmoType1, BCYN))
+			{
+				HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID());
+			}
+		}
 		SWLD HIJ 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, BCYN) || !CheckInventory(invoker.AmmoType2, 1))
@@ -193,15 +198,17 @@ class Revolver : BaseWeapon
 		}
 	ReloadEnd:
 	Close:
-		SWCL ABCDE 1;
+		SWCL AB 1;
+		SWCL C 1 { HUDExtensionRegistry.SendEventToExtension('CylinderClosed', invoker.GetHUDExtensionID()); }
+		SWCL DE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
+		SWCL FGH 3;
+		SWCL IJKLMN 2;
 		TNT1 A 0 {
+			invoker.m_SingleAction = false;
 			HUDExtensionRegistry.SendEventToExtension('ReloadComplete', invoker.GetHUDExtensionID());
 			invoker.m_IsLoading = false;
 		}
-		SWCL FGH 3;
-		SWCL IJKLMN 2;
-		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto Ready;
 
 	Select:
@@ -258,7 +265,7 @@ class RevolverRoundsHUD : HUDExtension
 	override void Tick()
 	{
 		m_ChamberRotation.Update();
-		if (m_ChamberRotation.GetValue() ~== 360.0) m_ChamberRotation.HardReset();
+		if (abs(m_ChamberRotation.GetValue()) ~== 360.0) m_ChamberRotation.HardReset();
 	}
 }
 
@@ -273,6 +280,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 	override void EnterState()
 	{
 		if (!m_RevolverRoundsHUD) m_RevolverRoundsHUD = RevolverRoundsHUD(GetData());
+		m_RevolverRoundsHUD.m_ChamberRotation.HardReset();
 	}
 
 	override void PreDraw(RenderEvent event)
@@ -380,15 +388,13 @@ class SMHUDRevolverRoundsReload : SMHUDRevolverRoundsState
 				m_RevolverRoundsHUD.m_ChamberRotation.m_Target -= 60.0;
 				return true;
 
+			case 'CylinderClosed':
+				m_RevolverRoundsHUD.m_ChamberRotation.m_Target += 60.0;
+				return true;
+
 			default:
 				return false;
 		}
-	}
-
-	override void EnterState()
-	{
-		Super.EnterState();
-		m_RevolverRoundsHUD.m_ChamberRotation.HardReset();
 	}
 
 	override void Draw(RenderEvent event)

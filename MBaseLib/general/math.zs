@@ -254,6 +254,16 @@ class MathVec2
 		return pivot + Rotate(vector - pivot, angle);
 	}
 
+	static vector2 CartesianToPolar(vector2 coords)
+	{
+		return (sqrt(coords.x * coords.x + coords.y * coords.y), atan(coords.y / coords.x));
+	}
+
+	static vector2 PolarToCartesian(vector2 coords)
+	{
+		return (coords.x * cos(coords.y), coords.x * sin(coords.y));
+	}
+
 	static vector2 SmoothDamp(
 		vector2 from,
 		vector2 to,

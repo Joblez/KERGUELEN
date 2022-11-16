@@ -6,6 +6,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	ModifiableVector2 m_PSpritePosition;
 	ModifiableVector2 m_PSpriteScale;
 
+	meta class<HUDExtension> m_HUDExtensionType;
+	property HUDExtensionType: m_HUDExtensionType;
+
 	//=================== Look Sway Parameters ================//
 
 	double m_LookSwayStrengthX;
@@ -31,6 +34,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	private double m_PreviousPlayerYaw;
 	private double m_PreviousPlayerPitch;
 
+	private int m_HUDExtensionID;
+
 	Default
 	{
 		Weapon.BobRangeX 0.4;
@@ -38,13 +43,17 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		Weapon.BobSpeed 1.7;
 		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
+
 		BaseWeapon.LookSwayResponse 20.0;
 		BaseWeapon.LookSwayRigidity 8.0;
 		BaseWeapon.LookSwayStrengthX 8.0;
 		BaseWeapon.LookSwayStrengthY 0.0;
 		BaseWeapon.MaxLookSwayTranslationX 26.0;
 		BaseWeapon.MaxLookSwayTranslationY 0.0;
+		BaseWeapon.HUDExtensionType "";
+
 		Inventory.PickupSound "weapon/pickup";
+
 		+WEAPON.NOAUTOFIRE;
 		+WEAPON.NOALERT;
 		+WEAPON.NOAUTOAIM;
@@ -92,7 +101,11 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		m_PreviousPlayerPitch = owner.Pitch;
 	}
 
-	// Copied from WeaponBase.
+	int GetHUDExtensionID() const
+	{
+		return m_HUDExtensionID;
+	}
+
 	bool IsSelected() const
 	{
 		return owner
@@ -104,6 +117,18 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	void SetBaseOffset(int x, int y)
 	{
 		m_PSpritePosition.SetBaseValue((x, y));
+	}
+
+	void RegisterWeaponHUD()
+	{
+		if (!m_HUDExtensionType) return;
+		m_HUDExtensionID = HUDExtensionRegistry.AddExtension(self, m_HUDExtensionType);
+	}
+
+	void UnregisterWeaponHUD()
+	{
+		if (!m_HUDExtensionType) return;
+		HUDExtensionRegistry.RemoveExtension(m_HUDExtensionID);
 	}
 
 	action void A_SetBaseOffset(int x, int y)

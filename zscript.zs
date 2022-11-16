@@ -10,7 +10,7 @@ version "4.9.0"
 
 //Weapons
 #include "zscript/weapons/BaseWeapon.zs"
-#include "zscript/weapons/testweapon.zs"
+#include "zscript/weapons/revolver.zs"
 #include "zscript/weapons/hatchet.zs"
 #include "zscript/weapons/ithaca.zs"
 #include "zscript/weapons/fnc.zs"

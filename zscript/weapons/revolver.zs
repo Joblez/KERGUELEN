@@ -341,10 +341,9 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 
 			StatusBar.DrawImage(
 				roundTexture,
-				ScreenUtil.NormalizedPositionToView((0.5, 0.5) + polarOffset),
+				ScreenUtil.NormalizedPositionToView((0.9, 0.6) + polarOffset),
 				StatusBarCore.DI_ITEM_CENTER,
-				0.65,
-				scale: ScreenUtil.ScaleToViewport(1, 1),
+				0.5,
 				col: col);
 		}
 	}

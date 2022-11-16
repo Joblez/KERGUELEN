@@ -119,20 +119,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 		}
 	Pump:
 		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
-		ITAP A 1;
-		ITAP B 1 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 3, 0, 7000, "");
-		}
-		ITAP C 1;
+		ITAP ABC 1;
 		ITAP DE 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
 		TNT1 A 0 A_CasingShotgunL(10, -22);
-		ITAP F 2;
-		ITAP G 2 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 3, 0, 7000, "");
-		}
+		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
@@ -145,20 +136,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 	Charge:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
 		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
-		ITAP A 1;
-		ITAP B 1 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 3, 0, 7000, "");
-		}
-		ITAP C 1;
+		ITAP ABC 1;
 		ITAP DE 2;
 		TNT1 A 0 A_CasingShotgunL(10, -22);
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
-		ITAP F 2;
-		ITAP G 2 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 3, 0, 7000, "");
-		}
+		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
@@ -208,12 +190,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
 		ITRL EF 2 A_WeaponReady(WRF_NOSWITCH);
 		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
-		ITRL H 1 A_WeaponReady(WRF_NOSWITCH);
-		ITRL I 1 {
-			int force = 3 + int(self.Vel.xy.Length() / 3);
-			A_Quake(force, 6, 0, 7000, "");
-			A_WeaponReady(WRF_NOSWITCH);
-		}
+		ITRL HI 1;
 		TNT1 A 0 A_SetBaseOffset(4, 34);
 		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(3, 33);

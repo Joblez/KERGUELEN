@@ -30,7 +30,11 @@ class Revolver : BaseWeapon
 		Weapon.AmmoType1 "RevoCylinder";
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.UpSound("sw/raise");
+
+		BaseWeapon.HUDExtensionType "RevolverRoundsHUD";
+
 		Inventory.PickupMessage "[2].357 Magnum Revolver";
+
 		Tag "Model 15";
 	}
 
@@ -54,7 +58,10 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
-		TNT1 A 0 A_StartSound("sw/cock2", 9);
+		TNT1 A 0 {
+			A_StartSound("sw/cock2", 9);
+			HUDExtensionRegistry.SendEventToExtension('ChamberRotated', invoker.GetHUDExtensionID());
+		}
 		SWDA A 1;
 		SWDA B 1;
 		SWDA C 1;
@@ -91,7 +98,9 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
 		SWSA ABCD 1;
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
-		SWSA EFGHIJKLMN 1;
+		SWSA E 1;
+		SWSA F 1 { HUDExtensionRegistry.SendEventToExtension('ChamberRotated', invoker.GetHUDExtensionID()); }
+		SWSA GHIJKLMN 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
 
@@ -194,8 +203,11 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	Select:
-		TNT1 A 0 SetPlayerProperty(0, 1, 2);
-		TNT1 A 0 { invoker.m_SingleAction = false; }
+		TNT1 A 0 {
+			SetPlayerProperty(0, 1, 2);
+			invoker.RegisterWeaponHUD();
+			invoker.m_SingleAction = false;
+		}
 		TNT1 A 1;
 		SWCL J 1 A_SetBaseOffset(-65, 81);
 		SWCL J 1 A_SetBaseOffset(-35, 55);
@@ -209,6 +221,7 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	Deselect:
+		TNT1 A 0 { invoker.UnregisterWeaponHUD(); }
 		SWCL M 1 A_SetBaseOffset(3, 34);
 		SWCL K 1 A_SetBaseOffset(-12, 38);
 		SWCL J 1 A_SetBaseOffset(-28, 39);
@@ -218,5 +231,132 @@ class Revolver : BaseWeapon
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Loop;
+	}
+}
+
+class RevolverRoundsHUD : HUDExtension
+{
+	const ROTATION_CORRECTION = 150.0;
+
+	Revolver m_Revolver;
+	InterpolatedDouble m_ChamberRotation;
+
+	override SMHUDMachine CreateHUDStateMachine()
+	{
+		return new("SMHUDRevolverRoundsMachine");
+	}
+
+	override void Setup()
+	{
+		m_ChamberRotation = new("InterpolatedDouble");
+		m_ChamberRotation.m_SmoothTime = 0.1;
+		m_Revolver = Revolver(m_Context);
+	}
+
+	override void Tick()
+	{
+		m_ChamberRotation.Update();
+		if (m_ChamberRotation.GetValue() ~== 360.0) m_ChamberRotation.HardReset();
+	}
+}
+
+class SMHUDRevolverRoundsState : SMHUDState
+{
+	RevolverRoundsHUD m_RevolverRoundsHUD;
+
+	protected int m_OriginalRelTop;
+	protected int m_OriginalHorizontalResolution;
+	protected int m_OriginalVerticalResolution;
+
+	override void EnterState()
+	{
+		if (!m_RevolverRoundsHUD) m_RevolverRoundsHUD = RevolverRoundsHUD(GetData());
+	}
+
+	override void PreDraw(RenderEvent event)
+	{
+		if (automapactive) return;
+
+		// Store these to clean up after drawing.
+		m_OriginalRelTop = StatusBar.RelTop;
+		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;
+		m_OriginalVerticalResolution = StatusBar.VerticalResolution;
+
+		int viewX, viewY, viewW, viewH;
+			[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
+
+		StatusBar.SetSize(0, viewW, viewH);
+		StatusBar.BeginHUD(forcescaled: true);
+	}
+
+	override void PostDraw(RenderEvent event)
+	{
+		if (automapactive) return;
+
+		StatusBar.SetSize(m_OriginalRelTop, m_OriginalHorizontalResolution, m_OriginalVerticalResolution);
+
+		StatusBar.BeginHUD(forcescaled: false);
+		StatusBar.BeginStatusBar();
+	}
+
+	Revolver GetRevolver() const
+	{
+		return m_RevolverRoundsHUD.m_Revolver;
+	}
+}
+
+class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
+{
+	override bool TryHandleEvent(name eventId)
+	{
+		switch (eventId)
+		{
+			case 'ChamberRotated':
+				InterpolatedDouble chamberRotation = m_RevolverRoundsHUD.m_ChamberRotation;
+				chamberRotation.m_Target += 60.0;
+				return true;
+
+			default:
+				return false;
+		}
+	}
+
+	override void Draw(RenderEvent event)
+	{
+		if (automapactive) return;
+
+		for (int i = 1; i <= 6; ++i)
+		{
+			vector2 polarCoords = (0.04,
+				360.0 * (i / 6.0)
+					- RevolverRoundsHUD.ROTATION_CORRECTION
+					+ m_RevolverRoundsHUD.m_ChamberRotation.GetValue());
+
+			vector2 polarOffset = ScreenUtil.AdjustForAspectRatio(
+				MathVec2.PolarToCartesian(polarCoords));
+
+			bool spent = StatusBar.CheckInventory("RevoCylinder", i);
+			string roundTexture = spent ? "RVRNRDY" : "RVRNSPNT";
+			color col = spent ? 0XFFFFFFFF : 0xFFAAAAAA;
+
+			StatusBar.DrawImage(
+				roundTexture,
+				ScreenUtil.NormalizedPositionToView((0.5, 0.5) + polarOffset),
+				StatusBarCore.DI_ITEM_CENTER,
+				0.65,
+				scale: ScreenUtil.ScaleToViewport(1, 1),
+				col: col);
+		}
+	}
+}
+
+class SMHUDRevolverRoundsMachine : SMHUDMachine
+{
+	override void Build()
+	{
+		Super.Build();
+
+		GetHUDActiveState()
+			.AddChild(new("SMHUDRevolverRoundsActive"));
 	}
 }

@@ -6,7 +6,7 @@ class HUDExtension abstract
 		UNINITIALIZED,
 		PENDING_ACTIVATION,
 		ACTIVE,
-		PENDING_REMOVAL // m_Drawer should be considered invalid at this stage
+		PENDING_REMOVAL
 	}
 
 	protected Object m_Context;
@@ -75,8 +75,7 @@ class HUDExtension abstract
 		m_StateMachine.CallBuild();
 
 		Setup();
-
-		m_LifecycleStage = PENDING_ACTIVATION;
+		QueueActivate();
 	}
 
 	void CallTick()
@@ -85,6 +84,12 @@ class HUDExtension abstract
 
 		Tick();
 		m_StateMachine.Update();
+	}
+
+	void QueueActivate()
+	{
+		SendEventToSM('QueueActivate');
+		m_LifecycleStage = PENDING_ACTIVATION;
 	}
 
 	void Activate()
@@ -183,11 +188,16 @@ class SMHUDMachine : SMMachine
 {
 	override void Build()
 	{
+		AddChild(new("SMHUDRemoved"));
 		AddChild(new("SMHUDActivating"));
 		AddChild(new("SMHUDActive"));
 		AddChild(new("SMHUDDeactivating"));
-		AddChild(new("SMHUDRemoved"));
 
+		AddTransition(new("SMTransition")
+			.From("SMHUDRemoved")
+			.To("SMHUDActivating")
+			.On('QueueActivate')
+		);
 		AddTransition(new("SMTransition")
 			.From("SMHUDActivating")
 			.To("SMHUDActive")

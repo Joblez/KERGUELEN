@@ -111,7 +111,7 @@ class WeaponBase : DoomWeapon abstract
 
 	private int m_TicsSinceLastAttack;
 
-	private int m_HUDExtensionID;
+	private HUDExtension m_HUDExtension;
 
 	private double m_PreviousPlayerYaw;
 	private double m_PreviousPlayerPitch;
@@ -225,6 +225,8 @@ class WeaponBase : DoomWeapon abstract
 		m_StateMachine.CallBuild();
 		m_StateMachine.Start();
 
+
+
 		m_Initialized = true;
 	}
 
@@ -296,9 +298,9 @@ class WeaponBase : DoomWeapon abstract
 		return inputQueue;
 	}
 
-	int GetHUDExtensionID() const
+	HUDExtension GetHUDExtension() const
 	{
-		return m_HUDExtensionID;
+		return m_HUDExtension;
 	}
 
 	bool IsSelected() const
@@ -498,13 +500,20 @@ class WeaponBase : DoomWeapon abstract
 	void RegisterWeaponHUD()
 	{
 		if (!m_HUDExtensionType) return;
-		m_HUDExtensionID = HUDExtensionRegistry.AddExtension(self, m_HUDExtensionType);
+
+		if (!m_HUDExtension)
+		{
+			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
+			m_HUDExtension.Init(self);
+		}
+
+		HUDExtensionRegistry.AddExtension(self, m_HUDExtension);
 	}
 
 	void UnregisterWeaponHUD()
 	{
-		if (!m_HUDExtensionType) return;
-		HUDExtensionRegistry.RemoveExtension(m_HUDExtensionID);
+		if (!m_HUDExtension) return;
+		HUDExtensionRegistry.RemoveExtension(m_HUDExtension);
 	}
 
 	action void A_SendEventToSM(name eventId)

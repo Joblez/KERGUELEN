@@ -262,7 +262,7 @@ class RevolverRoundsHUD : HUDExtension
 	override void Setup()
 	{
 		m_ChamberRotation = new("InterpolatedCylinderRotation");
-		m_ChamberRotation.m_SmoothTime = 0.07;
+		m_ChamberRotation.m_SmoothTime = 0.06;
 		m_Revolver = Revolver(m_Context);
 	}
 

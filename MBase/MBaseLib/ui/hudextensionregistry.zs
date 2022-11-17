@@ -29,19 +29,6 @@ class HUDExtensionRegistry : EventHandler
 				}
 			}
 		}
-		else if (stringArgEvent[0] == "SendEventToExtension")
-		{
-			name eventId = stringArgEvent[1];
-			int extensionId = e.Args[0];
-
-			for (uint i = 0; i < m_Entries.Size(); ++i)
-			{
-				if (m_Entries[i].m_Registrant == e.Player && m_Entries[i].m_ID == extensionId)
-				{
-					m_Entries[i].SendEvent(eventId);
-				}
-			}
-		}
 	}
 
 	override void RenderUnderlay(RenderEvent e)
@@ -88,9 +75,9 @@ class HUDExtensionRegistry : EventHandler
 		}
 	}
 
-	static int AddExtension(Object context, class<HUDExtension> type)
+	static void AddExtension(Object context, HUDExtension extension)
 	{
-		return GetInstance().AddExtensionEntry(context, consolePlayer, type);
+		GetInstance().AddExtensionEntry(context, consolePlayer, extension);
 	}
 
 	static void SendHUDEvent(name eventId)
@@ -98,31 +85,24 @@ class HUDExtensionRegistry : EventHandler
 		EventHandler.SendNetworkEvent("SendHUDEvent:"..eventId);
 	}
 
-	static void SendEventToExtension(name eventId, int extensionId)
+	static void RemoveExtension(HUDExtension extension)
 	{
-		EventHandler.SendNetworkEvent("SendEventToExtension:"..eventId, extensionId);
+		GetInstance().TryStartRemovingExtension(extension);
 	}
 
-	static void RemoveExtension(int id)
+	protected void AddExtensionEntry(Object context, int registrant, HUDExtension extension)
 	{
-		GetInstance().TryStartRemovingExtension(id);
-	}
-
-	protected int AddExtensionEntry(Object context, int registrant, class<HUDExtension> type)
-	{
-		m_CurrentID++;
-		let entry = CreateEntry(m_CurrentID, context, registrant, type);
+		extension.QueueActivate();
+		let entry = CreateEntry(context, registrant, extension);
 		m_Entries.Push(entry);
-
-		return entry.m_ID;
 	}
 
-	protected void TryStartRemovingExtension(int id)
+	protected void TryStartRemovingExtension(HUDExtension extension)
 	{
 		for (uint i = m_Entries.Size(); i > 0; --i)
 		{
 			uint index = i - 1;
-			if (m_Entries[index].m_ID == id)
+			if (m_Entries[index].m_Extension == extension)
 			{
 				m_Entries[index].SendEvent('Deactivate');
 			}
@@ -134,13 +114,9 @@ class HUDExtensionRegistry : EventHandler
 		return HUDExtensionRegistry(EventHandler.Find("HUDExtensionRegistry"));
 	}
 
-	private static HUDExtensionEntry CreateEntry(int id, Object context, int registrant, class<HUDExtension> type)
+	private static HUDExtensionEntry CreateEntry(Object context, int registrant, HUDExtension extension)
 	{
 		let entry = new("HUDExtensionEntry");
-		let extension = HUDExtension(new(type));
-		extension.Init(context);
-
-		entry.m_ID = id;
 		entry.m_Registrant = registrant;
 		entry.m_Extension = extension;
 
@@ -150,7 +126,6 @@ class HUDExtensionRegistry : EventHandler
 
 class HUDExtensionEntry
 {
-	int m_ID;
 	int m_Registrant;
 	HUDExtension m_Extension;
 

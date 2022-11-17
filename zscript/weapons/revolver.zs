@@ -72,6 +72,7 @@ class Revolver : BaseWeapon
 		SWDA E 0 Bright {
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
+			HUDExtensionRegistry.SendEventToExtension('RoundFired', invoker.GetHUDExtensionID());
 			A_StartSound("sw/fire", CHAN_AUTO);
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 20, "BulletPuff");
@@ -168,7 +169,6 @@ class Revolver : BaseWeapon
 		SWLD DE 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			A_StartSound("sw/load", CHAN_AUTO,0,0.5);
-
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));
@@ -178,15 +178,10 @@ class Revolver : BaseWeapon
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
+			HUDExtensionRegistry.SendEventToExtension('RoundInserted', invoker.GetHUDExtensionID());
 			return ResolveState(null);
 		}
 		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 {
-			if (!CheckInventory(invoker.AmmoType1, BCYN))
-			{
-				HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID());
-			}
-		}
 		SWLD HIJ 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, BCYN) || !CheckInventory(invoker.AmmoType2, 1))
@@ -199,14 +194,13 @@ class Revolver : BaseWeapon
 	ReloadEnd:
 	Close:
 		SWCL AB 1;
-		SWCL C 1 { HUDExtensionRegistry.SendEventToExtension('CylinderClosed', invoker.GetHUDExtensionID()); }
+		SWCL C 1 { HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID()); }
 		SWCL DE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
 		SWCL FGH 3;
 		SWCL IJKLMN 2;
 		TNT1 A 0 {
 			invoker.m_SingleAction = false;
-			HUDExtensionRegistry.SendEventToExtension('ReloadComplete', invoker.GetHUDExtensionID());
 			invoker.m_IsLoading = false;
 		}
 		Goto Ready;
@@ -245,10 +239,20 @@ class Revolver : BaseWeapon
 
 class RevolverRoundsHUD : HUDExtension
 {
-	const ROTATION_CORRECTION = 150.0;
+	enum ERoundState
+	{
+		RS_Ready,
+		RS_Spent,
+		RS_Empty
+	}
+
+	const ROTATION_CORRECTION = 90.0;
+	const ROTATION_SMOOTH_TIME = 0.07;
 
 	Revolver m_Revolver;
-	InterpolatedDouble m_ChamberRotation;
+	ERoundState[6] m_Rounds;
+	int m_CurrentRound;
+	InterpolatedCylinderRotation m_ChamberRotation;
 
 	override SMHUDMachine CreateHUDStateMachine()
 	{
@@ -257,21 +261,21 @@ class RevolverRoundsHUD : HUDExtension
 
 	override void Setup()
 	{
-		m_ChamberRotation = new("InterpolatedDouble");
-		m_ChamberRotation.m_SmoothTime = 0.1;
+		m_ChamberRotation = new("InterpolatedCylinderRotation");
+		m_ChamberRotation.m_SmoothTime = 0.07;
 		m_Revolver = Revolver(m_Context);
 	}
 
 	override void Tick()
 	{
 		m_ChamberRotation.Update();
-		if (abs(m_ChamberRotation.GetValue()) ~== 360.0) m_ChamberRotation.HardReset();
+		Console.Printf("Rotation: %f", m_ChamberRotation.GetValue());
 	}
 }
 
 class SMHUDRevolverRoundsState : SMHUDState
 {
-	RevolverRoundsHUD m_RevolverRoundsHUD;
+	protected RevolverRoundsHUD m_RoundsHUD;
 
 	protected int m_OriginalRelTop;
 	protected int m_OriginalHorizontalResolution;
@@ -279,8 +283,21 @@ class SMHUDRevolverRoundsState : SMHUDState
 
 	override void EnterState()
 	{
-		if (!m_RevolverRoundsHUD) m_RevolverRoundsHUD = RevolverRoundsHUD(GetData());
-		m_RevolverRoundsHUD.m_ChamberRotation.HardReset();
+		if (!m_RoundsHUD) m_RoundsHUD = RevolverRoundsHUD(GetData());
+	}
+
+	override void UpdateState()
+	{
+		Revolver rev = m_RoundsHUD.m_Revolver;
+
+		// In case players use IDFA or IDKFA.
+		if (rev.owner.CountInv(rev.AmmoType1) == BCYN)
+		{
+			for (int i = 0; i < 6; ++i)
+			{
+				m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Ready;
+			}
+		}
 	}
 
 	override void PreDraw(RenderEvent event)
@@ -311,7 +328,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 
 	Revolver GetRevolver() const
 	{
-		return m_RevolverRoundsHUD.m_Revolver;
+		return m_RoundsHUD.m_Revolver;
 	}
 
 	protected ui void DrawReadyRound(vector2 coords)
@@ -333,7 +350,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 			StatusBarCore.DI_ITEM_CENTER,
 			0.6,
 			scale: (2.0, 2.0),
-			col: 0xFFAAAAAA);
+			col: 0xFFBBBBBB);
 	}
 }
 
@@ -343,8 +360,30 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 	{
 		switch (eventId)
 		{
+			// Tying the rotation target to the round index leads to wrap-around issues,
+			// so they have to be modified independently.
+
+			case 'RoundInserted':
+				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, 6);
+				m_RoundsHUD.m_Rounds[insertIndex] = RevolverRoundsHUD.RS_Ready;
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, 6);
+				m_RoundsHUD.m_ChamberRotation.m_Target -= 60.0;
+				return true;
+			
+			case 'RoundFired':
+				m_RoundsHUD.m_Rounds[m_RoundsHUD.m_CurrentRound] = RevolverRoundsHUD.RS_Spent;
+				return true;
+
+			case 'CylinderEmptied':
+				for (int i = 0; i < 6; ++i)
+				{
+					m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Empty;
+				}
+				return true;
+
 			case 'CylinderRotated':
-				m_RevolverRoundsHUD.m_ChamberRotation.m_Target += 60.0;
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, 6);
+				m_RoundsHUD.m_ChamberRotation.m_Target += 60.0;
 				return true;
 
 			default:
@@ -356,59 +395,27 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 	{
 		if (automapactive) return;
 
-		for (int i = 1; i <= 6; ++i)
+		InterpolatedCylinderRotation rotation = m_RoundsHUD.m_ChamberRotation;
+
+		for (int i = 0; i < 6; ++i)
 		{
-			vector2 polarCoords = (40,
-				360.0 * (i / 6.0)
-					- RevolverRoundsHUD.ROTATION_CORRECTION
-					+ m_RevolverRoundsHUD.m_ChamberRotation.GetValue());
+			int roundIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + i, 6);
 
-			vector2 polarOffset = MathVec2.PolarToCartesian(polarCoords);
+			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Empty) continue;
 
-			if (StatusBar.CheckInventory("RevoCylinder", i))
+			vector2 polarCoords = (
+				40, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverRoundsHUD.ROTATION_CORRECTION);
+
+			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
+
+			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Ready)
 			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + polarOffset);
+				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + offset);
 			}
 			else
 			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + polarOffset);
+				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + offset);
 			}
-		}
-	}
-}
-
-class SMHUDRevolverRoundsReload : SMHUDRevolverRoundsState
-{
-	const ROTATION_CORRECTION = 150.0;
-	override bool TryHandleEvent(name eventId)
-	{
-		switch (eventId)
-		{
-			case 'CylinderRotated':
-				m_RevolverRoundsHUD.m_ChamberRotation.m_Target -= 60.0;
-				return true;
-
-			case 'CylinderClosed':
-				m_RevolverRoundsHUD.m_ChamberRotation.m_Target += 60.0;
-				return true;
-
-			default:
-				return false;
-		}
-	}
-
-	override void Draw(RenderEvent event)
-	{
-		for (int i = 0 ; i < GetRevolver().owner.CountInv("RevoCylinder"); ++i)
-		{
-			vector2 polarCoords = (40,
-				360.0 * (i / 6.0)
-					- ROTATION_CORRECTION
-					+ m_RevolverRoundsHUD.m_ChamberRotation.GetValue());
-
-			vector2 polarOffset = MathVec2.PolarToCartesian(polarCoords);
-
-			DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + polarOffset);
 		}
 	}
 }
@@ -421,18 +428,44 @@ class SMHUDRevolverRoundsMachine : SMHUDMachine
 
 		GetHUDActiveState()
 			.AddChild(new("SMHUDRevolverRoundsActive"))
-			.AddChild(new("SMHUDRevolverRoundsReload"))
-
-			.AddTransition(new("SMTransition")
-				.From("SMHUDRevolverRoundsActive")
-				.To("SMHUDRevolverRoundsReload")
-				.On('CylinderEmptied')
-			)
-			.AddTransition(new("SMTransition")
-				.From("SMHUDRevolverRoundsReload")
-				.To("SMHUDRevolverRoundsActive")
-				.On('ReloadComplete')
-			)
 		;
 	}
+}
+
+class InterpolatedCylinderRotation
+{
+	double m_Target;
+	double m_SmoothTime;
+
+	private double m_Current;
+	private double m_CurrentSpeed;
+
+	double GetValue() const
+	{
+		return m_Current;
+	}
+
+	void Update()
+	{
+		m_Current = Math.SmoothDamp(
+			m_Current,
+			m_Target,
+			m_CurrentSpeed,
+			m_SmoothTime,
+			double.Infinity,
+			1.0 / 35.0);
+
+		// Allow values to reach 360.0 so current can wrap cleanly.
+		if (m_Current > 360.0)
+		{
+			m_Target -= 360.0;
+			m_Current -= 360.0;
+		}
+		else if (m_Current < -360.0)
+		{
+			m_Target += 360.0;
+			m_Current += 360.0;
+		}
+	}
+
 }

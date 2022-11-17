@@ -351,7 +351,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 			StatusBarCore.DI_ITEM_CENTER,
 			0.6,
 			scale: (2.0, 2.0),
-			col: 0xFFBBBBBB);
+			col: 0x88BBBBBB);
 	}
 }
 

@@ -60,7 +60,7 @@ class Revolver : BaseWeapon
 	DoubleAction:
 		TNT1 A 0 {
 			A_StartSound("sw/cock2", 9);
-			HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID());
+			invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
 		}
 		SWDA A 1;
 		SWDA B 1;
@@ -72,7 +72,7 @@ class Revolver : BaseWeapon
 		SWDA E 0 Bright {
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
-			HUDExtensionRegistry.SendEventToExtension('RoundFired', invoker.GetHUDExtensionID());
+			invoker.GetHUDExtension().SendEventToSM('RoundFired');
 			A_StartSound("sw/fire", CHAN_AUTO);
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 20, "BulletPuff");
@@ -101,7 +101,7 @@ class Revolver : BaseWeapon
 		SWSA ABCD 1;
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
 		SWSA E 1;
-		SWSA F 1 { HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID()); }
+		SWSA F 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
 		SWSA GHIJKLMN 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
@@ -147,7 +147,7 @@ class Revolver : BaseWeapon
 		SWEJ J 1;
 		SWEJ K 1 {
 			A_TakeInventory("RevoCylinder", BCYN);
-			HUDExtensionRegistry.SendEventToExtension('CylinderEmptied', invoker.GetHUDExtensionID());
+			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
 			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
 		}
 		SWEJ L 1;
@@ -179,7 +179,7 @@ class Revolver : BaseWeapon
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
-			HUDExtensionRegistry.SendEventToExtension('RoundInserted', invoker.GetHUDExtensionID());
+			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
 			return ResolveState(null);
 		}
 		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
@@ -195,7 +195,7 @@ class Revolver : BaseWeapon
 	ReloadEnd:
 	Close:
 		SWCL AB 1;
-		SWCL C 1 { HUDExtensionRegistry.SendEventToExtension('CylinderRotated', invoker.GetHUDExtensionID()); }
+		SWCL C 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
 		SWCL DE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
 		SWCL FGH 3;

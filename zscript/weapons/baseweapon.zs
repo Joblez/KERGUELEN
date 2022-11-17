@@ -34,7 +34,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	private double m_PreviousPlayerYaw;
 	private double m_PreviousPlayerPitch;
 
-	private int m_HUDExtensionID;
+	private HUDExtension m_HUDExtension;
 
 	Default
 	{
@@ -101,9 +101,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		m_PreviousPlayerPitch = owner.Pitch;
 	}
 
-	int GetHUDExtensionID() const
+	HUDExtension GetHUDExtension() const
 	{
-		return m_HUDExtensionID;
+		return m_HUDExtension;
 	}
 
 	bool IsSelected() const
@@ -122,13 +122,20 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	void RegisterWeaponHUD()
 	{
 		if (!m_HUDExtensionType) return;
-		m_HUDExtensionID = HUDExtensionRegistry.AddExtension(self, m_HUDExtensionType);
+
+		if (!m_HUDExtension)
+		{
+			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
+			m_HUDExtension.Init(self);
+		}
+
+		HUDExtensionRegistry.AddExtension(self, m_HUDExtension);
 	}
 
 	void UnregisterWeaponHUD()
 	{
-		if (!m_HUDExtensionType) return;
-		HUDExtensionRegistry.RemoveExtension(m_HUDExtensionID);
+		if (!m_HUDExtension) return;
+		HUDExtensionRegistry.RemoveExtension(m_HUDExtension);
 	}
 
 	action void A_SetBaseOffset(int x, int y)

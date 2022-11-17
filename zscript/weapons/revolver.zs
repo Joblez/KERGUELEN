@@ -96,6 +96,7 @@ class Revolver : BaseWeapon
 		Goto Ready;
 
 	AltFire:
+		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
 		SWSA ABCD 1;
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);

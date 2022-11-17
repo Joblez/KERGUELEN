@@ -367,8 +367,13 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 			case 'RoundInserted':
 				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, 6);
 				m_RoundsHUD.m_Rounds[insertIndex] = RevolverRoundsHUD.RS_Ready;
-				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, 6);
-				m_RoundsHUD.m_ChamberRotation.m_Target -= 60.0;
+
+				Revolver rev = m_RoundsHUD.m_Revolver;
+				if (rev.owner.CountInv(rev.AmmoType1) < BCYN)
+				{
+					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, 6);
+					m_RoundsHUD.m_ChamberRotation.m_Target -= 60.0;
+				}
 				return true;
 			
 			case 'RoundFired':

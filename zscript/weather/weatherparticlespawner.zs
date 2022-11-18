@@ -162,10 +162,18 @@ class WeatherParticleSpawner : WeatherSpawner
 		}
 
 		int tics = 1;
-		double nextPlaneZ;
-		vector3 currentPosition = position;
+		double nextPlaneZ = GetApproachingPlaneZ(position, velocity);
 
-		nextPlaneZ = GetApproachingPlaneZ(position, velocity);
+		// Constant straight-down trajectory, simulate without iteration.
+		if (acceleration ~== Vec3Util.Zero() && velocity.xy ~== Vec2Util.Zero())
+		{
+			result.m_Lifetime = abs((nextPlaneZ - position.z) / velocity.z);
+			result.m_EndPosition = (position.xy, nextPlaneZ);
+			result.m_EndVelocity = velocity;
+			return;
+		}
+
+		vector3 currentPosition = position;
 
 		while (true)
 		{
@@ -174,19 +182,16 @@ class WeatherParticleSpawner : WeatherSpawner
 			if (velocity.z < 0.0 && currentPosition.z <= nextPlaneZ) break;
 			if (velocity.z > 0.0 && currentPosition.z >= nextPlaneZ) break;
 
-			if ((acceleration != Vec3Util.Zero()))
-			{
-				velocity += acceleration;
+			if ((acceleration != Vec3Util.Zero())) velocity += acceleration;
 				
-				// Recheck next plane Z in case acceleration changed the trajectory.
-				nextPlaneZ = GetApproachingPlaneZ(currentPosition, velocity);
-			}
+			// Recheck next plane Z in case acceleration or lateral velocity changed the trajectory.
+			nextPlaneZ = GetApproachingPlaneZ(currentPosition, velocity);
 
 			tics++;
 		}
-		
+
 		result.m_Lifetime = tics;
-		result.m_EndPosition = (position.xy, nextPlaneZ);
+		result.m_EndPosition = (currentPosition.xy, nextPlaneZ);
 		result.m_EndVelocity = velocity;
 	}
 

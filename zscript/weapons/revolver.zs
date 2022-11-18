@@ -269,7 +269,7 @@ class RevolverRoundsHUD : HUDExtension
 	override void Setup()
 	{
 		m_ChamberRotation = new("InterpolatedCylinderRotation");
-		m_ChamberRotation.m_SmoothTime = 0.06;
+		m_ChamberRotation.m_SmoothTime = ROTATION_SMOOTH_TIME;
 		m_Revolver = Revolver(m_Context);
 	}
 
@@ -319,8 +319,8 @@ class SMHUDRevolverRoundsState : SMHUDState
 		int viewX, viewY, viewW, viewH;
 			[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
 
-		StatusBar.SetSize(0, viewW, viewH);
-		StatusBar.BeginHUD(forcescaled: true);
+		StatusBar.SetSize(0, 1280, 720);
+		StatusBar.BeginHUD(forcescaled: false);
 	}
 
 	override void PostDraw(RenderEvent event)
@@ -345,7 +345,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			0.5,
-			scale: (2.0, 2.0),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
 			col: 0xFFFFFFFF);
 	}
 	
@@ -356,7 +356,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			0.35,
-			scale: (2.0, 2.0),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
 			col: 0xFFBBBBBB);
 	}
 }
@@ -430,14 +430,15 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 				40, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverRoundsHUD.ROTATION_CORRECTION);
 
 			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
+			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, 1280, 720);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Ready)
 			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + offset);
+				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
 			}
 			else
 			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.8, 0.65)) + offset);
+				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
 			}
 		}
 	}

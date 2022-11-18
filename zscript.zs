@@ -9,13 +9,16 @@ version "4.9.0"
 #include "zscript/misc/visualfx.zs"
 
 //Weapons
-#include "zscript/weapons/BaseWeapon.zs"
+#include "zscript/weapons/baseweapon.zs"
 #include "zscript/weapons/revolver.zs"
 #include "zscript/weapons/hatchet.zs"
 #include "zscript/weapons/ithaca.zs"
 #include "zscript/weapons/fnc.zs"
 #include "zscript/weapons/dynamite.zs"
 #include "zscript/weapons/sniper.zs"
+
+// UI
+#include "zscript/ui/revolverhud.zs"
 
 // Weather
 #include "zscript/weather/weathereffects.zs"

@@ -31,7 +31,7 @@ class Revolver : BaseWeapon
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.UpSound("sw/raise");
 
-		BaseWeapon.HUDExtensionType "RevolverRoundsHUD";
+		BaseWeapon.HUDExtensionType "RevolverHUD";
 
 		Inventory.PickupMessage "[2].357 Magnum Revolver";
 
@@ -148,7 +148,7 @@ class Revolver : BaseWeapon
 		SWEJ M 3;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
-			RevolverRoundsHUD hud = RevolverRoundsHUD(invoker.GetHUDExtension());
+			RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
 
 			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
 			{
@@ -242,7 +242,7 @@ class Revolver : BaseWeapon
 }
 
 // Not very proud of how hacky some of this is...
-class RevolverRoundsHUD : HUDExtension
+class RevolverHUD : HUDExtension
 {
 	enum ERoundState
 	{
@@ -259,7 +259,7 @@ class RevolverRoundsHUD : HUDExtension
 	int m_CurrentRound;
 	int m_EmptyRounds;
 
-	InterpolatedCylinderRotation m_ChamberRotation;
+	InterpolatedCylinderRotation m_CylinderRotation;
 
 	override SMHUDMachine CreateHUDStateMachine()
 	{
@@ -268,20 +268,20 @@ class RevolverRoundsHUD : HUDExtension
 
 	override void Setup()
 	{
-		m_ChamberRotation = new("InterpolatedCylinderRotation");
-		m_ChamberRotation.m_SmoothTime = ROTATION_SMOOTH_TIME;
+		m_CylinderRotation = new("InterpolatedCylinderRotation");
+		m_CylinderRotation.m_SmoothTime = ROTATION_SMOOTH_TIME;
 		m_Revolver = Revolver(m_Context);
 	}
 
 	override void Tick()
 	{
-		m_ChamberRotation.Update();
+		m_CylinderRotation.Update();
 	}
 }
 
-class SMHUDRevolverRoundsState : SMHUDState
+class SMHUDRevolverState : SMHUDState
 {
-	protected RevolverRoundsHUD m_RoundsHUD;
+	protected RevolverHUD m_RoundsHUD;
 
 	protected int m_OriginalRelTop;
 	protected int m_OriginalHorizontalResolution;
@@ -289,7 +289,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 
 	override void EnterState()
 	{
-		if (!m_RoundsHUD) m_RoundsHUD = RevolverRoundsHUD(GetData());
+		if (!m_RoundsHUD) m_RoundsHUD = RevolverHUD(GetData());
 	}
 
 	override void UpdateState()
@@ -301,7 +301,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 		{
 			for (int i = 0; i < BCYN; ++i)
 			{
-				m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Ready;
+				m_RoundsHUD.m_Rounds[i] = RevolverHUD.RS_Ready;
 			}
 			m_RoundsHUD.m_EmptyRounds = 0;
 		}
@@ -323,6 +323,35 @@ class SMHUDRevolverRoundsState : SMHUDState
 		StatusBar.BeginHUD(forcescaled: false);
 	}
 
+	override void Draw(RenderEvent event)
+	{
+		if (automapactive) return;
+
+		InterpolatedCylinderRotation rotation = m_RoundsHUD.m_CylinderRotation;
+
+		for (int i = 0; i < BCYN; ++i)
+		{
+			int roundIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + i, BCYN);
+
+			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Empty) continue;
+
+			vector2 polarCoords = (
+				40, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
+
+			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
+			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, 1280, 720);
+
+			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
+			{
+				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
+			}
+			else
+			{
+				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
+			}
+		}
+	}
+
 	override void PostDraw(RenderEvent event)
 	{
 		if (automapactive) return;
@@ -331,6 +360,57 @@ class SMHUDRevolverRoundsState : SMHUDState
 
 		StatusBar.BeginHUD(forcescaled: false);
 		StatusBar.BeginStatusBar();
+	}
+
+	override bool TryHandleEvent(name eventId)
+	{
+		switch (eventId)
+		{
+			// Tying the rotation target to the round index causes wrap-around issues,
+			// so they have to be modified independently.
+
+			case 'RoundInserted':
+				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
+				m_RoundsHUD.m_Rounds[insertIndex] = RevolverHUD.RS_Ready;
+				m_RoundsHUD.m_EmptyRounds--;
+				Revolver rev = m_RoundsHUD.m_Revolver;
+				if (rev.owner.CountInv(rev.AmmoType1) < BCYN)
+				{
+					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
+					m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
+				}
+				return true;
+			
+			case 'RoundFired':
+				m_RoundsHUD.m_Rounds[m_RoundsHUD.m_CurrentRound] = RevolverHUD.RS_Spent;
+				return true;
+
+			case 'CylinderEmptied':
+				for (int i = 0; i < BCYN; ++i)
+				{
+					m_RoundsHUD.m_Rounds[i] = RevolverHUD.RS_Empty;
+				}
+				m_RoundsHUD.m_EmptyRounds = BCYN;
+				return true;
+
+			case 'CylinderRotated':
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
+				m_RoundsHUD.m_CylinderRotation.m_Target += 60.0;
+				return true;
+			
+			case 'CylinderClosed':
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
+				m_RoundsHUD.m_CylinderRotation.m_Target += 60.0;
+				m_RoundsHUD.m_CylinderRotation.m_SmoothTime = 0.1;
+				return true;
+
+			case 'SmoothTimeReset':
+				m_RoundsHUD.m_CylinderRotation.m_SmoothTime = RevolverHUD.ROTATION_SMOOTH_TIME;
+				return true;
+
+			default:
+				return false;
+		}
 	}
 
 	Revolver GetRevolver() const
@@ -361,89 +441,6 @@ class SMHUDRevolverRoundsState : SMHUDState
 	}
 }
 
-class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
-{
-	override bool TryHandleEvent(name eventId)
-	{
-		switch (eventId)
-		{
-			// Tying the rotation target to the round index leads to wrap-around issues,
-			// so they have to be modified independently.
-
-			case 'RoundInserted':
-				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
-				m_RoundsHUD.m_Rounds[insertIndex] = RevolverRoundsHUD.RS_Ready;
-				m_RoundsHUD.m_EmptyRounds--;
-				Revolver rev = m_RoundsHUD.m_Revolver;
-				if (rev.owner.CountInv(rev.AmmoType1) < BCYN)
-				{
-					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
-					m_RoundsHUD.m_ChamberRotation.m_Target -= 60.0;
-				}
-				return true;
-			
-			case 'RoundFired':
-				m_RoundsHUD.m_Rounds[m_RoundsHUD.m_CurrentRound] = RevolverRoundsHUD.RS_Spent;
-				return true;
-
-			case 'CylinderEmptied':
-				for (int i = 0; i < BCYN; ++i)
-				{
-					m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Empty;
-				}
-				m_RoundsHUD.m_EmptyRounds = BCYN;
-				return true;
-
-			case 'CylinderRotated':
-				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
-				m_RoundsHUD.m_ChamberRotation.m_Target += 60.0;
-				return true;
-			
-			case 'CylinderClosed':
-				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
-				m_RoundsHUD.m_ChamberRotation.m_Target += 60.0;
-				m_RoundsHUD.m_ChamberRotation.m_SmoothTime = 0.1;
-				return true;
-
-			case 'SmoothTimeReset':
-				m_RoundsHUD.m_ChamberRotation.m_SmoothTime = RevolverRoundsHUD.ROTATION_SMOOTH_TIME;
-				return true;
-
-			default:
-				return false;
-		}
-	}
-
-	override void Draw(RenderEvent event)
-	{
-		if (automapactive) return;
-
-		InterpolatedCylinderRotation rotation = m_RoundsHUD.m_ChamberRotation;
-
-		for (int i = 0; i < BCYN; ++i)
-		{
-			int roundIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + i, BCYN);
-
-			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Empty) continue;
-
-			vector2 polarCoords = (
-				40, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverRoundsHUD.ROTATION_CORRECTION);
-
-			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
-			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, 1280, 720);
-
-			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Ready)
-			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
-			}
-			else
-			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
-			}
-		}
-	}
-}
-
 class SMHUDRevolverRoundsMachine : SMHUDMachine
 {
 	override void Build()
@@ -451,7 +448,7 @@ class SMHUDRevolverRoundsMachine : SMHUDMachine
 		Super.Build();
 
 		GetHUDActiveState()
-			.AddChild(new("SMHUDRevolverRoundsActive"))
+			.AddChild(new("SMHUDRevolverRoundsState"))
 		;
 	}
 }
@@ -491,5 +488,4 @@ class InterpolatedCylinderRotation
 			m_Current += 360.0;
 		}
 	}
-
 }

@@ -26,7 +26,7 @@ class Revolver : BaseWeapon
 		Weapon.SlotNumber 2;
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
-		Weapon.AmmoGive2 6;
+		Weapon.AmmoGive2 BCYN;
 		Weapon.AmmoType1 "RevoCylinder";
 		Weapon.AmmoType2 "Ammo357";
 		Weapon.UpSound("sw/raise");
@@ -144,20 +144,20 @@ class Revolver : BaseWeapon
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
 		SWEJ FG 1;
 		SWEJ HI 1;
-		SWEJ J 1;
-		SWEJ K 1 {
-			A_TakeInventory("RevoCylinder", BCYN);
-			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
-			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
-		}
-		SWEJ L 1;
+		SWEJ JKL 1;
 		SWEJ M 3;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
-			for (int i = 0; i < 6; ++i)
+			RevolverRoundsHUD hud = RevolverRoundsHUD(invoker.GetHUDExtension());
+
+			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
 			{
 				A_CasingRevolver(random(-4,4), random(-30,-34));
 			}
+
+			A_TakeInventory("RevoCylinder", BCYN);
+			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
+			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
 		}
 		SWEJ N 1;
 		SWEJ O 3;
@@ -195,12 +195,15 @@ class Revolver : BaseWeapon
 	ReloadEnd:
 	Close:
 		SWCL AB 1;
-		SWCL C 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
+		SWCL C 1 {
+			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
+		}
 		SWCL DE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
 		SWCL FGH 3;
 		SWCL IJKLMN 2;
 		TNT1 A 0 {
+			invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');
 			invoker.m_SingleAction = false;
 			invoker.m_IsLoading = false;
 		}
@@ -238,6 +241,7 @@ class Revolver : BaseWeapon
 	}
 }
 
+// Not very proud of how hacky some of this is...
 class RevolverRoundsHUD : HUDExtension
 {
 	enum ERoundState
@@ -251,8 +255,10 @@ class RevolverRoundsHUD : HUDExtension
 	const ROTATION_SMOOTH_TIME = 0.07;
 
 	Revolver m_Revolver;
-	ERoundState[6] m_Rounds;
+	ERoundState[BCYN] m_Rounds;
 	int m_CurrentRound;
+	int m_EmptyRounds;
+
 	InterpolatedCylinderRotation m_ChamberRotation;
 
 	override SMHUDMachine CreateHUDStateMachine()
@@ -270,7 +276,6 @@ class RevolverRoundsHUD : HUDExtension
 	override void Tick()
 	{
 		m_ChamberRotation.Update();
-		Console.Printf("Rotation: %f", m_ChamberRotation.GetValue());
 	}
 }
 
@@ -294,10 +299,11 @@ class SMHUDRevolverRoundsState : SMHUDState
 		// In case players use IDFA or IDKFA.
 		if (rev.owner.CountInv(rev.AmmoType1) == BCYN)
 		{
-			for (int i = 0; i < 6; ++i)
+			for (int i = 0; i < BCYN; ++i)
 			{
 				m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Ready;
 			}
+			m_RoundsHUD.m_EmptyRounds = 0;
 		}
 	}
 
@@ -338,7 +344,7 @@ class SMHUDRevolverRoundsState : SMHUDState
 			"RVRNRDY",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
-			0.6,
+			0.5,
 			scale: (2.0, 2.0),
 			col: 0xFFFFFFFF);
 	}
@@ -349,9 +355,9 @@ class SMHUDRevolverRoundsState : SMHUDState
 			"RVRNSPNT",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
-			0.6,
+			0.35,
 			scale: (2.0, 2.0),
-			col: 0x88BBBBBB);
+			col: 0xFFBBBBBB);
 	}
 }
 
@@ -365,13 +371,13 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 			// so they have to be modified independently.
 
 			case 'RoundInserted':
-				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, 6);
+				int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
 				m_RoundsHUD.m_Rounds[insertIndex] = RevolverRoundsHUD.RS_Ready;
-
+				m_RoundsHUD.m_EmptyRounds--;
 				Revolver rev = m_RoundsHUD.m_Revolver;
 				if (rev.owner.CountInv(rev.AmmoType1) < BCYN)
 				{
-					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, 6);
+					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
 					m_RoundsHUD.m_ChamberRotation.m_Target -= 60.0;
 				}
 				return true;
@@ -381,15 +387,26 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 				return true;
 
 			case 'CylinderEmptied':
-				for (int i = 0; i < 6; ++i)
+				for (int i = 0; i < BCYN; ++i)
 				{
 					m_RoundsHUD.m_Rounds[i] = RevolverRoundsHUD.RS_Empty;
 				}
+				m_RoundsHUD.m_EmptyRounds = BCYN;
 				return true;
 
 			case 'CylinderRotated':
-				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, 6);
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
 				m_RoundsHUD.m_ChamberRotation.m_Target += 60.0;
+				return true;
+			
+			case 'CylinderClosed':
+				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
+				m_RoundsHUD.m_ChamberRotation.m_Target += 60.0;
+				m_RoundsHUD.m_ChamberRotation.m_SmoothTime = 0.1;
+				return true;
+
+			case 'SmoothTimeReset':
+				m_RoundsHUD.m_ChamberRotation.m_SmoothTime = RevolverRoundsHUD.ROTATION_SMOOTH_TIME;
 				return true;
 
 			default:
@@ -403,9 +420,9 @@ class SMHUDRevolverRoundsActive : SMHUDRevolverRoundsState
 
 		InterpolatedCylinderRotation rotation = m_RoundsHUD.m_ChamberRotation;
 
-		for (int i = 0; i < 6; ++i)
+		for (int i = 0; i < BCYN; ++i)
 		{
-			int roundIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + i, 6);
+			int roundIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + i, BCYN);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverRoundsHUD.RS_Empty) continue;
 

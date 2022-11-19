@@ -155,9 +155,9 @@ class SMHUDRevolverState : SMHUDState
 			"RVRNRDY",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
-			0.5,
+			1.0,
 			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
-			col: 0xFFFFFFFF);
+			col: 0xFFCCCCCC);
 	}
 	
 	protected ui void DrawSpentRound(vector2 coords)
@@ -166,9 +166,9 @@ class SMHUDRevolverState : SMHUDState
 			"RVRNSPNT",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
-			0.35,
+			1.0,
 			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
-			col: 0xFFBBBBBB);
+			col: 0xFF999999);
 	}
 }
 

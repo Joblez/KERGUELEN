@@ -258,9 +258,21 @@ class SMHUDMachine : SMMachine
 		return SMHUDDeactivating(GetChild("SMHUDDeactivating"));
 	}
 
+	ui void PreDraw(RenderEvent event)
+	{
+		SMHUDState activeChild = SMHUDState(GetActiveChild());
+		if (activeChild) activeChild.CallPreDraw(event);
+	}
+
 	ui void Draw(RenderEvent event)
 	{
 		SMHUDState activeChild = SMHUDState(GetActiveChild());
 		if (activeChild) activeChild.CallDraw(event);
+	}
+
+	ui void PostDraw(RenderEvent event)
+	{
+		SMHUDState activeChild = SMHUDState(GetActiveChild());
+		if (activeChild) activeChild.CallPostDraw(event);
 	}
 }

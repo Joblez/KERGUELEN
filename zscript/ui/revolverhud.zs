@@ -1,5 +1,5 @@
 // Not very proud of how hacky some of this is...
-class RevolverHUD : HUDExtension
+class RevolverHUD : BaseWeaponHUD
 {
 	enum ERoundState
 	{
@@ -64,22 +64,6 @@ class SMHUDRevolverState : SMHUDState
 		}
 	}
 
-	override void PreDraw(RenderEvent event)
-	{
-		if (automapactive) return;
-
-		// Store these to clean up after drawing.
-		m_OriginalRelTop = StatusBar.RelTop;
-		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;
-		m_OriginalVerticalResolution = StatusBar.VerticalResolution;
-
-		int viewX, viewY, viewW, viewH;
-			[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
-
-		StatusBar.SetSize(0, 1280, 720);
-		StatusBar.BeginHUD(forcescaled: false);
-	}
-
 	override void Draw(RenderEvent event)
 	{
 		if (automapactive) return;
@@ -107,16 +91,6 @@ class SMHUDRevolverState : SMHUDState
 				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
 			}
 		}
-	}
-
-	override void PostDraw(RenderEvent event)
-	{
-		if (automapactive) return;
-
-		StatusBar.SetSize(m_OriginalRelTop, m_OriginalHorizontalResolution, m_OriginalVerticalResolution);
-
-		StatusBar.BeginHUD(forcescaled: false);
-		StatusBar.BeginStatusBar();
 	}
 
 	override bool TryHandleEvent(name eventId)

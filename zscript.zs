@@ -18,6 +18,7 @@ version "4.9.0"
 #include "zscript/weapons/sniper.zs"
 
 // UI
+#include "zscript/ui/baseweaponhud.zs"
 #include "zscript/ui/revolverhud.zs"
 
 // Weather

@@ -105,12 +105,10 @@ class Transform2D
 			temp.MakeIdentity();
 		}
 
-
 		Matrix3x3 comp;
 		Matrix3x3 result;
 
 		comp.MakeIdentity();
-
 
 		comp.m_Values[0][0] = m_Scale.x;
 		comp.m_Values[1][1] = m_Scale.y;

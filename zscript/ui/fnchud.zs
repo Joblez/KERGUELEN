@@ -16,7 +16,7 @@ class FNCHUD : BaseWeaponHUD
 		m_BottomOffset = new("InterpolatedDouble");
 		m_BottomOffset.m_Target = m_FNC.owner.CountInv(m_FNC.AmmoType1);
 		m_BottomOffset.Update();
-		m_BottomOffset.m_SmoothTime = 0.08;
+		m_BottomOffset.m_SmoothTime = 0.04;
 	}
 
 	override void Draw(RenderEvent event)
@@ -30,7 +30,7 @@ class FNCHUD : BaseWeaponHUD
 		TextureID roundTexture = TexMan.CheckForTexture("FNRNRDY");
 		[textureWidth, textureHeight] = TexMan.GetSize(roundTexture);
 
-		vector2 roundScale = (2.0, 2.0);
+		vector2 roundScale = ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720);
 
 		int leftRow, rightRow;
 
@@ -46,15 +46,8 @@ class FNCHUD : BaseWeaponHUD
 			}
 		}
 
-
 		m_BottomOffset.m_Target = rounds * textureHeight * roundScale.y / 2;
 		m_BottomOffset.Update();
-
-		StatusBar.SetClipRect(
-			int(bottomCoords.x),
-			int(bottomCoords.y),
-			int(textureWidth * roundScale.x) + 8,
-			int(textureHeight * roundScale.y) * (rounds + 1));
 		
 		int leftRowOffset = int(textureHeight * roundScale.y) * rounds % 2 == 0 ? 1 : 2;
 

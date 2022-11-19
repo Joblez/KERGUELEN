@@ -26,12 +26,22 @@ class HUDExtension abstract
 	}
 
 	virtual void Setup() { }
+
 	virtual void Tick() { }
 
 	virtual ui void UISetup() { }
+	
+	virtual ui void PreDraw(RenderEvent event)
+	{
+		m_StateMachine.PreDraw(event);
+	}
 	virtual ui void Draw(RenderEvent event)
 	{
 		m_StateMachine.Draw(event);
+	}
+	virtual ui void PostDraw(RenderEvent event)
+	{
+		m_StateMachine.PostDraw(event);
 	}
 
 	protected virtual SMHUDMachine CreateHUDStateMachine()
@@ -124,7 +134,9 @@ class HUDExtension abstract
 			m_IsUISetUp = true;
 		}
 
+		PreDraw(event);
 		Draw(event);
+		PostDraw(event);
 	}
 }
 
@@ -144,14 +156,30 @@ class SMHUDState : SMState abstract
 		return players[consoleplayer];
 	}
 
+	ui void CallPreDraw(RenderEvent event)
+	{
+		if (GetActiveChild() is "SMHUDState")
+		{
+			SMHUDState(GetActiveChild()).CallPreDraw(event);
+		}
+		PreDraw(event);
+	}
+
 	ui void CallDraw(RenderEvent event)
 	{
 		if (GetActiveChild() is "SMHUDState")
 		{
 			SMHUDState(GetActiveChild()).CallDraw(event);
 		}
-		PreDraw(event);
 		Draw(event);
+	}
+
+	ui void CallPostDraw(RenderEvent event)
+	{
+		if (GetActiveChild() is "SMHUDState")
+		{
+			SMHUDState(GetActiveChild()).CallPostDraw(event);
+		}
 		PostDraw(event);
 	}
 }

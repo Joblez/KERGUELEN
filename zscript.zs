@@ -20,6 +20,7 @@ version "4.9.0"
 // UI
 #include "zscript/ui/baseweaponhud.zs"
 #include "zscript/ui/revolverhud.zs"
+#include "zscript/ui/fnchud.zs"
 
 // Weather
 #include "zscript/weather/weathereffects.zs"

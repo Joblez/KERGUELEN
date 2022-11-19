@@ -26,6 +26,9 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
 		Weapon.UpSound("fnc/draw");
+
+		BaseWeapon.HUDExtensionType "FNCHUD";
+
 		DamageType "Normal";
 		Tag "FNC";
 	}
@@ -41,7 +44,10 @@ class FNC : BaseWeapon replaces Chaingun
 		Loop;
 
 	Select:
-		TNT1 A 0 SetPlayerProperty(0, 1, 2);
+		TNT1 A 0 {
+			SetPlayerProperty(0, 1, 2);
+			invoker.RegisterWeaponHUD();
+		}
 		TNT1 A 1;
 		FNRS F 1 A_SetBaseOffset(60, 100);
 		#### E 1 A_SetBaseOffset(50, 80);
@@ -54,6 +60,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	Deselect:
+		TNT1 A 0 { invoker.UnregisterWeaponHUD(); }
 		FNRS AB 1 A_SetBaseOffset(2, 30);
 		#### C 1 A_SetBaseOffset(20, 40);
 		#### D 1 A_SetBaseOffset(40, 60);

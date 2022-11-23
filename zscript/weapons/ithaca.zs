@@ -101,7 +101,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_ShotgunSmoke(4, -4);
 			A_ShotgunSmoke(4, -4);
 			A_TakeInventory("Sh12Tube", 1);
-			A_StartSound("shotgun/fire", CHAN_AUTO);
+			A_StartSound("shotgun/fire", CHAN_WEAPON);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(4, 34);
 		}
@@ -176,8 +176,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Goto Ready;
 
 	ReloadStart:
-		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE);
-		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE);
+		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE | WRF_NOBOB);
+		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE | WRF_NOBOB);
 		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", STUBE, "ReloadEnd");
@@ -186,15 +186,15 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	ProperReload:
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		ITRL ABCD 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRL ABCD 1 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_StartSound("shotgun/load", 10,0,0.5);
-		ITRL EF 2 A_WeaponReady(WRF_NOSWITCH);
-		ITRL G 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRL EF 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
+		ITRL G 1 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		ITRL HI 1;
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL M 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRL M 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -216,9 +216,9 @@ class Ithaca : BaseWeapon replaces Shotgun
 	ReloadEnd:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		ITRE ABCDE 2 A_WeaponReady(WRF_NOSWITCH);
+		ITRE ABCDE 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(1, 31);
-		ITRE FGHI 1 A_WeaponReady(WRF_NOSWITCH);
+		ITRE FGHI 1 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered), "Ready");
 		Goto Charge;

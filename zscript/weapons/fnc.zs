@@ -100,7 +100,7 @@ class FNC : BaseWeapon replaces Chaingun
 			A_CasingRifle(18,-5);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
-			A_StartSound("fnc/fire", CHAN_AUTO,0,0.9);
+			A_StartSound("fnc/fire",CHAN_WEAPON,0,0.9);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_WEAPON);
@@ -124,7 +124,7 @@ class FNC : BaseWeapon replaces Chaingun
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
-			A_StartSound("fnc/loop", 1, CHANF_LOOPING);
+			A_StartSound("fnc/loop", CHAN_WEAPON, CHANF_LOOPING);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)

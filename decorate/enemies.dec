@@ -9,7 +9,7 @@ actor Grarg replaces DoomImp
 	Scale 0.7
 	Bloodcolor "e8 00 21"
 	Monster
-	Dropitem "Ammo357",64
+	Dropitem "Ammo45",64
 	SeeSound "Grarg/Sight"
 	DeathSound "Grarg/Death"
 	ActiveSound "Grarg/Barks"

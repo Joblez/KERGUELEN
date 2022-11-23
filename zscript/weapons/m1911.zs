@@ -11,7 +11,7 @@ Class ColtMag : Ammo
 	}
 }
 
-class Handgun : baseweapon
+class Colt : baseweapon
 {
 
 	Default
@@ -27,6 +27,9 @@ class Handgun : baseweapon
 		Inventory.PickupMessage "[2] .45 Handgun";
 		Tag "Colt M1911A1";	
 	}
+	
+	bool m_empty;
+	
 	States
 	{
 
@@ -54,15 +57,48 @@ class Handgun : baseweapon
 		loop;
 	
 	Fire:
-		M19F A 1 BRIGHT;
+		TNT1 A 0 {
+			if (CheckInventory("ColtMag", 1))
+			{
+				return ResolveState(null);
+			}
+			else
+			{
+				return ResolveState("Empty");
+				
+			}
+		}
+		
+		TNT1 A 0 A_JumpIfInventory("ColtMag", 2, 1);
+		Goto Finalshot;	
+		
+		M19F A 1 BRIGHT {
+			A_AlertMonsters();
+			A_TakeInventory("ColtMag", 1);
+			A_StartSound("colt/fire", CHAN_WEAPON);
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_FireBullets(3,3, -1, 15, "BulletPuff");
+			A_FRecoil(1);
+			A_ShotgunSmoke(3, 3);
+		}
 		M19F B 1;
-		M19F CDEFG 1;
+		M19F CD 1;
+		M19F EFG 1 A_Weaponready(WRF_NOBOB);
 		goto ready;
 	
-	Lastshot:
-		M1FE A 1 BRIGHT;
-		M19E B 1;
-		M19E CEFGHI 1;
+	Finalshot:
+		M1FE A 1 BRIGHT {
+			invoker.m_Empty = true;
+			A_AlertMonsters();
+			A_TakeInventory("ColtMag", 1);
+			A_StartSound("colt/fire", CHAN_WEAPON);
+			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_FireBullets(3,3, -1, 10, "BulletPuff");
+			A_FRecoil(1);
+			A_ShotgunSmoke(3, 3);
+		}
+		M1FE B 1;
+		M1FE CEFGHI 1;
 		goto altready;
 
 	Altready:
@@ -71,16 +107,50 @@ class Handgun : baseweapon
 	
 	Empty:
 		M1FE HIJ 1;
-		goto ready;
+		goto altready;
 	
 	Reload:
+		TNT1 A 0 A_JumpIf((invoker.m_Empty), "Emptyreload");
 	ChamberedReload:
-		goto reloadrepeat;
+		M19R ABCD 1;
+		TNT1 A 0 A_Startsound("colt/magout",CHAN_AUTO);
+		M19R EFGHIJKLMNO 2;
+		TNT1 A 0 A_Startsound("colt/magins",CHAN_AUTO);	
+		M19R PQR 1;
+		M19R STUVWXYZ 2;
+		M199 AB 1;	
+		goto Loading;
 	
 	EmptyReload:
-	
-	ReloadRepeat:
+		M1RE ABCDE 1;
+		TNT1 A 0 A_Startsound("colt/magout",CHAN_AUTO);		
+		M1RE FGHIJKLMNOP 2;
+		TNT1 A 0 A_Startsound("colt/magins",CHAN_AUTO);		
+		M1RE QRS 1;
+		M1RE TUVWXYZ 2;
+		M1RR ABC 1;
+		TNT1 A 0 A_Startsound("colt/sliderel",CHAN_AUTO);		
+		M1RR DEFGHIJKL 2;
+	Loading:
+		TNT1 A 0 {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
+			{
+				return ResolveState ("Ready");
+			}
+
+			int ammoAmount = min(
+				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
+				CountInv(invoker.AmmoType2));
+
+			if (ammoAmount <= 0) return ResolveState ("Ready");
+
+			GiveInventory (invoker.AmmoType1, ammoAmount);
+			TakeInventory (invoker.AmmoType2, ammoAmount);
+
+			return ResolveState ("ReloadFinish");
+		}
 	ReloadEnd:
+		TNT1 A 0 {invoker.m_Empty = false;}
 		goto ready;
 	
 	Deselect:

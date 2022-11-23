@@ -236,6 +236,19 @@ DSSNIPR3 DSSNIPR3
 
 sniper/raise DSSNSEL
 
+//Colt
+
+$random colt/fire {DSM1F1 DSM1F2 DSM1F3 DSM1F4}
+
+DSM1F1 DSM1F1
+DSM1F2 DSM1F2
+DSM1F3 DSM1F3
+DSM1F4 DSM1F4
+
+colt/magout DSM1OUT
+colt/magins DSM1INS
+colt/sliderel DSM1REL
+
 //GRARG
 
 $random Grarg/Death { BPDEAT1 BPDEAT2 }

@@ -35,7 +35,7 @@ class Revolver : BaseWeapon
 
 		Inventory.PickupMessage "[2].357 Magnum Revolver";
 
-		Tag "Model 15";
+		Tag "Model 19";
 	}
 
 	override void Travelled()

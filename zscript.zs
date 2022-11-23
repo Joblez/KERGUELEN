@@ -16,6 +16,7 @@ version "4.9.0"
 #include "zscript/weapons/fnc.zs"
 #include "zscript/weapons/dynamite.zs"
 #include "zscript/weapons/sniper.zs"
+#include "zscript/weapons/m1911.zs"
 
 // UI
 #include "zscript/ui/baseweaponhud.zs"

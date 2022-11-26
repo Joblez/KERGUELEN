@@ -34,7 +34,6 @@ class Colt : baseweapon
 	{
 
 	ZF:
-		TNT1 A 1 A_VRecoil(0.96,1,4);
 		TNT1 A 1 A_VRecoil(0.99,1,4);
 		TNT1 A 1 A_VRecoil(1.0,1,4);
 		Stop;

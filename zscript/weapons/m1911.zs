@@ -34,7 +34,6 @@ class Colt : BaseWeapon
 	States
 	{
 	ZF:
-		TNT1 A 1 A_VRecoil(0.96, 1, 4);
 		TNT1 A 1 A_VRecoil(0.99, 1, 4);
 		TNT1 A 1 A_VRecoil(1.0, 1, 4);
 		Stop;
@@ -50,7 +49,6 @@ class Colt : BaseWeapon
 		M19R X 1 A_SetBaseOffset(-28, 39);
 		M19R Y 1 A_SetBaseOffset(-12, 38);
 		M19R Z 1 A_SetBaseOffset(3, 34);
-		M19I A 1 A_SetBaseOffset(3, 34);
 		M19I A 1 A_SetBaseOffset(0, WEAPONTOP);
 		M19I A 3;
 		Goto Ready;
@@ -110,7 +108,7 @@ class Colt : BaseWeapon
 			A_FRecoil(1);
 			A_SingleSmoke(6, -1);
 		}
-		M1FE B 1 A_CasingPistol(18,5);
+		M1FE B 1 A_CasingPistol(18, 5);
 		M1FE CEFGHI 1;
 		Goto AltReady;
 
@@ -187,10 +185,10 @@ class Colt : BaseWeapon
 
 	ChamberedDeselect:
 		M19I A 1 A_SetBaseOffset(3, 34);
-		M19I Z 1 A_SetBaseOffset(-12, 38);
-		M19I Y 1 A_SetBaseOffset(-28, 39);
-		M19I X 1 A_SetBaseOffset(-35, 55);
-		M19I W 1 A_SetBaseOffset(-65, 81);
+		M19R Z 1 A_SetBaseOffset(-12, 38);
+		M19R Y 1 A_SetBaseOffset(-28, 39);
+		M19R X 1 A_SetBaseOffset(-35, 55);
+		M19R W 1 A_SetBaseOffset(-65, 81);
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		TNT1 A 0 A_Lower(16);

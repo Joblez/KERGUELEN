@@ -5,7 +5,7 @@ actor NewPlayer : PlayerPawn
 	Player.DisplayName "Amerigo"
 	Player.StartItem "Colt", 1
 	Player.StartItem "Hatchet", 1
-	Player.StartItem "Ammo45", 24
+	Player.StartItem "Ammo45", 48
 	Player.Startitem "RevoCylinder",6
 	Player.SoundClass "player"
 	Player.WeaponSlot 1, "Hatchet"

@@ -9,7 +9,7 @@ actor Grarg replaces DoomImp
 	Scale 0.7
 	Bloodcolor "e8 00 21"
 	Monster
-	Dropitem "Ammo45",64
+	Dropitem "Ammo357",96
 	SeeSound "Grarg/Sight"
 	DeathSound "Grarg/Death"
 	ActiveSound "Grarg/Barks"
@@ -89,6 +89,7 @@ actor Lesco replaces ZombieMan
 	Mass 65
 	Scale 0.7
 	Monster
+	Dropitem "Ammo45",96
 	Bloodcolor "e8 00 21"
 	SeeSound "GLG/Attack"
 	DeathSound "GLG/Death"

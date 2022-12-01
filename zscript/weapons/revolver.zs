@@ -14,7 +14,7 @@ Class RevoCylinder : Ammo
 	}
 }
 
-class Revolver : BaseWeapon
+class Revolver : BaseWeapon replaces Supershotgun
 {
 	bool m_SingleAction; //Checks if you're firing in Single action.
 	vector2 m_Spread; //Weapon Spread.
@@ -77,7 +77,7 @@ class Revolver : BaseWeapon
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 40, "BulletPuff");
 			A_FRecoil(1);
-			A_ShotgunSmoke(3, 3);
+			A_ShotgunSmoke(7, -1);
 		}
 		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto PostShot;
@@ -86,9 +86,9 @@ class Revolver : BaseWeapon
 		SWAF A 1 Bright;
 		SWAF B 2 Bright;
 		SWAF C 1;
-		SWAF D 1;
+		SWAF D 2;
 		SWAF E 1;
-		SWAF F 1;
+		SWAF F 2;
 		SWAF G 1;
 	PostPostShot:
 		SWAF I 1;

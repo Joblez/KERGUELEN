@@ -4,10 +4,10 @@ class MuzzleSmoke : Actor
 	{
 		Speed -1;
 		RenderStyle "Add";
-		Alpha 0.5;
+		Alpha 0.4;
 		Radius 0;
 		Height 0;
-		Scale 0.5;
+		Scale 0.55;
 		+NOGRAVITY
 		+NOBLOCKMAP
 		+FLOORCLIP

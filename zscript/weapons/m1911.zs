@@ -45,11 +45,11 @@ class Colt : BaseWeapon
 		Stop;
 
 	ChamberedSelect:
-		M19I A 1 A_SetBaseOffset(-65, 81);
-		M19I A 1 A_SetBaseOffset(-35, 55);
-		M19I A 1 A_SetBaseOffset(-28, 39);
-		M19I A 1 A_SetBaseOffset(-12, 38);
-		M19I A 1 A_SetBaseOffset(3, 34);
+		M19R V 1 A_SetBaseOffset(-65, 81);
+		M19R W 1 A_SetBaseOffset(-35, 55);
+		M19R X 1 A_SetBaseOffset(-28, 39);
+		M19R Y 1 A_SetBaseOffset(-12, 38);
+		M19R Z 1 A_SetBaseOffset(3, 34);
 		M19I A 1 A_SetBaseOffset(3, 34);
 		M19I A 1 A_SetBaseOffset(0, WEAPONTOP);
 		M19I A 3;
@@ -92,12 +92,12 @@ class Colt : BaseWeapon
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBullets(3,3, -1, 15, "BulletPuff");
 			A_FRecoil(1);
-			A_ShotgunSmoke(3, 3);
+			A_SingleSmoke(6, -1);
 		}
-		M19F B 1;
-		M19F CD 1;
-		M19F EFG 1 A_WeaponReady(WRF_NOBOB);
-		Goto ready;
+		M19F B 1 A_CasingPistol(18, 5);
+		M19F CDE 1;
+		M19F FG 2 A_WeaponReady(WRF_NOBOB);
+		Goto Ready;
 	
 	FinalShot:
 		M1FE A 1 BRIGHT {
@@ -108,9 +108,9 @@ class Colt : BaseWeapon
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBullets(3, 3, -1, 10, "BulletPuff");
 			A_FRecoil(1);
-			A_ShotgunSmoke(3, 3);
+			A_SingleSmoke(6, -1);
 		}
-		M1FE B 1;
+		M1FE B 1 A_CasingPistol(18,5);
 		M1FE CEFGHI 1;
 		Goto AltReady;
 
@@ -142,9 +142,11 @@ class Colt : BaseWeapon
 
 	ChamberedReload:
 		M19R ABCD 1;
-		TNT1 A 0 A_Startsound("colt/magout", CHAN_AUTO);
-		M19R EFGHIJKLMNO 2;
-		TNT1 A 0 A_Startsound("colt/magins", CHAN_AUTO);
+		TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
+		M19R EF 2;
+		M19R GHI 1;
+		M19R JKLMNO 2;
+		TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
 		M19R PQR 1;
 		M19R STUVWXYZ 2;
 		M199 AB 1;
@@ -153,10 +155,12 @@ class Colt : BaseWeapon
 	EmptyReload:
 		M1RE ABCDE 1;
 		TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
-		M1RE FGHIJKLMNOP 2;
+		M1RE FG 2;
+		M1RE HIJ 1;
+		M1RE KLMNOP 2;
 		TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
-		M1RE QRS 1;
-		M1RE TUVWXYZ 2;
+		M1RE QRST 1;
+		M1RE UVWXYZ 2;
 		M1RR ABC 1;
 		TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);
 		M1RR DEFGHIJKL 2;
@@ -183,10 +187,10 @@ class Colt : BaseWeapon
 
 	ChamberedDeselect:
 		M19I A 1 A_SetBaseOffset(3, 34);
-		M19I A 1 A_SetBaseOffset(-12, 38);
-		M19I A 1 A_SetBaseOffset(-28, 39);
-		M19I A 1 A_SetBaseOffset(-35, 55);
-		M19I A 1 A_SetBaseOffset(-65, 81);
+		M19I Z 1 A_SetBaseOffset(-12, 38);
+		M19I Y 1 A_SetBaseOffset(-28, 39);
+		M19I X 1 A_SetBaseOffset(-35, 55);
+		M19I W 1 A_SetBaseOffset(-65, 81);
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		TNT1 A 0 A_Lower(16);

@@ -46,10 +46,25 @@ class Transform2D
 		return (x, y);
 	}
 
-	double GetGlobalScale() const
+	vector2 GetLocalTranslation() const
 	{
-		return m_Scale * m_Parent ? m_Parent.GetGlobalScale() : 1.0;
+		return m_Translation;
 	}
+
+	double GetLocalRotation() const
+	{
+		return m_Rotation;
+	}
+
+	vector2 GetLocalScale() const
+	{
+		return m_Scale;
+	}
+
+	// double GetGlobalScale() const
+	// {
+	// 	return m_Scale * m_Parent ? m_Parent.GetGlobalScale() : 1.0;
+	// }
 
 	double GetSumOfRotations() const
 	{

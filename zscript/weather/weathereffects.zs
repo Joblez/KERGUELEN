@@ -42,6 +42,7 @@ class RainDrop : WeatherParticle
 		Height 3;
 		XScale 0.4;
 		YScale 0.7;
+		Alpha 0.5;
 		RenderStyle "Add";
 		-NOGRAVITY;
 	}

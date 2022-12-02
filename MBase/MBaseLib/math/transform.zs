@@ -22,13 +22,11 @@ class Transform2D
 		Matrix3x3 mat;
 		mat.CopyFrom(m_GlobalTransformMatrix);
 
-		Shape2DTransform tr = new("Shape2DTransform");
-		tr.From2D(
+		return Shape2DTransform.From2D(
 			mat.m_Values[0][0], mat.m_Values[0][1],
 			mat.m_Values[1][0], mat.m_Values[1][1],
 			mat.m_Values[2][0], mat.m_Values[2][1]);
 
-		return tr;
 	}
 
 	vector2 TransformVector(vector2 v) const

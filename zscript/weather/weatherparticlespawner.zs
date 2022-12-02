@@ -22,6 +22,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		double density,
 		double range,
 		Sector sec,
+		WeatherAgent agent,
 		color particleColor = 0xFFFFFFFF,
 		int particleRenderStyle = STYLE_Normal,
 		string particleTextureName = "",
@@ -36,13 +37,13 @@ class WeatherParticleSpawner : WeatherSpawner
 		double particleFadeStep = 0.0,
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
-		bool enableEndOfLifeCallbacks = false,
-		Agent worldAgent = null)
+		bool enableEndOfLifeCallbacks = false)
 	{
 		WeatherParticleSpawner spawner = new("WeatherParticleSpawner");
 
 		spawner.m_Sector = sec;
 		spawner.m_Range = range;
+		spawner.m_WeatherAgent = agent;
 		spawner.m_Color = particleColor;
 		spawner.m_Texture = TexMan.CheckForTexture(particleTextureName);
 		spawner.m_RenderStyle = particleRenderStyle;
@@ -57,7 +58,6 @@ class WeatherParticleSpawner : WeatherSpawner
 		spawner.m_AccelerationDeviation = particleAccelerationDeviation;
 		spawner.m_Alpha = particleAlpha;
 		spawner.m_FadeStep = particleFadeStep;
-		spawner.m_WorldAgent = worldAgent ? worldAgent : WorldAgentHandler.GetWorldAgent();
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
@@ -68,7 +68,7 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	override void Tick()
 	{
-		if (m_WorldAgent.IsFrozen()) return;
+		if (m_WeatherAgent.IsFrozen()) return;
 
 		Super.Tick();
 
@@ -121,10 +121,10 @@ class WeatherParticleSpawner : WeatherSpawner
 		}
 
 		// Move spawn agent to spawn location
-		vector3 oldPosition = m_WorldAgent.Pos;
-		m_WorldAgent.SetXYZ(position);
+		vector3 oldPosition = m_WeatherAgent.Pos;
+		m_WeatherAgent.SetXYZ(position);
 
-		m_WorldAgent.A_SpawnParticleEx(
+		m_WeatherAgent.A_SpawnParticleEx(
 			m_Color,
 			m_Texture,
 			m_RenderStyle,
@@ -141,14 +141,14 @@ class WeatherParticleSpawner : WeatherSpawner
 			fadestepf: m_FadeStep
 		);
 
-		m_WorldAgent.SetXYZ(oldPosition);
+		m_WeatherAgent.SetXYZ(oldPosition);
 	}
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }
 
-	protected Actor GetworldAgent() const
+	protected Actor Getagent() const
 	{
-		return m_WorldAgent;
+		return m_WeatherAgent;
 	}
 
 	protected void SimulateParticle(

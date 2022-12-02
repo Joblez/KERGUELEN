@@ -4,11 +4,12 @@ class WeatherHandler : EventHandler
 	const SNOW_TAG = 3571;
 	array<WeatherSpawner> m_WeatherSpawners;
 
-	private Agent m_WorldAgent;
+	private WeatherAgent m_WeatherAgent;
 
 	override void WorldLoaded(WorldEvent e)
 	{
-		if (!m_WorldAgent) m_WorldAgent = WorldAgentHandler.GetWorldAgent();
+		if (!m_WeatherAgent) m_WeatherAgent = WeatherAgent(Actor.Spawn("WeatherAgent"));
+
 		CreateWeatherSpawners();
 	}
 
@@ -21,7 +22,7 @@ class WeatherHandler : EventHandler
 		{
 			// TODO: Replace with particle spawner once particle billboarding can be disabled.
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(12, 256.0, Level.Sectors[i], "RainDrop", worldAgent: m_WorldAgent));
+				WeatherSpawner.Create(12, 256.0, Level.Sectors[i], "RainDrop", m_WeatherAgent));
 		}
 
 		iterator = Level.CreateSectorTagIterator(SNOW_TAG);
@@ -33,6 +34,7 @@ class WeatherHandler : EventHandler
 					10,
 					384.0,
 					Level.Sectors[i],
+					m_WeatherAgent,
 					particleRenderStyle: STYLE_Add,
 					particleTextureName: "SNOWA0",
 					particleSize: 8.0,
@@ -42,8 +44,15 @@ class WeatherHandler : EventHandler
 					particleAcceleration: (0.0, 0.0, -0.05),
 					particleAlpha: 0.635,
 					projectionTime: 3.0,
-					shouldSimulateParticles: true,
-					worldAgent: m_WorldAgent));
+					shouldSimulateParticles: true));
 		}
 	}
+}
+
+/**
+ * Subclass of agent for the weather to be frozen without freezing other agents.
+**/
+class WeatherAgent : Agent
+{
+
 }

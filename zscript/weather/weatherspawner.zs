@@ -10,11 +10,11 @@ class WeatherSpawner : Thinker
 	protected SectorTriangulation m_Triangulation;
 	protected CVar m_WeatherAmountCVar;
 
-	protected Agent m_WorldAgent;
+	protected Agent m_WeatherAgent;
 
 	private double m_Time;
 
-	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherParticle> particleType, double projectionTime = 1.0, Agent worldAgent = null)
+	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherParticle> particleType, WeatherAgent agent, double projectionTime = 1.0)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
 
@@ -26,14 +26,14 @@ class WeatherSpawner : Thinker
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
 		spawner.m_ProjectionLength = projectionTime * TICRATE;
 
-		spawner.m_WorldAgent = worldAgent ? worldAgent : WorldAgentHandler.GetWorldAgent();
+		spawner.m_WeatherAgent = agent;
 
 		return spawner;
 	}
 
 	override void Tick()
 	{
-		if (m_WorldAgent.IsFrozen()) return;
+		if (m_WeatherAgent.IsFrozen()) return;
 
 		double frequency = GetAdjustedFrequency();
 		if (frequency == 0) return;

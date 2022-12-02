@@ -16,8 +16,6 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	protected Agent m_SpawnAgent;
-
 	private array<WeatherParticleCallbackData> pendingCallbackData;
 
 	static WeatherParticleSpawner Create(
@@ -39,7 +37,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false,
-		Agent spawnAgent = null)
+		Agent worldAgent = null)
 	{
 		WeatherParticleSpawner spawner = new("WeatherParticleSpawner");
 
@@ -59,7 +57,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		spawner.m_AccelerationDeviation = particleAccelerationDeviation;
 		spawner.m_Alpha = particleAlpha;
 		spawner.m_FadeStep = particleFadeStep;
-		spawner.m_SpawnAgent = spawnAgent ? spawnAgent : WorldAgentHandler.GetWorldAgent();
+		spawner.m_WorldAgent = worldAgent ? worldAgent : WorldAgentHandler.GetWorldAgent();
 		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
@@ -70,6 +68,8 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	override void Tick()
 	{
+		if (m_WorldAgent.IsFrozen()) return;
+
 		Super.Tick();
 
 		for (int i = pendingCallbackData.Size() - 1; i >= 0; --i)
@@ -121,9 +121,10 @@ class WeatherParticleSpawner : WeatherSpawner
 		}
 
 		// Move spawn agent to spawn location
-		m_SpawnAgent.SetXYZ(position);
+		vector3 oldPosition = m_WorldAgent.Pos;
+		m_WorldAgent.SetXYZ(position);
 
-		m_SpawnAgent.A_SpawnParticleEx(
+		m_WorldAgent.A_SpawnParticleEx(
 			m_Color,
 			m_Texture,
 			m_RenderStyle,
@@ -140,14 +141,14 @@ class WeatherParticleSpawner : WeatherSpawner
 			fadestepf: m_FadeStep
 		);
 
-		m_SpawnAgent.SetXYZ(Vec3Util.Zero());
+		m_WorldAgent.SetXYZ(pos);
 	}
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }
 
-	protected Actor GetSpawnAgent() const
+	protected Actor GetworldAgent() const
 	{
-		return m_SpawnAgent;
+		return m_WorldAgent;
 	}
 
 	protected void SimulateParticle(

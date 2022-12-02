@@ -65,6 +65,7 @@ class Colt : BaseWeapon
 		Goto AltReady;
 
 	Ready:
+		TNT1 A 0 { invoker.m_Empty = false; }
 		M19I A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	
@@ -113,6 +114,7 @@ class Colt : BaseWeapon
 		Goto AltReady;
 
 	AltReady:
+		TNT1 A 0 A_JumpIf(CheckInventory("ColtMag", 1), "Ready"); // In case players use inventory cheats
 		M1FE J 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 	

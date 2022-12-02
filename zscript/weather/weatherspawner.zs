@@ -57,7 +57,10 @@ class WeatherSpawner : Thinker
 
 	double GetAdjustedRange() const
 	{
-		return (m_Range / 2) * m_WeatherAmountCVar.GetInt() + m_Range;
+		int weatherSetting = m_WeatherAmountCVar.GetInt();
+
+		if (weatherSetting == 6) weatherSetting += 2; // Increase even further for Ultra.
+		return (m_Range * 2) * weatherSetting + m_Range;
 	}
 
 	double GetAdjustedFrequency() const

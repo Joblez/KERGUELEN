@@ -21,7 +21,7 @@ class WeatherHandler : EventHandler
 		{
 			// TODO: Replace with particle spawner once particle billboarding can be disabled.
 			m_WeatherSpawners.Push(
-				WeatherSpawner.Create(14, 256.0, Level.Sectors[i], "RainDrop"));
+				WeatherSpawner.Create(12, 256.0, Level.Sectors[i], "RainDrop"));
 		}
 
 		iterator = Level.CreateSectorTagIterator(SNOW_TAG);

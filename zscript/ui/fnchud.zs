@@ -2,8 +2,10 @@ class FNCHUD : BaseWeaponHUD
 {
 	FNC m_FNC;
 
-	ui Transform2D m_CanvasTransform;
-	ui InterpolatedDouble m_BottomOffset;
+	ui InterpolatedDouble m_RoundsOffset;
+	private vector2 m_OriginalHUDTranslation;
+	private double m_OriginalHUDRotation;
+	private vector2 m_OriginalHUDScale;
 
 	override void Setup()
 	{
@@ -12,25 +14,38 @@ class FNCHUD : BaseWeaponHUD
 
 	override void UISetup()
 	{
-		m_CanvasTransform = Transform2D.Create();
-		m_BottomOffset = new("InterpolatedDouble");
-		m_BottomOffset.m_Target = m_FNC.owner.CountInv(m_FNC.AmmoType1);
-		m_BottomOffset.Update();
-		m_BottomOffset.m_SmoothTime = 0.04;
+		Super.UISetup();
+
+		m_RoundsOffset = new("InterpolatedDouble");
+		m_RoundsOffset.m_Target = m_FNC.owner.CountInv(m_FNC.AmmoType1);
+		m_RoundsOffset.Update();
+		m_RoundsOffset.m_SmoothTime = 0.06;
+	}
+
+	override void PreDraw(RenderEvent event)
+	{
+		Super.PreDraw(event);
+
+		m_OriginalHUDTranslation = hudTransform.GetLocalTranslation();
+		m_OriginalHUDRotation = hudTransform.GetLocalRotation();
+		m_OriginalHUDScale = hudTransform.GetLocalScale();
+
+		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.957, 0.7)));
+		hudTransform.SetRotation(90.0);
+		hudTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, 1280, 720));
 	}
 
 	override void Draw(RenderEvent event)
 	{
 		if (automapactive) return;
 
-		vector2 bottomCoords = ScreenUtil.NormalizedPositionToView((0.89, 0.235));
 		int rounds = m_FNC.owner.CountInv(m_FNC.AmmoType1);
 
 		int textureWidth, textureHeight;
 		TextureID roundTexture = TexMan.CheckForTexture("FNRNRDY");
 		[textureWidth, textureHeight] = TexMan.GetSize(roundTexture);
 
-		vector2 roundScale = ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720);
+		vector2 roundsOrigin = Vec2Util.Zero();
 
 		int leftRow, rightRow;
 
@@ -46,37 +61,61 @@ class FNCHUD : BaseWeaponHUD
 			}
 		}
 
-		m_BottomOffset.m_Target = rounds * textureHeight * roundScale.y / 2;
-		m_BottomOffset.Update();
+		m_RoundsOffset.m_Target = rounds * textureHeight / 2;
+		m_RoundsOffset.Update();
 		
-		int leftRowOffset = int(textureHeight * roundScale.y) * rounds % 2 == 0 ? 1 : 2;
+		int leftRowOffset = int(textureHeight) * rounds % 2 == 0 ? 1 : 2;
+		
+		vector2 roundScale = hudTransform.GetLocalScale();
+
+		// No clue why it works this way.
+		vector2 invertedScale = (1.0 / roundScale.x, 1.0 / roundScale.y);
 
 		for (int i = 1; i <= leftRow; ++i)
 		{
-			StatusBar.DrawTexture(
+			vector2 roundVector =
+				(roundsOrigin.x,
+				(roundsOrigin.y - textureHeight * i)
+					+ m_RoundsOffset.GetValue() + leftRowOffset);
+
+			roundVector = hudTransform.TransformVector(roundVector);
+
+			StatusBar.DrawTextureRotated(
 				roundTexture,
-				(bottomCoords.x,
-					(bottomCoords.y - textureHeight * roundScale.y * i)
-					+ m_BottomOffset.GetValue() + leftRowOffset),
-				StatusBarCore.DI_ITEM_LEFT_TOP,
+				roundVector,
+				StatusBarCore.DI_ITEM_LEFT_TOP | StatusBar.DI_MIRROR,
+				hudTransform.GetLocalRotation(),
 				1.0,
-				scale: roundScale,
+				scale: invertedScale,
 				col: 0xFFFFFFFF);
 		}
 
 		for (int i = 1; i <= rightRow; ++i)
 		{
-			StatusBar.DrawTexture(
+			vector2 roundvector =
+				(roundsOrigin.x + 4,
+				(roundsOrigin.y - textureHeight * i)
+					+ m_RoundsOffset.GetValue() + textureHeight / 2);
+
+			roundVector = hudTransform.TransformVector(roundVector);
+
+			StatusBar.DrawTextureRotated(
 				roundTexture,
-				(bottomCoords.x + 4,
-					(bottomCoords.y - textureHeight * roundScale.y * i)
-					+ m_BottomOffset.GetValue() + textureHeight * roundScale.y / 2),
-				StatusBarCore.DI_ITEM_LEFT_TOP,
+				roundVector,
+				StatusBarCore.DI_ITEM_LEFT_TOP | StatusBar.DI_MIRROR,
+				hudTransform.GetLocalRotation(),
 				1.0,
-				scale: roundScale,
+				scale: invertedScale,
 				col: 0xFFFFFFFF);
 		}
+	}
 
-		StatusBar.ClearClipRect();
+	override void PostDraw(RenderEvent event)
+	{
+		Super.PostDraw(event);
+
+		hudTransform.SetTranslation(m_OriginalHUDTranslation);
+		hudTransform.SetRotation(m_OriginalHUDRotation);
+		hudTransform.SetScale(m_OriginalHUDScale);
 	}
 }

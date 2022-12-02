@@ -1,6 +1,6 @@
 Mod by Joe 'Joblez' Salem
 
-MBase created by Magdiel, creator of various features, assisted in development (king of formatting fixes)
+MUtil created by Magdiel, creator of various features, assisted in development (make code look good)
 
 This mod uses Nashgore by Nash Muhandes
 
@@ -16,15 +16,8 @@ Specifics:
 
 'Wyvern' - Raven Software, Obsidian
 
-''
-
-Shark credits:
-Submitted: Krispy
-Decorate: Krispy, zrrion the insect, IOP team (gibs)
-Sounds: 3D Realms
-Sprites: 3D Realms
-
 Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+
 
 2.Weapons
 

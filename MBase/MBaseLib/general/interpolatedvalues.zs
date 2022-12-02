@@ -48,7 +48,7 @@ class InterpolatedDouble
 		return m_Current;
 	}
 
-	void Update()
+	void Update(double delta = 1.0 / 35.0)
 	{
 		m_Current = Math.SmoothDamp(
 			m_Current,
@@ -56,7 +56,7 @@ class InterpolatedDouble
 			m_CurrentSpeed,
 			m_SmoothTime,
 			double.Infinity,
-			1.0 / 35.0);
+			delta);
 	}
 
 	void Reset()
@@ -94,7 +94,7 @@ class InterpolatedVector2
 		return m_Current.y;
 	}
 
-	void Update()
+	void Update(double delta = 1.0 / 35.0)
 	{
 		m_Current = MathVec2.SmoothDamp(
 			m_Current,
@@ -102,7 +102,7 @@ class InterpolatedVector2
 			m_CurrentSpeed,
 			m_SmoothTime,
 			double.Infinity,
-			1.0 / TICRATE);
+			delta);
 	}
 
 	void Reset()
@@ -145,7 +145,7 @@ class InterpolatedVector3
 		return m_Current.z;
 	}
 
-	void Update()
+	void Update(double delta = 1.0 / 35.0)
 	{
 		m_Current = MathVec3.SmoothDamp(
 			m_Current,
@@ -153,7 +153,7 @@ class InterpolatedVector3
 			m_CurrentSpeed,
 			m_SmoothTime,
 			double.Infinity,
-			1.0 / TICRATE);
+			delta);
 	}
 
 	void Reset()

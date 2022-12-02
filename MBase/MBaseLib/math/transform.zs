@@ -17,6 +17,18 @@ class Transform2D
 		return tr;
 	}
 
+	Shape2DTransform ToShape2DTransform()
+	{
+		Matrix3x3 mat;
+		mat.CopyFrom(m_GlobalTransformMatrix);
+
+		return Shape2DTransform.From2D(
+			mat.m_Values[0][0], mat.m_Values[0][1],
+			mat.m_Values[1][0], mat.m_Values[1][1],
+			mat.m_Values[2][0], mat.m_Values[2][1]);
+
+	}
+
 	vector2 TransformVector(vector2 v) const
 	{
 		Matrix3x3 mat;

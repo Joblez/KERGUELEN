@@ -141,7 +141,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			fadestepf: m_FadeStep
 		);
 
-		m_WorldAgent.SetXYZ(pos);
+		m_WorldAgent.SetXYZ(oldPosition);
 	}
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }

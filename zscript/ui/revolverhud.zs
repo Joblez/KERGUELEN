@@ -77,18 +77,18 @@ class SMHUDRevolverState : SMHUDState
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Empty) continue;
 
 			vector2 polarCoords = (
-				40, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
+				20, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
 
 			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
 			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, 1280, 720);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
 			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
+				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.675)) + offset);
 			}
 			else
 			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.625)) + offset);
+				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.675)) + offset);
 			}
 		}
 	}
@@ -156,7 +156,7 @@ class SMHUDRevolverState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, 1280, 720),
 			col: 0xFFCCCCCC);
 	}
 	
@@ -167,7 +167,7 @@ class SMHUDRevolverState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(2.0, 2.0, 1280, 720),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, 1280, 720),
 			col: 0xFF999999);
 	}
 }

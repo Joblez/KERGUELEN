@@ -25,7 +25,14 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.AmmoType1 "Sh12Tube";
 		Weapon.Kickback 50;
 		Weapon.UpSound("shotgun/draw");
+
+		BaseWeapon.MaxLookSwayTranslationX 48.0;
+		BaseWeapon.LookSwayStrengthX 15.0;
+		BaseWeapon.LookSwayResponse 5.0;
+		BaseWeapon.LookSwayRigidity 9.0;
+
 		Inventory.PickupMessage "(3)12 Gauge Hunting Shotgun";
+
 		DamageType "Shotgun";
 		Tag "Ithaca";
 	}

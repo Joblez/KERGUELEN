@@ -1,5 +1,0 @@
-// MBase EventHandlers
-GameInfo
-{
-	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WorldAgentHandler"
-}

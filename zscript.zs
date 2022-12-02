@@ -1,7 +1,7 @@
 version "4.9.0"
 
-// MBase
-#include "MBase/MBaseLib/zscript.zs"
+// MUtil
+#include "MUtil/MUtilLib/zscript.zs"
 
 // Miscellaneous
 #include "zscript/misc/footsteps.zs"

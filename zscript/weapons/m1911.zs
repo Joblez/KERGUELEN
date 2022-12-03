@@ -11,14 +11,13 @@ Class ColtMag : Ammo
 	}
 }
 
-class Colt : BaseWeapon
+class Colt : BaseWeapon replaces Pistol
 {
 	bool m_Empty;
 
 	Default
 	{
 		Weapon.Kickback 10;
-		Weapon.SlotNumber 2;
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 CMAG;
@@ -33,6 +32,10 @@ class Colt : BaseWeapon
 
 	States
 	{
+	Spawn:
+		PIST A 1;
+		Loop;
+
 	ZF:
 		TNT1 A 1 A_VRecoil(0.99, 1, 4);
 		TNT1 A 1 A_VRecoil(1.0, 1, 4);

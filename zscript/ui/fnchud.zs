@@ -30,7 +30,7 @@ class FNCHUD : BaseWeaponHUD
 		m_OriginalHUDRotation = hudTransform.GetLocalRotation();
 		m_OriginalHUDScale = hudTransform.GetLocalScale();
 
-		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.957, 0.7)));
+		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.96, 0.96)));
 		hudTransform.SetRotation(90.0);
 		hudTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, 1280, 720));
 	}

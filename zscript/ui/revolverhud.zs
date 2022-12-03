@@ -84,11 +84,11 @@ class SMHUDRevolverState : SMHUDState
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
 			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.89, 0.675)) + offset);
+				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.9, 0.94)) + offset);
 			}
 			else
 			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.89, 0.675)) + offset);
+				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.9, 0.94)) + offset);
 			}
 		}
 	}

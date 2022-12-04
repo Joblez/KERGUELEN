@@ -1,44 +1,36 @@
-Class BarrelExploding : Actor replaces ExplosiveBarrel
+Class Hura : Actor replaces ExplosiveBarrel
 {
 	Default
 	{
 		Health 20;
 		Radius 10;
 		Height 34;
-		DamageType "fire";
-		DeathSound("barrel/hiss");
-		Obituary "$OB_BARREL";
+		Scale 0.75;
+		DamageType "normal";
+		DeathSound("dynamite/explode");
+		Bloodcolor "1c412b";
+		Obituary "Player hit a hura plant.";
+		Species "Plant";
 		+SOLID;
 		+SHOOTABLE;
-		+NOBLOOD;
+		+STANDSTILL;
 		+ACTIVATEMCROSS;
-		+DONTGIB;
 		+NOICEDEATH;
 	}
 
 	States
 	{
 	Spawn:
-		BAR1 AB 6;
+		EFRT A 6;
 		Loop;
-	Death:
-		BEXP A 5 Bright;
-		BEXP B 5 Bright A_Scream;
-		BEXP C 5 Bright;
-		BEXP D 5 Bright A_Explode();
-		TNT1 A 0 {
-			if (GetCVar("weapon_particle_toggle") == 1)
-			{
-				for (int i = 0; i < 6; ++i)
-				{
-					A_SpawnProjectile("RocketDebris", 0, 0, random(0, 360), 2, random(0, 360));
-					A_SpawnProjectile("SmokeSpawner", 0, 0, random(0, 360), 2, random(0, 360));
-				}
-			}
-		}
-		BOOM ABCD 1 Bright A_SetTranslucent(0.8, 1);
-		BOOM EFGH 1 Bright A_SetTranslucent(0.5, 1);
-		BOOM IJKLMNOPQRSTUVWXY 1 Bright A_SetTranslucent(0.3, 1);
+	Death:	
+	XDeath:
+		EFEX AB 2 Bright ;
+		TNT1 A 0 A_Startsound("Dynamite/explode",CHAN_AUTO);
+		TNT1 A 0 A_XScream;	
+		EFEX CD 3 Bright A_Explode(); 
+		EFEX EFGHIJ 3 BRIGHT A_Noblocking; 
+		EFEX J -1;
 		Stop;
 	}
 }

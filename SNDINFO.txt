@@ -166,7 +166,7 @@ DSLODH3 DSLODH3
 
 shotgun/draw DSSHTGB
 
-//m2c
+//m2 carbine
 
 $random m2c/fire { DSm2cF1 DSm2cF2 DSm2cF3 DSm2cF4 }
 
@@ -332,6 +332,8 @@ DSEDHT1 DSEDHT1
 DSEDHT2 DSEDHT2
 DSEDHT3 DSEDHT3
 DSEDHT4 DSEDHT4
+
+Seed/pop DSEDPOP
 
 vine/idle DVINIDL
 

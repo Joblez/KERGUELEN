@@ -9,7 +9,7 @@ Class Hura : Actor replaces ExplosiveBarrel
 		DamageType "normal";
 		DeathSound("dynamite/explode");
 		Bloodcolor "1c412b";
-		Obituary "Player hit a hura plant.";
+		Obituary "Amerigo hit a hura plant.";
 		Species "Plant";
 		+SOLID;
 		+SHOOTABLE;
@@ -28,6 +28,7 @@ Class Hura : Actor replaces ExplosiveBarrel
 		EFEX AB 2 Bright ;
 		TNT1 A 0 A_Startsound("Dynamite/explode",CHAN_AUTO);
 		TNT1 A 0 A_XScream;	
+		TNT1 AAAAAAAA 0 { A_SpawnProjectile("Huraseed",36,0,random(-180,180));}
 		EFEX CD 3 Bright A_Explode(); 
 		EFEX EFGHIJ 3 BRIGHT A_Noblocking; 
 		EFEX J -1;

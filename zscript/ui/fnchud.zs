@@ -1,6 +1,6 @@
-class FNCHUD : BaseWeaponHUD
+class M2CHUD : BaseWeaponHUD
 {
-	FNC m_FNC;
+	M2C m_M2C;
 
 	ui InterpolatedDouble m_RoundsOffset;
 	private vector2 m_OriginalHUDTranslation;
@@ -9,7 +9,7 @@ class FNCHUD : BaseWeaponHUD
 
 	override void Setup()
 	{
-		m_FNC = FNC(m_Context);
+		m_M2C = M2C(m_Context);
 	}
 
 	override void UISetup()
@@ -17,7 +17,7 @@ class FNCHUD : BaseWeaponHUD
 		Super.UISetup();
 
 		m_RoundsOffset = new("InterpolatedDouble");
-		m_RoundsOffset.m_Target = m_FNC.owner.CountInv(m_FNC.AmmoType1);
+		m_RoundsOffset.m_Target = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 		m_RoundsOffset.Update();
 		m_RoundsOffset.m_SmoothTime = 0.06;
 	}
@@ -39,7 +39,7 @@ class FNCHUD : BaseWeaponHUD
 	{
 		if (automapactive) return;
 
-		int rounds = m_FNC.owner.CountInv(m_FNC.AmmoType1);
+		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 
 		int textureWidth, textureHeight;
 		TextureID roundTexture = TexMan.CheckForTexture("FNRNRDY");

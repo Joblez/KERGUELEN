@@ -8,12 +8,11 @@ class RifleMag : Ammo
 	}
 }
 
-// FN FNC
+// M2 Carbine
 
-class FNC : BaseWeapon replaces Chaingun
+class M2C : BaseWeapon replaces Chaingun
 {
 	bool m_FireSelect; // Fire selector.
-	int burstfire;
 
 	Default
 	{
@@ -25,12 +24,12 @@ class FNC : BaseWeapon replaces Chaingun
 		Weapon.AmmoType2 "Ammo223";
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
-		Weapon.UpSound("fnc/draw");
+		Weapon.UpSound("M2C/draw");
 
-		BaseWeapon.HUDExtensionType "FNCHUD";
+		BaseWeapon.HUDExtensionType "M2CHUD";
 
 		DamageType "Normal";
-		Tag "FNC";
+		Tag "M2 Carbine";
 	}
 
 	States
@@ -40,7 +39,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Loop;
 
 	Ready:
-		FNCI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		M2CI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Select:
@@ -49,32 +48,32 @@ class FNC : BaseWeapon replaces Chaingun
 			invoker.RegisterWeaponHUD();
 		}
 		TNT1 A 1;
-		FNRS F 1 A_SetBaseOffset(60, 100);
-		#### E 1 A_SetBaseOffset(50, 80);
-		#### D 1 A_SetBaseOffset(40, 60);
-		#### C 1 A_SetBaseOffset(20, 40);
-		#### BA 1 A_SetBaseOffset(2, 30);
-		FNCF DE 1;
-		FNCI A 0 A_SetBaseOffset(0, WEAPONTOP);
-		FNCI A 1 A_Raise(16);
+		M2ST F 1 A_SetBaseOffset(-60, 100);
+		#### E 1 A_SetBaseOffset(-50, 80);
+		#### D 1 A_SetBaseOffset(-40, 60);
+		#### C 1 A_SetBaseOffset(-20, 40);
+		#### BA 1 A_SetBaseOffset(-2, 30);
+		M2CF DE 1;
+		M2CI A 0 A_SetBaseOffset(0, WEAPONTOP);
+		M2CI A 1 A_Raise(16);
 		Goto Ready;
 
 	Deselect:
 		TNT1 A 0 { invoker.UnregisterWeaponHUD(); }
-		FNRS AB 1 A_SetBaseOffset(2, 30);
-		#### C 1 A_SetBaseOffset(20, 40);
-		#### D 1 A_SetBaseOffset(40, 60);
-		#### E 1 A_SetBaseOffset(50, 80);
-		#### F 1 A_SetBaseOffset(60, 100);
-		FNCI A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
+		M2ST A 1 A_SetBaseOffset(2, 30);
+		#### B 1 A_SetBaseOffset(20, 40);
+		#### B 1 A_SetBaseOffset(40, 60);
+		#### B 1 A_SetBaseOffset(50, 80);
+		#### C 1 A_SetBaseOffset(60, 100);
+		M2CI A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
-		FNCI A 1 A_Lower(16);
+		M2CI A 1 A_Lower(16);
 		Loop;
 
 	Empty:
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
-		FNCF DEF 2;
+		M2CF DEF 2;
 		Goto Ready;
 	ZF:
 		TNT1 A 1 A_VRecoil(0.99, 1, 4);
@@ -95,22 +94,22 @@ class FNC : BaseWeapon replaces Chaingun
 	Single:
 		TNT1 A 0 A_FireBullets(3, 1, -1, 12, "Bullet_Puff");
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		FNFL A 1 Bright {
+		M2FL A 1 Bright {
 			A_FRecoil(0.8);
 			A_CasingRifle(18,-5);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
-			A_StartSound("fnc/fire",CHAN_WEAPON,0,0.9);
+			A_StartSound("M2C/fire",CHAN_WEAPON,0,0.9);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_WEAPON);
 			if (psp) psp.frame = random(0, 3);
 		}
-		FNCF A 1;
-		FNCF B 1;
+		M2CF A 1;
+		M2CF B 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		FNCF C 2 A_WeaponReady(WRF_NOSWITCH);
-		FNCF DEF 2 A_WeaponReady(WRF_NOSWITCH);
+		M2CF C 2 A_WeaponReady(WRF_NOSWITCH);
+		M2CF DEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 	Hold:
 	Automatic:
@@ -118,72 +117,71 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Finalshot;
 		TNT1 A 0 A_FireBullets(5, 2, -1, 12, "Bullet_puff");
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		FNFL A 1 Bright {
+		M2FL A 1 Bright {
 			A_FRecoil(0.8);
 			A_CasingRifle(18, -5);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
-			A_StartSound("fnc/loop", CHAN_WEAPON, CHANF_LOOPING);
+			A_StartSound("M2C/loop", CHAN_WEAPON, CHANF_LOOPING);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
 			psp.frame = random(0, 3);
 
 		}
-		FNCF A 1;
-		FNCF B 1;
+		M2CF A 1;
+		M2CF B 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf(Player.cmd.buttons & BT_ATTACK, "Automatic");
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("fnc/loopend", 11);
-		FNCF CDEF 2 A_WeaponReady(WRF_NOSWITCH);
+		TNT1 A 0 A_StartSound("M2C/loopend", 11);
+		M2CF CDEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 
 	FinalShot:
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("fnc/loopend", 11);
-		FNCF CDEF 2;
+		TNT1 A 0 A_StartSound("M2C/loopend", 11);
+		M2CF CDEF 2;
 		Goto Ready;
 
 	Reload:
 		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
 		Goto Ready;
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
-		FNRS ABCDEFG 2;
-		FNRS HI 1;
-		FNRO AB 1;
-		TNT1 A 0 A_StartSound("fnc/magout", 9, 0, 0.5);
+		M2ST ABCDEFG 2;
+		M2ST H 1;
+		MOUT AB 1;
+		TNT1 A 0 A_StartSound("M2C/magout", 9, 0, 0.5);
 		TNT1 A 0 A_SetBaseOffset(-4, 34);
-		FNRO CDE 1;
+		MOUT CDE 2;
 		TNT1 A 0 A_SetBaseOffset(-3, 33);
-		FNRO FG 2;
-		FNRO HI 3;
+		MOUT FG 2;
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
-		FNIN A 2;
+		MINS A 2;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
-		FNIN BCD 1;
+		MINS BCD 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		FNIN EF 1;
-		TNT1 A 0 A_StartSound("fnc/magins", 9, 0, 0.5);
-		FNIN G 2;
+		MINS EF 1;
+		TNT1 A 0 A_StartSound("M2C/magins", 9, 0, 0.5);
+		MINS G 2;
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		FNIN HIJ 2;
+		MINS HIJK 2;
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		FNBT ABC 1;
-		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");
-		FNBT DE 2;
+		M2BT ABCD 1;
+		M2BT E 2;
+		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");		
 		TNT1 A 0  A_SetBaseOffset(0, 30);
-		FNBT FG 2;
-		TNT1 A 0 A_StartSound("fnc/boltback", 9, 0, 0.75);
+		M2BT FG 2;
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		FNBT HI 1;
-		FNBT JKL 2;
-		TNT1 A 0 A_StartSound("fnc/boltrel", 9, 0, 0.75);
-		FNBT M 2 A_SetBaseOffset(0, 30);
-		FNBT NO 2;
-		FNBT P 1;
-		FNCE ABCDEFGH 2;
+		M2BT HIJ 1;
+		TNT1 A 0 A_StartSound("M2C/boltback", 9, 0, 0.75);		
+		M2BT KL 2;
+		M2BT M 2 A_SetBaseOffset(0, 30);
+		M2BT NO 2;
+		TNT1 A 0 A_StartSound("M2C/boltrel", 9, 0, 0.75);		
+		M2BT PQRSTU 1;
+		M2ED ABCDEFG 2;
 	Loading:
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -206,7 +204,7 @@ class FNC : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	NotEmpty:
-		FNCE CDEFGH 2 A_SetBaseOffset(0, 30);
+		M2ED BCDEFG 2 A_SetBaseOffset(0, 30);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
@@ -233,7 +231,7 @@ class FNC : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(1, 31);
 		TNT1 A 0 A_Print(invoker.m_FireSelect ? "Full Auto" : "Semi Auto");
 	 	TNT1 A 0 A_StartSound("weapons/firemode", CHAN_AUTO, 0, 0.5);
-		FNCF DEF 2;
+		M2CF DEF 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		Goto Ready;
 	}

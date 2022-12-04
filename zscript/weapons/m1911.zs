@@ -97,8 +97,8 @@ class Colt : BaseWeapon replaces Pistol
 			A_SingleSmoke(6, -1);
 		}
 		M19F B 1 A_CasingPistol(18, 5);
-		M19F CD 1;
-		M19F EFG 2 A_WeaponReady(WRF_NOBOB);
+		M19F CDE 1;
+		M19F FG 2 A_WeaponReady(WRF_NOBOB);
 		Goto Ready;
 	
 	FinalShot:

@@ -166,32 +166,32 @@ DSLODH3 DSLODH3
 
 shotgun/draw DSSHTGB
 
-//FNC
+//m2c
 
-$random fnc/fire { DSFNCF1 DSFNCF2 DSFNCF3 DSFNCF4 }
+$random m2c/fire { DSm2cF1 DSm2cF2 DSm2cF3 DSm2cF4 }
 
-DSFNCF1 DSFNCF1
-DSFNCF2 DSFNCF2
-DSFNCF3 DSFNCF3
-DSFNCF4 DSFNCF4
+DSm2cF1 DSm2cF1
+DSm2cF2 DSm2cF2
+DSm2cF3 DSm2cF3
+DSm2cF4 DSm2cF4
 
-fnc/magout DSFNOUT
+m2c/magout DSFNOUT
 
-fnc/magins DSFNINS
+m2c/magins DSFNINS
 
-fnc/boltback DSFNBAC
+m2c/boltback DSFNBAC
 
-fnc/boltrel DSFNREL
+m2c/boltrel DSFNREL
 
-fnc/loop DSMCHLP
+m2c/loop DSMCHLP
 
-fnc/loopend DSMCHED
+m2c/loopend DSMCHED
 
 weapons/empty DRYFIRE
 
 weapons/firemode DSWEPCK
 
-fnc/draw DSFNCGB
+m2c/draw DSm2cGB
 
 //Dynamite
 

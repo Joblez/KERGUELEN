@@ -16,12 +16,12 @@ class M2C : BaseWeapon replaces Chaingun
 
 	Default
 	{
-		Inventory.PickupMessage "(4) 5.56 Assault Rifle";
+		Inventory.PickupMessage "(4) .30 Carbine Automatic";
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 RMAG;
 		Weapon.AmmoType1 "RifleMag";
-		Weapon.AmmoType2 "Ammo223";
+		Weapon.AmmoType2 "Ammo30";
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
 		Weapon.UpSound("M2C/draw");
@@ -146,7 +146,7 @@ class M2C : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	Reload:
-		TNT1 A 0 A_JumpIfInventory("Ammo223", 1, 1);
+		TNT1 A 0 A_JumpIfInventory(invoker.ammotype2, 1, 1);
 		Goto Ready;
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
 		M2ST ABCDEFG 2;

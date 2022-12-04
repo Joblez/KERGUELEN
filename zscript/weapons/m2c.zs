@@ -156,13 +156,13 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(-4, 34);
 		MOUT CDE 2;
 		TNT1 A 0 A_SetBaseOffset(-3, 33);
-		MOUT FG 2;
+		MOUT FG 3;
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
 		MINS A 2;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
 		MINS BCD 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		MINS EF 1;
+		MINS EF 2;
 		TNT1 A 0 A_StartSound("M2C/magins", 9, 0, 0.5);
 		MINS G 2;
 		TNT1 A 0 A_SetBaseOffset(3, 33);

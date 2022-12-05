@@ -7,7 +7,6 @@ Class Hura : Actor replaces ExplosiveBarrel
 		Height 34;
 		Scale 0.75;
 		DamageType "normal";
-		DeathSound("dynamite/explode");
 		Bloodcolor "1c412b";
 		Obituary "Amerigo hit a hura plant.";
 		Species "Plant";
@@ -25,12 +24,14 @@ Class Hura : Actor replaces ExplosiveBarrel
 		Loop;
 	Death:	
 	XDeath:
-		EFEX AB 2 Bright ;
-		TNT1 A 0 A_Startsound("Dynamite/explode",CHAN_AUTO);
-		TNT1 A 0 A_XScream;	
-		TNT1 AAAAAAAA 0 { A_SpawnProjectile("Huraseed",36,0,random(-180,180));}
-		EFEX CD 3 Bright A_Explode(); 
-		EFEX EFGHIJ 3 BRIGHT A_Noblocking; 
+		TNT1 A 0 A_Startsound("Hura/die",CHAN_AUTO);
+		EFEX AB 5 Bright ;
+		EFEX CD 5 Bright ;
+		TNT1 AAAAAAAA 0 { A_SpawnProjectile("Huraseed",36,0,random(-180,180));}	
+		TNT1 A 0 A_Explode(10,256); 
+		TNT1 A 0 A_Startsound("Dryad/Death",CHAN_AUTO);
+		TNT1 A 0 A_XScream;			
+		EFEX EFGHIJ 2 BRIGHT A_Noblocking; 
 		EFEX J -1;
 		Stop;
 	}

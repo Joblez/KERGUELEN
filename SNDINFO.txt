@@ -337,6 +337,12 @@ Seed/pop DSEDPOP
 
 vine/idle DVINIDL
 
+$random Hura/die { DSHUR1 DSHUR2 DSHUR3 }
+
+DSHUR1 DSHUR1
+DSHUR2 DSHUR2
+DSHUR3 DSHUR3
+
 //SHEEP
 
 $random sheep/sight { sight1 sight2 sight3 sight4 sight5 sight6 }

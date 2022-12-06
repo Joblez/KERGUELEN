@@ -60,13 +60,14 @@ class RainSpawner : WeatherParticleSpawner
 		vector3 oldPosition = m_WeatherAgent.Pos;
 		m_WeatherAgent.SetXYZ(data.m_EndPosition);
 
+		// Spawn ripple effect when rain hits water.
 		if (data.m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
 		{
 			// Particles cannot be flat, fall back to actor.
 			WaterRipple ripple = WaterRipple(Actor.Spawn("WaterRipple", data.m_EndPosition));
 			return;
 		}
-		else
+		else // Spawn splash texture.
 		{
 			m_WeatherAgent.A_SpawnParticleEx(
 				0xFFFFFFFF,
@@ -76,10 +77,10 @@ class RainSpawner : WeatherParticleSpawner
 				4,
 				10.0,
 				0.0,
-				0.0, 0.0, 1.0,
+				0.0, 0.0, 1.75,
 				0.0, 0.0, 0.0,
 				0.0, 0.0, 0.0,
-				1.0,
+				0.7,
 				0.0,
 				0.0);
 		}

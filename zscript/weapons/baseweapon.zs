@@ -219,11 +219,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		A_SetPitch(pitch - sp);
 	}
 
-	action void A_CasingShotgun(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("ShellSpawnerR", 0, 0, x, y);
-	}
-
 	action void A_CasingGrenade(double x, double y)
 	{
 		if (GetCVar("casing_toggle") == 1) A_FireProjectile("GrenadeSpawnerR", 0, 0, x, y);
@@ -234,34 +229,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RocketSpawnerR", 0, 0, x, y);
 	}
 
-	action void A_CasingRevolver(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RevolverSpawnerR", 0, 0, x, y);
-	}
-
-	action void A_CasingRifleL(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RifleSpawnerL", 0, 0, x, y);
-	}
-
-	action void A_CasingShotgunL(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("ShellSpawnerL", 0, 0, x, y);
-	}
-
-	action void A_CasingPistolL(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("PistolSpawnerL", 0, 0, x, y);
-	}
-
 	action void A_CasingGrenadeL(double x, double y)
 	{
 		if (GetCVar("casing_toggle") == 1) A_FireProjectile("GrenadeSpawnerL", 0, 0, x, y);
-	}
-
-	action void A_CasingRevolverL(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RevolverSpawnerL", 0, 0, x, y);
 	}
 
 	// Smoke

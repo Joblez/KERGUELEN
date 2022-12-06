@@ -72,7 +72,7 @@ class M2C : BaseWeapon replaces Chaingun
 
 	Empty:
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
+		TNT1 A 0 A_StartSound("weapons/empty", CHAN_AUTO, 0, 0.5);
 		M2CF DEF 2;
 		Goto Ready;
 	ZF:
@@ -242,7 +242,7 @@ class M2C : BaseWeapon replaces Chaingun
 		{
 			A_SpawnEffect(
 				"RifleCasing",
-				(22.0, 14.0, 32.0),
+				(23.0, 16.0, 32.0),
 				-90.0 + FRandom(-15.0, 15.0),
 				FRandom(-50.0, -65.0),
 				FRandom(3.5, 5.5),

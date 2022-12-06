@@ -54,7 +54,7 @@ class M2C : BaseWeapon replaces Chaingun
 		#### C 1 A_SetBaseOffset(-20, 40);
 		#### BA 1 A_SetBaseOffset(-2, 30);
 		M2CF DE 1;
-		M2CI A 0 A_SetBaseOffset(0, WEAPONTOP);
+		M2CI A 1 A_SetBaseOffset(0, WEAPONTOP);
 		M2CI A 1 A_Raise(16);
 		Goto Ready;
 
@@ -65,7 +65,7 @@ class M2C : BaseWeapon replaces Chaingun
 		#### B 1 A_SetBaseOffset(40, 60);
 		#### B 1 A_SetBaseOffset(50, 80);
 		#### C 1 A_SetBaseOffset(60, 100);
-		M2CI A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
+		M2CI A 1 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		M2CI A 1 A_Lower(16);
 		Loop;
@@ -107,7 +107,7 @@ class M2C : BaseWeapon replaces Chaingun
 		}
 		M2CF A 1;
 		M2CF B 1;
-		TNT1 A 0 A_SetBaseOffset(0, 30);
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONTOP);
 		M2CF C 2 A_WeaponReady(WRF_NOSWITCH);
 		M2CF DEF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;

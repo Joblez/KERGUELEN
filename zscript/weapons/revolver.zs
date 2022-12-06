@@ -152,7 +152,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
 			{
-				A_CasingRevolver(random(-4,4), random(-30,-34));
+				A_SpawnCasing();
 			}
 
 			A_TakeInventory("RevoCylinder", BCYN);
@@ -238,5 +238,19 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Loop;
+	}
+
+	private action void A_SpawnCasing()
+	{
+		if (GetCVar("casing_toggle") == 1)
+		{
+			A_SpawnEffect(
+				"RevolverCasing",
+				(FRandom(-6.0, 4.0), FRandom(8.0, 10.0), FRandom(3.0, 6.0)),
+				0.0,
+				FRandom(88.0, 92.0),
+				FRandom(1.0, 1.5),
+				true);
+		}
 	}
 }

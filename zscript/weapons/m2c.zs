@@ -96,7 +96,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);
-			A_CasingRifle(18,-5);
+			A_SpawnCasing();
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_StartSound("M2C/fire",CHAN_WEAPON,0,0.9);
@@ -119,7 +119,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);
-			A_CasingRifle(18, -5);
+			A_SpawnCasing();
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
@@ -234,5 +234,19 @@ class M2C : BaseWeapon replaces Chaingun
 		M2CF DEF 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		Goto Ready;
+	}
+
+	private action void A_SpawnCasing()
+	{
+		if (GetCVar("casing_toggle") == 1)
+		{
+			A_SpawnEffect(
+				"RifleCasing",
+				(22.0, 14.0, 32.0),
+				-90.0 + FRandom(-15.0, 15.0),
+				FRandom(-50.0, -65.0),
+				FRandom(3.5, 5.5),
+				true);
+		}
 	}
 }

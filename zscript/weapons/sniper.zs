@@ -96,7 +96,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHB DEFG 2;
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ISHB HIJ 1;
-		TNT1 A 0 A_CasingRifle(18,-5);
+		TNT1 A 0 A_SpawnCasing();
 		ISHB KL 2;
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
 		ISHB MN 1;
@@ -235,7 +235,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRD DEFGHIJ 2;
 		TNT1 A 0 A_StartSound("sniper/boltback",9);
 		ISRD KLMNOPQ 1;
-		TNT1 A 0 A_CasingRifle(-18,-5);
+		TNT1 A 0 A_SpawnCasingAlt();
 		ISRD RSTUV 2;
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
 		ISRD WXYZ 2;
@@ -271,6 +271,35 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 4;
 		ITAI A 0 A_Lower(16);
 		Wait;
+	}
 
+	private action void A_SpawnCasing()
+	{
+		if (GetCVar("casing_toggle") == 1)
+		{
+			A_SpawnEffect(
+				"RifleCasing",
+				(20.0, 20.0, 28.0),
+				-90.0 + FRandom(-5.0, 5.0),
+				FRandom(-60.0, -70.0),
+				FRandom(4.5, 6.0),
+				true);
+		}
+	}
+
+	private action void A_SpawnCasingAlt()
+	{
+		if (GetCVar("casing_toggle") == 1)
+		{
+			let effect = invoker.SpawnEffect(
+				"RifleCasing",
+				(-2.0, 10.0, 11.0),
+				-16.0 + FRandom(-2.0, 2.0),
+				FRandom(-50.0, -57.5),
+				FRandom(4.0, 5.0),
+				true);
+			
+			effect.Roll = -9.0;
+		}
 	}
 }

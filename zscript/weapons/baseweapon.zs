@@ -3,6 +3,8 @@
 
 class BaseWeapon : DoomWeapon replaces DoomWeapon
 {
+	const SPAWN_OFFSET_DEPTH_FACTOR = 0.00805528;
+
 	ModifiableVector2 m_PSpritePosition;
 	ModifiableVector2 m_PSpriteScale;
 
@@ -138,6 +140,61 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		HUDExtensionRegistry.RemoveExtension(m_HUDExtension);
 	}
 
+	Actor SpawnEffect(
+		class<Actor> effectType,
+		vector3 spawnOffset = (0, 0, 0),
+		double yaw = 0.0,
+		double pitch = 0.0,
+		double velocity = double.Infinity,
+		bool addPawnVelocity = false,
+		bool adjustForFov = true,
+		bool followPSpriteOffset = true)
+	{
+		let pawn = PlayerPawn(owner);
+
+		// Bring to eye level
+		let spawnPoint = (0, 0, pawn.Player.viewz - pawn.Pos.z);
+		if (pawn.ViewPos) spawnPoint += pawn.ViewPos.Offset;
+
+		if (followPSpriteOffset)
+		{
+			let factor = SPAWN_OFFSET_DEPTH_FACTOR * spawnOffset.z;
+			let offsetX = m_PSpritePosition.GetX() - m_PSpritePosition.GetBaseX();
+			let offsetY = m_PSpritePosition.GetY() - m_PSpritePosition.GetBaseY();
+			spawnOffset.x += abs(offsetX) * factor * Math.Sign(offsetX);
+			spawnOffset.y += abs(offsetY) * factor * Math.Sign(offsetY);
+		}
+
+		if (adjustForFov)
+		{
+			spawnOffset.x /= GetSpawnOffsetFovFactor();
+			spawnOffset.y /= GetSpawnOffsetFovFactor();
+			spawnOffset.z *= GetSpawnOffsetFovFactor();
+		}
+
+		// Remap offset coordinates
+		vector3 zxyOffset = (spawnOffset.z, -spawnOffset.x, -spawnOffset.y);
+
+		// Rotate offset to view direction
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle);
+
+		let position = spawnPoint + zxyOffset;
+
+		// Rotate relative to pawn
+		yaw += pawn.Angle;
+
+		let effect = SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
+		if (addPawnVelocity) effect.Vel += pawn.Vel;
+		return effect;
+	}
+
+	action void A_SpawnEffect(class<Actor> effectType, vector3 spawnOffset = (0, 0, 0), double yaw = 0.0, double pitch = 0.0, double velocity = 0.0, bool addPawnVelocity = false)
+	{
+		let weapon = BaseWeapon(invoker);
+		weapon.SpawnEffect(effectType, spawnOffset, yaw, pitch, velocity, addPawnVelocity);
+	}
+
 	action void A_SetBaseOffset(int x, int y)
 	{
 		invoker.SetBaseOffset(x, y);
@@ -162,19 +219,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		A_SetPitch(pitch - sp);
 	}
 
-	action void A_CasingRifle(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RifleSpawnerR", 0, 0, x, y);
-	}
-
 	action void A_CasingShotgun(double x, double y)
 	{
 		if (GetCVar("casing_toggle") == 1) A_FireProjectile("ShellSpawnerR", 0, 0, x, y);
-	}
-
-	action void A_CasingPistol(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("PistolSpawnerR", 0, 0, x, y);
 	}
 
 	action void A_CasingGrenade(double x, double y)
@@ -238,6 +285,12 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		}
 	}
 
+	protected double GetSpawnOffsetFovFactor() const
+	{
+		let factor = Math.Remap(owner.Player.FOV, 75.0, 120.0, 1.6, 1.0);
+		return factor;
+	}
+
 	private void WeaponLookSway()
 	{
 		let swayForce = (
@@ -245,6 +298,45 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			(owner.Pitch - m_PreviousPlayerPitch) * (M_PI / 180) * m_LookSwayStrengthY);
 
 		m_WeaponLookSwayer.AddForce(swayForce);
+	}
+
+	private Actor SpawnProjectile(class<Actor> projectileType, vector3 position, double yaw, double pitch, double speed = double.Infinity)
+	{
+		position += owner.Pos;
+		if (position.z != ONFLOORZ && position.z != ONCEILINGZ)
+		{
+			if (position.z < owner.FloorZ)
+			{
+				position.z = owner.FloorZ;
+			}
+		}
+
+		let projectile = Spawn(projectileType, position, ALLOW_REPLACE);
+		projectile.Target = owner;
+		projectile.Angle = yaw;
+		projectile.Pitch = pitch;
+
+		if (projectile.bFloorHugger && projectile.bCeilingHugger)
+		{
+			projectile.VelFromAngle();
+		}
+		else
+		{
+			if (speed == double.Infinity) speed = projectile.Speed;
+			projectile.Vel3DFromAngle(speed, yaw, pitch);
+		}
+
+		if (projectile.bSPECTRAL)
+		{
+			projectile.SetFriendPlayer(owner.player);
+		}
+
+		if (!projectile.CheckMissileSpawn(owner.Radius))
+		{
+			projectile = null;
+		}
+
+		return projectile;
 	}
 }
 

@@ -312,6 +312,11 @@ class Melee_Puff: Bullet_Puff
 
 class BaseCasing : Actor
 {
+	double m_RollOrientation;
+
+	double m_StartRoll;
+	property StartingRoll: m_StartRoll;
+
 	Default
 	{
 		Height 4;
@@ -328,6 +333,32 @@ class BaseCasing : Actor
 		+THRUACTORS
 		+FORCEXYBILLBOARD
 		+ACTIVATEIMPACT
+		+ROLLSPRITE
+	}
+
+	override void BeginPlay()
+	{
+		Super.BeginPlay();
+
+		Roll = m_StartRoll;
+		m_RollOrientation = FRandomPick(1.0, -1.0);
+	}
+
+	override void Tick()
+	{
+		Super.Tick();
+
+		if (IsFrozen()) return;
+
+		if (!InStateSequence(CurState, ResolveState("Death")))
+		{
+			Roll -= FRandom(540.0, 1080.0) / TICRATE * m_RollOrientation;
+		}
+		else
+		{
+			bRollSprite = false;
+			bXFlip = abs(Roll) % 180.0 < 90.0;
+		}
 	}
 }
 
@@ -337,19 +368,14 @@ class PistolCasing : BaseCasing
 	{
 		Scale 0.14;
 		BounceSound "weapons/shell4";
+
+		BaseCasing.StartingRoll -72.5;
 	}
 
 	States
 	{
 	Spawn:
-		CAS3 A 2;
-		CAS3 B 2;
-		CAS3 C 2;
-		CAS3 D 2;
-		CAS3 E 2;
-		CAS3 F 2;
-		CAS3 G 2;
-		CAS3 H 2;
+		CAS3 I 16;
 		Loop;
 
 	Death:
@@ -370,20 +396,13 @@ class RevolverCasing : BaseCasing
 		Height 5;
 		Scale 0.14;
 		BounceSound "weapons/shell4";
+
 	}
 
 	States
 	{
 	Spawn:
-		CAS5 A 2;
-		CAS5 B 2;
-		CAS5 C 2;
-		CAS5 D 2;
-		CAS5 E 2;
-		CAS5 F 2;
-		CAS5 G 2;
-		CAS5 H 2;
-		CAS5 I 2;
+		CAS5 I 16;
 		Loop;
 
 	Death:
@@ -405,20 +424,16 @@ class RifleCasing : BaseCasing
 		Speed 8;
 		Scale 0.14;
 		BounceSound "weapons/shell2";
+
+		BaseCasing.StartingRoll -70.0;
 	}
 
 	States
 	{
 	Spawn:
-		CAS4 A 2;
-		CAS4 B 2;
-		CAS4 C 2;
-		CAS4 D 2;
-		CAS4 E 2;
-		CAS4 F 2;
-		CAS4 G 2;
-		CAS4 H 2;
+		CAS4 I 16;
 		Loop;
+
 	Death:
 		CAS4 I 350;
 		CAS4 I 3 A_SetTranslucent(0.8, 0);
@@ -439,23 +454,18 @@ class ShotgunCasing : BaseCasing
 		Speed 4;
 		Scale 0.18;
 		BounceSound "weapons/shell3";
+
+		BaseCasing.StartingRoll -50.0;
 	}
 
 	States
 	{
 	Spawn:
-		CAS2 A 2;
-		CAS2 B 2;
-		CAS2 C 2;
-		CAS2 D 2;
-		CAS2 E 2;
-		CAS2 F 2;
-		CAS2 G 2;
-		CAS2 H 2;
+		CAS2 I 16;
 		Loop;
 
 	Death:
-		CAS2 I 350 ;
+		CAS2 I 350;
 		CAS2 I 3 A_SetTranslucent(0.8, 0);
 		CAS2 I 3 A_SetTranslucent(0.6, 0);
 		CAS2 I 3 A_SetTranslucent(0.4, 0);
@@ -480,14 +490,7 @@ class GrenadeCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS6 A 2;
-		CAS6 B 2;
-		CAS6 C 2;
-		CAS6 D 2;
-		CAS6 E 2;
-		CAS6 F 2;
-		CAS6 G 2;
-		CAS6 H 2;
+		CAS6 I 16;
 		Loop;
 
 	Death:
@@ -547,7 +550,7 @@ class PistolSpawnerR : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -557,7 +560,7 @@ class PistolSpawnerL : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(-80, -90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -567,7 +570,7 @@ class RevolverSpawnerR : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -577,7 +580,7 @@ class RevolverSpawnerL : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(-80, -90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -587,7 +590,7 @@ class ShellSpawnerR : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -597,7 +600,7 @@ class ShellSpawnerL : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(-80, -90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -607,7 +610,7 @@ class RifleSpawnerR : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -617,7 +620,7 @@ class RifleSpawnerL : BaseSpawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(-80, -90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -627,7 +630,7 @@ class GrenadeSpawnerR : Basespawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -637,7 +640,7 @@ class GrenadeSpawnerL : Basespawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(-80, -90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }
@@ -647,7 +650,7 @@ class RocketSpawnerR : Basespawner
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RocketCasing", 0, random(-1, 1), random(80, 90), 0);
+		TNT1 A 0 NoDelay A_SpawnProjectile("RocketCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }

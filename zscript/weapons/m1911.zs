@@ -96,7 +96,7 @@ class Colt : BaseWeapon replaces Pistol
 			A_FRecoil(1);
 			A_SingleSmoke(6, -1);
 		}
-		M19F B 1 A_CasingPistol(18, 5);
+		M19F B 1 A_SpawnCasing();
 		M19F CDE 1;
 		M19F FG 2 A_WeaponReady(WRF_NOBOB);
 		Goto Ready;
@@ -112,7 +112,7 @@ class Colt : BaseWeapon replaces Pistol
 			A_FRecoil(1);
 			A_SingleSmoke(6, -1);
 		}
-		M1FE B 1 A_CasingPistol(18, 5);
+		M1FE B 1 A_SpawnCasing();
 		M1FE CEFGHI 1;
 		Goto AltReady;
 
@@ -209,6 +209,20 @@ class Colt : BaseWeapon replaces Pistol
 		TNT1 A 4;
 		TNT1 A 0 A_Lower(16);
 		Loop;
+	}
+
+	private action void A_SpawnCasing()
+	{
+		if (GetCVar("casing_toggle") == 1)
+		{
+			A_SpawnEffect(
+				"PistolCasing",
+				(15.0, 7.0, 24.0),
+				-90.0 + FRandom(0.0, 15.0),
+				FRandom(-20.0, -35.0),
+				FRandom(4.0, 6.0),
+				true);
+		}
 	}
 
 	private action State A_BranchOnEmpty(statelabel emptyState, statelabel nonEmptyState)

@@ -26,7 +26,7 @@ class WeatherParticle : Actor
 		Stop;
 	}
 
-	double GetParticleDrawDistance()
+	double GetParticleDrawDistance() const
 	{
 		int setting = GetCVar("splash_particles");
 		if (setting == 0) return 0.0;
@@ -34,91 +34,21 @@ class WeatherParticle : Actor
 	}
 }
 
-class RainDrop : WeatherParticle
+class WaterRipple : WeatherParticle
 {
 	Default
 	{
-		VSpeed -32.0;
-		Height 3;
-		XScale 0.4;
-		YScale 0.7;
-		Alpha 0.5;
+		Alpha 0.9;
 		RenderStyle "Add";
-		-NOGRAVITY;
+		+NOINTERACTION;
+		+FLATSPRITE;
+		+NOGRAVITY;
 	}
 
 	States
 	{
 	Spawn:
-		RAIN A 1;
-		Loop;
-	Death:
-		RAIN A 2;
-		TNT1 A 0 {
-			if (invoker.cursector.GetFloorTerrain(Sector.floor).IsLiquid)
-			{
-				return ResolveState("WaterDeath");
-			}
-
-			int splashParticleSetting = invoker.GetCVar("splash_particles");
-			if (splashParticleSetting > 0)
-			{
-				scale = (0.5,0.5);
-				bForceYBillboard = false;
-				bForceXYBillboard = true;
-				if (Distance3DSquared(players[consoleplayer].mo) <= GetParticleDrawDistance() ** 2)
-				{
-					if (splashParticleSetting == 6) // Extra detail for Ultra
-					{
-						for (int i = 0; i < Random(8, 12); ++i)
-						{
-							A_SpawnParticle(
-								0xFFFFFFFF,
-								SPF_RELVEL,
-								lifetime: 22,
-								size: FRandom(1.5, 2.5),
-								angle: FRandom(0.0, 360.0),
-								zoff: 1.0,
-								velx: FRandom(1.5, 4.0),
-								velz: FRandom(0.25, 1.5),
-								accelz: -0.25,
-								fadestepf: 0,
-								sizestep: -0.15
-							);
-						}
-					}
-
-					for (int i = 0; i < Random(splashParticleSetting, splashParticleSetting + 2); ++i)
-					{
-						A_SpawnParticle(
-							0xFFFFFFFF,
-							SPF_RELVEL,
-							lifetime: 22,
-							size: FRandom(2.5, 6.0),
-							angle: FRandom(0.0, 360.0),
-							zoff: 2.0,
-							velx: FRandom(0.75, 2.25),
-							velz: FRandom(0.5, 2.5),
-							accelz: -0.25,
-							fadestepf: 0,
-							sizestep: -0.5
-						);
-					}
-				}
-			}
-
-			return ResolveState(null);
-		}
-		RAIN BCDE 1;
-		Stop;
-
-	WaterDeath:
-		TNT1 A 0 {
-			invoker.bFlatSprite = true;
-			Angle = FRandom(0.0, 360.0);
-			Scale = (1.0, 1.0);
-			Alpha = 0.9;
-		}
+		TNT1 A 0 { Angle = FRandom(0.0, 360.0); }
 		RAIN FFGGHHIIJJKKLL 1 Bright {
 			A_SetTranslucent(max(0.0, invoker.Alpha - 0.9 / 14.0), 1);
 			Scale += (0.075, 0.075);

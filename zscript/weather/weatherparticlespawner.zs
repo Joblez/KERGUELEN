@@ -4,6 +4,7 @@ class WeatherParticleSpawner : WeatherSpawner
 	TextureID m_Texture;
 	int m_RenderStyle;
 	int m_Lifetime;
+	int m_ParticleFlags;
 	double m_Alpha;
 	double m_FadeStep;
 	double m_Size;
@@ -25,6 +26,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		WeatherAgent agent,
 		color particleColor = 0xFFFFFFFF,
 		int particleRenderStyle = STYLE_Normal,
+		int particleFlags = 0,
 		string particleTextureName = "",
 		int particleLifetime = 35,
 		double particleSize = 1,
@@ -41,29 +43,70 @@ class WeatherParticleSpawner : WeatherSpawner
 	{
 		WeatherParticleSpawner spawner = new("WeatherParticleSpawner");
 
-		spawner.m_Sector = sec;
-		spawner.m_Range = range;
-		spawner.m_WeatherAgent = agent;
-		spawner.m_Color = particleColor;
-		spawner.m_Texture = TexMan.CheckForTexture(particleTextureName);
-		spawner.m_RenderStyle = particleRenderStyle;
-		spawner.m_Lifetime = particleLifetime;
-		spawner.m_Size = particleSize;
-		spawner.m_SizeDeviation = particleSizeDeviation;
-		spawner.m_ShouldSimulateParticles = shouldSimulateParticles;
-		spawner.m_ShouldDoCallbackAtEndOfParticleLife = enableEndOfLifeCallbacks;
-		spawner.m_InitialVelocity = initialParticleVelocity;
-		spawner.m_InitialVelocityDeviation = initialParticleVelocityDeviation;
-		spawner.m_Acceleration = particleAcceleration;
-		spawner.m_AccelerationDeviation = particleAccelerationDeviation;
-		spawner.m_Alpha = particleAlpha;
-		spawner.m_FadeStep = particleFadeStep;
-		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
-		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
-		spawner.m_ProjectionLength = projectionTime * TICRATE;
+		spawner.Init(
+			density,
+			range,
+			sec,
+			agent,
+			particleColor,
+			particleRenderStyle,
+			particleFlags,
+			particleTextureName,
+			particleLifetime,
+			particleSize,
+			particleSizeDeviation,
+			initialParticleVelocity,
+			initialParticleVelocityDeviation,
+			particleAcceleration,
+			particleAccelerationDeviation,
+			particleAlpha,
+			particleFadeStep,
+			projectionTime,
+			shouldSimulateParticles,
+			enableEndOfLifeCallbacks);
 
 		return spawner;
+	}
+
+	void Init(
+		double density,
+		double range,
+		Sector sec,
+		WeatherAgent agent,
+		color particleColor,
+		int particleRenderStyle,
+		int particleFlags,
+		string particleTextureName,
+		int particleLifetime,
+		double particleSize,
+		double particleSizeDeviation,
+		vector3 initialParticleVelocity,
+		vector3 initialParticleVelocityDeviation,
+		vector3 particleAcceleration,
+		vector3 particleAccelerationDeviation,
+		double particleAlpha,
+		double particleFadeStep,
+		double projectionTime,
+		bool shouldSimulateParticles,
+		bool enableEndOfLifeCallbacks)
+	{
+		Super.Init(density, range, sec, null, agent, projectionTime);
+
+		m_Color = particleColor;
+		m_Texture = TexMan.CheckForTexture(particleTextureName);
+		m_RenderStyle = particleRenderStyle;
+		m_ParticleFlags = particleFlags;
+		m_Lifetime = particleLifetime;
+		m_Size = particleSize;
+		m_SizeDeviation = particleSizeDeviation;
+		m_InitialVelocity = initialParticleVelocity;
+		m_InitialVelocityDeviation = initialParticleVelocityDeviation;
+		m_Acceleration = particleAcceleration;
+		m_AccelerationDeviation = particleAccelerationDeviation;
+		m_Alpha = particleAlpha;
+		m_FadeStep = particleFadeStep;
+		m_ShouldSimulateParticles = shouldSimulateParticles;
+		m_ShouldDoCallbackAtEndOfParticleLife = enableEndOfLifeCallbacks;
 	}
 
 	override void Tick()
@@ -128,7 +171,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			m_Color,
 			m_Texture,
 			m_RenderStyle,
-			0,
+			m_ParticleFlags,
 			lifetime,
 			m_Size + FRandom(-m_SizeDeviation, m_SizeDeviation),
 			velx: velocity.x,
@@ -146,11 +189,6 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }
 
-	protected Actor Getagent() const
-	{
-		return m_WeatherAgent;
-	}
-
 	protected void SimulateParticle(
 		out WeatherParticleSimulationResult result,
 		vector3 position,
@@ -162,8 +200,9 @@ class WeatherParticleSpawner : WeatherSpawner
 			ThrowAbortException("Particle does not move, cannot simulate lifetime.");
 		}
 
+		Sector sec = GetSector();
 		int tics = 1;
-		double nextPlaneZ = GetApproachingPlaneZ(position, velocity);
+		double nextPlaneZ = GetApproachingPlaneZ(position, velocity, sec);
 
 		// Constant straight-down trajectory, simulate without iteration.
 		if (acceleration ~== Vec3Util.Zero() && velocity.xy ~== Vec2Util.Zero())
@@ -171,6 +210,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			result.m_Lifetime = abs((nextPlaneZ - position.z) / velocity.z);
 			result.m_EndPosition = (position.xy, nextPlaneZ);
 			result.m_EndVelocity = velocity;
+			result.m_Sector = sec;
 			return;
 		}
 
@@ -184,9 +224,9 @@ class WeatherParticleSpawner : WeatherSpawner
 			if (velocity.z > 0.0 && currentPosition.z >= nextPlaneZ) break;
 
 			if ((acceleration != Vec3Util.Zero())) velocity += acceleration;
-				
+
 			// Recheck next plane Z in case acceleration or lateral velocity changed the trajectory.
-			nextPlaneZ = GetApproachingPlaneZ(currentPosition, velocity);
+			nextPlaneZ = GetApproachingPlaneZ(currentPosition, velocity, sec);
 
 			tics++;
 		}
@@ -194,12 +234,11 @@ class WeatherParticleSpawner : WeatherSpawner
 		result.m_Lifetime = tics;
 		result.m_EndPosition = (currentPosition.xy, nextPlaneZ);
 		result.m_EndVelocity = velocity;
+		result.m_Sector = sec;
 	}
 
-	private double GetApproachingPlaneZ(vector3 position, vector3 velocity)
+	private double GetApproachingPlaneZ(vector3 position, vector3 velocity, out Sector sec)
 	{
-		Sector sec;
-		
 		if (velocity.xy ~== Vec2Util.Zero())
 		{
 			sec = GetSector();
@@ -225,6 +264,7 @@ struct WeatherParticleSimulationResult
 	int m_Lifetime;
 	vector3 m_EndPosition;
 	vector3 m_EndVelocity;
+	Sector m_Sector;
 
 	WeatherParticleCallbackData CreateCallbackData() const
 	{
@@ -233,6 +273,7 @@ struct WeatherParticleSimulationResult
 		data.m_Lifetime = m_Lifetime;
 		data.m_EndPosition = m_EndPosition;
 		data.m_EndVelocity = m_EndVelocity;
+		data.m_Sector = m_Sector;
 
 		return data;
 	}
@@ -244,6 +285,7 @@ class WeatherParticleCallbackData
 	int m_Lifetime;
 	vector3 m_EndPosition;
 	vector3 m_EndVelocity;
+	Sector m_Sector;
 }
 
 class WeatherParticleLineTracer : LineTracer

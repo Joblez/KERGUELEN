@@ -28,6 +28,7 @@ version "4.10.0"
 #include "zscript/weather/weatherhandler.zs"
 #include "zscript/weather/weatherspawner.zs"
 #include "zscript/weather/weatherparticlespawner.zs"
+#include "zscript/weather/rainspawner.zs"
 
 // Second-level includes.
 #include "zscript_nashgore.zs"

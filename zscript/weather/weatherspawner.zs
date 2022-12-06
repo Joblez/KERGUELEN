@@ -17,18 +17,20 @@ class WeatherSpawner : Thinker
 	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherParticle> particleType, WeatherAgent agent, double projectionTime = 1.0)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
-
-		spawner.m_Range = range;
-		spawner.m_Sector = sec;
-		spawner.m_ParticleType = particleType;
-		spawner.m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
-		spawner.m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		spawner.m_Frequency = density * spawner.m_Triangulation.GetArea() / 2048.0 / TICRATE;
-		spawner.m_ProjectionLength = projectionTime * TICRATE;
-
-		spawner.m_WeatherAgent = agent;
-
+		spawner.Init(density, range, sec, particleType, agent, projectionTime);
 		return spawner;
+	}
+
+	void Init(double density, double range, Sector sec, class<WeatherParticle> particleType, WeatherAgent agent, double projectionTime = 1.0)
+	{
+		m_Range = range;
+		m_Sector = sec;
+		m_ParticleType = particleType;
+		m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
+		m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
+		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
+		m_ProjectionLength = projectionTime * TICRATE;
+		m_WeatherAgent = agent;
 	}
 
 	override void Tick()

@@ -15,7 +15,7 @@ class RainSpawner : WeatherParticleSpawner
 		int particleLifetime = 35,
 		double particleSize = 20.0,
 		double particleSizeDeviation = 2.0,
-		vector3 initialParticleVelocity = (0.0, 0.0, -32.0),
+		vector3 initialParticleVelocity = (0.0, 0.0, -42.0),
 		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 2.0),
 		vector3 particleAcceleration = (0.0, 0.0, 0.0),
 		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),

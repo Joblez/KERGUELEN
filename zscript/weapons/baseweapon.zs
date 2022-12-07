@@ -185,7 +185,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		yaw += pawn.Angle;
 
 		let effect = SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
-		if (addPawnVelocity) effect.Vel += pawn.Vel;
+		if (effect && addPawnVelocity) effect.Vel += pawn.Vel;
 		return effect;
 	}
 

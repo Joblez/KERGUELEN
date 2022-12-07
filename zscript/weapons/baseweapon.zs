@@ -185,7 +185,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		yaw += pawn.Angle;
 
 		let effect = SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
-		if (effect && addPawnVelocity) effect.Vel += pawn.Vel;
+		if (addPawnVelocity) effect.Vel += pawn.Vel;
 		return effect;
 	}
 
@@ -299,11 +299,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		if (projectile.bSPECTRAL)
 		{
 			projectile.SetFriendPlayer(owner.player);
-		}
-
-		if (!projectile.CheckMissileSpawn(owner.Radius))
-		{
-			projectile = null;
 		}
 
 		return projectile;

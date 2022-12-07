@@ -757,12 +757,7 @@ class WeaponBase : DoomWeapon abstract
 		{
 			projectile.SetFriendPlayer(owner.player);
 		}
-
-		if (!projectile.CheckMissileSpawn(owner.Radius))
-		{
-			projectile = null;
-		}
-
+		
 		return projectile;
 	}
 

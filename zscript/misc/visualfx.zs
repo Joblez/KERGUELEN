@@ -357,7 +357,8 @@ class BaseCasing : Actor
 		else
 		{
 			bRollSprite = false;
-			bXFlip = abs(Roll) % 180.0 < 90.0;
+			double rollDegrees = abs(Roll % 360.0);
+			bXFlip = !((rollDegrees > 90.0 && rollDegrees < 180.0) || (rollDegrees > 180.0 && rollDegrees < 270.0));
 		}
 	}
 }

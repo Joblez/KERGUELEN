@@ -280,9 +280,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_SpawnEffect(
 				"RifleCasing",
 				(20.0, 20.0, 28.0),
-				-90.0 + FRandom(-5.0, 5.0),
-				FRandom(-60.0, -70.0),
-				FRandom(4.5, 6.0),
+				-90.0 + FRandom(-5.0, 1.0),
+				FRandom(-70.0, -75.0),
+				FRandom(5.35, 5.45),
 				true);
 		}
 	}
@@ -296,7 +296,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 				(-2.0, 10.0, 11.0),
 				-16.0 + FRandom(-2.0, 2.0),
 				FRandom(-50.0, -57.5),
-				FRandom(4.0, 5.0),
+				FRandom(4.75, 5.25),
 				true);
 			
 			effect.Roll = -9.0;

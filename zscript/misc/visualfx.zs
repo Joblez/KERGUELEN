@@ -30,10 +30,10 @@ class MuzzleSmoke2 : MuzzleSmoke
 	Default
 	{
 		Speed 1;
-		Alpha 0.3;
+		Alpha 0.5;
 		Radius 0;
 		Height 0;
-		Scale 0.8;
+		Scale 1.0;
 		+NOGRAVITY
 		+NOBLOCKMAP
 		+FLOORCLIP
@@ -52,7 +52,7 @@ class ExplosionSmoke : Actor
 		Alpha 0.3;
 		Radius 2;
 		Height 2;
-		Scale 0.8;
+		Scale 1.0;
 		Projectile;
 		Speed 12;
 		Gravity 0.65;
@@ -375,7 +375,7 @@ class PistolCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS3 I 16;
+		CAS3 ABCDEFGH 5;
 		Loop;
 
 	Death:
@@ -402,7 +402,7 @@ class RevolverCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS5 I 16;
+		CAS5  ABCDEFGH 5;
 		Loop;
 
 	Death:
@@ -431,7 +431,7 @@ class RifleCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS4 I 16;
+		CAS4 ABCDEFGH 5;
 		Loop;
 
 	Death:
@@ -461,7 +461,7 @@ class ShotgunCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS2 I 16;
+		CAS2 ABCDEFGH 5;
 		Loop;
 
 	Death:

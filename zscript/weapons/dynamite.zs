@@ -168,13 +168,13 @@ class DynamiteStick : Actor
 				for (int i = 0; i < 9; ++i)
 				{
 					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360));
 					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile("MuzzleSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360));
 				}
 			}
 		}
-		BOOM ABCDEFGHIJKLMOPQRSTUVWXY 2 Bright Radius_Quake(100,8,0,15,0);
+		BOOM ABCDEFGHIJKLMOPQRST 1 Bright Radius_Quake(100,8,0,15,0);
 		Stop;
 	Grenade:
 		DYPP ABC 10 A_Die;

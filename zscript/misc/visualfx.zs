@@ -344,12 +344,14 @@ class BaseCasing : Actor
 
 		m_VirtualRoll = m_StartRoll + 22.5;
 		m_RollOrientation = FRandomPick(1.0, -1.0);
-
+		ConvertVirtualRoll();
 	}
 
 	override void Tick()
 	{
 		Super.Tick();
+
+		if (IsFrozen()) return;
 
 		if (!InStateSequence(CurState, ResolveState("Death")))
 		{
@@ -471,7 +473,7 @@ class ShotgunCasing : BaseCasing
 		Scale 0.18;
 		BounceSound "weapons/shell3";
 
-		BaseCasing.StartingRoll 50.0;
+		BaseCasing.StartingRoll 130.0;
 	}
 
 	States

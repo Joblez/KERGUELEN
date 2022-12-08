@@ -244,8 +244,8 @@ class M2C : BaseWeapon replaces Chaingun
 				"RifleCasing",
 				(23.0, 16.0, 32.0),
 				-90.0 + FRandom(-15.0, 15.0),
-				FRandom(-50.0, -65.0),
-				FRandom(3.5, 5.5),
+				FRandom(-40.0, -65.0),
+				FRandom(3.0, 5.5),
 				true);
 		}
 	}

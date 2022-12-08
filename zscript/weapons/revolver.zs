@@ -148,13 +148,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWEJ M 3;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
-			RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
-
-			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
-			{
-				A_SpawnCasing();
-			}
-
+			A_DropCasings();
 			A_TakeInventory("RevoCylinder", BCYN);
 			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
 			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
@@ -240,17 +234,24 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Wait;
 	}
 
-	private action void A_SpawnCasing()
+	private action void A_DropCasings()
 	{
 		if (GetCVar("casing_toggle") == 1)
 		{
-			A_SpawnEffect(
-				"RevolverCasing",
-				(FRandom(-6.0, 4.0), FRandom(8.0, 10.0), FRandom(3.0, 6.0)),
-				0.0,
-				FRandom(88.0, 92.0),
-				FRandom(1.0, 1.5),
-				true);
+			// Yuck.
+			RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
+
+			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
+			{
+				vector2 coords = MathVec2.PolarToCartesian((3.0, (360.0 - double(i) * 60.0)));
+				A_SpawnEffect(
+					"RevolverCasing",
+					(coords.x, coords.y + 8.0, -2.0),
+					210.0,
+					FRandom(62.0, 63.0),
+					FRandom(2.0, 2.5),
+					true);
+			}
 		}
 	}
 }

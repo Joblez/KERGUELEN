@@ -269,7 +269,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISR2 C 1 A_SetBaseOffset(-65, 81);
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
-		ITAI A 0 A_Lower(16);
+		ITAI A 1 A_Lower(16);
 		Wait;
 	}
 
@@ -296,7 +296,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 				(-2.0, 10.0, 11.0),
 				-16.0 + FRandom(-2.0, 2.0),
 				FRandom(-50.0, -57.5),
-				FRandom(4.75, 5.25),
+				FRandom(4.5, 5.0),
 				true);
 			
 			effect.Roll = -9.0;

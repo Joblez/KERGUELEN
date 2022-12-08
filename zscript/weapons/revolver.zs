@@ -237,7 +237,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
-		Loop;
+		Wait;
 	}
 
 	private action void A_SpawnCasing()

@@ -33,8 +33,8 @@ class Colt : BaseWeapon replaces Pistol
 	States
 	{
 	Spawn:
-		PIST A 1;
-		Loop;
+		PIST A -1;
+		Stop;
 
 	ZF:
 		TNT1 A 1 A_VRecoil(0.99, 1, 4);

@@ -113,6 +113,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS FGH 2 A_SetBaseOffset(1, 30);
 		DYNS I 2 A_SetBaseOffset(0, WEAPONTOP);
 		TNT1 A 0 A_Raise(16);
+		Wait;
 
 	Deselect:
 		DYNS FEDCB 2;
@@ -120,6 +121,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS A 2;
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 0 A_Lower(16);
+		Wait;
 	}
 }
 

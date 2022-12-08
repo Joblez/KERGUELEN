@@ -313,10 +313,11 @@ class Melee_Puff: Bullet_Puff
 class BaseCasing : Actor
 {
 	double m_RollOrientation;
-	double m_VirtualRoll;
 
 	double m_StartRoll;
 	property StartingRoll: m_StartRoll;
+
+	private double m_VirtualRoll;
 
 	Default
 	{
@@ -377,6 +378,12 @@ class BaseCasing : Actor
 
 		// Subtract 22.5 from the remainder to land at the midpoint between angle frames.
 		Roll = (rollAngle % 45.0) - 22.5;
+	}
+
+	void SetVirtualRoll(double newRoll)
+	{
+		m_VirtualRoll = newRoll + 22.5;
+		ConvertVirtualRoll();
 	}
 }
 
@@ -443,7 +450,7 @@ class RifleCasing : BaseCasing
 		Scale 0.14;
 		BounceSound "weapons/shell2";
 
-		BaseCasing.StartingRoll 70.0;
+		BaseCasing.StartingRoll 145.0;
 	}
 
 	States

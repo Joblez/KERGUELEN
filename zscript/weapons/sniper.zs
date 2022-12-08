@@ -277,13 +277,16 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	{
 		if (GetCVar("casing_toggle") == 1)
 		{
-			A_SpawnEffect(
-				"RifleCasing",
-				(20.0, 20.0, 28.0),
-				-90.0 + FRandom(-5.0, 1.0),
-				FRandom(-70.0, -75.0),
-				FRandom(5.35, 5.45),
-				true);
+			RifleCasing effect = RifleCasing(
+				invoker.SpawnEffect(
+					"RifleCasing",
+					(20.0, 20.0, 28.0),
+					-90.0 + FRandom(-5.0, 1.0),
+					FRandom(-70.0, -75.0),
+					FRandom(5.35, 5.45),
+					true));
+			
+			effect.SetVirtualRoll(130.0);
 		}
 	}
 
@@ -291,15 +294,16 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	{
 		if (GetCVar("casing_toggle") == 1)
 		{
-			let effect = invoker.SpawnEffect(
-				"RifleCasing",
-				(-2.0, 10.0, 11.0),
-				-16.0 + FRandom(-2.0, 2.0),
-				FRandom(-50.0, -57.5),
-				FRandom(4.5, 5.0),
-				true);
+			RifleCasing effect = RifleCasing(
+				invoker.SpawnEffect(
+					"RifleCasing",
+					(-2.0, 10.0, 11.0),
+					-16.0 + FRandom(-2.0, 2.0),
+					FRandom(-50.0, -57.5),
+					FRandom(4.5, 5.0),
+					true));
 			
-			effect.Roll = -9.0;
+			effect.SetVirtualRoll(175.0);
 		}
 	}
 }

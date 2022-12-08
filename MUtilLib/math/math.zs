@@ -369,10 +369,7 @@ class MathVec3
 
 	static vector2 ToYawAndPitch(vector3 vector)
 	{
-		vector2 result;
-		result.x = 1 / (vector.x / -(vector.y == 0.0 ? double.Epsilon : vector.y));
-		result.y = 1 / (sqrt((vector.x * vector.x) + (vector.y * vector.y)) / (vector.z == 0.0 ? double.Epsilon : vector.z));
-		return result;
+		return (atan2(vector.y, vector.x), atan(vector.z / sqrt(vector.x * vector.x + vector.y * vector.y)));
 	}
 
 	static vector3 SmoothDamp(

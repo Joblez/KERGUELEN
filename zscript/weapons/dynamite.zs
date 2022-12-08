@@ -176,7 +176,8 @@ class DynamiteStick : Actor
 				}
 			}
 		}
-		BOOM ABCDEFGHIJKLMOPQRST 1 Bright Radius_Quake(100,8,0,15,0);
+		BOOM TRPMKJIHGFEDCB 1 Bright Radius_Quake(100,8,0,15,0);
+		// BOOM ABCDEFGHIJKLMOPQRST 1 Bright Radius_Quake(100,8,0,15,0);
 		Stop;
 	Grenade:
 		DYPP ABC 10 A_Die;

@@ -417,7 +417,15 @@ class WeaponBase : DoomWeapon abstract
 		DoAttackSideEffects(ammoCost, fireType);
 	}
 
-	Actor SpawnEffect(class<Actor> effectType, vector3 spawnOffset = (0, 0, 0), double yaw = 0.0, double pitch = 0.0, double velocity = double.Infinity, bool adjustForFov = true, bool followPSpriteOffset = true)
+	Actor SpawnEffect(
+		class<Actor> effectType,
+		vector3 spawnOffset = (0, 0, 0),
+		double yaw = 0.0,
+		double pitch = 0.0,
+		double velocity = double.Infinity,
+		bool addPawnVelocity = false,
+		bool adjustForFov = true,
+		bool followPSpriteOffset = true)
 	{
 		let pawn = PlayerPawn(owner);
 
@@ -453,7 +461,9 @@ class WeaponBase : DoomWeapon abstract
 		// Rotate relative to pawn
 		yaw += pawn.Angle;
 
-		return SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
+		let effect = SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
+		if (addPawnVelocity) effect.Vel += pawn.Vel;
+		return effect;
 	}
 
 	void SetBaseOffset(int x, int y)
@@ -597,10 +607,10 @@ class WeaponBase : DoomWeapon abstract
 		weapon.WeaponRecoil(offsetForce, scaleForce);
 	}
 
-	action void A_SpawnEffect(class<Actor> effectType, vector3 spawnOffset = (0, 0, 0), double yaw = 0.0, double pitch = 0.0, double velocity = 0.0)
+	action void A_SpawnEffect(class<Actor> effectType, vector3 spawnOffset = (0, 0, 0), double yaw = 0.0, double pitch = 0.0, double velocity = 0.0, bool addPawnVelocity = false)
 	{
 		let weapon = WeaponBase(invoker);
-		weapon.SpawnEffect(effectType, spawnOffset, yaw, pitch, velocity);
+		weapon.SpawnEffect(effectType, spawnOffset, yaw, pitch, velocity, addPawnVelocity);
 	}
 
 	protected double GetSpawnOffsetFovFactor() const

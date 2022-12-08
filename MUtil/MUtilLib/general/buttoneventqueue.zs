@@ -68,43 +68,43 @@ class ButtonEventQueue : Thinker
 		string eventText;
 		switch (event)
 		{
-			case BT_ATTACK:		eventText = eventText.."ATTACK"; break;
+			case BT_ATTACK:			eventText = eventText.."ATTACK"; break;
 			case BT_USE:			eventText = eventText.."USE"; break;
 			case BT_JUMP:			eventText = eventText.."JUMP"; break;
-			case BT_CROUCH:		eventText = eventText.."CROUCH"; break;
+			case BT_CROUCH:			eventText = eventText.."CROUCH"; break;
 			case BT_TURN180:		eventText = eventText.."TURN180"; break;
-			case BT_ALTATTACK:	eventText = eventText.."ALTATTACK"; break;
-			case BT_RELOAD:		eventText = eventText.."RELOAD"; break;
+			case BT_ALTATTACK:		eventText = eventText.."ALTATTACK"; break;
+			case BT_RELOAD:			eventText = eventText.."RELOAD"; break;
 			case BT_ZOOM:			eventText = eventText.."ZOOM"; break;
 			case BT_SPEED:			eventText = eventText.."SPEED"; break;
-			case BT_STRAFE:		eventText = eventText.."STRAFE"; break;
-			case BT_MOVERIGHT:	eventText = eventText.."MOVERIGHT"; break;
+			case BT_STRAFE:			eventText = eventText.."STRAFE"; break;
+			case BT_MOVERIGHT:		eventText = eventText.."MOVERIGHT"; break;
 			case BT_MOVELEFT:		eventText = eventText.."MOVELEFT"; break;
 			case BT_BACK:			eventText = eventText.."BACK"; break;
 			case BT_FORWARD:		eventText = eventText.."FORWARD"; break;
 			case BT_RIGHT:			eventText = eventText.."RIGHT"; break;
 			case BT_LEFT:			eventText = eventText.."LEFT"; break;
-			case BT_LOOKUP:		eventText = eventText.."LOOKUP"; break;
+			case BT_LOOKUP:			eventText = eventText.."LOOKUP"; break;
 			case BT_LOOKDOWN:		eventText = eventText.."LOOKDOWN"; break;
-			case BT_MOVEUP:		eventText = eventText.."MOVEUP"; break;
+			case BT_MOVEUP:			eventText = eventText.."MOVEUP"; break;
 			case BT_MOVEDOWN:		eventText = eventText.."MOVEDOWN"; break;
-			case BT_SHOWSCORES:	eventText = eventText.."SHOWSCORES"; break;
+			case BT_SHOWSCORES:		eventText = eventText.."SHOWSCORES"; break;
 			case BT_USER1:			eventText = eventText.."USER1"; break;
 			case BT_USER2:			eventText = eventText.."USER2"; break;
 			case BT_USER3:			eventText = eventText.."USER3"; break;
 			case BT_USER4:			eventText = eventText.."USER4"; break;
 			case BT_RUN:			eventText = eventText.."RUN"; break;
 
-			default:					eventText = eventText.."None"; break;
+			default:				eventText = eventText.."None"; break;
 		}
 
 		eventText = eventText..", ";
 
 		switch (type)
 		{
-			case BTEVENT_Pressed:	eventText = eventText.."Pressed"; break;
-			case BTEVENT_Released:	eventText = eventText.."Released"; break;
-			default:						eventText = eventText.."None"; break;
+			case BTEVENT_Pressed:		eventText = eventText.."Pressed"; break;
+			case BTEVENT_Released:		eventText = eventText.."Released"; break;
+			default:					eventText = eventText.."None"; break;
 		}
 
 		return eventText;

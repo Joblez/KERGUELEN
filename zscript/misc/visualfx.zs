@@ -313,6 +313,7 @@ class Melee_Puff: Bullet_Puff
 class BaseCasing : Actor
 {
 	double m_RollOrientation;
+	double m_VirtualRoll;
 
 	double m_StartRoll;
 	property StartingRoll: m_StartRoll;
@@ -334,32 +335,46 @@ class BaseCasing : Actor
 		+FORCEXYBILLBOARD
 		+ACTIVATEIMPACT
 		+ROLLSPRITE
+		+ROLLCENTER
 	}
 
 	override void BeginPlay()
 	{
 		Super.BeginPlay();
 
-		Roll = m_StartRoll;
+		m_VirtualRoll = m_StartRoll + 22.5;
 		m_RollOrientation = FRandomPick(1.0, -1.0);
+
 	}
 
 	override void Tick()
 	{
 		Super.Tick();
 
-		if (IsFrozen()) return;
-
 		if (!InStateSequence(CurState, ResolveState("Death")))
 		{
-			Roll -= FRandom(540.0, 1080.0) / TICRATE * m_RollOrientation;
+			m_VirtualRoll += FRandom(480.0, 1080.0) / TICRATE;
+			ConvertVirtualRoll();
 		}
 		else
 		{
 			bRollSprite = false;
-			double rollDegrees = abs(Roll % 360.0);
-			bXFlip = !((rollDegrees > 90.0 && rollDegrees < 180.0) || (rollDegrees > 180.0 && rollDegrees < 270.0));
+			double rollAngle = Math.PosMod(m_VirtualRoll, 360.0);
+			bXFlip = rollAngle < 180.0;
 		}
+	}
+
+	void ConvertVirtualRoll()
+	{
+		// Frames A-H = numbers 0-7.
+
+		double rollAngle = Math.PosMod(m_VirtualRoll, 360.0);
+
+		// Frames are ordered counterclockwise starting from 0° and go in 45° increments.
+		frame = uint(rollAngle / 45);
+
+		// Subtract 22.5 from the remainder to land at the midpoint between angle frames.
+		Roll = (rollAngle % 45.0) - 22.5;
 	}
 }
 
@@ -370,13 +385,13 @@ class PistolCasing : BaseCasing
 		Scale 0.14;
 		BounceSound "weapons/shell4";
 
-		BaseCasing.StartingRoll -72.5;
+		BaseCasing.StartingRoll 72.5;
 	}
 
 	States
 	{
 	Spawn:
-		CAS3 ABCDEFGH 5;
+		CAS3 A 1;
 		Loop;
 
 	Death:
@@ -403,7 +418,7 @@ class RevolverCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS5  ABCDEFGH 5;
+		CAS5 A 1;
 		Loop;
 
 	Death:
@@ -426,13 +441,13 @@ class RifleCasing : BaseCasing
 		Scale 0.14;
 		BounceSound "weapons/shell2";
 
-		BaseCasing.StartingRoll -70.0;
+		BaseCasing.StartingRoll 70.0;
 	}
 
 	States
 	{
 	Spawn:
-		CAS4 ABCDEFGH 5;
+		CAS4 A 1;
 		Loop;
 
 	Death:
@@ -456,13 +471,13 @@ class ShotgunCasing : BaseCasing
 		Scale 0.18;
 		BounceSound "weapons/shell3";
 
-		BaseCasing.StartingRoll -50.0;
+		BaseCasing.StartingRoll 50.0;
 	}
 
 	States
 	{
 	Spawn:
-		CAS2 ABCDEFGH 5;
+		CAS2 A 1;
 		Loop;
 
 	Death:
@@ -491,7 +506,7 @@ class GrenadeCasing : BaseCasing
 	States
 	{
 	Spawn:
-		CAS6 I 16;
+		CAS6 A 1;
 		Loop;
 
 	Death:
@@ -517,8 +532,9 @@ class RocketCasing : BaseCasing
 	States
 	{
 	Spawn:
-		RCCA A 2;
+		RCCA A 1;
 		Loop;
+
 	Death:
 		RCCA A 350;
 		RCCA A 3 A_SetTranslucent(0.8, 0);

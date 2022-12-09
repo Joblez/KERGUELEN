@@ -248,7 +248,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 					"RevolverCasing",
 					(coords.x, coords.y + 8.0, -2.0),
 					210.0,
-					FRandom(62.0, 63.0),
+					FRandom(-62.0, -63.0),
 					FRandom(2.0, 2.5),
 					true);
 			}

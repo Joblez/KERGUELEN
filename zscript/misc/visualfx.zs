@@ -314,10 +314,11 @@ class BaseCasing : Actor
 {
 	double m_RollOrientation;
 
-	double m_StartRoll;
+	meta double m_StartRoll;
 	property StartingRoll: m_StartRoll;
 
 	private double m_VirtualRoll;
+	private bool m_FirstTickPassed;
 
 	Default
 	{
@@ -343,20 +344,27 @@ class BaseCasing : Actor
 	{
 		Super.BeginPlay();
 
-		m_VirtualRoll = m_StartRoll + 22.5;
 		m_RollOrientation = FRandomPick(1.0, -1.0);
-		ConvertVirtualRoll();
+		SetVirtualRoll(m_StartRoll);
 	}
 
 	override void Tick()
 	{
 		Super.Tick();
 
+		// Skip first tick so casings can be seen at their starting roll.
+		if (!m_FirstTickPassed)
+		{
+			m_FirstTickPassed = true;
+			ConvertVirtualRoll();
+			return;
+		}
+
 		if (IsFrozen()) return;
 
 		if (!InStateSequence(CurState, ResolveState("Death")))
 		{
-			m_VirtualRoll += FRandom(480.0, 1080.0) / TICRATE;
+			m_VirtualRoll += FRandom(1.0, 3.0) * 360.0 / TICRATE * m_RollOrientation;
 			ConvertVirtualRoll();
 		}
 		else
@@ -375,9 +383,10 @@ class BaseCasing : Actor
 
 		// Frames are ordered counterclockwise starting from 0° and go in 45° increments.
 		frame = uint(rollAngle / 45);
+		Console.Printf("Roll: %f, Frame %i", m_VirtualRoll, frame);
 
 		// Subtract 22.5 from the remainder to land at the midpoint between angle frames.
-		Roll = (rollAngle % 45.0) - 22.5;
+		A_SetRoll(Math.PosMod(rollAngle % 45.0, 360.0) - 22.5, SPF_INTERPOLATE);
 	}
 
 	void SetVirtualRoll(double newRoll)
@@ -450,14 +459,14 @@ class RifleCasing : BaseCasing
 		Scale 0.14;
 		BounceSound "weapons/shell2";
 
-		BaseCasing.StartingRoll 145.0;
+		BaseCasing.StartingRoll 140.0;
 	}
 
 	States
 	{
 	Spawn:
 		CAS4 A 1;
-		Loop;
+		Wait;
 
 	Death:
 		CAS4 I 350;

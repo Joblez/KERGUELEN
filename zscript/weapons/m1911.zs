@@ -219,7 +219,7 @@ class Colt : BaseWeapon replaces Pistol
 				"PistolCasing",
 				(15.0, 7.0, 24.0),
 				-90.0 + FRandom(0.0, 15.0),
-				FRandom(-20.0, -35.0),
+				FRandom(20.0, 35.0),
 				FRandom(4.0, 6.0),
 				true);
 		}

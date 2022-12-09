@@ -282,7 +282,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 					"RifleCasing",
 					(20.0, 20.0, 28.0),
 					-90.0 + FRandom(-5.0, 1.0),
-					FRandom(-70.0, -75.0),
+					FRandom(70.0, 75.0),
 					FRandom(5.35, 5.45),
 					true));
 			
@@ -299,8 +299,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 					"RifleCasing",
 					(-2.0, 10.0, 11.0),
 					-16.0 + FRandom(-2.0, 2.0),
-					FRandom(-50.0, -57.5),
-					FRandom(4.5, 5.0),
+					FRandom(50.0, 57.5),
+					FRandom(4.35, 4.65),
 					true));
 			
 			effect.SetVirtualRoll(175.0);

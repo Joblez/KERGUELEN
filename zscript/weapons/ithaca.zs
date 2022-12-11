@@ -239,8 +239,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 				"ShotgunCasing",
 				(21.0, 19.0, 42.0),
 				0.0 + FRandom(7.0, 0),
-				FRandom(20.0, 25.0),
-				FRandom(9.0, 9.5),
+				FRandom(-6.0, -6.75),
+				FRandom(6.0, 6.5),
 				true);
 		}
 	}

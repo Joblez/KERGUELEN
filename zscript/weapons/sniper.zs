@@ -280,7 +280,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			RifleCasing effect = RifleCasing(
 				invoker.SpawnEffect(
 					"RifleCasing",
-					(20.0, 20.0, 28.0),
+					(17.0, 17.0, 23.0),
 					-90.0 + FRandom(-5.0, 1.0),
 					FRandom(70.0, 75.0),
 					FRandom(5.35, 5.45),

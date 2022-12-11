@@ -403,7 +403,7 @@ class PistolCasing : BaseCasing
 		Scale 0.14;
 		BounceSound "weapons/shell4";
 
-		BaseCasing.StartingRoll 72.5;
+		BaseCasing.StartingRoll 110.0;
 	}
 
 	States
@@ -559,133 +559,6 @@ class RocketCasing : BaseCasing
 		RCCA A 3 A_SetTranslucent(0.6, 0);
 		RCCA A 3 A_SetTranslucent(0.4, 0);
 		RCCA A 3 A_SetTranslucent(0.2, 0);
-		Stop;
-	}
-}
-
-class BaseSpawner: Actor
-{
-	double x;
-	double y;
-	double angle;
-
-	Default
-	{
-		Projectile;
-		Speed 35;
-		+NOCLIP;
-		+DONTSPLASH;
-		+NOTIMEFREEZE;
-		-ACTIVATEIMPACT;
-	}
-}
-
-class PistolSpawnerR : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class PistolSpawnerL : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("PistolCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class RevolverSpawnerR : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class RevolverSpawnerL : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RevolverCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class ShellSpawnerR : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class ShellSpawnerL : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("ShotgunCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class RifleSpawnerR : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class RifleSpawnerL : BaseSpawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RifleCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class GrenadeSpawnerR : Basespawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class GrenadeSpawnerL : Basespawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("GrenadeCasing", 0, random(-1, 1), random(-80, -90), 0, FRandom(0.0, 50.0));
-		Stop;
-	}
-}
-
-class RocketSpawnerR : Basespawner
-{
-	States
-	{
-	Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("RocketCasing", 0, random(-1, 1), random(80, 90), 0, FRandom(0.0, 50.0));
 		Stop;
 	}
 }

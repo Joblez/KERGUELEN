@@ -322,8 +322,8 @@ class BaseCasing : Actor
 
 	Default
 	{
-		Height 4;
-		Radius 2;
+		Height 2;
+		Radius 3;
 		Speed 8;
 		Gravity 0.8;
 		BounceFactor 0.5;
@@ -427,7 +427,7 @@ class RevolverCasing : BaseCasing
 {
 	Default
 	{
-		Height 5;
+		Radius 2;
 		Scale 0.14;
 		BounceSound "weapons/shell4";
 
@@ -453,8 +453,6 @@ class RifleCasing : BaseCasing
 {
 	Default
 	{
-		Height 8;
-		Radius 6;
 		Speed 8;
 		Scale 0.14;
 		BounceSound "weapons/shell2";
@@ -483,8 +481,8 @@ class ShotgunCasing : BaseCasing
 {
 	Default
 	{
-		Height 6;
-		Radius 4;
+		Height 3;
+		Radius 3;
 		Speed 4;
 		Scale 0.18;
 		BounceSound "weapons/shell3";

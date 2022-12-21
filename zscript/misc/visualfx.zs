@@ -505,36 +505,7 @@ class ShotgunCasing : BaseCasing
 		CAS2 I 3 A_SetTranslucent(0.0, 0);
 		Stop;
 	}
-
 }
-
-class GrenadeCasing : BaseCasing
-{
-	Default
-	{
-		Height 8;
-		Radius 6;
-		Speed 4;
-		Scale 0.5;
-		BounceSound "weapons/shell3";
-	}
-
-	States
-	{
-	Spawn:
-		CAS6 A 1;
-		Loop;
-
-	Death:
-		CAS6 I 350;
-		CAS6 I 3 A_SetTranslucent(0.8, 0);
-		CAS6 I 3 A_SetTranslucent(0.6, 0);
-		CAS6 I 3 A_SetTranslucent(0.4, 0);
-		CAS6 I 3 A_SetTranslucent(0.2, 0);
-		Stop;
-	}
-}
-
 class RocketCasing : BaseCasing
 {
 	Default

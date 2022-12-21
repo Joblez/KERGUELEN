@@ -92,8 +92,11 @@ class RainSpawner : WeatherParticleSpawner
 			m_WeatherAgent.SetXYZ(oldPosition);
 			return;
 		}
-		
-		if (m_WeatherAgent.Distance3DSquared(players[consoleplayer].mo) <= GetSplashParticleDrawDistance() ** 2)
+
+		PlayerPawn pawn = PlayerPawn(players[consoleplayer].mo);
+
+		if (m_WeatherAgent.Distance3DSquared(pawn) <= GetSplashParticleDrawDistance() ** 2
+			&& Actor.AbsAngle(m_WeatherAgent.AngleTo(pawn), pawn.Angle) <= 180.0)
 		{
 			if (splashParticleSetting == 6) // Extra detail for Ultra
 			{

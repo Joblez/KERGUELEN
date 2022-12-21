@@ -226,22 +226,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	{
 		A_SetPitch(pitch - sp);
 	}
-
-	action void A_CasingGrenade(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("GrenadeSpawnerR", 0, 0, x, y);
-	}
-
-	action void A_CasingRocket(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("RocketSpawnerR", 0, 0, x, y);
-	}
-
-	action void A_CasingGrenadeL(double x, double y)
-	{
-		if (GetCVar("casing_toggle") == 1) A_FireProjectile("GrenadeSpawnerL", 0, 0, x, y);
-	}
-
+	
 	// Smoke
 
 	action void A_ShotgunSmoke (double x, double y)

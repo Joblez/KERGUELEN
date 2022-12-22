@@ -140,13 +140,11 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
-		// Move spawn agent to spawn location
+		// Move weather agent to spawn location.
 		vector3 oldPosition = m_WeatherAgent.Pos;
 		m_WeatherAgent.SetXYZ(spawnPosition);
 
 		Actor pawn = players[consoleplayer].mo;
-		double delta = Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent));
-		Console.Printf("Angle delta: %f", delta);
 
 		// Reduce spawn chance outside of 2D view range.
 		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))

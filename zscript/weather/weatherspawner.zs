@@ -108,7 +108,7 @@ class WeatherSpawner : Thinker
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
-		// Move spawn agent to spawn location for angle check.
+		// Move weather agent to spawn location for angle check.
 		vector3 oldPosition = m_WeatherAgent.Pos;
 		m_WeatherAgent.SetXYZ(spawnPosition);
 

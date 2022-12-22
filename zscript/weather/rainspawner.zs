@@ -100,16 +100,16 @@ class RainSpawner : WeatherParticleSpawner
 		{
 			if (splashParticleSetting == 6) // Extra detail for Ultra
 			{
-				for (int i = 0; i < Random(6, 9); ++i)
+				for (int i = 0; i < 6; ++i)
 				{
 					m_WeatherAgent.A_SpawnParticle(
 						0xFFFFFFFF,
 						SPF_RELVEL,
 						lifetime: 22,
-						size: FRandom(1.5, 2.5),
+						size: FRandom(2.0, 2.5),
 						angle: FRandom(0.0, 360.0),
 						zoff: 1.0,
-						velx: FRandom(1.5, 4.0),
+						velx: FRandom(2.0, 4.0),
 						velz: FRandom(0.25, 1.5),
 						accelz: -0.25,
 						fadestepf: 0,

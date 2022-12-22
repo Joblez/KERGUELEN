@@ -16,7 +16,7 @@ class ToStr
 
 	static string Vec3(vector3 value, int precision = 6, int padding = 0)
 	{
-		return string.Format("[%*.*f, %*.*f, %*.*f]"
+		return string.Format("[%*.*f, %*.*f, %*.*f]",
 			padding, precision, value.x,
 			padding, precision, value.y,
 			padding, precision, value.z);

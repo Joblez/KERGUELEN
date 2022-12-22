@@ -17,7 +17,7 @@ class ScreenUtil
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
 
-		if viewH == 0 return 0.0;
+		if (viewH == 0) return 0.0;
 
 		return 1.0 * viewW / viewH;
 	}

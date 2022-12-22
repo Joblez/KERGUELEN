@@ -16,7 +16,7 @@ class ModifierType
 			case MD_Multiplicative: return "MD_Multiplicative";
 			default:
 				ThrowAbortException("Invalid EModifierType.");
-				return null; // Only here so the compiler stops complaining.
+				return ""; // Only here so the compiler stops complaining.
 		}
 	}
 }

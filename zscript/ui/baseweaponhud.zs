@@ -19,8 +19,8 @@ class BaseWeaponHUD : HUDExtension abstract
 		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;
 		m_OriginalVerticalResolution = StatusBar.VerticalResolution;
 
+		StatusBar.BeginHUD(forcescaled: false);
 		StatusBar.SetSize(0, 1280, 720);
-		StatusBar.BeginHUD();
 
 		Super.PreDraw(event);
 	}

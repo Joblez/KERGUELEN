@@ -1,6 +1,6 @@
 class ScreenUtil
 {
-	static vector2 NormalizedPositionToView(vector2 pos)
+	static vector2 NormalizedPositionToView(vector2 pos) const
 	{
 		// Wrap values, but ensure 1.0 doesn't wrap to 0.
 		if (abs(pos.x) > 1.0) pos.x %= 1;
@@ -12,7 +12,15 @@ class ScreenUtil
 		return (viewW * pos.x + viewX, viewH * pos.y + viewY);
 	}
 
-	static vector2 AdjustForAspectRatio(vector2 pos)
+	static double GetAspectRatio() const
+	{
+		int viewX, viewY, viewW, viewH;
+		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
+
+		return 1.0 * viewW / viewH;
+	}
+
+	static vector2 AdjustForAspectRatio(vector2 pos) const
 	{
 		// Wrap values, but ensure 1.0 doesn't wrap to 0.
 		if (abs(pos.x) > 1.0) pos.x %= 1;
@@ -28,7 +36,7 @@ class ScreenUtil
 		return pos;
 	}
 
-	static vector2, vector2, vector2, vector2 RectFromTopLeft(vector2 origin, double w, double h, bool adjustForAspectRatio = true)
+	static vector2, vector2, vector2, vector2 RectFromTopLeft(vector2 origin, double w, double h, bool adjustForAspectRatio = true) const
 	{
 		if (adjustForAspectRatio)
 		{
@@ -46,7 +54,7 @@ class ScreenUtil
 		return topLeft, topRight, bottomLeft, bottomRight;
 	}
 
-	static vector2, vector2, vector2, vector2 RectFromCenter(vector2 center, double w, double h, bool adjustForAspectRatio = true)
+	static vector2, vector2, vector2, vector2 RectFromCenter(vector2 center, double w, double h, bool adjustForAspectRatio = true) const
 	{
 		if (adjustForAspectRatio)
 		{
@@ -65,7 +73,7 @@ class ScreenUtil
 		return topLeft, topRight, bottomLeft, bottomRight;
 	}
 
-	static vector2 ScaleRelativeToBaselineRes(double x, double y, int baseWidth, int baseHeight, bool keepAspectRatio = true)
+	static vector2 ScaleRelativeToBaselineRes(double x, double y, int baseWidth, int baseHeight, bool keepAspectRatio = true) const
 	{
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
@@ -82,7 +90,7 @@ class ScreenUtil
 		return (x * xFactor, y * yFactor);
 	}
 
-	static vector2 ScaleToViewport(double x, double y)
+	static vector2 ScaleToViewport(double x, double y) const
 	{
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();

@@ -114,16 +114,15 @@ class WeatherSpawner : Thinker
 
 		Actor pawn = players[consoleplayer].mo;
 
-		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent)) >= 90.0
-			&& FRandom(0, 1) < GetOutOfViewFrequencyReduction()) // Reduce chances of particle spawning when out of view.
+		// Reduce spawn chance outside of 2D view range.
+		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
+				<= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
+			&& FRandom(0, 1) > GetOutOfViewFrequencyReduction())
 		{
-			m_WeatherAgent.SetXYZ(oldPosition);
-			return;
+			Actor.Spawn(m_ParticleType, spawnPosition);
 		}
 
-
-		Actor.Spawn(m_ParticleType, spawnPosition);
-
 		m_WeatherAgent.SetXYZ(oldPosition);
+		return;
 	}
 }

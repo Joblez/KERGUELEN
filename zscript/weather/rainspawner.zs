@@ -95,8 +95,10 @@ class RainSpawner : WeatherParticleSpawner
 
 		Actor pawn = players[consoleplayer].mo;
 
+		// Cull by distance and 2D view range.
 		if (m_WeatherAgent.Distance3DSquared(pawn) <= GetSplashParticleDrawDistance() ** 2
-			&& Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent)) < 90.0) // Can't frustum cull, so at least cull by maximum possible view span.
+			&& Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
+				< players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio())
 		{
 			if (splashParticleSetting == 6) // Extra detail for Ultra
 			{

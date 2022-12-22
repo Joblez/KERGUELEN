@@ -4,7 +4,9 @@ struct Matrix2x2
 
 	string ToString(int precision = 6) const
 	{
-		return string.Format("⌈%10.*f %10.*f⌉\n⌊%10.*f %10.*f⌋",
+		return string.Format(
+				"⌈%10."..Int(precision).."f %10."..Int(precision)..
+			"f⌉\n⌊%10."..Int(precision).."f %10."..Int(precision).."f⌋",
 			precision, m_Values[0][0], precision, m_Values[0][1],
 			precision, m_Values[1][0], precision, m_Values[1][1]);
 	}
@@ -76,7 +78,10 @@ struct Matrix3x3
 
 	string ToString(int precision = 6) const
 	{
-		return string.Format("⌈%10.*f %10.*f %10.*f⌉\n|%10.*f %10.*f %10.*f|\n⌊%10.*f %10.*f %10.*f⌋",
+		return string.Format(
+				"⌈%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision)..
+			"f⌉\n|%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision)..
+			"f|\n⌊%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision).."f⌋",
 			precision, m_Values[0][0], precision, m_Values[0][1], precision, m_Values[0][2],
 			precision, m_Values[1][0], precision, m_Values[1][1], precision, m_Values[1][2],
 			precision, m_Values[2][0], precision, m_Values[2][1], precision, m_Values[2][2]);
@@ -149,7 +154,11 @@ struct Matrix4x4
 
 	string ToString(int precision = 6) const
 	{
-		return string.Format("⌈%10.*f %10.*f %10.*f⌉\n|%10.*f %10.*f %10.*f|\n|%10.*f %10.*f %10.*f|\n⌊%10.*f %10.*f %10.*f⌋",
+		return string.Format(
+				"⌈%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision)..
+			"f⌉\n|%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision)..
+			"f|\n|%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision)..
+			"f|\n⌊%10."..Int(precision).."f %10."..Int(precision).."f %10."..Int(precision).."f⌋",
 			precision, m_Values[0][0], precision, m_Values[0][1], precision, m_Values[0][2], precision, m_Values[0][3],
 			precision, m_Values[1][0], precision, m_Values[1][1], precision, m_Values[1][2], precision, m_Values[1][3],
 			precision, m_Values[2][0], precision, m_Values[2][1], precision, m_Values[2][2], precision, m_Values[2][3],

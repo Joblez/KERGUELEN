@@ -73,7 +73,7 @@ class RainSpawner : WeatherParticleSpawner
 				0xFFFFFFFF,
 				m_MainSplashTexture,
 				STYLE_Add,
-				0,
+				SPF_REPLACE,
 				4,
 				10.0,
 				0.0,
@@ -93,10 +93,10 @@ class RainSpawner : WeatherParticleSpawner
 			return;
 		}
 
-		PlayerPawn pawn = PlayerPawn(players[consoleplayer].mo);
+		Actor pawn = players[consoleplayer].mo;
 
 		if (m_WeatherAgent.Distance3DSquared(pawn) <= GetSplashParticleDrawDistance() ** 2
-			&& Actor.AbsAngle(pawn.Angle, m_WeatherAgent.AngleTo(pawn)) >= 90.0) // Can't frustum cull, so at least cull by maximum possible view span.
+			&& Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent)) < 90.0) // Can't frustum cull, so at least cull by maximum possible view span.
 		{
 			if (splashParticleSetting == 6) // Extra detail for Ultra
 			{
@@ -121,7 +121,7 @@ class RainSpawner : WeatherParticleSpawner
 			{
 				m_WeatherAgent.A_SpawnParticle(
 					0xFFFFFFFF,
-					SPF_RELVEL,
+					SPF_RELVEL | SPF_REPLACE,
 					lifetime: 22,
 					size: FRandom(2.5, 6.0),
 					angle: FRandom(0.0, 360.0),
@@ -141,6 +141,6 @@ class RainSpawner : WeatherParticleSpawner
 	{
 		int setting = m_SplashParticlesCVar.GetInt();
 		if (setting == 0) return 0.0;
-		return 128 * setting + 128;
+		return 128 * setting + 128 * (setting == 6 ? 3.0 : 1.0); // Extra distance for ultra, to ensure splashes don't cut off when using sniper zoom.
 	}
 }

@@ -137,7 +137,23 @@ class WeatherParticleSpawner : WeatherSpawner
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
 
 		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
-		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
+
+		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
+
+		// Move spawn agent to spawn location
+		vector3 oldPosition = m_WeatherAgent.Pos;
+		m_WeatherAgent.SetXYZ(spawnPosition);
+
+		Actor pawn = players[consoleplayer].mo;
+		double delta = Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent));
+		Console.Printf("Angle delta: %f", delta);
+
+		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent)) >= 90.0
+			&& FRandom(0, 1) < GetOutOfViewFrequencyReduction()) // Reduce chances of particle spawning when out of view.
+		{
+			m_WeatherAgent.SetXYZ(oldPosition);
+			return;
+		}
 
 		int lifetime;
 		vector3 velocity = m_InitialVelocity;
@@ -153,7 +169,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		if (m_ShouldSimulateParticles)
 		{
 			WeatherParticleSimulationResult result;
-			SimulateParticle(result, position, velocity, acceleration);
+			SimulateParticle(result, spawnPosition, velocity, acceleration);
 			lifetime = result.m_Lifetime;
 
 			if (m_ShouldDoCallbackAtEndOfParticleLife) pendingCallbackData.Push(result.CreateCallbackData());
@@ -163,9 +179,6 @@ class WeatherParticleSpawner : WeatherSpawner
 			lifetime = m_Lifetime;
 		}
 
-		// Move spawn agent to spawn location
-		vector3 oldPosition = m_WeatherAgent.Pos;
-		m_WeatherAgent.SetXYZ(position);
 
 		m_WeatherAgent.A_SpawnParticleEx(
 			m_Color,

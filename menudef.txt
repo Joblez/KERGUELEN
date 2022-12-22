@@ -138,6 +138,12 @@ OptionMenu "VisualEffects"
 
 	Option "Weather Amount", "weather_amount", "GraphicsSettings"
 	Option "Splash Particles", "splash_particles", "GraphicsSettings"
+
+	StaticText ""
+	StaticText "NOTE: Playing on Ultra settings may easily cause the game to exceed the default"
+	StaticText "maximum particle amount. Please adjust your maximum amount accordingly."
+
+	Slider "Max Particles", "r_maxparticles", 4000, 24000, 250, 0
 }
 
 //NASHGORE

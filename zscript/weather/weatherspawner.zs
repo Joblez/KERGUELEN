@@ -87,6 +87,11 @@ class WeatherSpawner : Thinker
 		}
 	}
 
+	double GetOutOfViewFrequencyReduction() const
+	{
+		return min(m_WeatherAmountCVar.GetInt() * 0.075, 0.33);
+	}
+
 	void SetDensity(double density)
 	{
 		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
@@ -100,8 +105,25 @@ class WeatherSpawner : Thinker
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
 
 		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
-		vector3 position = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
-		Actor.Spawn(m_ParticleType, position);
+		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
+
+		// Move spawn agent to spawn location for angle check.
+		vector3 oldPosition = m_WeatherAgent.Pos;
+		m_WeatherAgent.SetXYZ(spawnPosition);
+
+		Actor pawn = players[consoleplayer].mo;
+
+		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent)) >= 90.0
+			&& FRandom(0, 1) < GetOutOfViewFrequencyReduction()) // Reduce chances of particle spawning when out of view.
+		{
+			m_WeatherAgent.SetXYZ(oldPosition);
+			return;
+		}
+
+
+		Actor.Spawn(m_ParticleType, spawnPosition);
+
+		m_WeatherAgent.SetXYZ(oldPosition);
 	}
 }

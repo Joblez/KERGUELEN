@@ -1,14 +1,29 @@
 class BaseWeaponHUD : HUDExtension abstract
 {
+	const HUD_WIDTH = 1280;
+	const HUD_HEIGHT = 720;
+
 	protected int m_OriginalRelTop;
 	protected int m_OriginalHorizontalResolution;
 	protected int m_OriginalVerticalResolution;
 
 	protected ui Transform2D hudTransform;
+	protected ui CVar hudAspectScale;
+
+	ui double GetAspectScaleX()
+	{
+		return hudAspectScale.GetBool() ? ScreenUtil.ASPECT_SCALE_X : 1.0;
+	}
+
+	ui double GetAspectScaleY()
+	{
+		return hudAspectScale.GetBool() ? ScreenUtil.ASPECT_SCALE_Y : 1.0;
+	}
 
 	override void UISetup()
 	{
 		hudTransform = Transform2D.Create();
+		hudAspectScale = CVar.GetCVar("hud_aspectscale");
 	}
 
 	override void PreDraw(RenderEvent event)
@@ -20,7 +35,7 @@ class BaseWeaponHUD : HUDExtension abstract
 		m_OriginalVerticalResolution = StatusBar.VerticalResolution;
 
 		StatusBar.BeginHUD(forcescaled: false);
-		StatusBar.SetSize(0, 1280, 720);
+		StatusBar.SetSize(0, HUD_WIDTH, HUD_HEIGHT);
 
 		Super.PreDraw(event);
 	}
@@ -42,7 +57,7 @@ class BaseWeaponHUD : HUDExtension abstract
 
 		StatusBar.SetSize(m_OriginalRelTop, m_OriginalHorizontalResolution, m_OriginalVerticalResolution);
 
-		StatusBar.BeginHUD(forcescaled: false);
+		StatusBar.BeginHUD(forcescaled: true);
 		StatusBar.BeginStatusBar();
 
 		Super.PostDraw(event);

@@ -383,7 +383,7 @@ class BaseCasing : Actor
 
 		// Frames are ordered counterclockwise starting from 0° and go in 45° increments.
 		frame = uint(rollAngle / 45);
-		Console.Printf("Roll: %f, Frame %i", m_VirtualRoll, frame);
+		// Console.Printf("Roll: %f, Frame %i", m_VirtualRoll, frame);
 
 		// Subtract 22.5 from the remainder to land at the midpoint between angle frames.
 		A_SetRoll(Math.PosMod(rollAngle % 45.0, 360.0) - 22.5, SPF_INTERPOLATE);

@@ -30,9 +30,9 @@ class M2CHUD : BaseWeaponHUD
 		m_OriginalHUDRotation = hudTransform.GetLocalRotation();
 		m_OriginalHUDScale = hudTransform.GetLocalScale();
 
-		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.96, 0.96)));
+		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.97, 0.97)));
 		hudTransform.SetRotation(90.0);
-		hudTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, 1280, 720));
+		hudTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, HUD_WIDTH, HUD_HEIGHT, adjustForHUDAspectScale: false));
 	}
 
 	override void Draw(RenderEvent event)
@@ -64,9 +64,12 @@ class M2CHUD : BaseWeaponHUD
 		m_RoundsOffset.m_Target = rounds * textureHeight / 2;
 		m_RoundsOffset.Update();
 		
-		int leftRowOffset = int(textureHeight) * rounds % 2 == 0 ? 1 : 2;
-		
+		// Never thought I'd come across good ol' off-by-one in screen coordinates...
+		double leftRowOffset = (textureHeight * rounds % 2 == 0 ? 1.0 : 2.0) - 1;
 		vector2 roundScale = hudTransform.GetLocalScale();
+		
+		// So much work to get around what this one little CVar does...
+		roundScale.y *= GetAspectScaleY();
 
 		// No clue why it works this way.
 		vector2 invertedScale = (1.0 / roundScale.x, 1.0 / roundScale.y);
@@ -77,13 +80,14 @@ class M2CHUD : BaseWeaponHUD
 				(roundsOrigin.x,
 				(roundsOrigin.y - textureHeight * i)
 					+ m_RoundsOffset.GetValue() + leftRowOffset);
+					
 
 			roundVector = hudTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
 				roundTexture,
 				roundVector,
-				StatusBarCore.DI_ITEM_LEFT_TOP | StatusBar.DI_MIRROR,
+				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
 				hudTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,
@@ -93,16 +97,16 @@ class M2CHUD : BaseWeaponHUD
 		for (int i = 1; i <= rightRow; ++i)
 		{
 			vector2 roundvector =
-				(roundsOrigin.x + 4,
+				(roundsOrigin.x + 5 * GetAspectScaleY(),
 				(roundsOrigin.y - textureHeight * i)
-					+ m_RoundsOffset.GetValue() + textureHeight / 2);
+					+ m_RoundsOffset.GetValue() + textureHeight * 0.5);
 
 			roundVector = hudTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
 				roundTexture,
 				roundVector,
-				StatusBarCore.DI_ITEM_LEFT_TOP | StatusBar.DI_MIRROR,
+				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
 				hudTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,

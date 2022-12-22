@@ -2,6 +2,13 @@ struct Matrix2x2
 {
 	double[2][2] m_Values;
 
+	string ToString(int precision = 6) const
+	{
+		return string.Format("⌈%10.*f %10.*f⌉\n⌊%10.*f %10.*f⌋",
+			precision, m_Values[0][0], precision, m_Values[0][1],
+			precision, m_Values[1][0], precision, m_Values[1][1]);
+	}
+
 	void MakeIdentity()
 	{
 		for (int i = 0; i < 2; ++i)
@@ -67,6 +74,14 @@ struct Matrix3x3
 {
 	double[3][3] m_Values;
 
+	string ToString(int precision = 6) const
+	{
+		return string.Format("⌈%10.*f %10.*f %10.*f⌉\n|%10.*f %10.*f %10.*f|\n⌊%10.*f %10.*f %10.*f⌋",
+			precision, m_Values[0][0], precision, m_Values[0][1], precision, m_Values[0][2],
+			precision, m_Values[1][0], precision, m_Values[1][1], precision, m_Values[1][2],
+			precision, m_Values[2][0], precision, m_Values[2][1], precision, m_Values[2][2]);
+	}
+
 	void MakeIdentity()
 	{
 		for (int i = 0; i < 3; ++i)
@@ -131,6 +146,15 @@ struct Matrix3x3
 struct Matrix4x4
 {
 	double[4][4] m_Values;
+
+	string ToString(int precision = 6) const
+	{
+		return string.Format("⌈%10.*f %10.*f %10.*f⌉\n|%10.*f %10.*f %10.*f|\n|%10.*f %10.*f %10.*f|\n⌊%10.*f %10.*f %10.*f⌋",
+			precision, m_Values[0][0], precision, m_Values[0][1], precision, m_Values[0][2], precision, m_Values[0][3],
+			precision, m_Values[1][0], precision, m_Values[1][1], precision, m_Values[1][2], precision, m_Values[1][3],
+			precision, m_Values[2][0], precision, m_Values[2][1], precision, m_Values[2][2], precision, m_Values[2][3],
+			precision, m_Values[3][0], precision, m_Values[3][1], precision, m_Values[3][2], precision, m_Values[3][3]);
+	}
 
 	void MakeIdentity()
 	{

@@ -36,6 +36,13 @@ class PSpriteTransform
 		m_Initialized = true;
 	}
 
+	virtual string ToString() const
+	{
+		return string.Format(
+			"T: %s"..ToStr.Vec2(m_Translation.GetValue())
+		.."\nS: %s"..ToStr.Vec2(m_Scale.GetValue()));
+	}
+
 	void AddTransform(out ModifiableVector2 originTranslation, out ModifiableVector2 originScale)
 	{
 		originTranslation.AddModifier(m_Translation);
@@ -69,6 +76,13 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 		m_InterpolatedScale.m_SmoothTime = smoothTime;
 
 		m_Initialized = true;
+	}
+
+	override string ToString() const
+	{
+		return string.Format(
+			"T: %s"..ToStr.Vec2(m_InterpolatedTranslation.GetValue())
+		.."\nS: %s"..ToStr.Vec2(m_InterpolatedScale.GetValue()));
 	}
 
 	virtual void Update()

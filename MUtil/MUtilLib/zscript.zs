@@ -8,6 +8,7 @@
 #include "./general/modifiablevalues.zs"
 #include "./general/pspritetransform.zs"
 #include "./general/screenutil.zs"
+#include "./general/tostr.zs"
 #include "./general/triangulation.zs"
 #include "./general/vectorutil.zs"
 #include "./math/math.zs"

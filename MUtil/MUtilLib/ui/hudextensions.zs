@@ -15,6 +15,8 @@ class HUDExtension abstract
 
 	protected ui bool m_IsUISetUp;
 
+	// TODO: Add ToString().
+
 	virtual void OnActivate()
 	{
 		m_StateMachine.SendEvent('ActivationComplete');

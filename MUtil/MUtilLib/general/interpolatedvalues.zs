@@ -12,15 +12,21 @@
 // 		return m_Current;
 // 	}
 
-// 	void Update()
+// 	string ToString(int precision = 6) const
 // 	{
-// 		m_Current = Math.SmoothDampFloat(
+// 		return "Current: "..ToStr.Float(m_Current, precision)
+// 			.."\nTarget: "..ToStr.Float(m_Target, precision);
+// 	}
+
+// 	void Update(double delta = 1.0 / 35.0)
+// 	{
+// 		m_Current = Mathf.SmoothDamp(
 // 			m_Current,
 // 			m_Target,
 // 			m_CurrentSpeed,
 // 			m_SmoothTime,
 // 			float.Infinity,
-// 			1.0 / 35.0);
+// 			delta);
 // 	}
 
 // 	void Reset()
@@ -46,6 +52,12 @@ class InterpolatedDouble
 	double GetValue() const
 	{
 		return m_Current;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		return "Current: "..ToStr.Double(m_Current, precision)
+			.."\nTarget: "..ToStr.Double(m_Target, precision);
 	}
 
 	void Update(double delta = 1.0 / 35.0)
@@ -92,6 +104,12 @@ class InterpolatedVector2
 	double GetY() const
 	{
 		return m_Current.y;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		return "Current: "..ToStr.Vec2(m_Current, precision)
+			.."\nTarget: "..ToStr.Vec2(m_Target, precision);
 	}
 
 	void Update(double delta = 1.0 / 35.0)
@@ -143,6 +161,12 @@ class InterpolatedVector3
 	double GetZ() const
 	{
 		return m_Current.z;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		return "Current: "..ToStr.Vec3(m_Current, precision)
+			.."\nTarget: "..ToStr.Vec3(m_Target, precision);
 	}
 
 	void Update(double delta = 1.0 / 35.0)

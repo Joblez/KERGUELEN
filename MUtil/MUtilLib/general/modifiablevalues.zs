@@ -6,6 +6,19 @@ enum EModifierType
 	MD_Multiplicative
 }
 
+class ModifierType
+{
+	static string AsString(EModifierType type)
+	{
+		switch (type)
+		{
+			case MD_Additive: return "MD_Additive";
+			case MD_Multiplicative: return "MD_Multiplicative";
+			default: ThrowAbortException("Invalid EModifierType.");
+		}
+	}
+}
+
 class FloatModifier
 {
 	name m_Name;
@@ -16,6 +29,12 @@ class FloatModifier
 	EModifierType GetType() const
 	{
 		return m_Type;
+	}
+
+	string ToString() const
+	{
+		return string.Format(
+			"Name: %s\nType: %s\nValue: %f", m_Name, ModifierType.AsString(m_Type), m_Value);
 	}
 
 	void SetType(EModifierType newType)
@@ -42,11 +61,30 @@ class ModifiableFloat
 	private float m_FinalValue;
 	private bool m_IsDirty;
 
-	private array<FloatModifier> modifiers;
+	private array<FloatModifier> m_Modifiers;
 
 	float GetBaseValue() const
 	{
 		return m_BaseValue;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		string result =
+			"Base value: "..ToStr.Float(m_BaseValue, precision)
+		.."\nFinal value: "..ToStr.Float(m_BaseValue, precision);
+
+		if (m_Modifiers.Size() > 0)
+		{
+			result.AppendFormat("\nModifiers:");
+
+			for (int i = 0; i < m_Modifiers.Size(); ++i)
+			{
+				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+			}
+		}
+
+		return result;
 	}
 
 	float GetValue()
@@ -69,25 +107,25 @@ class ModifiableFloat
 	void AddModifier(FloatModifier modifier)
 	{
 		modifier.m_Target = self;
-		modifiers.Push(modifier);
+		m_Modifiers.Push(modifier);
 		m_IsDirty = true;
 	}
 
 	void RemoveModifier(FloatModifier modifier)
 	{
-		uint index = modifiers.Find(modifier);
+		uint index = m_Modifiers.Find(modifier);
 
-		if (index != modifiers.Size()) modifiers.Delete(index);
+		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
 	void RemoveModifierByName(name inName)
 	{
 		bool modifierFound = false;
-		for (int i = modifiers.Size() - 1; i >= 0; --i)
+		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
 		{
-			if (modifiers[i].m_Name == inName)
+			if (m_Modifiers[i].m_Name == inName)
 			{
-				modifiers.Delete(i);
+				m_Modifiers.Delete(i);
 				m_IsDirty = true;
 				modifierFound = true;
 			}
@@ -103,15 +141,15 @@ class ModifiableFloat
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
-		for (int i = 0; i < modifiers.Size(); ++i)
+		for (int i = 0; i < m_Modifiers.Size(); ++i)
 		{
-			if (modifiers[i].GetType() == MD_Additive)
+			if (m_Modifiers[i].GetType() == MD_Additive)
 			{
-				m_FinalValue += modifiers[i].GetValue();
+				m_FinalValue += m_Modifiers[i].GetValue();
 			}
 			else
 			{
-				m_FinalValue *= modifiers[i].GetValue();
+				m_FinalValue *= m_Modifiers[i].GetValue();
 			}
 		}
 		m_IsDirty = false;
@@ -135,6 +173,12 @@ class DoubleModifier
 		return m_Value;
 	}
 
+	string ToString() const
+	{
+		return string.Format(
+			"Name: %s\nType: %s\nValue: %f", m_Name, ModifierType.AsString(m_Type), m_Value);
+	}
+
 	void SetType(EModifierType newType)
 	{
 		m_Type = newType;
@@ -154,9 +198,9 @@ class ModifiableDouble
 	private double m_FinalValue;
 	private bool m_IsDirty;
 
-	private array<DoubleModifier> modifiers;
+	private array<DoubleModifier> m_Modifiers;
 
-	double GetBaseValue()
+	double GetBaseValue() const
 	{
 		return m_BaseValue;
 	}
@@ -165,6 +209,25 @@ class ModifiableDouble
 	{
 		if (m_IsDirty) ApplyModifiers();
 		return m_FinalValue;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		string result =
+			"Base value: "..ToStr.Double(m_BaseValue, precision)
+		.."\nFinal value: "..ToStr.Double(m_BaseValue, precision);
+
+		if (m_Modifiers.Size() > 0)
+		{
+			result.AppendFormat("\nModifiers:");
+
+			for (int i = 0; i < m_Modifiers.Size(); ++i)
+			{
+				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+			}
+		}
+
+		return result;
 	}
 
 	void SetBaseValue(double newValue)
@@ -181,25 +244,25 @@ class ModifiableDouble
 	void AddModifier(DoubleModifier modifier)
 	{
 		modifier.m_Target = self;
-		modifiers.Push(modifier);
+		m_Modifiers.Push(modifier);
 		m_IsDirty = true;
 	}
 
 	void RemoveModifier(DoubleModifier modifier)
 	{
-		uint index = modifiers.Find(modifier);
+		uint index = m_Modifiers.Find(modifier);
 
-		if (index != modifiers.Size()) modifiers.Delete(index);
+		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
 	void RemoveModifierByName(name inName)
 	{
 		bool modifierFound = false;
-		for (int i = modifiers.Size() - 1; i >= 0; --i)
+		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
 		{
-			if (modifiers[i].m_Name == inName)
+			if (m_Modifiers[i].m_Name == inName)
 			{
-				modifiers.Delete(i);
+				m_Modifiers.Delete(i);
 				m_IsDirty = true;
 				modifierFound = true;
 			}
@@ -215,15 +278,15 @@ class ModifiableDouble
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
-		for (int i = 0; i < modifiers.Size(); ++i)
+		for (int i = 0; i < m_Modifiers.Size(); ++i)
 		{
-			if (modifiers[i].GetType() == MD_Additive)
+			if (m_Modifiers[i].GetType() == MD_Additive)
 			{
-				m_FinalValue += modifiers[i].GetValue();
+				m_FinalValue += m_Modifiers[i].GetValue();
 			}
 			else
 			{
-				m_FinalValue *= modifiers[i].GetValue();
+				m_FinalValue *= m_Modifiers[i].GetValue();
 			}
 		}
 		m_IsDirty = false;
@@ -242,15 +305,21 @@ class Vector2Modifier
 		return m_Type;
 	}
 
+	vector2 GetValue() const
+	{
+		return m_Value;
+	}
+
+	string ToString() const
+	{
+		return string.Format(
+			"Name: %s\nType: %s\nValue: ", m_Name, ModifierType.AsString(m_Type))..ToStr.Vec2(m_Value);
+	}
+
 	void SetType(EModifierType newType)
 	{
 		m_Type = newType;
 		if (m_Target) m_Target.MarkDirty();
-	}
-
-	vector2 GetValue() const
-	{
-		return m_Value;
 	}
 
 	void SetValue(vector2 newValue)
@@ -278,7 +347,7 @@ class ModifiableVector2
 	private vector2 m_FinalValue;
 	private bool m_IsDirty;
 
-	private array<Vector2Modifier> modifiers;
+	private array<Vector2Modifier> m_Modifiers;
 
 	vector2 GetBaseValue() const
 	{
@@ -293,6 +362,25 @@ class ModifiableVector2
 	double GetBaseY() const
 	{
 		return m_BaseValue.y;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		string result =
+			"Base value: "..ToStr.Vec2(m_BaseValue, precision)
+		.."\nFinal value: "..ToStr.Vec2(m_BaseValue, precision);
+
+		if (m_Modifiers.Size() > 0)
+		{
+			result.AppendFormat("\nModifiers:");
+
+			for (int i = 0; i < m_Modifiers.Size(); ++i)
+			{
+				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+			}
+		}
+
+		return result;
 	}
 
 	vector2 GetValue()
@@ -339,25 +427,25 @@ class ModifiableVector2
 	void AddModifier(Vector2Modifier modifier)
 	{
 		modifier.m_Target = self;
-		modifiers.Push(modifier);
+		m_Modifiers.Push(modifier);
 		m_IsDirty = true;
 	}
 
 	void RemoveModifier(Vector2Modifier modifier)
 	{
-		uint index = modifiers.Find(modifier);
+		uint index = m_Modifiers.Find(modifier);
 
-		if (index != modifiers.Size()) modifiers.Delete(index);
+		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
 	void RemoveModifierByName(name inName)
 	{
 		bool modifierFound = false;
-		for (int i = modifiers.Size() - 1; i >= 0; --i)
+		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
 		{
-			if (modifiers[i].m_Name == inName)
+			if (m_Modifiers[i].m_Name == inName)
 			{
-				modifiers.Delete(i);
+				m_Modifiers.Delete(i);
 				m_IsDirty = true;
 				modifierFound = true;
 			}
@@ -373,15 +461,15 @@ class ModifiableVector2
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
-		for (int i = 0; i < modifiers.Size(); ++i)
+		for (int i = 0; i < m_Modifiers.Size(); ++i)
 		{
-			if (modifiers[i].GetType() == MD_Additive)
+			if (m_Modifiers[i].GetType() == MD_Additive)
 			{
-				m_FinalValue += modifiers[i].GetValue();
+				m_FinalValue += m_Modifiers[i].GetValue();
 			}
 			else
 			{
-				let modifier = modifiers[i].GetValue();
+				let modifier = m_Modifiers[i].GetValue();
 				m_FinalValue.x *= modifier.x;
 				m_FinalValue.y *= modifier.y;
 			}
@@ -402,15 +490,21 @@ class Vector3Modifier
 		return m_Type;
 	}
 
+	vector3 GetValue() const
+	{
+		return m_Value;
+	}
+
+	string ToString() const
+	{
+		return string.Format(
+			"Name: %s\nType: %s\nValue: ", m_Name, ModifierType.AsString(m_Type))..ToStr.Vec3(m_Value);
+	}
+
 	void SetType(EModifierType newType)
 	{
 		m_Type = newType;
 		if (m_Target) m_Target.MarkDirty();
-	}
-
-	vector3 GetValue() const
-	{
-		return m_Value;
 	}
 
 	void SetValue(vector3 newValue)
@@ -444,7 +538,7 @@ class ModifiableVector3
 	private vector3 m_FinalValue;
 	private bool m_IsDirty;
 
-	private array<Vector3Modifier> modifiers;
+	private array<Vector3Modifier> m_Modifiers;
 
 	vector3 GetBaseValue() const
 	{
@@ -464,6 +558,25 @@ class ModifiableVector3
 	double GetBaseZ() const
 	{
 		return m_BaseValue.z;
+	}
+
+	string ToString(int precision = 6) const
+	{
+		string result =
+			"Base value: "..ToStr.Vec3(m_BaseValue, precision)
+		.."\nFinal value: "..ToStr.Vec3(m_BaseValue, precision);
+
+		if (m_Modifiers.Size() > 0)
+		{
+			result.AppendFormat("\nModifiers:");
+
+			for (int i = 0; i < m_Modifiers.Size(); ++i)
+			{
+				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+			}
+		}
+
+		return result;
 	}
 
 	vector3 GetValue()
@@ -522,25 +635,25 @@ class ModifiableVector3
 	void AddModifier(Vector3Modifier modifier)
 	{
 		modifier.m_Target = self;
-		modifiers.Push(modifier);
+		m_Modifiers.Push(modifier);
 		m_IsDirty = true;
 	}
 
 	void RemoveModifier(Vector3Modifier modifier)
 	{
-		uint index = modifiers.Find(modifier);
+		uint index = m_Modifiers.Find(modifier);
 
-		if (index != modifiers.Size()) modifiers.Delete(index);
+		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
 	void RemoveModifierByName(name inName)
 	{
 		bool modifierFound = false;
-		for (int i = modifiers.Size() - 1; i >= 0; --i)
+		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
 		{
-			if (modifiers[i].m_Name == inName)
+			if (m_Modifiers[i].m_Name == inName)
 			{
-				modifiers.Delete(i);
+				m_Modifiers.Delete(i);
 				m_IsDirty = true;
 				modifierFound = true;
 			}
@@ -556,15 +669,15 @@ class ModifiableVector3
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
-		for (int i = 0; i < modifiers.Size(); ++i)
+		for (int i = 0; i < m_Modifiers.Size(); ++i)
 		{
-			if (modifiers[i].GetType() == MD_Additive)
+			if (m_Modifiers[i].GetType() == MD_Additive)
 			{
-				m_FinalValue += modifiers[i].GetValue();
+				m_FinalValue += m_Modifiers[i].GetValue();
 			}
 			else
 			{
-				let modifier = modifiers[i].GetValue();
+				let modifier = m_Modifiers[i].GetValue();
 				m_FinalValue.x *= modifier.x;
 				m_FinalValue.y *= modifier.y;
 				m_FinalValue.z *= modifier.z;

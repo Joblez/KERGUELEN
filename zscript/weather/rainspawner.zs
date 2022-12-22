@@ -141,6 +141,8 @@ class RainSpawner : WeatherParticleSpawner
 	{
 		int setting = m_SplashParticlesCVar.GetInt();
 		if (setting == 0) return 0.0;
-		return 128 * setting + 128 * (setting == 6 ? 3.0 : 1.0); // Extra distance for ultra, to ensure splashes don't cut off when using sniper zoom.
+
+		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
+		return 96 * setting + 192 * Math.Remap(players[consoleplayer].FOV, 10, 120, 8.0, 1.0);
 	}
 }

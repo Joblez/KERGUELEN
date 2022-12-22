@@ -82,14 +82,14 @@ class WeatherSpawner : Thinker
 			case 3: return m_Frequency * 0.7;
 			case 4:
 			default: return m_Frequency;
-			case 5: return m_Frequency * 1.75;
-			case 6: return m_Frequency * 2.5;
+			case 5: return m_Frequency * 1.4;
+			case 6: return m_Frequency * 2.0;
 		}
 	}
 
 	double GetOutOfViewFrequencyReduction() const
 	{
-		return min(m_WeatherAmountCVar.GetInt() * 0.075, 0.33);
+		return min(m_WeatherAmountCVar.GetInt() * 0.075, 0.4);
 	}
 
 	void SetDensity(double density)

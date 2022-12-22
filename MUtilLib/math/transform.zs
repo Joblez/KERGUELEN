@@ -17,7 +17,7 @@ class Transform2D
 		return tr;
 	}
 
-	Shape2DTransform ToShape2DTransform()
+	Shape2DTransform ToShape2DTransform() const
 	{
 		Matrix3x3 mat;
 		mat.CopyFrom(m_GlobalTransformMatrix);
@@ -44,6 +44,21 @@ class Transform2D
 		double y = v.x * mat.m_Values[0][1] + v.y * mat.m_Values[1][1] + mat.m_Values[2][1];
 
 		return (x, y);
+	}
+
+	string ToString() const
+	{
+		string result =
+			"Translation: "..ToStr.Vec2(m_Translation)
+		.."\nRotation: "..ToStr.Double(m_Rotation)
+		.."\nScale: "..ToStr.Vec2(m_Scale)
+		.."\nGlobal matrix:\n";
+
+		// Move matrix string a bit to the right.
+		string matrixString = "\t"..m_GlobalTransformMatrix.ToString();
+		matrixString.Replace("\n", "\n\t");
+
+		return result..matrixString;
 	}
 
 	vector2 GetLocalTranslation() const

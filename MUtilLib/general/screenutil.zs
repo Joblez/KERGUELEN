@@ -1,5 +1,8 @@
 class ScreenUtil
 {
+	const ASPECT_SCALE_X = 1.2;
+	const ASPECT_SCALE_Y = 5.0 / 6.0;
+
 	static vector2 NormalizedPositionToView(vector2 pos)
 	{
 		// Wrap values, but ensure 1.0 doesn't wrap to 0.
@@ -9,7 +12,9 @@ class ScreenUtil
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
 
-		return (viewW * pos.x + viewX, viewH * pos.y + viewY);
+		viewH = AdjustForHUDAspectScaleVertical(viewH);
+
+		return (pos.x * viewW + viewX, pos.y * viewH + viewY);
 	}
 
 	static double GetAspectRatio()
@@ -18,6 +23,8 @@ class ScreenUtil
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
 
 		if (viewH == 0) return 0.0;
+
+		viewH = AdjustForHUDAspectScaleVertical(viewH);
 
 		return 1.0 * viewW / viewH;
 	}
@@ -30,6 +37,8 @@ class ScreenUtil
 
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
+
+		viewH = AdjustForHUDAspectScaleVertical(viewH);
 
 		double aspectRatio = 1.0 * viewW / viewH;
 		if (viewW > viewH) pos.x /= aspectRatio;
@@ -44,6 +53,8 @@ class ScreenUtil
 		{
 			int viewX, viewY, viewW, viewH;
 			[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
+
+			viewH = AdjustForHUDAspectScaleVertical(viewH);
 
 			double aspectRatio = 1.0 * viewW / viewH;
 			if (viewW > viewH) w /= aspectRatio;
@@ -63,6 +74,8 @@ class ScreenUtil
 			int viewX, viewY, viewW, viewH;
 			[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
 
+			viewH = AdjustForHUDAspectScaleVertical(viewH);
+
 			double aspectRatio = 1.0 * viewW / viewH;
 			if (viewW > viewH) w /= aspectRatio;
 			else if (viewW < viewH) h /= aspectRatio;
@@ -75,7 +88,13 @@ class ScreenUtil
 		return topLeft, topRight, bottomLeft, bottomRight;
 	}
 
-	static vector2 ScaleRelativeToBaselineRes(double x, double y, int baseWidth, int baseHeight, bool keepAspectRatio = true)
+	static vector2 ScaleRelativeToBaselineRes(
+		double x,
+		double y,
+		int baseWidth,
+		int baseHeight,
+		bool keepAspectRatio = true,
+		bool adjustForHUDAspectScale = true)
 	{
 		int viewX, viewY, viewW, viewH;
 		[viewX, viewY, viewW, viewH] = Screen.GetViewWindow();
@@ -83,10 +102,17 @@ class ScreenUtil
 		double xFactor = 1.0 * viewW / baseWidth;
 		double yFactor = 1.0 * viewH / baseHeight;
 
+		if (adjustForHUDAspectScale)
+		{
+			yFactor = AdjustForHUDAspectScaleVertical(yFactor);
+		}
+
 		if (keepAspectRatio)
 		{
 			double smaller = min(xFactor, yFactor);
-			return (x * smaller, y * smaller);
+			vector2 result = (x * smaller, y * smaller);
+			if (adjustForHUDAspectScale) result.x = AdjustForHUDAspectScaleHorizontal(result.x);
+			return result;
 		}
 
 		return (x * xFactor, y * yFactor);
@@ -104,5 +130,19 @@ class ScreenUtil
 		y *= 1.0 * viewH / screenH;
 
 		return (x, y);
+	}
+
+	private static double AdjustForHUDAspectScaleHorizontal(double horizontal)
+	{
+		bool hudAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
+
+		return hudAspectScale ? horizontal * ASPECT_SCALE_X : horizontal;
+	}
+
+	private static double AdjustForHUDAspectScaleVertical(double vertical)
+	{
+		bool hudAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
+
+		return hudAspectScale ? vertical * ASPECT_SCALE_Y : vertical;
 	}
 }

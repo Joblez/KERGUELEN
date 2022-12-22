@@ -805,6 +805,8 @@ class SMMachine : SMState abstract
 		return m_IsBuilding;
 	}
 
+	// TODO: Add ToString().
+
 	/**
 	 * Defines the hierarchy of this state machine.
 	 *

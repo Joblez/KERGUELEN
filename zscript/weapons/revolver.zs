@@ -73,8 +73,8 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
 			invoker.GetHUDExtension().SendEventToSM('RoundFired');
-			A_StartSound("sw/fire", CHAN_WEAPON);
-			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_StartSound("sw/fire", CHAN_AUTO);
+			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 35, "BulletPuff");
 			A_FRecoil(1);
 			A_ShotgunSmoke(7, -1);
@@ -193,7 +193,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
 		}
 		SWCL DE 1;
-		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO,0,0.5);
+		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
 		SWCL FGH 3;
 		SWCL IJKLMN 2;
 		TNT1 A 0 {

@@ -19,7 +19,7 @@ class M2CHUD : BaseWeaponHUD
 		m_RoundsOffset = new("InterpolatedDouble");
 		m_RoundsOffset.m_Target = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 		m_RoundsOffset.Update();
-		m_RoundsOffset.m_SmoothTime = 0.06;
+		m_RoundsOffset.m_SmoothTime = 0.07;
 	}
 
 	override void PreDraw(RenderEvent event)

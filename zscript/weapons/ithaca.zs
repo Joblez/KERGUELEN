@@ -125,10 +125,10 @@ class Ithaca : BaseWeapon replaces Shotgun
 			}
 		}
 	Pump:
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
+		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO, 0, 0.9);
 		ITAP ABC 1;
 		ITAP DE 2;
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
 		TNT1 A 0 A_SpawnCasing();
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }

@@ -2,7 +2,11 @@ class M2CHUD : BaseWeaponHUD
 {
 	M2C m_M2C;
 
-	ui InterpolatedDouble m_RoundsOffset;
+	InterpolatedDouble m_RoundsOffset;
+
+	private TextureID m_RoundTexture;
+	private vector2 m_TextureSize;
+
 	private vector2 m_OriginalHUDTranslation;
 	private double m_OriginalHUDRotation;
 	private vector2 m_OriginalHUDScale;
@@ -10,16 +14,23 @@ class M2CHUD : BaseWeaponHUD
 	override void Setup()
 	{
 		m_M2C = M2C(m_Context);
-	}
-
-	override void UISetup()
-	{
-		Super.UISetup();
 
 		m_RoundsOffset = new("InterpolatedDouble");
 		m_RoundsOffset.m_Target = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 		m_RoundsOffset.Update();
-		m_RoundsOffset.m_SmoothTime = 0.07;
+		m_RoundsOffset.m_SmoothTime = 0.05;
+
+		m_RoundTexture = TexMan.CheckForTexture("FNRNRDY");
+		int textureWidth, textureHeight;
+		[textureWidth, textureHeight] = TexMan.GetSize(m_RoundTexture);
+		m_TextureSize = (textureWidth, textureHeight);
+	}
+
+	override void Tick()
+	{
+		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
+		m_RoundsOffset.m_Target = rounds * m_TextureSize.y / 2;
+		m_RoundsOffset.Update();
 	}
 
 	override void PreDraw(RenderEvent event)
@@ -41,10 +52,6 @@ class M2CHUD : BaseWeaponHUD
 
 		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 
-		int textureWidth, textureHeight;
-		TextureID roundTexture = TexMan.CheckForTexture("FNRNRDY");
-		[textureWidth, textureHeight] = TexMan.GetSize(roundTexture);
-
 		vector2 roundsOrigin = Vec2Util.Zero();
 
 		int leftRow, rightRow;
@@ -61,11 +68,8 @@ class M2CHUD : BaseWeaponHUD
 			}
 		}
 
-		m_RoundsOffset.m_Target = rounds * textureHeight / 2;
-		m_RoundsOffset.Update();
-		
 		// Never thought I'd come across good ol' off-by-one in screen coordinates...
-		double leftRowOffset = (textureHeight * rounds % 2 == 0 ? 1.0 : 2.0) - 1;
+		double leftRowOffset = (m_TextureSize.y * rounds % 2 == 0 ? 1.0 : 2.0) - 1;
 		vector2 roundScale = hudTransform.GetLocalScale();
 		
 		// So much work to get around what this one little CVar does...
@@ -78,14 +82,14 @@ class M2CHUD : BaseWeaponHUD
 		{
 			vector2 roundVector =
 				(roundsOrigin.x,
-				(roundsOrigin.y - textureHeight * i)
+				(roundsOrigin.y - m_TextureSize.y * i)
 					+ m_RoundsOffset.GetValue() + leftRowOffset);
 					
 
 			roundVector = hudTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
-				roundTexture,
+				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
 				hudTransform.GetLocalRotation(),
@@ -98,13 +102,13 @@ class M2CHUD : BaseWeaponHUD
 		{
 			vector2 roundvector =
 				(roundsOrigin.x + 5 * GetAspectScaleY(),
-				(roundsOrigin.y - textureHeight * i)
-					+ m_RoundsOffset.GetValue() + textureHeight * 0.5);
+				(roundsOrigin.y - m_TextureSize.y * i)
+					+ m_RoundsOffset.GetValue() + m_TextureSize.y * 0.5);
 
 			roundVector = hudTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
-				roundTexture,
+				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
 				hudTransform.GetLocalRotation(),

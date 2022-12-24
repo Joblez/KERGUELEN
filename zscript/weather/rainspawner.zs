@@ -3,7 +3,7 @@ class RainSpawner : WeatherParticleSpawner
 	private CVar m_SplashParticlesCVar;
 	private TextureID m_MainSplashTexture;
 
-	static WeatherParticleSpawner Create(
+	static RainSpawner Create(
 		double density,
 		double range,
 		Sector sec,
@@ -13,13 +13,13 @@ class RainSpawner : WeatherParticleSpawner
 		int particleFlags = SPF_NO_XY_BILLBOARD,
 		string particleTextureName = "RAINA0",
 		int particleLifetime = 35,
-		double particleSize = 20.0,
+		double particleSize = 28.0,
 		double particleSizeDeviation = 2.0,
 		vector3 initialParticleVelocity = (0.0, 0.0, -42.0),
 		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 2.0),
 		vector3 particleAcceleration = (0.0, 0.0, 0.0),
 		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
-		double particleAlpha = 0.6,
+		double particleAlpha = 0.5,
 		double particleFadeStep = 0.0,
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = true,
@@ -145,6 +145,6 @@ class RainSpawner : WeatherParticleSpawner
 		if (setting == 0) return 0.0;
 
 		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
-		return 96 * setting + 192 * Math.Remap(players[consoleplayer].FOV, 10, 120, 8.0, 1.0);
+		return 96 * setting + 256 * Math.Remap(players[consoleplayer].FOV, 10, 120, 12.0, 1.0);
 	}
 }

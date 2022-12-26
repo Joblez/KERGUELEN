@@ -525,7 +525,7 @@ class WeaponBase : DoomWeapon abstract
 			m_HUDExtension.Init(self);
 		}
 
-		HUDExtensionRegistry.AddExtension(self, m_HUDExtension);
+		HUDExtensionRegistry.AddExtension(m_HUDExtension);
 	}
 
 	void UnregisterWeaponHUD()

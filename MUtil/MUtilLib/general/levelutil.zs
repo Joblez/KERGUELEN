@@ -1,14 +1,37 @@
 class LevelUtil play
 {
+	/**
+	 * Damages and thrusts Actors within a spherical radius, like an explosion.
+	 *
+	 * Parameters:
+	 * - origin: The origin point of the explosion.
+	 * - damage: The damage at the center of the explosion.
+	 * - thrustForce: The thrusting force at the center of the explosion.
+	 * - radius: The range of the explosion. Damage and thrust force are attenuated
+	 *		linearly along this range.
+	 * - thrustTarget: Whether the thrust should aim at the bottom of the target, the
+	 *		center, or the top, to approximate center of mass.
+	 * - exclusions: Any Actors that should not be affected by the explosion.
+	 * - source: An optional Actor to be used as the source of the explosion. If not
+	 *		provided, a placeholder Actor will be used instead.
+	 * - inflictor: An optional Actor to be specified as the inflictor when the explosion
+	 *		damages an Actor.
+	 * - thrustOffset: Offset to the position that will be used to determine thrust
+	 *		direction.
+	 * - checkHit: Whether or not to check for blocking geometry or Actors when checking
+	 *		for affected Actors. When false, the explosion will go through walls.
+	**/
 	static play void Explode3D(
 		vector3 origin,
 		int damage,
 		double thrustForce,
 		double radius,
-		EThrustTarget thrustTarget = THRTARGET_Top,
+		EThrustTarget thrustTarget = THRTARGET_Center,
 		array<Actor> exclusions = null,
 		Actor source = null,
-		vector3 thrustOffset = (0.0, 0.0, 0.0))
+		Actor inflictor = null,
+		vector3 thrustOffset = (0.0, 0.0, 0.0),
+		bool checkHit = true)
 	{
 		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
@@ -16,7 +39,10 @@ class LevelUtil play
 		{
 			Actor mo = iterator.thing;
 
+			// Ignore Actors that wouldn't normally take explosion damage.
 			if (!mo.bSolid || !mo.bShootable) continue;
+
+			// Ensure map object is not among exclusions.
 			if (exclusions && exclusions.Size() > 0 && exclusions.Find(mo) != exclusions.Size()) continue;
 
 			vector3 position;
@@ -37,10 +63,10 @@ class LevelUtil play
 			vector3 toTarget = position - origin;
 			double distance = toTarget.Length();
 
-			if (distance > radius) continue;
+			// Avoid division by zero and negative radius.
+			if (radius <= 0.0) radius = double.Epsilon;
 
-			int attenuatedDamage = int(round((radius - distance) / radius * damage));
-			double attenuatedForce = (radius - distance) / radius * thrustForce;
+			if (distance > radius) continue;
 
 			if (!source) source = WorldAgentHandler.GetWorldAgent();
 
@@ -53,61 +79,14 @@ class LevelUtil play
 
 			source.SetOrigin(oldPosition, false);
 
-			if (traceData.HitActor != mo) continue;
+			if (checkHit && traceData.HitActor != mo) continue;
 
-			mo.DamageMobj(null, source, attenuatedDamage, 'Explosive', DMG_THRUSTLESS | DMG_EXPLOSION);
+			int attenuatedDamage = int(round((radius - distance) / radius * damage));
+			double attenuatedForce = (radius - distance) / radius * thrustForce;
 
-			toTarget = position - (origin + thrustOffset);
-			ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
-		}
-	}
+			mo.DamageMobj(inflictor, source, attenuatedDamage, 'Explosive', DMG_THRUSTLESS | DMG_EXPLOSION);
 
-	static play void RadiusThrust3D(
-		vector3 origin,
-		double force,
-		double radius,
-		EThrustTarget thrustTarget = THRTARGET_Top,
-		array<Actor> exclusions = null)
-	{
-		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
-
-		while (iterator.Next())
-		{
-			Actor mo = iterator.thing;
-
-			if (!mo.bSolid || !mo.bShootable || mo.bDontThrust) continue;
-			if (exclusions && exclusions.Find(mo) != exclusions.Size()) continue;
-
-			vector3 position;
-			switch (thrustTarget)
-			{
-				case THRTARGET_Center:
-					position = (mo.Pos.xy, mo.Pos.z + (mo.Height / 2.0));
-					break;
-				case THRTARGET_Top:
-					position = (mo.Pos.xy, mo.Pos.z + mo.Height);
-					break;
-				case THRTARGET_Origin:
-				default:
-					position = mo.Pos;
-					break;
-			}
-			vector3 toTarget = position - origin;
-			double distance = toTarget.Length();
-
-			if (distance > radius) continue;
-
-			LineTracer tracer = new("LineTracer");
-			bool traceHit = tracer.Trace(origin, Level.PointInSector(origin.xy), toTarget.Unit(), distance, 0);
-
-			if (!traceHit || tracer.Results.HitType != TRACE_HitActor || tracer.Results.HitActor != mo)
-			{
-				continue;
-			}
-
-			double attenuatedForce = (radius - distance) / radius * force;
-
-			ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
+			ActorUtil.Thrust3D(mo, toTarget + thrustOffset, attenuatedForce);
 		}
 	}
 }

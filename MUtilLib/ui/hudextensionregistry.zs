@@ -75,9 +75,9 @@ class HUDExtensionRegistry : EventHandler
 		}
 	}
 
-	static void AddExtension(Object context, HUDExtension extension)
+	static void AddExtension(HUDExtension extension)
 	{
-		GetInstance().AddExtensionEntry(context, consolePlayer, extension);
+		GetInstance().AddExtensionEntry(consolePlayer, extension);
 	}
 
 	static void SendHUDEvent(name eventId)
@@ -90,10 +90,9 @@ class HUDExtensionRegistry : EventHandler
 		GetInstance().TryStartRemovingExtension(extension);
 	}
 
-	protected void AddExtensionEntry(Object context, int registrant, HUDExtension extension)
+	protected void AddExtensionEntry(int registrant, HUDExtension extension)
 	{
-		extension.QueueActivate();
-		let entry = CreateEntry(context, registrant, extension);
+		let entry = CreateEntry(registrant, extension);
 		m_Entries.Push(entry);
 	}
 
@@ -114,7 +113,7 @@ class HUDExtensionRegistry : EventHandler
 		return HUDExtensionRegistry(EventHandler.Find("HUDExtensionRegistry"));
 	}
 
-	private static HUDExtensionEntry CreateEntry(Object context, int registrant, HUDExtension extension)
+	private static HUDExtensionEntry CreateEntry(int registrant, HUDExtension extension)
 	{
 		let entry = new("HUDExtensionEntry");
 		entry.m_Registrant = registrant;

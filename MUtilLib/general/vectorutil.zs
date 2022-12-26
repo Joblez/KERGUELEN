@@ -69,6 +69,11 @@ class Vec2Util
 	static vector3 YX_(vector2 v) { return (v.y, v.x, 0.0); }
 	static vector3 _YX(vector2 v) { return (0.0, v.y, v.y); }
 
+	static vector2 Random(double minX, double maxX, double minY, double maxY)
+	{
+		return (FRandom(minX, maxX), FRandom(minY, maxY));
+	}
+
 	static vector2, vector2, vector2, vector2 RectFromTopLeft(vector2 origin, double w, double h)
 	{
 		vector2 topLeft = origin;
@@ -216,6 +221,11 @@ class Vec3Util
 	static vector3 Z_Z(vector3 v) { return (v.z, 0.0, v.z); }
 	static vector3 _ZZ(vector3 v) { return (0.0, v.z, v.z); }
 
+	static vector3 Random(double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
+	{
+		return (FRandom(minX, maxX), FRandom(minY, maxY), FRandom(minZ, maxZ));
+	}
+
 	static vector3 FromAngles(double yaw, double pitch, double length = 1)
 	{
 		return (length * cos(yaw), length * sin(yaw), length * -sin(pitch));
@@ -226,5 +236,13 @@ class Vec3Util
 		vector3 dir = target - origin;
 		if (unit) dir = dir.Unit();
 		return dir;
+	}
+}
+
+class Vec4Util
+{
+	static vector4 Random(double minX, double maxX, double minY, double maxY, double minZ, double maxZ, double minW, double maxW)
+	{
+		return (FRandom(minX, maxX), FRandom(minY, maxY), FRandom(minZ, maxZ), FRandom(minW, maxW));
 	}
 }

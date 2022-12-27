@@ -1,27 +1,39 @@
+/** Contains several utilities related to two-component vectors. **/
 class Vec2Util
 {
 	//====================== Directions ======================//
 
+	/** Returns a unit vector2 pointing to +X. **/
 	static vector2 Forward()
 	{
 		return (1, 0);
 	}
+
+	/** Returns a unit vector2 pointing to -X. **/
 	static vector2 Back()
 	{
 		return (-1, 0);
 	}
+
+	/** Returns a unit vector2 pointing to +Y. **/
 	static vector2 Left()
 	{
 		return (0, 1);
 	}
+	
+	/** Returns a unit vector2 pointing to -Y. **/
 	static vector2 Right()
 	{
 		return (0, -1);
 	}
+
+	/** Returns a vector2 with all of its components set to zero. **/
 	static vector2 Zero()
 	{
 		return (0, 0);
 	}
+
+	/** Returns a vector2 with all of its components set to double.Infinity. **/
 	static vector2 Inf()
 	{
 		return (double.Infinity, double.Infinity);
@@ -69,11 +81,33 @@ class Vec2Util
 	static vector3 YX_(vector2 v) { return (v.y, v.x, 0.0); }
 	static vector3 _YX(vector2 v) { return (0.0, v.y, v.y); }
 
+	/** Returns a vector2 with random values from min X and Y to max X and Y. **/
 	static vector2 Random(double minX, double maxX, double minY, double maxY)
 	{
 		return (FRandom(minX, maxX), FRandom(minY, maxY));
 	}
 
+	/**
+	 * Convenience method for getting a direction vector from origin and target vectors.
+	 *
+	 * Equivalent to (target - origin).Unit().
+	**/
+	static vector2 Direction(vector2 origin, vector2 target)
+	{
+		return (target - origin).Unit();
+	}
+
+	/**
+	 * Returns four vector2s corresponding to the four corners of a rectangle starting from
+	 * the top-left corner with the given width and height.
+	 *
+	 * The values are returned as top-left, top-right, bottom-left, and bottom-right, in that order.
+	 *
+	 * Parameters:
+	 * - origin: The top-left corner from which to derive the rectangle.
+	 * - w: The width of the resulting rectangle.
+	 * - h: The height of the resulting rectangle.
+	**/
 	static vector2, vector2, vector2, vector2 RectFromTopLeft(vector2 origin, double w, double h)
 	{
 		vector2 topLeft = origin;
@@ -84,6 +118,17 @@ class Vec2Util
 		return topLeft, topRight, bottomLeft, bottomRight;
 	}
 
+	/**
+	 * Returns four vector2s corresponding to the four corners of a rectangle starting from
+	 * the given center point with the given width and height.
+	 *
+	 * The values are returned as top-left, top-right, bottom-left, and bottom-right, in that order.
+	 *
+	 * Parameters:
+	 * - origin: The center point from which to derive the rectangle.
+	 * - w: The width of the resulting rectangle.
+	 * - h: The height of the resulting rectangle.
+	**/
 	static vector2, vector2, vector2, vector2 RectFromCenter(vector2 center, double w, double h)
 	{
 		vector2 origin = center - (w / 2, h / 2);
@@ -93,38 +138,54 @@ class Vec2Util
 	}
 }
 
+/** Contains several utilities related to three-component vectors. **/
 class Vec3Util
 {
 	//====================== Directions ======================//
 
+	/** Returns a unit vector3 pointing to +X. **/
 	static vector3 Forward()
 	{
 		return (1, 0, 0);
 	}
+
+	/** Returns a unit vector3 pointing to -X. **/
 	static vector3 Back()
 	{
 		return (-1, 0, 0);
 	}
+
+	/** Returns a unit vector3 pointing to +Y. **/
 	static vector3 Left()
 	{
 		return (0, 1, 0);
 	}
+
+	/** Returns a unit vector3 pointing to -Y. **/
 	static vector3 Right()
 	{
 		return (0, -1, 0);
 	}
+
+	/** Returns a unit vector3 pointing to +Z. **/
 	static vector3 Up()
 	{
 		return (0, 0, 1);
 	}
+
+	/** Returns a unit vector3 pointing to -Z. **/
 	static vector3 Down()
 	{
 		return (0, 0, -1);
 	}
+
+	/** Returns a vector3 with all of its components set to zero. **/
 	static vector3 Zero()
 	{
 		return (0, 0, 0);
 	}
+
+	/** Returns a vector3 with all of its components set to double.Infinity. **/
 	static vector3 Inf()
 	{
 		return (double.Infinity, double.Infinity, double.Infinity);
@@ -221,26 +282,32 @@ class Vec3Util
 	static vector3 Z_Z(vector3 v) { return (v.z, 0.0, v.z); }
 	static vector3 _ZZ(vector3 v) { return (0.0, v.z, v.z); }
 
+	/** Returns a vector3 with random values from min X, Y, and Z to max X, Y, and Z. **/
 	static vector3 Random(double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
 	{
 		return (FRandom(minX, maxX), FRandom(minY, maxY), FRandom(minZ, maxZ));
 	}
 
+	/** Returns a direction vector from the given yaw and pitch angles. **/
 	static vector3 FromAngles(double yaw, double pitch, double length = 1)
 	{
 		return (length * cos(yaw), length * sin(yaw), length * -sin(pitch));
 	}
 
-	static vector3 Direction(vector3 origin, vector3 target, bool unit = true)
+	/**
+	 * Convenience method for getting a direction vector from origin and target vectors.
+	 *
+	 * Equivalent to (target - origin).Unit().
+	**/
+	static vector3 Direction(vector3 origin, vector3 target)
 	{
-		vector3 dir = target - origin;
-		if (unit) dir = dir.Unit();
-		return dir;
+		return (target - origin).Unit();
 	}
 }
 
 class Vec4Util
 {
+	/** Returns a vector4 with random values from min X, Y, Z, and W to max X, Y, Z, and W. **/
 	static vector4 Random(double minX, double maxX, double minY, double maxY, double minZ, double maxZ, double minW, double maxW)
 	{
 		return (FRandom(minX, maxX), FRandom(minY, maxY), FRandom(minZ, maxZ), FRandom(minW, maxW));

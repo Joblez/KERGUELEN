@@ -104,9 +104,14 @@ class WeatherParticleSpawner : WeatherSpawner
 	{
 		Actor pawn = players[consoleplayer].mo;
 
-		// Project the player's position along the direction they are moving to ensure
-		// particles fall into view from where they spawn.
-		vector2 projectedPosition = pawn.Pos.xy + (pawn.Vel.xy * m_ProjectionLength);
+		// Project the player's position forward to ensure particles fall into view, but
+		// divide by setting because it may look jarring with higher densities.
+		double attenuatedProjectionLength = m_ProjectionLength / (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0);
+		
+		Console.Printf("Projection length: %.2f", attenuatedProjectionLength);
+
+		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
+			+ (players[consoleplayer].mo.Vel.xy * attenuatedProjectionLength);
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);

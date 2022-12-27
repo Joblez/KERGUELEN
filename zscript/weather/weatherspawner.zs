@@ -101,8 +101,14 @@ class WeatherSpawner : Thinker
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
 
-		// Project the player's position forward to ensure particles fall into view.
-		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
+		// Project the player's position forward to ensure particles fall into view, but
+		// divide by setting because it may look jarring with higher densities.
+		double attenuatedProjectionLength = m_ProjectionLength / (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0);
+		
+		Console.Printf("Projection length: %.2f", attenuatedProjectionLength);
+
+		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
+			+ (players[consoleplayer].mo.Vel.xy * attenuatedProjectionLength);
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
 		double range = GetAdjustedRange() ** 2;

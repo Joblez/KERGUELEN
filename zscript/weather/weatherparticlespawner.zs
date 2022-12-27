@@ -102,22 +102,32 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	override void SpawnWeatherParticle()
 	{
+		Actor pawn = players[consoleplayer].mo;
+
 		// Project the player's position along the direction they are moving to ensure
 		// particles fall into view from where they spawn.
-		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
+		vector2 projectedPosition = pawn.Pos.xy + (pawn.Vel.xy * m_ProjectionLength);
 		vector2 point = m_Triangulation.GetRandomPoint();
 
-		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
+		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
+		double range = GetAdjustedRange() ** 2;
+
+		// Cull outside range.
+		if (distance > range) return;
+
+		// Attenuate amount over distance.
+		double spawnScore = FRandom(0.0, 1.0);
+		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
+
+		// Reduce spawn chance outside of horizontal view range.
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(projectedPosition.x - pawn.Pos.x, projectedPosition.y - pawn.Pos.y))
+			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
+
+		if (spawnScore < spawnThreshold) return;
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
-		Actor pawn = players[consoleplayer].mo;
-
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(projectedPosition.x - pawn.Pos.x, projectedPosition.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
-
-		// Reduce spawn chance outside of horizontal view range.
-		if (isOutOfView && FRandom(0, 1) < GetOutOfViewFrequencyReduction()) return;
 
 		// Copy params for simulated lifetime.
 		// TODO: Clean up if struct assignment is ever implemented.

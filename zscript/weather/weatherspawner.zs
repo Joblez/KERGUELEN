@@ -69,7 +69,6 @@ class WeatherSpawner : Thinker
 	{
 		int weatherSetting = GetWeatherAmountCVar().GetInt();
 
-		if (weatherSetting == 6) weatherSetting++; // Increase even further for Ultra.
 		return (m_Range * 2) * weatherSetting + m_Range;
 	}
 
@@ -105,7 +104,15 @@ class WeatherSpawner : Thinker
 		// Project the player's position forward to ensure particles fall into view.
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
 
-		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
+		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
+		double range = GetAdjustedRange() ** 2;
+
+		// Cull outside range.
+		if (distance > range) return;
+
+		// Attenuate amount over distance.
+		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
+		if (FRandom(0.0, 1.0) < 1.0 - spawnThreshold) return;
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 

@@ -20,11 +20,10 @@ class WeatherHandler : EventHandler
 
 		while ((i = iterator.Next()) >= 0)
 		{
-			// TODO: Replace with particle spawner once particle billboarding can be disabled.
 			m_WeatherSpawners.Push(
 				RainSpawner.Create(
-					12,
-					256.0,
+					14,
+					320.0,
 					Level.Sectors[i],
 					m_WeatherAgent));
 		}
@@ -35,17 +34,18 @@ class WeatherHandler : EventHandler
 		snowParams.color1 = 0xFFFFFFFF;
 		snowParams.texture = TexMan.CheckForTexture("SNOWA0");
 		snowParams.style = STYLE_Add;
-		snowParams.size = 8.0 + FRandom(-3.0, 3.0);
-		snowParams.vel = (0.0, 0.0, -2.5) + Vec3Util.Random(-2.0, 2.0, -2.0, 2.0, -1.0, 1.0);
 		snowParams.accel = (0.0, 0.0, -0.05);
 		snowParams.startalpha = 0.635;
 
 		while ((i = iterator.Next()) >= 0)
 		{
+			snowParams.size = 8.0 + FRandom(-3.0, 3.0);
+			snowParams.vel = (0.0, 0.0, -2.5) + Vec3Util.Random(-2.0, 2.0, -2.0, 2.0, -1.0, 1.0);
+
 			m_WeatherSpawners.Push(
 				WeatherParticleSpawner.Create(
 					10,
-					384.0,
+					256.0,
 					Level.Sectors[i],
 					m_WeatherAgent,
 					snowParams,

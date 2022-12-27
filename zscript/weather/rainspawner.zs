@@ -1,6 +1,6 @@
 class RainSpawner : WeatherParticleSpawner
 {
-	private CVar m_SplashParticlesCVar;
+	private transient CVar m_SplashParticlesCVar;
 	private TextureID m_MainSplashTexture;
 
 	static RainSpawner Create(
@@ -58,52 +58,52 @@ class RainSpawner : WeatherParticleSpawner
 	override void ParticleEndOfLifeCallback(WeatherParticleCallbackData data)
 	{
 		vector3 oldPosition = m_WeatherAgent.Pos;
-		m_WeatherAgent.SetXYZ(data.m_EndPosition);
+
+		Actor pawn = players[consoleplayer].mo;
+
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(data.m_EndPosition.x - pawn.Pos.x, data.m_EndPosition.y - pawn.Pos.y))
+			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+
+		double distance = MathVec3.SquareDistanceBetween(data.m_EndPosition, pawn.Pos);
+		double mainSplashRange = GetSplashTextureDrawDistance() ** 2 * (isOutOfView ? 0.5 : 1.0);
+
+		// Cull splash texture by distance.
+		// Do not entirely cull splash textures out of view in case player turns suddenly.
+		if (distance > mainSplashRange) return;
+
+		double spawnScore = FRandom(0.0, 1.0);
+		double spawnThreshold = GetOutOfViewFrequencyReduction();
 
 		// Spawn ripple effect when rain hits water.
 		if (data.m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
 		{
 			// Particles cannot be flat, fall back to actor.
-			WaterRipple ripple = WaterRipple(Actor.Spawn("WaterRipple", data.m_EndPosition));
+			if (!isOutOfView || spawnScore >= spawnThreshold) WaterRipple ripple = WaterRipple(Actor.Spawn("WaterRipple", data.m_EndPosition));
 			return;
 		}
-		else // Spawn splash texture.
+		else if (!isOutOfView || spawnScore >= spawnThreshold * 2) // Splash textures are less prominent than ripple textures, cull more aggressively.
 		{
-			m_WeatherAgent.A_SpawnParticleEx(
-				0xFFFFFFFF,
-				m_MainSplashTexture,
-				STYLE_Add,
-				SPF_REPLACE,
-				4,
-				10.0,
-				0.0,
-				0.0, 0.0, 1.75,
-				0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0,
-				0.7,
-				0.0,
-				0.0);
+			
 		}
+		else // Not on water and below splash threshold, do nothing.
+		{
+			return;
+		}
+
+		// Don't spawn splash particles out of view or too far away.
+		if (isOutOfView || distance > GetSplashParticleDrawDistance() ** 2) return;
+
+		if (!m_SplashParticlesCVar) m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
 
 		int splashParticleSetting = m_SplashParticlesCVar.GetInt();
 
-		if (splashParticleSetting <= 0)
-		{
-			m_WeatherAgent.SetXYZ(oldPosition);
-			return;
-		}
+		// Don't spawn if splash particles disabled.
+		if (splashParticleSetting <= 0) return;
 
-		Actor pawn = players[consoleplayer].mo;
-
-		// Cull by distance and 2D view range.
-		if (m_WeatherAgent.Distance3DSquared(pawn) <= GetSplashParticleDrawDistance() ** 2
-			&& Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
-				< players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio())
+		if (splashParticleSetting == 6) // Extra detail for Ultra
 		{
-			if (splashParticleSetting == 6) // Extra detail for Ultra
+			for (int i = 0; i < 6; ++i)
 			{
-				for (int i = 0; i < 6; ++i)
-				{
 					m_WeatherAgent.A_SpawnParticle(
 						0xFFFFFFFF,
 						SPF_RELVEL,
@@ -116,11 +116,11 @@ class RainSpawner : WeatherParticleSpawner
 						accelz: -0.25,
 						fadestepf: 0,
 						sizestep: -0.15);
-				}
 			}
+		}
 
-			for (int i = 0; i < Random(splashParticleSetting, splashParticleSetting + 2); ++i)
-			{
+		for (int i = 0; i < Random(splashParticleSetting, splashParticleSetting + 2); ++i)
+		{
 				m_WeatherAgent.A_SpawnParticle(
 					0xFFFFFFFF,
 					SPF_RELVEL | SPF_REPLACE,
@@ -133,10 +133,16 @@ class RainSpawner : WeatherParticleSpawner
 					accelz: -0.25,
 					fadestepf: 0,
 					sizestep: -0.5);
-			}
 		}
+	}
 
-		m_WeatherAgent.SetXYZ(oldPosition);
+	double GetSplashTextureDrawDistance() const
+	{
+		int setting = m_WeatherAmountCVar.GetInt();
+		if (setting == 0) return 0.0;
+
+		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
+		return 256 * setting + 256 * Math.Remap(players[consoleplayer].FOV, 10, 120, 10.0, 1.0);
 	}
 
 	double GetSplashParticleDrawDistance() const

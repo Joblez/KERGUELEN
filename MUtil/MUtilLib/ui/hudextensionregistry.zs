@@ -92,6 +92,7 @@ class HUDExtensionRegistry : EventHandler
 
 	protected void AddExtensionEntry(int registrant, HUDExtension extension)
 	{
+		extension.QueueActivate();
 		let entry = CreateEntry(registrant, extension);
 		m_Entries.Push(entry);
 	}

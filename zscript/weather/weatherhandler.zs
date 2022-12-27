@@ -22,7 +22,7 @@ class WeatherHandler : EventHandler
 		{
 			m_WeatherSpawners.Push(
 				RainSpawner.Create(
-					14,
+					12,
 					290.0,
 					level.Sectors[i],
 					m_WeatherAgent));

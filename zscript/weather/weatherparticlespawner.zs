@@ -20,7 +20,7 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	private array<WeatherParticleCallbackData> pendingCallbackData;
+	protected array<WeatherParticleCallbackData> pendingCallbackData;
 
 	static WeatherParticleSpawner Create(
 		double density,
@@ -132,7 +132,12 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		if (spawnScore < spawnThreshold) return;
 
-		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
+		vector3 spawnPosition = (point.x, point.y,
+			(m_Sector.HighestCeilingAt(point)
+				// Particles can exist outside of level geometry, spawn above ceiling to make it
+				// seem as though the rain is falling from the sky.
+				+ 435.0
+				- FRandom(2.0, 12.0)));
 
 
 		// Copy params for simulated lifetime.

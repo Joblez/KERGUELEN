@@ -1,5 +1,3 @@
-// TODO: [Long-term] Learn way more math.
-
 class Math
 {
 	static double Sign(double num)

@@ -1,45 +1,72 @@
 // TODO: Figure out why the compiler hates this one.
-// class InterpolatedFloat
-// {
-// 	float m_Target;
-// 	float m_SmoothTime;
+/**
+ * Represents a float that interpolates to a target value over time.
+**/
+class InterpolatedFloat
+{
+	/** The end value of this InterpolatedFloat. **/
+	float m_Target;
 
-// 	private float m_Current;
-// 	private float m_CurrentSpeed;
+	/**
+	 * The period of time over which this InterpolatedFloat will interpolate
+	 * towards its target.
+	**/
+	float m_SmoothTime;
 
-// 	float GetValue() const
-// 	{
-// 		return m_Current;
-// 	}
+	private float m_Current;
+	private float m_CurrentSpeed;
 
-// 	string ToString(int precision = 6) const
-// 	{
-// 		return "Current: "..ToStr.Float(m_Current, precision)
-// 			.."\nTarget: "..ToStr.Float(m_Target, precision);
-// 	}
+	/** Returns the current value of this InterpolatedFloat. **/
+	float GetValue() const { return m_Current; }
 
-// 	void Update(double delta = 1.0 / 35.0)
-// 	{
-// 		m_Current = Mathf.SmoothDamp(
-// 			m_Current,
-// 			m_Target,
-// 			m_CurrentSpeed,
-// 			m_SmoothTime,
-// 			float.Infinity,
-// 			delta);
-// 	}
+	/**
+	 * Returns a string representation of this InterpolatedFloat.
+	 *
+	 * Parameters:
+	 * - precision: The amount of decimal places to truncate the resulting numbers to.
+	**/
+	string ToString(int precision = 6) const
+	{
+		return "Current: "..ToStr.Float(m_Current, precision)
+			.."\nTarget: "..ToStr.Float(m_Target, precision);
+	}
 
-// 	void Reset()
-// 	{
-// 		m_Target = 0;
-// 	}
+	/**
+	 * Advances the interpolation of this InterpolatedFloat by the given time delta.
+	 *
+	 * NOTE:
+	 * 	For many use cases this will likely be called every tic, which is why the default
+	 * 	value of delta is 1 / 35.
+	**/
+	void Update(double delta = 1.0 / 35.0)
+	{
+		m_Current = Mathf.SmoothDamp(
+			m_Current,
+			m_Target,
+			m_CurrentSpeed,
+			m_SmoothTime,
+			float.Infinity,
+			delta);
+	}
 
-// 	void HardReset()
-// 	{
-// 		m_Target = 0;
-// 		m_Current = 0;
-// 	}
-// }
+	/**
+	 * Forces the value of this InterpolatedFloat to be set to the given value immediately.
+	 *
+	 * NOTE: This is an advanced use case.
+	**/
+	void ForceSet(float value)
+	{
+		m_Target = value;
+		m_Current = value;
+		m_CurrentSpeed = 0.0;
+	}
+
+	/** Resets the end value of this InterpolatedFloat to zero. **/
+	void Reset() { m_Target = 0.0; }
+
+	/** Resets the value of this InterpolatedFloat immediately. **/
+	void HardReset() { ForceSet(0.0); }
+}
 
 /**
  * Represents a double that interpolates to a target value over time.
@@ -175,7 +202,7 @@ class InterpolatedVector2
 	{
 		m_Target = value;
 		m_Current = value;
-		m_CurrentSpeed = 0.0;
+		m_CurrentSpeed = Vec2Util.Zero();
 	}
 
 	/** Resets the end value of this InterpolatedVector2 to zero. **/
@@ -260,7 +287,7 @@ class InterpolatedVector3
 	{
 		m_Target = value;
 		m_Current = value;
-		m_CurrentSpeed = 0.0;
+		m_CurrentSpeed = Vec3Util.Zero();
 	}
 
 	/** Resets the end value of this InterpolatedVector3 to zero. **/

@@ -102,18 +102,14 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	override void SpawnWeatherParticle()
 	{
-		vector2 point = m_Triangulation.GetRandomPoint();
-
-		// Project the player's position forward to ensure particles are in view.
+		// Project the player's position along the direction they are moving to ensure
+		// particles fall into view from where they spawn.
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy + (players[consoleplayer].mo.Vel.xy * m_ProjectionLength);
+		vector2 point = m_Triangulation.GetRandomPoint();
 
 		if (MathVec2.SquareDistanceBetween(point, projectedPosition) > GetAdjustedRange() ** 2) return;
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
-
-		// Move weather agent to spawn location.
-		vector3 oldPosition = m_WeatherAgent.Pos;
-		m_WeatherAgent.SetXYZ(spawnPosition);
 
 		Actor pawn = players[consoleplayer].mo;
 
@@ -121,11 +117,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
 
 		// Reduce spawn chance outside of horizontal view range.
-		if (isOutOfView && FRandom(0, 1) < GetOutOfViewFrequencyReduction())
-		{
-			m_WeatherAgent.SetXYZ(oldPosition);
-			return;
-		}
+		if (isOutOfView && FRandom(0, 1) < GetOutOfViewFrequencyReduction()) return;
 
 		// Copy params for simulated lifetime.
 		// TODO: Clean up if struct assignment is ever implemented.

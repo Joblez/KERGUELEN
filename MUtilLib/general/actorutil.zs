@@ -1,6 +1,4 @@
-/**
- * A class containing several Actor-related utilities.
-**/
+/** Contains several Actor-related utilities. **/
 class ActorUtil
 {
 	/**

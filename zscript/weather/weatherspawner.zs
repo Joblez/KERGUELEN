@@ -8,7 +8,7 @@ class WeatherSpawner : Thinker
 	protected double m_ProjectionLength;
 
 	protected SectorTriangulation m_Triangulation;
-	protected CVar m_WeatherAmountCVar;
+	protected transient CVar m_WeatherAmountCVar;
 
 	protected Agent m_WeatherAgent;
 
@@ -61,20 +61,21 @@ class WeatherSpawner : Thinker
 
 	CVar GetWeatherAmountCVar() const
 	{
+		if (!m_WeatherAmountCVar) m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		return m_WeatherAmountCVar;
 	}
 
 	double GetAdjustedRange() const
 	{
-		int weatherSetting = m_WeatherAmountCVar.GetInt();
+		int weatherSetting = GetWeatherAmountCVar().GetInt();
 
-		if (weatherSetting == 6) weatherSetting += 2; // Increase even further for Ultra.
+		if (weatherSetting == 6) weatherSetting++; // Increase even further for Ultra.
 		return (m_Range * 2) * weatherSetting + m_Range;
 	}
 
 	double GetAdjustedFrequency() const
 	{
-		switch (m_WeatherAmountCVar.GetInt())
+		switch (GetWeatherAmountCVar().GetInt())
 		{
 			case 0: return 0.0;
 			case 1: return m_Frequency * 0.2;
@@ -89,7 +90,7 @@ class WeatherSpawner : Thinker
 
 	double GetOutOfViewFrequencyReduction() const
 	{
-		return min(m_WeatherAmountCVar.GetInt() * 0.075, 0.4);
+		return min(GetWeatherAmountCVar().GetInt() * 0.075, 0.4);
 	}
 
 	void SetDensity(double density)
@@ -114,7 +115,7 @@ class WeatherSpawner : Thinker
 
 		Actor pawn = players[consoleplayer].mo;
 
-		// Reduce spawn chance outside of 2D view range.
+		// Reduce spawn chance outside of horizontal view range.
 		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
 				<= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
 			&& FRandom(0, 1) > GetOutOfViewFrequencyReduction())

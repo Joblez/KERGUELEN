@@ -8,7 +8,7 @@ class BaseWeaponHUD : HUDExtension abstract
 	protected int m_OriginalVerticalResolution;
 
 	protected ui Transform2D hudTransform;
-	protected ui CVar hudAspectScale;
+	protected ui transient CVar hudAspectScale;
 
 	ui double GetAspectScaleX()
 	{
@@ -29,6 +29,8 @@ class BaseWeaponHUD : HUDExtension abstract
 	override void PreDraw(RenderEvent event)
 	{
 		if (automapactive) return;
+
+		if (!hudAspectScale) hudAspectScale = CVar.GetCVar("hud_aspectscale");
 
 		m_OriginalRelTop = StatusBar.RelTop;
 		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;

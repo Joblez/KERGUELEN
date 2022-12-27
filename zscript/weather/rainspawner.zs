@@ -20,7 +20,7 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Add;
 		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
 		params.lifetime = 35;
-		params.size = 28.0 + FRandom(-2.0, 2.0);
+		params.size = 34.0 + FRandom(-2.0, 2.0);
 		params.vel = (0.0, 0.0, -42.0 + FRandom(-2.0, 2.0));
 		params.startalpha = 0.5;
 
@@ -50,12 +50,12 @@ class RainSpawner : WeatherParticleSpawner
 
 		// Spawn from max real splash range up to three times as far depending on FOV,
 		// with higher odds depending on weather amount setting.
-		double minRange = GetAdjustedRange() ** 2;
+		double minRange = GetAdjustedRange() ** 2.0;
 		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 3.0, 1.0);
 
 		vector2 position = pawn.Pos.xy;
-		vector2 point = m_Triangulation.GetRandomPoint();;
-		double distance = MathVec2.SquareDistanceBetween(point, position);;
+		vector2 point = m_Triangulation.GetRandomPoint();
+		double distance = MathVec2.SquareDistanceBetween(point, position);
 
 		if (distance < minRange || distance >= maxRange) return;
 

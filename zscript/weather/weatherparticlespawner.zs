@@ -115,7 +115,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = GetAdjustedRange() ** 2;
+		double range = GetAdjustedRange() ** 2.0;
 
 		// Cull outside range.
 		if (distance > range) return;

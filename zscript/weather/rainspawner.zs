@@ -48,8 +48,7 @@ class RainSpawner : WeatherParticleSpawner
 
 		Actor pawn = players[consoleplayer].mo;
 
-		// Spawn from max real splash range up to three times as far depending on FOV,
-		// with higher odds depending on weather amount setting.
+		// Spawn from max real splash range up to three times as far depending on FOV.
 		double minRange = GetAdjustedRange() ** 2.0;
 		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 3.0, 1.0);
 
@@ -57,14 +56,19 @@ class RainSpawner : WeatherParticleSpawner
 		vector2 point = m_Triangulation.GetRandomPoint();
 		double distance = MathVec2.SquareDistanceBetween(point, position);
 
+		// Cull if outside desired range.
 		if (distance < minRange || distance >= maxRange) return;
 
+		// Fake splashes are more likely to appear at higher weather settings.
 		if (FRandom(0.0, 1.0) < 1.0 - GetFakeSplashChance()) return;
 
+		// Could use a line trace to ensure this handles 3D floors correctly, but it's
+		// too rare an edge case for an effect like this.
 		vector3 spawnPosition = (point, m_Sector.NextLowestFloorAt(point.x, point.y, m_Sector.HighestCeilingAt(point)));
 
+		// Attenuate spawn chance over distance.
 		double spawnScore = FRandom(0.0, 1.0);
-		double spawnThreshold = Math.Remap(distance, minRange, maxRange, 0.5, 1.0);
+		double spawnThreshold = Math.Remap(distance, minRange, maxRange, 0.5, 0.9);
 
 		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
@@ -72,29 +76,7 @@ class RainSpawner : WeatherParticleSpawner
 		// Fake splashes appear instantly, cull everything out of view.
 		if (isOutOfView || spawnScore < spawnThreshold) return;
 
-		if (m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
-		{
-			// Particles cannot be flat, fall back to actor.
-			WaterRipple ripple = WaterRipple(Actor.Spawn("WaterRipple", spawnPosition));
-			return;
-		}
-		else
-		{
-			// Spawn splash texture.
-
-			FSpawnParticleParams params;
-
-			params.color1 = 0xFFFFFFFF;
-			params.texture = m_MainSplashTexture;
-			params.style = STYLE_Add;
-			params.flags = SPF_REPLACE;
-			params.lifetime = 4;
-			params.size = 10.0;
-			params.pos = spawnPosition + (0.0, 0.0, 1.75);
-			params.startalpha = 0.7;
-
-			Level.SpawnParticle(params);
-		}
+		SpawnSplashEffect(spawnPosition);
 	}
 
 	override void ParticleEndOfLifeCallback(WeatherParticleCallbackData data)
@@ -104,6 +86,7 @@ class RainSpawner : WeatherParticleSpawner
 		double distance = MathVec3.SquareDistanceBetween(data.m_EndPosition, pawn.Pos);
 		double range = GetAdjustedRange();
 
+		// Attenuate spawn chance over distance.
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
@@ -114,30 +97,7 @@ class RainSpawner : WeatherParticleSpawner
 
 		if (spawnScore >= spawnThreshold) return;
 
-		// Spawn ripple effect when rain hits water.
-		if (data.m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
-		{
-			// Particles cannot be flat, fall back to actor.
-			WaterRipple ripple = WaterRipple(Actor.Spawn("WaterRipple", data.m_EndPosition));
-			return;
-		}
-		else
-		{
-			// Spawn splash texture.
-
-			FSpawnParticleParams params;
-
-			params.color1 = 0xFFFFFFFF;
-			params.texture = m_MainSplashTexture;
-			params.style = STYLE_Add;
-			params.flags = SPF_REPLACE;
-			params.lifetime = 4;
-			params.size = 10.0;
-			params.pos = data.m_EndPosition + (0.0, 0.0, 1.75);
-			params.startalpha = 0.7;
-
-			Level.SpawnParticle(params);
-		}
+		SpawnSplashEffect(data.m_EndPosition);
 
 		double splashParticleRange = GetSplashParticleDrawDistance() ** 2;
 
@@ -168,7 +128,7 @@ class RainSpawner : WeatherParticleSpawner
 			{
 				params.size = FRandom(2.5, 3.0);
 				params.vel = MathVec3.Rotate(Vec3Util.Random(2.0, 4.5, 0.0, 0.0, 0.275, 1.55), Vec3Util.Up(), FRandom(0.0, 360.0));
-				Level.SpawnParticle(params);
+				level.SpawnParticle(params);
 			}
 		}
 
@@ -189,7 +149,7 @@ class RainSpawner : WeatherParticleSpawner
 		{
 			params.size = FRandom(3.0, 6.0);
 			params.vel = MathVec3.Rotate(Vec3Util.Random(0.75, 2.25, 0.0, 0.0, 0.5, 2.5), Vec3Util.Up(), FRandom(0.0, 360.0));
-			Level.SpawnParticle(params);
+			level.SpawnParticle(params);
 		}
 	}
 
@@ -213,5 +173,31 @@ class RainSpawner : WeatherParticleSpawner
 	{
 		if (!m_SplashParticlesCVar) m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
 		return m_SplashParticlesCVar;
+	}
+
+	void SpawnSplashEffect(vector3 spawnPosition) const
+	{
+		// Spawn ripple effect when rain hits liquids.
+		if (m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
+		{
+			// Particles cannot be flat, fall back to actor.
+			Actor.Spawn("WaterRipple", spawnPosition);
+			return;
+		}
+		else // Spawn splash effect.
+		{
+			FSpawnParticleParams params;
+
+			params.color1 = 0xFFFFFFFF;
+			params.texture = m_MainSplashTexture;
+			params.style = STYLE_Add;
+			params.flags = SPF_REPLACE;
+			params.lifetime = 4;
+			params.size = 10.0;
+			params.pos = spawnPosition + (0.0, 0.0, 1.75);
+			params.startalpha = 0.7;
+
+			level.SpawnParticle(params);
+		}
 	}
 }

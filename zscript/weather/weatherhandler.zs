@@ -15,7 +15,7 @@ class WeatherHandler : EventHandler
 
 	private void CreateWeatherSpawners()
 	{
-		SectorTagIterator iterator = Level.CreateSectorTagIterator(RAIN_TAG);
+		SectorTagIterator iterator = level.CreateSectorTagIterator(RAIN_TAG);
 		int i;
 
 		while ((i = iterator.Next()) >= 0)
@@ -24,11 +24,11 @@ class WeatherHandler : EventHandler
 				RainSpawner.Create(
 					14,
 					290.0,
-					Level.Sectors[i],
+					level.Sectors[i],
 					m_WeatherAgent));
 		}
 
-		iterator = Level.CreateSectorTagIterator(SNOW_TAG);
+		iterator = level.CreateSectorTagIterator(SNOW_TAG);
 
 		FSpawnParticleParams snowParams;
 		snowParams.color1 = 0xFFFFFFFF;
@@ -46,7 +46,7 @@ class WeatherHandler : EventHandler
 				WeatherParticleSpawner.Create(
 					10,
 					256.0,
-					Level.Sectors[i],
+					level.Sectors[i],
 					m_WeatherAgent,
 					snowParams,
 					projectionTime: 3.0,

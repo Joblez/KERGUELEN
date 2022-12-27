@@ -105,13 +105,13 @@ class WeatherParticleSpawner : WeatherSpawner
 		Actor pawn = players[consoleplayer].mo;
 
 		// Project the player's position forward to ensure particles fall into view, but
-		// divide by setting because it may look jarring with higher densities.
-		double attenuatedProjectionLength = m_ProjectionLength / (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0);
-		
-		Console.Printf("Projection length: %.2f", attenuatedProjectionLength);
-
+		// scale down with weather setting because it may look jarring at higher densities.
+		// Base length could be calculated procedurally, but unsure if worth the trouble.
+		double attenuatedProjectionLength = m_ProjectionLength
+			/ (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0); // Avoid division by zero.
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
 			+ (players[consoleplayer].mo.Vel.xy * attenuatedProjectionLength);
+
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
@@ -124,9 +124,10 @@ class WeatherParticleSpawner : WeatherSpawner
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		// Reduce spawn chance outside of horizontal view range.
 		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(projectedPosition.x - pawn.Pos.x, projectedPosition.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+
+		// Reduce spawn chance outside of horizontal view range.
 		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
 
 		if (spawnScore < spawnThreshold) return;
@@ -164,7 +165,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			if (m_ShouldDoCallbackAtEndOfParticleLife) pendingCallbackData.Push(result.CreateCallbackData());
 		}
 
-		Level.SpawnParticle(outParams);
+		level.SpawnParticle(outParams);
 	}
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }
@@ -225,7 +226,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		}
 		else
 		{
-			sec = Level.PointInSector(position.xy);
+			sec = level.PointInSector(position.xy);
 		}
 
 		if (velocity.z < 0.0)

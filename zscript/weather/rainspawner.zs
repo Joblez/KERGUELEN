@@ -8,43 +8,28 @@ class RainSpawner : WeatherParticleSpawner
 		double range,
 		Sector sec,
 		WeatherAgent agent,
-		color particleColor = 0xFFFFFFFF,
-		int particleRenderStyle = STYLE_Add,
-		int particleFlags = SPF_NO_XY_BILLBOARD,
-		string particleTextureName = "RAINA0",
-		int particleLifetime = 35,
-		double particleSize = 28.0,
-		double particleSizeDeviation = 2.0,
-		vector3 initialParticleVelocity = (0.0, 0.0, -42.0),
-		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 2.0),
-		vector3 particleAcceleration = (0.0, 0.0, 0.0),
-		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
-		double particleAlpha = 0.5,
-		double particleFadeStep = 0.0,
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = true,
 		bool enableEndOfLifeCallbacks = true)
 	{
 		RainSpawner spawner = new("RainSpawner");
 
+		FSpawnParticleParams params;
+		params.color1 = 0xFFFFFFFF;
+		params.texture = TexMan.CheckForTexture("RAINA0");
+		params.style = STYLE_Add;
+		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
+		params.lifetime = 35;
+		params.size = 28.0 + FRandom(-2.0, 2.0);
+		params.vel = (0.0, 0.0, -42.0 + FRandom(-2.0, 2.0));
+		params.startalpha = 0.5;
+
 		spawner.Init(
 			density,
 			range,
 			sec,
 			agent,
-			particleColor,
-			particleRenderStyle,
-			particleFlags,
-			particleTextureName,
-			particleLifetime,
-			particleSize,
-			particleSizeDeviation,
-			initialParticleVelocity,
-			initialParticleVelocityDeviation,
-			particleAcceleration,
-			particleAccelerationDeviation,
-			particleAlpha,
-			particleFadeStep,
+			params,
 			projectionTime,
 			shouldSimulateParticles,
 			enableEndOfLifeCallbacks);
@@ -83,7 +68,20 @@ class RainSpawner : WeatherParticleSpawner
 		}
 		else if (!isOutOfView || spawnScore >= spawnThreshold * 2) // Splash textures are less prominent than ripple textures, cull more aggressively.
 		{
-			
+			// Spawn splash texture.
+
+			FSpawnParticleParams params;
+
+			params.color1 = 0xFFFFFFFF;
+			params.texture = m_MainSplashTexture;
+			params.style = STYLE_Add;
+			params.flags = SPF_REPLACE;
+			params.lifetime = 4;
+			params.size = 10.0;
+			params.pos = data.m_EndPosition + (0.0, 0.0, 1.75);
+			params.startalpha = 0.7;
+
+			Level.SpawnParticle(params);
 		}
 		else // Not on water and below splash threshold, do nothing.
 		{
@@ -102,38 +100,42 @@ class RainSpawner : WeatherParticleSpawner
 
 		if (splashParticleSetting == 6) // Extra detail for Ultra
 		{
+			FSpawnParticleParams params;
+
+			params.color1 = 0xFFFFFFFF;
+			params.style = STYLE_Normal;
+			params.lifetime = 22;
+			params.sizestep = -0.15;
+			params.pos = data.m_EndPosition + (0.0, 0.0, 1.0);
+			params.accel = (0.0, 0.0, -0.15);
+			params.startalpha = 1.0;
+
 			for (int i = 0; i < 6; ++i)
 			{
-					m_WeatherAgent.A_SpawnParticle(
-						0xFFFFFFFF,
-						SPF_RELVEL,
-						lifetime: 22,
-						size: FRandom(2.0, 2.5),
-						angle: FRandom(0.0, 360.0),
-						zoff: 1.0,
-						velx: FRandom(2.0, 4.0),
-						velz: FRandom(0.25, 1.5),
-						accelz: -0.25,
-						fadestepf: 0,
-						sizestep: -0.15);
+				params.size = FRandom(2.0, 2.5);
+				params.vel = MathVec3.Rotate(Vec3Util.Random(2.0, 4.0, 0.0, 0.0, 0.25, 1.5), Vec3Util.Up(), FRandom(0.0, 360.0));
+				Level.SpawnParticle(params);
 			}
 		}
 
+		FSpawnParticleParams params;
+
+		params.color1 = 0xFFFFFFFF;
+		params.style = STYLE_Normal;
+		params.lifetime = 22;
+		params.sizestep = -0.5;
+		params.pos = data.m_EndPosition + (0.0, 0.0, 2.0);
+		params.accel = (0.0, 0.0, -0.25);
+		params.startalpha = 1.0;
+
 		for (int i = 0; i < Random(splashParticleSetting, splashParticleSetting + 2); ++i)
 		{
-				m_WeatherAgent.A_SpawnParticle(
-					0xFFFFFFFF,
-					SPF_RELVEL | SPF_REPLACE,
-					lifetime: 22,
-					size: FRandom(2.5, 6.0),
-					angle: FRandom(0.0, 360.0),
-					zoff: 2.0,
-					velx: FRandom(0.75, 2.25),
-					velz: FRandom(0.5, 2.5),
-					accelz: -0.25,
-					fadestepf: 0,
-					sizestep: -0.5);
+			params.size = FRandom(2.5, 6.0);
+			params.vel = MathVec3.Rotate(Vec3Util.Random(0.75, 2.25, 0.0, 0.0, 0.5, 2.5), Vec3Util.Up(), FRandom(0.0, 360.0));
+			Level.SpawnParticle(params);
 		}
+
+		m_WeatherAgent.SetXYZ(oldPosition);
 	}
 
 	double GetSplashTextureDrawDistance() const

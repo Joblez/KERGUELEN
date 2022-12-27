@@ -1,3 +1,4 @@
+// TODO: Replace individual particle arguments with FSpawnParticleParams.
 class WeatherParticleSpawner : WeatherSpawner
 {
 	color m_Color;
@@ -14,6 +15,8 @@ class WeatherParticleSpawner : WeatherSpawner
 	vector3 m_Acceleration;
 	vector3 m_AccelerationDeviation;
 
+	FSpawnParticleParams m_ParticleParams;
+
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
@@ -24,19 +27,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		double range,
 		Sector sec,
 		WeatherAgent agent,
-		color particleColor = 0xFFFFFFFF,
-		int particleRenderStyle = STYLE_Normal,
-		int particleFlags = 0,
-		string particleTextureName = "",
-		int particleLifetime = 35,
-		double particleSize = 1,
-		double particleSizeDeviation = 0,
-		vector3 initialParticleVelocity = (0.0, 0.0, 0.0),
-		vector3 initialParticleVelocityDeviation = (0.0, 0.0, 0.0),
-		vector3 particleAcceleration = (0.0, 0.0, 0.0),
-		vector3 particleAccelerationDeviation = (0.0, 0.0, 0.0),
-		double particleAlpha = 1.0,
-		double particleFadeStep = 0.0,
+		FSpawnParticleParams particleParams,
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false)
@@ -48,19 +39,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			range,
 			sec,
 			agent,
-			particleColor,
-			particleRenderStyle,
-			particleFlags,
-			particleTextureName,
-			particleLifetime,
-			particleSize,
-			particleSizeDeviation,
-			initialParticleVelocity,
-			initialParticleVelocityDeviation,
-			particleAcceleration,
-			particleAccelerationDeviation,
-			particleAlpha,
-			particleFadeStep,
+			particleParams,
 			projectionTime,
 			shouldSimulateParticles,
 			enableEndOfLifeCallbacks);
@@ -73,38 +52,30 @@ class WeatherParticleSpawner : WeatherSpawner
 		double range,
 		Sector sec,
 		WeatherAgent agent,
-		color particleColor,
-		int particleRenderStyle,
-		int particleFlags,
-		string particleTextureName,
-		int particleLifetime,
-		double particleSize,
-		double particleSizeDeviation,
-		vector3 initialParticleVelocity,
-		vector3 initialParticleVelocityDeviation,
-		vector3 particleAcceleration,
-		vector3 particleAccelerationDeviation,
-		double particleAlpha,
-		double particleFadeStep,
+		FSpawnParticleParams particleParams,
 		double projectionTime,
 		bool shouldSimulateParticles,
 		bool enableEndOfLifeCallbacks)
 	{
 		Super.Init(density, range, sec, null, agent, projectionTime);
 
-		m_Color = particleColor;
-		m_Texture = TexMan.CheckForTexture(particleTextureName);
-		m_RenderStyle = particleRenderStyle;
-		m_ParticleFlags = particleFlags;
-		m_Lifetime = particleLifetime;
-		m_Size = particleSize;
-		m_SizeDeviation = particleSizeDeviation;
-		m_InitialVelocity = initialParticleVelocity;
-		m_InitialVelocityDeviation = initialParticleVelocityDeviation;
-		m_Acceleration = particleAcceleration;
-		m_AccelerationDeviation = particleAccelerationDeviation;
-		m_Alpha = particleAlpha;
-		m_FadeStep = particleFadeStep;
+		// TODO: Clean up if struct assignment is ever implemented.
+		m_ParticleParams.color1 = particleParams.color1;
+		m_ParticleParams.texture = particleParams.texture;
+		m_ParticleParams.style = particleParams.style;
+		m_ParticleParams.flags = particleParams.flags;
+		m_ParticleParams.lifetime = particleParams.lifetime;
+		m_ParticleParams.size = particleParams.size;
+		m_ParticleParams.sizestep = particleParams.sizestep;
+		m_ParticleParams.pos = particleParams.pos;
+		m_ParticleParams.vel = particleParams.vel;
+		m_ParticleParams.accel = particleParams.accel;
+		m_ParticleParams.startalpha = particleParams.startalpha;
+		m_ParticleParams.fadestep = particleParams.fadestep;
+		m_ParticleParams.startroll = particleParams.startroll;
+		m_ParticleParams.rollvel = particleParams.rollvel;
+		m_ParticleParams.rollacc = particleParams.rollacc;
+
 		m_ShouldSimulateParticles = shouldSimulateParticles;
 		m_ShouldDoCallbackAtEndOfParticleLife = enableEndOfLifeCallbacks;
 	}
@@ -146,58 +117,47 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		Actor pawn = players[consoleplayer].mo;
 
-		// Reduce spawn chance outside of 2D view range.
-		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
-				>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
-			&& FRandom(0, 1) < GetOutOfViewFrequencyReduction())
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(projectedPosition.x - pawn.Pos.x, projectedPosition.y - pawn.Pos.y))
+			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+
+		// Reduce spawn chance outside of horizontal view range.
+		if (isOutOfView && FRandom(0, 1) < GetOutOfViewFrequencyReduction())
 		{
 			m_WeatherAgent.SetXYZ(oldPosition);
 			return;
 		}
 
-		int lifetime;
-		vector3 velocity = m_InitialVelocity;
-		velocity.x += FRandom(-m_InitialVelocityDeviation.x, m_InitialVelocityDeviation.x);
-		velocity.y += FRandom(-m_InitialVelocityDeviation.y, m_InitialVelocityDeviation.y);
-		velocity.z += FRandom(-m_InitialVelocityDeviation.z, m_InitialVelocityDeviation.z);
+		// Copy params for simulated lifetime.
+		// TODO: Clean up if struct assignment is ever implemented.
+		FSpawnParticleParams outParams;
 
-		vector3 acceleration = m_Acceleration;
-		acceleration.x += FRandom(-m_AccelerationDeviation.x, m_AccelerationDeviation.x);
-		acceleration.y += FRandom(-m_AccelerationDeviation.y, m_AccelerationDeviation.y);
-		acceleration.z += FRandom(-m_AccelerationDeviation.z, m_AccelerationDeviation.z);
+		outParams.color1 = m_ParticleParams.color1;
+		outParams.texture = m_ParticleParams.texture;
+		outParams.style = m_ParticleParams.style;
+		outParams.flags = m_ParticleParams.flags;
+		outParams.lifetime = m_ParticleParams.lifetime;
+		outParams.size = m_ParticleParams.size;
+		outParams.sizestep = m_ParticleParams.sizestep;
+		outParams.vel = m_ParticleParams.vel;
+		outParams.accel = m_ParticleParams.accel;
+		outParams.startalpha = m_ParticleParams.startalpha;
+		outParams.fadestep = m_ParticleParams.fadestep;
+		outParams.startroll = m_ParticleParams.startroll;
+		outParams.rollvel = m_ParticleParams.rollvel;
+		outParams.rollacc = m_ParticleParams.rollacc;
+
+		outParams.pos = spawnPosition;
 
 		if (m_ShouldSimulateParticles)
 		{
 			WeatherParticleSimulationResult result;
-			SimulateParticle(result, spawnPosition, velocity, acceleration);
-			lifetime = result.m_Lifetime;
+			SimulateParticle(result, outParams.pos, outParams.vel, outParams.accel);
+			outParams.lifetime = result.m_Lifetime;
 
 			if (m_ShouldDoCallbackAtEndOfParticleLife) pendingCallbackData.Push(result.CreateCallbackData());
 		}
-		else
-		{
-			lifetime = m_Lifetime;
-		}
 
-
-		m_WeatherAgent.A_SpawnParticleEx(
-			m_Color,
-			m_Texture,
-			m_RenderStyle,
-			m_ParticleFlags,
-			lifetime,
-			m_Size + FRandom(-m_SizeDeviation, m_SizeDeviation),
-			velx: velocity.x,
-			vely: velocity.y,
-			velz: velocity.z,
-			accelx: acceleration.x,
-			accely: acceleration.y,
-			accelz: acceleration.z,
-			startalphaf: m_Alpha,
-			fadestepf: m_FadeStep
-		);
-
-		m_WeatherAgent.SetXYZ(oldPosition);
+		Level.SpawnParticle(outParams);
 	}
 
 	protected virtual void ParticleEndOfLifeCallback(WeatherParticleCallbackData data) { }

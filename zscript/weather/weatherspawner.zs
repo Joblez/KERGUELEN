@@ -109,21 +109,15 @@ class WeatherSpawner : Thinker
 
 		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 
-		// Move weather agent to spawn location for angle check.
-		vector3 oldPosition = m_WeatherAgent.Pos;
-		m_WeatherAgent.SetXYZ(spawnPosition);
-
 		Actor pawn = players[consoleplayer].mo;
 
 		// Reduce spawn chance outside of horizontal view range.
-		if (Actor.absangle(pawn.Angle, pawn.AngleTo(m_WeatherAgent))
-				<= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
+		if (Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
+				>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
 			&& FRandom(0, 1) > GetOutOfViewFrequencyReduction())
 		{
 			Actor.Spawn(m_ParticleType, spawnPosition);
 		}
-
-		m_WeatherAgent.SetXYZ(oldPosition);
 		return;
 	}
 }

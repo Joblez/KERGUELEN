@@ -42,6 +42,9 @@ class RainSpawner : WeatherParticleSpawner
 
 	override void SpawnWeatherParticle()
 	{
+		// Spawn additional fake splashes outside of weather range.
+		SpawnFakeSplash();
+
 		Actor pawn = players[consoleplayer].mo;
 
 		// Project the player's position forward to ensure particles fall into view, but
@@ -113,9 +116,6 @@ class RainSpawner : WeatherParticleSpawner
 		outParams.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 2.0);
 
 		level.SpawnParticle(outParams);
-
-		// Spawn additional fake splashes outside of weather range.
-		SpawnFakeSplash();
 	}
 
 	override void ParticleEndOfLifeCallback(WeatherParticleCallbackData data)
@@ -244,9 +244,9 @@ class RainSpawner : WeatherParticleSpawner
 	{
 		Actor pawn = players[consoleplayer].mo;
 
-		// Spawn from max real splash range up to three times as far depending on FOV.
+		// Spawn from max real splash range up to four times as far depending on FOV.
 		double minRange = GetAdjustedRange() ** 2.0;
-		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 3.0, 1.0);
+		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 4.0, 1.0);
 
 		vector2 position = pawn.Pos.xy;
 		vector2 point = m_Triangulation.GetRandomPoint();

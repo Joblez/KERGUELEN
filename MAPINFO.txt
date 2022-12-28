@@ -1,5 +1,7 @@
 GameInfo
 {
+	PlayerClasses = "NewPlayer"
+
 	// MBase EventHandlers
 	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WorldAgentHandler"
 

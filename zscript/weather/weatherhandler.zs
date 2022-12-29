@@ -2,7 +2,6 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 {
 	const RAIN_TAG = 3570;
 	const SNOW_TAG = 3571;
-	array<WeatherSpawner> m_WeatherSpawners;
 
 	private WeatherAgent m_WeatherAgent;
 
@@ -21,14 +20,6 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		CreateWeatherSpawners();
 	}
 
-	override void WorldTick()
-	{
-		foreach (spawner : m_WeatherSpawners)
-		{
-			spawner.Tick();
-		}
-	}
-
 	private void CreateWeatherSpawners()
 	{
 		SectorTagIterator iterator = level.CreateSectorTagIterator(RAIN_TAG);
@@ -36,12 +27,11 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 
 		while ((i = iterator.Next()) >= 0)
 		{
-			m_WeatherSpawners.Push(
-				RainSpawner.Create(
-					12,
-					280.0,
-					level.Sectors[i],
-					m_WeatherAgent));
+			RainSpawner.Create(
+				12,
+				280.0,
+				level.Sectors[i],
+				m_WeatherAgent);
 		}
 
 		iterator = level.CreateSectorTagIterator(SNOW_TAG);
@@ -58,26 +48,27 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 			snowParams.size = 8.0 + FRandom(-3.0, 3.0);
 			snowParams.vel = (0.0, 0.0, -2.5) + Vec3Util.Random(-2.0, 2.0, -2.0, 2.0, -1.0, 1.0);
 
-			m_WeatherSpawners.Push(
-				WeatherParticleSpawner.Create(
-					10,
-					256.0,
-					level.Sectors[i],
-					m_WeatherAgent,
-					snowParams,
-					projectionTime: 3.0,
-					shouldSimulateParticles: true));
+			WeatherParticleSpawner.Create(
+				10,
+				256.0,
+				level.Sectors[i],
+				m_WeatherAgent,
+				snowParams,
+				projectionTime: 3.0,
+				shouldSimulateParticles: true);
 		}
 	}
 
 	private void ReconstructWeatherParticleState()
 	{
-		foreach(spawner : m_WeatherSpawners)
-		{
-			spawner.m_WeatherAgent = m_WeatherAgent;
-			WeatherParticleSpawner particleSpawner = WeatherParticleSpawner(spawner);
+		let iter = ThinkerIterator.Create("WeatherParticleSpawner");
 
-			if (particleSpawner) particleSpawner.ReconstructWeatherState();
+		WeatherParticleSpawner spawner = WeatherParticleSpawner(iter.Next());
+		while (spawner)
+		{
+			spawner.ReconstructWeatherState();
+
+			spawner = WeatherParticleSpawner(iter.Next());
 		}
 	}
 }

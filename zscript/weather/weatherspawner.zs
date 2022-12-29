@@ -1,4 +1,4 @@
-class WeatherSpawner play
+class WeatherSpawner : Thinker
 {
 	protected Sector m_Sector;
 	protected class<WeatherParticle> m_ParticleType;
@@ -33,7 +33,7 @@ class WeatherSpawner play
 		m_WeatherAgent = agent;
 	}
 
-	virtual void Tick()
+	override void Tick()
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
 

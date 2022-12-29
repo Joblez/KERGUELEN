@@ -8,7 +8,6 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 
 	override void WorldLoaded(WorldEvent e)
 	{
-		Console.Printf("Spawners: %i", m_WeatherSpawners.Size());
 		if (!m_WeatherAgent) m_WeatherAgent = WeatherAgent(Actor.Spawn("WeatherAgent"));
 
 		if (e.IsSaveGame)

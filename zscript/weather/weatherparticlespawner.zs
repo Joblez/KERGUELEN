@@ -20,8 +20,6 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	bool printed;
-
 	protected array<WeatherParticleSimulation> m_SimulationData;
 
 	static WeatherParticleSpawner Create(
@@ -83,12 +81,6 @@ class WeatherParticleSpawner : WeatherSpawner
 	override void Tick()
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
-
-		if (!printed)
-		{
-			Console.Printf("Active simulations: %i", m_SimulationData.Size());
-			printed = true;
-		}
 
 		Super.Tick();
 		for (int i = m_SimulationData.Size() - 1; i >= 0; --i)

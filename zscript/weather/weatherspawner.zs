@@ -1,4 +1,4 @@
-class WeatherSpawner : Thinker
+class WeatherSpawner play
 {
 	protected Sector m_Sector;
 	protected class<WeatherParticle> m_ParticleType;
@@ -10,7 +10,7 @@ class WeatherSpawner : Thinker
 	protected SectorTriangulation m_Triangulation;
 	protected transient CVar m_WeatherAmountCVar;
 
-	protected Agent m_WeatherAgent;
+	WeatherAgent m_WeatherAgent;
 
 	private double m_Time;
 
@@ -33,7 +33,7 @@ class WeatherSpawner : Thinker
 		m_WeatherAgent = agent;
 	}
 
-	override void Tick()
+	virtual void Tick()
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
 

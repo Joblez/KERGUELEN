@@ -1,4 +1,4 @@
-class WeatherHandler : EventHandler
+class WeatherHandler : StaticEventHandler // Need to be save-game-aware to reconstruct the weather state from the sim.
 {
 	const RAIN_TAG = 3570;
 	const SNOW_TAG = 3571;
@@ -8,9 +8,26 @@ class WeatherHandler : EventHandler
 
 	override void WorldLoaded(WorldEvent e)
 	{
+		Console.Printf("Spawners: %i", m_WeatherSpawners.Size());
 		if (!m_WeatherAgent) m_WeatherAgent = WeatherAgent(Actor.Spawn("WeatherAgent"));
 
+		if (e.IsSaveGame)
+		{
+			// Already have spawners, respawn particles lost from loading the save.
+			ReconstructWeatherParticleState();
+			return;
+		}
+
+		// Create new spawners otherwise.
 		CreateWeatherSpawners();
+	}
+
+	override void WorldTick()
+	{
+		foreach (spawner : m_WeatherSpawners)
+		{
+			spawner.Tick();
+		}
 	}
 
 	private void CreateWeatherSpawners()
@@ -23,7 +40,7 @@ class WeatherHandler : EventHandler
 			m_WeatherSpawners.Push(
 				RainSpawner.Create(
 					12,
-					290.0,
+					280.0,
 					level.Sectors[i],
 					m_WeatherAgent));
 		}
@@ -51,6 +68,17 @@ class WeatherHandler : EventHandler
 					snowParams,
 					projectionTime: 3.0,
 					shouldSimulateParticles: true));
+		}
+	}
+
+	private void ReconstructWeatherParticleState()
+	{
+		foreach(spawner : m_WeatherSpawners)
+		{
+			spawner.m_WeatherAgent = m_WeatherAgent;
+			WeatherParticleSpawner particleSpawner = WeatherParticleSpawner(spawner);
+
+			if (particleSpawner) particleSpawner.ReconstructWeatherState();
 		}
 	}
 }

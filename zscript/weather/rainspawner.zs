@@ -22,6 +22,7 @@ class RainSpawner : WeatherParticleSpawner
 		params.lifetime = 35;
 		params.size = 40.0 + FRandom(-2.0, 2.0);
 		params.vel = (0.0, 0.0, -52.0 + FRandom(-2.0, 2.0));
+		params.accel = (0.0, 0.0, -0.1);
 		params.startalpha = 0.525;
 
 		spawner.Init(
@@ -83,33 +84,32 @@ class RainSpawner : WeatherParticleSpawner
 
 
 		// Copy params for simulated lifetime.
-		// TODO: Clean up if struct assignment is ever implemented.
 		FSpawnParticleParams outParams;
 
-		outParams.color1 = m_ParticleParams.color1;
-		outParams.texture = m_ParticleParams.texture;
-		outParams.style = m_ParticleParams.style;
-		outParams.flags = m_ParticleParams.flags;
-		outParams.lifetime = m_ParticleParams.lifetime;
-		outParams.size = m_ParticleParams.size;
-		outParams.sizestep = m_ParticleParams.sizestep;
-		outParams.vel = m_ParticleParams.vel;
-		outParams.accel = m_ParticleParams.accel;
-		outParams.startalpha = m_ParticleParams.startalpha;
-		outParams.fadestep = m_ParticleParams.fadestep;
-		outParams.startroll = m_ParticleParams.startroll;
-		outParams.rollvel = m_ParticleParams.rollvel;
-		outParams.rollacc = m_ParticleParams.rollacc;
+		outParams.color1 = m_Color;
+		outParams.texture = m_Texture;
+		outParams.style = m_Style;
+		outParams.flags = m_Flags;
+		outParams.lifetime = m_Lifetime;
+		outParams.size = m_Size;
+		outParams.sizestep = m_SizeStep;
+		outParams.vel = m_Vel;
+		outParams.accel = m_Accel;
+		outParams.startalpha = m_StartAlpha;
+		outParams.fadestep = m_FadeStep;
+		outParams.startroll = m_StartRoll;
+		outParams.rollvel = m_RollVel;
+		outParams.rollacc = m_RollAcc;
 
 		outParams.pos = spawnPosition;
 
 		if (m_ShouldSimulateParticles)
 		{
-			WeatherParticleSimulationResult result;
-			SimulateParticle(result, outParams.pos, outParams.vel, outParams.accel);
-			outParams.lifetime = result.m_Lifetime + 1; // Rain sometimes doesn't visibly touch the ground, add one extra tic.
+			WeatherParticleSimulation result = SimulateParticle(outParams);
 
-			if (m_ShouldDoCallbackAtEndOfParticleLife) pendingCallbackData.Push(result.CreateCallbackData());
+			outParams.lifetime = result.GetLifetime() + 1; // Rain sometimes doesn't visibly touch the ground, add one extra tic.
+
+			m_SimulationData.Push(result);
 		}
 
 		// Scale distant rain drops up to make them more prominent.
@@ -118,25 +118,63 @@ class RainSpawner : WeatherParticleSpawner
 		level.SpawnParticle(outParams);
 	}
 
-	override void ParticleEndOfLifeCallback(WeatherParticleCallbackData data)
+	// Nearly identical to super method, but need to plug in the scaling logic somewhere.
+	override void ReconstructWeatherState()
+	{
+		for (int i = m_SimulationData.Size() - 1; i >= 0; --i)
+		{
+			FSpawnParticleParams params;
+
+			params.color1 = m_Color;
+			params.texture = m_Texture;
+			params.style = m_Style;
+			params.flags = m_Flags;
+
+			Actor pawn = players[consoleplayer].mo;
+
+			// Determine current state.
+			int time = m_SimulationData[i].GetCurrentTime();
+			params.lifetime = m_SimulationData[i].GetLifetime() - time;
+			params.pos = m_SimulationData[i].GetPositionAt(time);
+			params.vel = m_SimulationData[i].GetVelocityAt(time);
+			params.accel = m_SimulationData[i].GetAcceleration();
+			params.size = m_SimulationData[i].GetSizeAt(time);
+			params.sizestep = m_SimulationData[i].GetSizeStep();
+			params.startalpha = m_SimulationData[i].GetAlphaAt(time);
+			params.fadestep = m_SimulationData[i].GetFadeStep();
+			params.startroll = m_SimulationData[i].GetRollAt(time);
+			params.rollvel = m_SimulationData[i].GetRollVelocityAt(time);
+			params.rollacc = m_SimulationData[i].GetRollAcceleration();
+
+			// Apply distant rain scaling.
+			double distance = MathVec2.SquareDistanceBetween(params.pos.xy, pawn.Pos.xy);
+			params.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 2.0);
+
+			// Spawn with reconstructed state.
+			level.SpawnParticle(params);
+		}
+	}
+
+	override void ParticleEndOfLifeCallback(WeatherParticleSimulation data)
 	{
 		Actor pawn = players[consoleplayer].mo;
 
-		double distance = MathVec3.SquareDistanceBetween(data.m_EndPosition, pawn.Pos);
+		double distance = MathVec3.SquareDistanceBetween(data.GetEndPosition(), pawn.Pos);
 		double range = GetAdjustedRange();
 
 		// Attenuate spawn chance over distance.
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(data.m_EndPosition.x - pawn.Pos.x, data.m_EndPosition.y - pawn.Pos.y))
+		vector3 endPosition = data.GetEndPosition();
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(endPosition.x - pawn.Pos.x, endPosition.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
 		
 		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
 
 		if (spawnScore >= spawnThreshold) return;
 
-		SpawnSplashEffect(data.m_EndPosition);
+		SpawnSplashEffect(data.GetEndPosition());
 
 		double splashParticleRange = GetSplashParticleDrawDistance() ** 2;
 
@@ -156,7 +194,7 @@ class RainSpawner : WeatherParticleSpawner
 			params.style = STYLE_Normal;
 			params.lifetime = 14;
 			params.sizestep = -0.2;
-			params.pos = data.m_EndPosition + (0.0, 0.0, 1.0);
+			params.pos = data.GetEndPosition() + (0.0, 0.0, 1.0);
 			params.accel = (0.0, 0.0, -0.15);
 			params.startalpha = 1.0;
 
@@ -177,7 +215,7 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Normal;
 		params.lifetime = 16;
 		params.sizestep = -0.4;
-		params.pos = data.m_EndPosition + (0.0, 0.0, 2.0);
+		params.pos = data.GetEndPosition() + (0.0, 0.0, 2.0);
 		params.accel = (0.0, 0.0, -0.25);
 		params.startalpha = 1.0;
 

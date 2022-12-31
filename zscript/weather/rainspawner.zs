@@ -20,8 +20,8 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Add;
 		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
 		params.lifetime = 35;
-		params.size = 40.0 + FRandom(-2.0, 2.0);
-		params.vel = (0.0, 0.0, -52.0 + FRandom(-2.0, 2.0));
+		params.size = 52.0 + FRandom(-2.0, 2.0);
+		params.vel = (0.0, 0.0, -56.0 + FRandom(-2.0, 2.0));
 		params.accel = (0.0, 0.0, -0.1);
 		params.startalpha = 0.525;
 
@@ -222,7 +222,7 @@ class RainSpawner : WeatherParticleSpawner
 		// Attenuate amount over distance.
 		int amount = int(round(Math.Remap(distance, 0.0, splashParticleRange, splashParticleSetting, 0.0)));
 
-		for (int i = 0; i < Random(amount - 3, amount); ++i)
+		for (int i = 0; i < Random(amount - 2, amount); ++i)
 		{
 			params.size = FRandom(3.0, 6.0);
 			params.vel = MathVec3.Rotate(Vec3Util.Random(0.75, 2.25, 0.0, 0.0, 0.5, 2.5), Vec3Util.Up(), FRandom(0.0, 360.0));

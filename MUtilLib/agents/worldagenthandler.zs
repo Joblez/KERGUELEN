@@ -2,8 +2,9 @@
  * An event handler that spawns and holds a reference to a single Agent instance
  * that can be retrieved and used instead of spawning new Agents.
  *
- * NOTE: Several other utility classes make use of the world Agent. Exercise
- *       caution when stripping this from the library.
+ * NOTE:
+ *		Several other utility classes make use of the world Agent. Exercise
+ *		caution when stripping this from the library.
 **/
 class WorldAgentHandler : EventHandler
 {

@@ -1,5 +1,5 @@
 // MUtil EventHandlers
 GameInfo
 {
-	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WorldAgentHandler"
+	AddEventHandlers = "SectorDataRegistry", "WorldAgentHandler"
 }

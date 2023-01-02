@@ -1,4 +1,6 @@
-// TODO: Document WeaponBase
+// TODO: Document WeaponBase.
+
+// Note: Make sure to mention how WeaponBase is much more opinionated than the rest of the codebase.
 class WeaponBase : DoomWeapon abstract
 {
 	// Smart auto-aim modes.
@@ -225,7 +227,11 @@ class WeaponBase : DoomWeapon abstract
 		m_StateMachine.CallBuild();
 		m_StateMachine.Start();
 
-
+		if (m_HUDExtensionType)
+		{
+			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
+			m_HUDExtension.Init(self);
+		}
 
 		m_Initialized = true;
 	}
@@ -283,6 +289,8 @@ class WeaponBase : DoomWeapon abstract
 			{
 				TryHandleButtonEvent(buttonEvent, eventType);
 			}
+
+			if (m_HUDExtension) m_HUDExtension.CallTick();
 		}
 
 		// Monitor actor properties even if not selected to avoid sudden spikes.
@@ -513,25 +521,6 @@ class WeaponBase : DoomWeapon abstract
 
 		owner.Player.WeaponState |= GetButtonStateFlags(flags);
 		DoReadyWeaponDisableSwitch(owner.player, flags & WRF_DisableSwitch);
-	}
-
-	void RegisterWeaponHUD()
-	{
-		if (!m_HUDExtensionType) return;
-
-		if (!m_HUDExtension)
-		{
-			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
-			m_HUDExtension.Init(self);
-		}
-
-		HUDExtensionRegistry.AddExtension(m_HUDExtension);
-	}
-
-	void UnregisterWeaponHUD()
-	{
-		if (!m_HUDExtension) return;
-		HUDExtensionRegistry.RemoveExtension(m_HUDExtension);
 	}
 
 	action void A_SendEventToSM(name eventId)
@@ -1015,7 +1004,6 @@ class SMWeaponSwitchingIn : SMWeaponState
 	override void EnterState()
 	{
 		SetWeaponSprite("SwitchingIn");
-		GetWeapon().RegisterWeaponHUD();
 	}
 }
 
@@ -1037,7 +1025,6 @@ class SMWeaponSwitchingOut : SMWeaponState
 	override void EnterState()
 	{
 		SetWeaponSprite("SwitchingOut");
-		GetWeapon().UnregisterWeaponHUD();
 	}
 
 	override void ExitState()
@@ -1114,6 +1101,10 @@ class SMWeaponMachine : SMMachinePlay
 	}
 }
 
+//=================================================//
+//                  Miscellaneous                  //
+//=================================================//
+
 class WeaponSwayer : InterpolatedPSpriteTransform
 {
 	private WeaponBase m_Weapon;
@@ -1187,10 +1178,6 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		m_InterpolatedScale.m_Target = scaleForce;
 	}
 }
-
-//=================================================//
-//                  Miscellaneous                  //
-//=================================================//
 
 class ProjectileBase : Actor
 {

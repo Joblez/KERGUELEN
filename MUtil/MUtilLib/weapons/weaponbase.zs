@@ -23,7 +23,7 @@ class WeaponBase : DoomWeapon abstract
 	ModifiableVector2 m_PSpritePosition;
 	ModifiableVector2 m_PSpriteScale;
 
-	ButtonEventQueue inputQueue;
+	ButtonEventQueue m_InputQueue;
 
 	int m_Damage;
 	property Damage: m_Damage;
@@ -232,7 +232,7 @@ class WeaponBase : DoomWeapon abstract
 
 	override void Travelled()
 	{
-		if (!inputQueue) inputQueue = new("ButtonEventQueue").Init(PlayerPawn(owner));
+		if (!m_InputQueue) m_InputQueue = new("ButtonEventQueue").Init(PlayerPawn(owner));
 
 		if (IsSelected())
 		{
@@ -247,7 +247,7 @@ class WeaponBase : DoomWeapon abstract
 			return false;
 		}
 
-		inputQueue = new("ButtonEventQueue").Init(PlayerPawn(owner));
+		m_InputQueue = new("ButtonEventQueue").Init(PlayerPawn(owner));
 		return true;
 	}
 
@@ -295,7 +295,7 @@ class WeaponBase : DoomWeapon abstract
 
 	ButtonEventQueue GetInputQueue() const
 	{
-		return inputQueue;
+		return m_InputQueue;
 	}
 
 	HUDExtension GetHUDExtension() const

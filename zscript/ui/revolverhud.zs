@@ -32,6 +32,7 @@ class RevolverHUD : BaseWeaponHUD
 
 	override void Tick()
 	{
+		Super.Tick();
 		m_CylinderRotation.Update();
 	}
 }
@@ -51,6 +52,7 @@ class SMHUDRevolverState : SMHUDState
 
 	override void UpdateState()
 	{
+		Console.Printf("State ticked.");
 		Revolver rev = m_RoundsHUD.m_Revolver;
 
 		// In case players use IDFA or IDKFA.
@@ -64,7 +66,7 @@ class SMHUDRevolverState : SMHUDState
 		}
 	}
 
-	override void Draw(RenderEvent event)
+	override void Draw(int state, double ticFrac)
 	{
 		if (automapactive) return;
 
@@ -76,19 +78,23 @@ class SMHUDRevolverState : SMHUDState
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Empty) continue;
 
+			double scale = 2.0;
+			double radius = 20 * scale;
+
 			vector2 polarCoords = (
-				20, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
+				radius, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
 
 			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
-			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT);
+
+			vector2 origin = (KergStatusBar.WEAPON_HUD_ORIGIN_X, KergStatusBar.WEAPON_HUD_ORIGIN_Y - radius - KergStatusBar.BASE_PADDING * scale);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
 			{
-				DrawReadyRound(ScreenUtil.NormalizedPositionToView((0.9, 0.94)) + offset);
+				DrawReadyRound(origin + offset, scale);
 			}
 			else
 			{
-				DrawSpentRound(ScreenUtil.NormalizedPositionToView((0.9, 0.94)) + offset);
+				DrawSpentRound(origin + offset, scale);
 			}
 		}
 	}
@@ -149,25 +155,25 @@ class SMHUDRevolverState : SMHUDState
 		return m_RoundsHUD.m_Revolver;
 	}
 
-	protected ui void DrawReadyRound(vector2 coords)
+	protected ui void DrawReadyRound(vector2 coords, double scale)
 	{
 		StatusBar.DrawImage(
 			"RVRNRDY",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT),
+			scale: (scale, scale),
 			col: 0xFFCCCCCC);
 	}
 	
-	protected ui void DrawSpentRound(vector2 coords)
+	protected ui void DrawSpentRound(vector2 coords, double scale)
 	{
 		StatusBar.DrawImage(
 			"RVRNSPNT",
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT),
+			scale: (scale, scale),
 			col: 0xFF999999);
 	}
 }
@@ -195,7 +201,7 @@ class InterpolatedCylinderRotation
 		return m_Current;
 	}
 
-	void Update()
+	void Update(double delta = 1.0 / 35.0)
 	{
 		m_Current = Math.SmoothDamp(
 			m_Current,
@@ -203,7 +209,7 @@ class InterpolatedCylinderRotation
 			m_CurrentSpeed,
 			m_SmoothTime,
 			double.Infinity,
-			1.0 / 35.0);
+			delta);
 
 		// Allow values to reach 360.0 so current can wrap cleanly.
 		if (m_Current > 360.0)

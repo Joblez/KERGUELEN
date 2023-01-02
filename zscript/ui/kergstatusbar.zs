@@ -3,16 +3,17 @@ class KergStatusBar : BaseStatusBar
 	const HUD_WIDTH = 1280;
 	const HUD_HEIGHT = 720;
 
+	const WEAPON_HUD_ORIGIN_X = -330;
+	const WEAPON_HUD_ORIGIN_Y = -200;
+
 	const TEXT_SCALE = 6.0;
 	const BASE_PADDING = 8;
 
 	const UPPERCASE_ALPHANUMERIC_TOP_OFFSET = 2;
 
 	const DIVIDER_GIRTH = 8;
-	const DIVIDER_OUTLINE_GIRTH = DIVIDER_GIRTH + 8;
 
 	const DIVIDER_FILL_COLOR = 0xFFB3AFAF;
-	const DIVIDER_OUTLINE_COLOR = 0xFF070707;
 
 	HUDFont m_Font;
 
@@ -48,32 +49,44 @@ class KergStatusBar : BaseStatusBar
 
 		if (weap)
 		{
-			int reserveAmmo = weap.GetReserveAmmo();
+			DrawReserveHUD(weap.GetReserveAmmo());
 
-			if (reserveAmmo >= 0) DrawReserveHUD(reserveAmmo);
+			HUDExtension extension = weap.GetHUDExtension();
+
+			if (extension)
+			{
+				extension.CallDraw(state, TicFrac);
+			}
+			else
+			{
+				// Eventually this should be removed.
+				DrawAmmoHUD(weap.GetAmmo());
+			}
 		}
+	}
+
+	void DrawAmmoHUD(int amount)
+	{
+		if (amount < 0) return;
+
+		vector2 ammoHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y - m_Font.mFont.GetHeight() * TEXT_SCALE - BASE_PADDING * TEXT_SCALE);
+
+		DrawString(m_Font, FormatNumber(amount, 1), ammoHUDOrigin, DI_TEXT_ALIGN_CENTER, scale: (TEXT_SCALE, TEXT_SCALE));
 	}
 
 	void DrawReserveHUD(int amount)
 	{
-		int maxCharacters = 3;
+		if (amount < 0) return;
 
 		int dividerHeight = 86;
 
-		vector2 reserveHUDOrigin = (-330, -160);
+		vector2 reserveHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y + 40);
 
 		DrawImage(
 			"BPAKA0",
-			(reserveHUDOrigin.x - BASE_PADDING * 4 - DIVIDER_OUTLINE_GIRTH - 8, reserveHUDOrigin.y + UPPERCASE_ALPHANUMERIC_TOP_OFFSET * TEXT_SCALE * 0.5),
+			(reserveHUDOrigin.x - BASE_PADDING * 4 - DIVIDER_GIRTH - 8, reserveHUDOrigin.y + UPPERCASE_ALPHANUMERIC_TOP_OFFSET * TEXT_SCALE * 0.5),
 			DI_ITEM_RIGHT_TOP,
 			scale: (2.0, 2.0));
-
-		// Fill(
-		// 	DIVIDER_OUTLINE_COLOR,
-		// 	reserveHUDOrigin.x - DIVIDER_OUTLINE_GIRTH * 0.5,
-		// 	reserveHUDOrigin.y - DIVIDER_OUTLINE_GIRTH * 0.25,
-		// 	DIVIDER_OUTLINE_GIRTH,
-		// 	dividerHeight + DIVIDER_OUTLINE_GIRTH * 0.5);
 
 		Fill(
 			DIVIDER_FILL_COLOR,
@@ -84,8 +97,8 @@ class KergStatusBar : BaseStatusBar
 		
 		DrawString(
 			m_Font,
-			FormatNumber(amount, 1, maxCharacters),
-			(reserveHUDOrigin.x + BASE_PADDING * 4 + DIVIDER_OUTLINE_GIRTH, reserveHUDOrigin.y),
+			FormatNumber(amount, 1),
+			(reserveHUDOrigin.x + BASE_PADDING * 4 + DIVIDER_GIRTH, reserveHUDOrigin.y),
 			DI_TEXT_ALIGN_LEFT,
 			scale: (TEXT_SCALE, TEXT_SCALE));
 	}

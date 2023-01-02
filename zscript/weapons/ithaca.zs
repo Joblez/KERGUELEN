@@ -233,12 +233,12 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	override int GetAmmo() const
 	{
-		return CountInv(AmmoType1);
+		return Ammo1.Amount;
 	}
 
 	override int GetReserveAmmo() const
 	{
-		return CountInv(AmmoType2);
+		return Ammo2.Amount;
 	}
 
 	private action void A_SpawnCasing()

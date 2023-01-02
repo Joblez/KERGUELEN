@@ -31,20 +31,20 @@ class M2CHUD : BaseWeaponHUD
 		m_RoundsOffset.m_SmoothTime = 0.02;
 	}
 
-	override void PreDraw(RenderEvent event)
+	override void PreDraw(int state, double ticFrac)
 	{
-		Super.PreDraw(event);
+		Super.PreDraw(state, ticFrac);
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 		m_OriginalHUDRotation = m_HUDTransform.GetLocalRotation();
 		m_OriginalHUDScale = m_HUDTransform.GetLocalScale();
 
-		m_HUDTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.97, 0.97)));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 180, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 20));
 		m_HUDTransform.SetRotation(90.0);
-		m_HUDTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT, adjustForHUDAspectScale: false));
+		m_HUDTransform.SetScale((2.0, 2.0));
 	}
 
-	override void Draw(RenderEvent event)
+	override void Draw(int state, double ticFrac)
 	{
 		if (automapactive) return;
 
@@ -72,7 +72,7 @@ class M2CHUD : BaseWeaponHUD
 		
 		m_RoundsOffset.m_Target = rounds * m_TextureSize.y / 2;
 
-		m_RoundsOffset.Update((level.time + event.FracTic - m_PreviousTime) / TICRATE);
+		m_RoundsOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
 
 		// So much work to get around what this one little CVar does...
 		roundScale.y *= GetAspectScaleY();
@@ -120,11 +120,11 @@ class M2CHUD : BaseWeaponHUD
 		}
 	}
 
-	override void PostDraw(RenderEvent event)
+	override void PostDraw(int state, double ticFrac)
 	{
-		Super.PostDraw(event);
+		Super.PostDraw(state, ticFrac);
 
-		m_PreviousTime = level.time + event.FracTic;
+		m_PreviousTime = level.time + ticFrac;
 
 		m_HUDTransform.SetTranslation(m_OriginalHUDTranslation);
 		m_HUDTransform.SetRotation(m_OriginalHUDRotation);

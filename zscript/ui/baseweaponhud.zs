@@ -26,7 +26,7 @@ class BaseWeaponHUD : HUDExtension abstract
 		m_HUDAspectScale = CVar.GetCVar("hud_aspectscale");
 	}
 
-	override void PreDraw(RenderEvent event)
+	override void PreDraw(int state, double ticFrac)
 	{
 		if (automapactive) return;
 
@@ -39,10 +39,10 @@ class BaseWeaponHUD : HUDExtension abstract
 		StatusBar.BeginHUD(forcescaled: false);
 		StatusBar.SetSize(0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT);
 
-		Super.PreDraw(event);
+		Super.PreDraw(state, ticFrac);
 	}
 
-	override void PostDraw(RenderEvent event)
+	override void PostDraw(int state, double ticFrac)
 	{
 		if (automapactive) return;
 
@@ -51,6 +51,6 @@ class BaseWeaponHUD : HUDExtension abstract
 		StatusBar.BeginHUD(forcescaled: true);
 		StatusBar.BeginStatusBar();
 
-		Super.PostDraw(event);
+		Super.PostDraw(state, ticFrac);
 	}
 }

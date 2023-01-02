@@ -17,6 +17,16 @@ class WeatherParticleSpawner : WeatherSpawner
 	float m_RollVel;
 	float m_RollAcc;
 
+	double m_SizeDeviation;
+	double m_SizeStepDeviation;
+	vector3 m_VelDeviation;
+	vector3 m_AccelDeviation;
+	double m_AlphaDeviation;
+	double m_FadeDeviation;
+	double m_RollDeviation;
+	double m_RollVelDeviation;
+	double m_RollAccDeviation;
+
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
@@ -28,6 +38,17 @@ class WeatherParticleSpawner : WeatherSpawner
 		Sector sec,
 		WeatherAgent agent,
 		FSpawnParticleParams particleParams,
+		double sizeDeviation = 0.0,
+		double sizeStepDeviation = 0.0,
+		double sizeDeviation = 0.0,
+		double sizeStepDeviation = 0.0,
+		vector3 velDeviation = (0.0, 0.0, 0.0),
+		vector3 accelDeviation = (0.0, 0.0, 0.0),
+		double alphaDeviation = 0.0,
+		double fadeDeviation = 0.0,
+		double rollDeviation = 0.0,
+		double rollVelDeviation = 0.0,
+		double rollAccDeviation = 0.0,
 		double projectionTime = 1.0,
 		bool shouldSimulateParticles = false,
 		bool enableEndOfLifeCallbacks = false)
@@ -40,6 +61,15 @@ class WeatherParticleSpawner : WeatherSpawner
 			sec,
 			agent,
 			particleParams,
+			sizeDeviation,
+			sizeStepDeviation,
+			velDeviation,
+			accelDeviation,
+			alphaDeviation,
+			fadeDeviation,
+			rollDeviation,
+			rollVelDeviation,
+			rollAccDeviation,
 			projectionTime,
 			shouldSimulateParticles,
 			enableEndOfLifeCallbacks);
@@ -53,9 +83,18 @@ class WeatherParticleSpawner : WeatherSpawner
 		Sector sec,
 		WeatherAgent agent,
 		FSpawnParticleParams particleParams,
-		double projectionTime,
-		bool shouldSimulateParticles,
-		bool enableEndOfLifeCallbacks)
+		double sizeDeviation = 0.0,
+		double sizeStepDeviation = 0.0,
+		vector3 velDeviation = (0.0, 0.0, 0.0),
+		vector3 accelDeviation = (0.0, 0.0, 0.0),
+		double alphaDeviation = 0.0,
+		double fadeDeviation = 0.0,
+		double rollDeviation = 0.0,
+		double rollVelDeviation = 0.0,
+		double rollAccDeviation = 0.0,
+		double projectionTime = 1.0,
+		bool shouldSimulateParticles = false,
+		bool enableEndOfLifeCallbacks = false)
 	{
 		Super.Init(density, range, sec, null, agent, projectionTime);
 
@@ -73,6 +112,16 @@ class WeatherParticleSpawner : WeatherSpawner
 		m_StartRoll = particleParams.startroll;
 		m_RollVel = particleParams.rollvel;
 		m_RollAcc = particleParams.rollacc;
+
+		m_SizeDeviation = sizeDeviation;
+		m_SizeStepDeviation = sizeStepDeviation;
+		m_VelDeviation = velDeviation;
+		m_AccelDeviation = accelDeviation;
+		m_AlphaDeviation = alphaDeviation;
+		m_FadeDeviation = fadeDeviation;
+		m_RollDeviation = rollDeviation;
+		m_RollVelDeviation = rollVelDeviation;
+		m_RollAccDeviation = rollAccDeviation;
 
 		m_ShouldSimulateParticles = shouldSimulateParticles;
 		m_ShouldDoCallbackAtEndOfParticleLife = enableEndOfLifeCallbacks;
@@ -144,15 +193,15 @@ class WeatherParticleSpawner : WeatherSpawner
 		outParams.style = m_Style;
 		outParams.flags = m_Flags;
 		outParams.lifetime = m_Lifetime;
-		outParams.size = m_Size;
-		outParams.sizestep = m_SizeStep;
-		outParams.vel = m_Vel;
-		outParams.accel = m_Accel;
-		outParams.startalpha = m_StartAlpha;
-		outParams.fadestep = m_FadeStep;
-		outParams.startroll = m_StartRoll;
-		outParams.rollvel = m_RollVel;
-		outParams.rollacc = m_RollAcc;
+		outParams.size = m_Size + FRandom(-m_SizeDeviation, m_SizeDeviation);
+		outParams.sizestep = m_SizeStep + FRandom(-m_SizeStepDeviation, m_SizeStepDeviation);
+		outParams.vel = m_Vel + Vec3Util.Random(-m_VelDeviation.x, -m_VelDeviation.y, -m_VelDeviation.z, m_VelDeviation.x, m_VelDeviation.y, m_VelDeviation.z);
+		outParams.accel = m_Accel + Vec3Util.Random(-m_AccelDeviation.x, -m_AccelDeviation.y, -m_AccelDeviation.z, m_AccelDeviation.x, m_AccelDeviation.y, m_AccelDeviation.z);
+		outParams.startalpha = m_StartAlpha + FRandom(-m_AlphaDeviation, m_AlphaDeviation);
+		outParams.fadestep = m_FadeStep + FRandom(-m_FadeDeviation, m_FadeDeviation);
+		outParams.startroll = m_StartRoll + FRandom(-m_RollDeviation, m_RollDeviation);
+		outParams.rollvel = m_RollVel + FRandom(-m_RollVelDeviation, m_RollVelDeviation);
+		outParams.rollacc = m_RollAcc + FRandom(-m_RollAccDeviation, m_RollAccDeviation);
 
 		outParams.pos = spawnPosition;
 

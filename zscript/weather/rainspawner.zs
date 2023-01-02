@@ -20,8 +20,8 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Add;
 		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
 		params.lifetime = 35;
-		params.size = 52.0 + FRandom(-2.0, 2.0);
-		params.vel = (0.0, 0.0, -56.0 + FRandom(-2.0, 2.0));
+		params.size = 52.0;
+		params.vel = (0.0, 0.0, -56.0);
 		params.accel = (0.0, 0.0, -0.1);
 		params.startalpha = 0.525;
 
@@ -31,12 +31,14 @@ class RainSpawner : WeatherParticleSpawner
 			sec,
 			agent,
 			params,
-			projectionTime,
-			shouldSimulateParticles,
-			enableEndOfLifeCallbacks);
+			sizeDeviation: 2.0,
+			velDeviation: (0.0, 0.0, 2.0),
+			projectionTime: projectionTime,
+			shouldSimulateParticles: shouldSimulateParticles,
+			enableEndOfLifeCallbacks: enableEndOfLifeCallbacks);
 
-			spawner.m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
-			spawner.m_MainSplashTexture = TexMan.CheckForTexture("RSPLSH1");
+		spawner.m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
+		spawner.m_MainSplashTexture = TexMan.CheckForTexture("RSPLSH1");
 
 		return spawner;
 	}

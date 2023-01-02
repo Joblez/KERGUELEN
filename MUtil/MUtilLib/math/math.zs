@@ -57,7 +57,7 @@ class Math
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return; // Avoid division by zero.
+		if (delta == 0.0) return from; // Avoid division by zero.
 
 		smoothTime = max(0.001, smoothTime);
 		double omega = 2.0 / smoothTime;
@@ -142,7 +142,7 @@ class MathF
 		float maxSpeed,
 		float delta)
 	{
-		if (delta == 0.0) return; // Avoid division by zero.
+		if (delta == 0.0) return from; // Avoid division by zero.
 
 		smoothTime = max(0.001, smoothTime);
 		float omega = 2.0 / smoothTime;
@@ -274,7 +274,7 @@ class MathVec2
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return; // Avoid division by zero.
+		if (delta == 0.0) return from; // Avoid division by zero.
 
 		smoothTime = max(0.001, smoothTime);
 		double omega = 2.0 / smoothTime;
@@ -384,7 +384,7 @@ class MathVec3
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return; // Avoid division by zero.
+		if (delta == 0.0) return from; // Avoid division by zero.
 
 		smoothTime = max(0.001, smoothTime);
 		double omega = 2.0 / smoothTime;

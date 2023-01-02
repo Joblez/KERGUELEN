@@ -2,7 +2,7 @@ class M2CHUD : BaseWeaponHUD
 {
 	M2C m_M2C;
 
-	InterpolatedDouble m_RoundsOffset;
+	ui InterpolatedDouble m_RoundsOffset;
 
 	private TextureID m_RoundTexture;
 	private vector2 m_TextureSize;
@@ -11,14 +11,11 @@ class M2CHUD : BaseWeaponHUD
 	private double m_OriginalHUDRotation;
 	private vector2 m_OriginalHUDScale;
 
+	private ui double m_PreviousTime;
+
 	override void Setup()
 	{
 		m_M2C = M2C(m_Context);
-
-		m_RoundsOffset = new("InterpolatedDouble");
-		m_RoundsOffset.m_Target = m_M2C.owner.CountInv(m_M2C.AmmoType1);
-		m_RoundsOffset.Update();
-		m_RoundsOffset.m_SmoothTime = 0.04;
 
 		m_RoundTexture = TexMan.CheckForTexture("FNRNRDY");
 		int textureWidth, textureHeight;
@@ -26,33 +23,34 @@ class M2CHUD : BaseWeaponHUD
 		m_TextureSize = (textureWidth, textureHeight);
 	}
 
-	override void Tick()
+	override void UISetup()
 	{
-		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
-		m_RoundsOffset.m_Target = rounds * m_TextureSize.y / 2;
-		m_RoundsOffset.Update();
+		Super.UISetup();
+
+		m_RoundsOffset = new("InterpolatedDouble");
+		m_RoundsOffset.m_SmoothTime = 0.02;
 	}
 
 	override void PreDraw(RenderEvent event)
 	{
 		Super.PreDraw(event);
 
-		m_OriginalHUDTranslation = hudTransform.GetLocalTranslation();
-		m_OriginalHUDRotation = hudTransform.GetLocalRotation();
-		m_OriginalHUDScale = hudTransform.GetLocalScale();
+		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
+		m_OriginalHUDRotation = m_HUDTransform.GetLocalRotation();
+		m_OriginalHUDScale = m_HUDTransform.GetLocalScale();
 
-		hudTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.97, 0.97)));
-		hudTransform.SetRotation(90.0);
-		hudTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, HUD_WIDTH, HUD_HEIGHT, adjustForHUDAspectScale: false));
+		m_HUDTransform.SetTranslation(ScreenUtil.NormalizedPositionToView((0.97, 0.97)));
+		m_HUDTransform.SetRotation(90.0);
+		m_HUDTransform.SetScale(ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT, adjustForHUDAspectScale: false));
 	}
 
 	override void Draw(RenderEvent event)
 	{
 		if (automapactive) return;
 
-		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
-
 		vector2 roundsOrigin = Vec2Util.Zero();
+
+		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
 
 		int leftRow, rightRow;
 
@@ -70,8 +68,12 @@ class M2CHUD : BaseWeaponHUD
 
 		// Never thought I'd come across good ol' off-by-one in screen coordinates...
 		double leftRowOffset = (m_TextureSize.y * rounds % 2 == 0 ? 1.0 : 2.0) - 1;
-		vector2 roundScale = hudTransform.GetLocalScale();
+		vector2 roundScale = m_HUDTransform.GetLocalScale();
 		
+		m_RoundsOffset.m_Target = rounds * m_TextureSize.y / 2;
+
+		m_RoundsOffset.Update((level.time + event.FracTic - m_PreviousTime) / TICRATE);
+
 		// So much work to get around what this one little CVar does...
 		roundScale.y *= GetAspectScaleY();
 
@@ -86,13 +88,13 @@ class M2CHUD : BaseWeaponHUD
 					+ m_RoundsOffset.GetValue() + leftRowOffset);
 					
 
-			roundVector = hudTransform.TransformVector(roundVector);
+			roundVector = m_HUDTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
 				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
-				hudTransform.GetLocalRotation(),
+				m_HUDTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,
 				col: 0xFFFFFFFF);
@@ -105,13 +107,13 @@ class M2CHUD : BaseWeaponHUD
 				(roundsOrigin.y - m_TextureSize.y * i)
 					+ m_RoundsOffset.GetValue() + m_TextureSize.y * 0.5);
 
-			roundVector = hudTransform.TransformVector(roundVector);
+			roundVector = m_HUDTransform.TransformVector(roundVector);
 
 			StatusBar.DrawTextureRotated(
 				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBar.DI_MIRROR,
-				hudTransform.GetLocalRotation(),
+				m_HUDTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,
 				col: 0xFFFFFFFF);
@@ -122,8 +124,10 @@ class M2CHUD : BaseWeaponHUD
 	{
 		Super.PostDraw(event);
 
-		hudTransform.SetTranslation(m_OriginalHUDTranslation);
-		hudTransform.SetRotation(m_OriginalHUDRotation);
-		hudTransform.SetScale(m_OriginalHUDScale);
+		m_PreviousTime = level.time + event.FracTic;
+
+		m_HUDTransform.SetTranslation(m_OriginalHUDTranslation);
+		m_HUDTransform.SetRotation(m_OriginalHUDRotation);
+		m_HUDTransform.SetScale(m_OriginalHUDScale);
 	}
 }

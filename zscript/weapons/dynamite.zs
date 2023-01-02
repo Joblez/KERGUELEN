@@ -65,7 +65,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_Refire();
 	Release:
 		TNT1 A 0 A_StartSound("hatchet/swing",9);
-		TNT1 A 0 A_TakeInventory("DynamiteAmmo",1);
+		TNT1 A 0 A_TakeInventory(invoker.AmmoType1, 1);
 		DYNT ABC 1;
 		TNT1 A 0 {
 			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12, 0, 0);
@@ -74,7 +74,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNT DE 2;
 		DYNT FGHIJK 1;
 		TNT1 A 0 {
-			invoker.AmmoUse1 = CountInv("DynamiteAmmo") > 0 ? 0 : 1;
+			invoker.AmmoUse1 = invoker.GetReserveAmmo() > 0 ? 0 : 1;
 			A_CheckReload();
 		}
 	NewStick:
@@ -104,7 +104,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Wait;
 
 	Select:
-		TNT1 A 0 { invoker.AmmoUse1 = CountInv("DynamiteAmmo") > 0 ? 0 : 1; }
+		TNT1 A 0 { invoker.AmmoUse1 = invoker.GetReserveAmmo() > 0 ? 0 : 1; }
 		DYNS A 2 A_SetBaseOffset(1, 85);
 		DYNS B 2 A_SetBaseOffset(1, 60);
 		TNT1 A 0 A_StartSound("dynamite/open", 10);
@@ -122,6 +122,11 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 0 A_Lower(16);
 		Wait;
+	}
+
+	override int GetReserveAmmo() const
+	{
+		return CountInv(AmmoType1);
 	}
 }
 

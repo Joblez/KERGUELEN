@@ -38,11 +38,6 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Tag "Model 19";
 	}
 
-	override void Travelled()
-	{
-		if (m_SingleAction) owner.Player.SetPSprite(PSP_WEAPON, ResolveState("AltReady"));
-	}
-
 	States
 	{
 	Spawn:
@@ -60,7 +55,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 	DoubleAction:
 		TNT1 A 0 {
 			A_StartSound("sw/cock2", 9);
-			invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
+			// invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
 		}
 		SWDA A 1;
 		SWDA B 1;
@@ -72,7 +67,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWDA E 0 Bright {
 			A_AlertMonsters();
 			A_TakeInventory("RevoCylinder", 1);
-			invoker.GetHUDExtension().SendEventToSM('RoundFired');
+			// invoker.GetHUDExtension().SendEventToSM('RoundFired');
 			A_StartSound("sw/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 35, "BulletPuff");
@@ -101,7 +96,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWSA ABCD 1;
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
 		SWSA E 1;
-		SWSA F 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
+		SWSA F 1 { /* invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); */ }
 		SWSA GHIJKLMN 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
@@ -150,7 +145,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.m_IsLoading = true;
 			A_DropCasings();
 			A_TakeInventory("RevoCylinder", BCYN);
-			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
+			// invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
 			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
 		}
 		SWEJ N 1;
@@ -173,7 +168,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
-			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
+			// invoker.GetHUDExtension().SendEventToSM('RoundInserted');
 			return ResolveState(null);
 		}
 		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
@@ -190,14 +185,14 @@ class Revolver : BaseWeapon replaces Supershotgun
 	Close:
 		SWCL AB 1;
 		SWCL C 1 {
-			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
+			// invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
 		}
 		SWCL DE 1;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
 		SWCL FGH 3;
 		SWCL IJKLMN 2;
 		TNT1 A 0 {
-			invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');
+			// invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');
 			invoker.m_SingleAction = false;
 			invoker.m_IsLoading = false;
 		}
@@ -206,7 +201,6 @@ class Revolver : BaseWeapon replaces Supershotgun
 	Select:
 		TNT1 A 0 {
 			SetPlayerProperty(0, 1, 2);
-			invoker.RegisterWeaponHUD();
 			invoker.m_SingleAction = false;
 		}
 		TNT1 A 1;
@@ -222,7 +216,6 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Goto Ready;
 
 	Deselect:
-		TNT1 A 0 { invoker.UnregisterWeaponHUD(); }
 		SWCL M 1 A_SetBaseOffset(3, 34);
 		SWCL K 1 A_SetBaseOffset(-12, 38);
 		SWCL J 1 A_SetBaseOffset(-28, 39);
@@ -232,6 +225,21 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);
 		Wait;
+	}
+
+	override void Travelled()
+	{
+		if (m_SingleAction) owner.Player.SetPSprite(PSP_WEAPON, ResolveState("AltReady"));
+	}
+
+	override int GetAmmo() const
+	{
+		return CountInv(AmmoType1);
+	}
+
+	override int GetReserveAmmo() const
+	{
+		return CountInv(AmmoType2);
 	}
 
 	private action void A_DropCasings()

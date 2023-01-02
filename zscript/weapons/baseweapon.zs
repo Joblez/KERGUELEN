@@ -83,6 +83,12 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
 			(0, 0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
+
+		if (m_HUDExtensionType)
+		{
+			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
+			m_HUDExtension.Init(self);
+		}
 	}
 
 	override void DoEffect()
@@ -97,6 +103,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			psp.x = m_PSpritePosition.GetX();
 			psp.y = m_PSpritePosition.GetY();
 			psp.scale = m_PSpriteScale.GetValue();
+
+			if (m_HUDExtension) m_HUDExtension.CallTick();
 		}
 
 		m_PreviousPlayerYaw = owner.Angle;
@@ -116,28 +124,19 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			&& owner.Player.ReadyWeapon == self;
 	}
 
+	virtual int GetAmmo() const
+	{
+		return -1;
+	}
+
+	virtual int GetReserveAmmo() const
+	{
+		return -1;
+	}
+
 	void SetBaseOffset(int x, int y)
 	{
 		m_PSpritePosition.SetBaseValue((x, y));
-	}
-
-	void RegisterWeaponHUD()
-	{
-		if (!m_HUDExtensionType) return;
-
-		if (!m_HUDExtension)
-		{
-			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
-			m_HUDExtension.Init(self);
-		}
-
-		HUDExtensionRegistry.AddExtension(m_HUDExtension);
-	}
-
-	void UnregisterWeaponHUD()
-	{
-		if (!m_HUDExtension) return;
-		HUDExtensionRegistry.RemoveExtension(m_HUDExtension);
 	}
 
 	Actor SpawnEffect(
@@ -217,7 +216,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			A_ZoomFactor(zf, ZOOM_NOSCALETURNING);
 			A_Quake(quakeInt, 1, 0, quakeTrem);
 		}
-
 	}
 
 	// Felt Recoil.

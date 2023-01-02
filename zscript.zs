@@ -19,6 +19,7 @@ version "4.10.0"
 #include "zscript/weapons/m1911.zs"
 
 // UI
+#include "zscript/ui/kergstatusbar.zs"
 #include "zscript/ui/baseweaponhud.zs"
 #include "zscript/ui/revolverhud.zs"
 #include "zscript/ui/m2chud.zs"

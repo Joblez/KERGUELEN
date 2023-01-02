@@ -134,15 +134,15 @@ class ScreenUtil
 
 	private static double AdjustForHUDAspectScaleHorizontal(double horizontal)
 	{
-		bool hudAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
+		bool m_HUDAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
 
-		return hudAspectScale ? horizontal * ASPECT_SCALE_X : horizontal;
+		return m_HUDAspectScale ? horizontal * ASPECT_SCALE_X : horizontal;
 	}
 
 	private static double AdjustForHUDAspectScaleVertical(double vertical)
 	{
-		bool hudAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
+		bool m_HUDAspectScale = CVar.GetCVar("hud_aspectscale").GetBool();
 
-		return hudAspectScale ? vertical * ASPECT_SCALE_Y : vertical;
+		return m_HUDAspectScale ? vertical * ASPECT_SCALE_Y : vertical;
 	}
 }

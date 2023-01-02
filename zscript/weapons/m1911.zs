@@ -211,6 +211,17 @@ class Colt : BaseWeapon replaces Pistol
 		Loop;
 	}
 
+	override int GetAmmo() const
+	{
+		return CountInv(AmmoType1);
+	}
+
+	override int GetReserveAmmo() const
+	{
+		return CountInv(AmmoType2);
+	}
+
+
 	private action void A_SpawnCasing()
 	{
 		if (GetCVar("casing_toggle") == 1)

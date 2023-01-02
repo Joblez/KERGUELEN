@@ -80,7 +80,7 @@ class SMHUDRevolverState : SMHUDState
 				20, (360.0 - double(roundIndex) * 60.0) + rotation.GetValue() - RevolverHUD.ROTATION_CORRECTION);
 
 			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
-			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, BaseWeaponHUD.HUD_WIDTH, BaseWeaponHUD.HUD_HEIGHT);
+			offset = ScreenUtil.ScaleRelativeToBaselineRes(offset.x, offset.y, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
 			{
@@ -156,7 +156,7 @@ class SMHUDRevolverState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, BaseWeaponHUD.HUD_WIDTH, BaseWeaponHUD.HUD_HEIGHT),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT),
 			col: 0xFFCCCCCC);
 	}
 	
@@ -167,7 +167,7 @@ class SMHUDRevolverState : SMHUDState
 			coords,
 			StatusBarCore.DI_ITEM_CENTER,
 			1.0,
-			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, BaseWeaponHUD.HUD_WIDTH, BaseWeaponHUD.HUD_HEIGHT),
+			scale: ScreenUtil.ScaleRelativeToBaselineRes(1.0, 1.0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT),
 			col: 0xFF999999);
 	}
 }
@@ -178,9 +178,7 @@ class SMHUDRevolverMachine : SMHUDMachine
 	{
 		Super.Build();
 
-		GetHUDActiveState()
-			.AddChild(new("SMHUDRevolverState"))
-		;
+		AddChild(new("SMHUDRevolverState"));
 	}
 }
 

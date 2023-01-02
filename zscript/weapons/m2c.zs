@@ -45,7 +45,6 @@ class M2C : BaseWeapon replaces Chaingun
 	Select:
 		TNT1 A 0 {
 			SetPlayerProperty(0, 1, 2);
-			invoker.RegisterWeaponHUD();
 		}
 		TNT1 A 1;
 		M2ST F 1 A_SetBaseOffset(-60, 100);
@@ -59,7 +58,6 @@ class M2C : BaseWeapon replaces Chaingun
 		Goto Ready;
 
 	Deselect:
-		TNT1 A 0 { invoker.UnregisterWeaponHUD(); }
 		M2ST A 1 A_SetBaseOffset(2, 30);
 		#### B 1 A_SetBaseOffset(20, 40);
 		#### B 1 A_SetBaseOffset(40, 60);
@@ -234,6 +232,16 @@ class M2C : BaseWeapon replaces Chaingun
 		M2CF DEF 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		Goto Ready;
+	}
+
+	override int GetAmmo() const
+	{
+		return CountInv(AmmoType1);
+	}
+
+	override int GetReserveAmmo() const
+	{
+		return CountInv(AmmoType2);
 	}
 
 	private action void A_SpawnCasing()

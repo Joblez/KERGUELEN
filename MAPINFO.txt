@@ -2,8 +2,10 @@ GameInfo
 {
 	PlayerClasses = "NewPlayer"
 
+	StatusBarClass = "KergStatusBar"
+
 	// MBase EventHandlers
-	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WorldAgentHandler"
+	AddEventHandlers = "SectorDataRegistry", "WorldAgentHandler"
 
 	AddEventHandlers = "NashGoreHandler"
 

@@ -1,7 +1,7 @@
 class WeatherSpawner : Thinker
 {
 	protected Sector m_Sector;
-	protected class<WeatherParticle> m_ParticleType;
+	protected class<WeatherActor> m_WeatherType;
 
 	protected double m_Frequency;
 	protected double m_Range;
@@ -14,18 +14,18 @@ class WeatherSpawner : Thinker
 
 	private double m_Time;
 
-	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherParticle> particleType, WeatherAgent agent, double projectionTime = 1.0)
+	static WeatherSpawner Create(double density, double range, Sector sec, class<WeatherActor> weatherType, WeatherAgent agent, double projectionTime = 1.0)
 	{
 		WeatherSpawner spawner = new("WeatherSpawner");
-		spawner.Init(density, range, sec, particleType, agent, projectionTime);
+		spawner.Init(density, range, sec, weatherType, agent, projectionTime);
 		return spawner;
 	}
 
-	void Init(double density, double range, Sector sec, class<WeatherParticle> particleType, WeatherAgent agent, double projectionTime = 1.0)
+	void Init(double density, double range, Sector sec, class<WeatherActor> weatherType, WeatherAgent agent, double projectionTime = 1.0)
 	{
 		m_Range = range;
 		m_Sector = sec;
-		m_ParticleType = particleType;
+		m_WeatherType = weatherType;
 		m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
 		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
@@ -129,7 +129,7 @@ class WeatherSpawner : Thinker
 				>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
 			&& FRandom(0, 1) > GetOutOfViewFrequencyReduction())
 		{
-			Actor.Spawn(m_ParticleType, spawnPosition);
+			Actor.Spawn(m_WeatherType, spawnPosition);
 		}
 		return;
 	}

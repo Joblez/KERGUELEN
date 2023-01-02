@@ -1,4 +1,4 @@
-class WeatherParticle : Actor
+class WeatherActor : Actor
 {
 	Default
 	{
@@ -34,7 +34,7 @@ class WeatherParticle : Actor
 	}
 }
 
-class WaterRipple : WeatherParticle
+class WaterRipple : WeatherActor
 {
 	Default
 	{
@@ -57,7 +57,7 @@ class WaterRipple : WeatherParticle
 	}
 }
 
-class Snowflake : WeatherParticle
+class Snowflake : WeatherActor
 {
 	Default
 	{
@@ -87,7 +87,7 @@ class Snowflake : WeatherParticle
 		}
 		Loop;
 	Death:
-		SNOW A 1;
+		TNT1 A 0;
 		Stop;
 	}
 }

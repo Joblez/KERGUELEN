@@ -69,7 +69,7 @@ class KergStatusBar : BaseStatusBar
 	{
 		if (amount < 0) return;
 
-		vector2 ammoHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y - m_Font.mFont.GetHeight() * TEXT_SCALE - BASE_PADDING * TEXT_SCALE);
+		vector2 ammoHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y - m_Font.mFont.GetHeight() * TEXT_SCALE - BASE_PADDING);
 
 		DrawString(m_Font, FormatNumber(amount, 1), ammoHUDOrigin, DI_TEXT_ALIGN_CENTER, scale: (TEXT_SCALE, TEXT_SCALE));
 	}

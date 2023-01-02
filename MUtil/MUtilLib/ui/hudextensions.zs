@@ -1,31 +1,16 @@
 // TODO: Document HUDExtension.
+
+// Note: HUDExtensions represent HUD drawing behavior with state, you retrieve them from
+// your status bar's Draw() method and call CallDraw() to draw them. You can also tick their
+// state machines with their CallTick() method.
 class HUDExtension abstract
 {
-	enum ELifecycleStage
-	{
-		UNINITIALIZED,
-		PENDING_ACTIVATION,
-		ACTIVE,
-		PENDING_REMOVAL
-	}
-
 	protected Object m_Context;
-	protected ELifecycleStage m_LifecycleStage;
 	protected SMHUDMachine m_StateMachine;
 
 	protected ui bool m_IsUISetUp;
 
 	// TODO: Add ToString().
-
-	virtual void OnActivate()
-	{
-		m_StateMachine.SendEvent('ActivationComplete');
-	}
-
-	virtual void OnDeactivate()
-	{
-		m_StateMachine.SendEvent('DeactivationComplete');
-	}
 
 	virtual void Setup() { }
 
@@ -33,49 +18,27 @@ class HUDExtension abstract
 
 	virtual ui void UISetup() { }
 	
-	virtual ui void PreDraw(RenderEvent event)
-	{
-		m_StateMachine.PreDraw(event);
-	}
-	virtual ui void Draw(RenderEvent event)
-	{
-		m_StateMachine.Draw(event);
-	}
-	virtual ui void PostDraw(RenderEvent event)
-	{
-		m_StateMachine.PostDraw(event);
-	}
-
 	protected virtual SMHUDMachine CreateHUDStateMachine()
 	{
 		return new("SMHUDMachine");
 	}
 
-	ELifecycleStage GetLifecycleStage() const
+	protected virtual ui void PreDraw(int state, double ticFrac)
 	{
-		return m_LifecycleStage;
+		m_StateMachine.PreDraw(state, ticFrac);
+	}
+	protected virtual ui void Draw(int state, double ticFrac)
+	{
+		m_StateMachine.Draw(state, ticFrac);
+	}
+	protected virtual ui void PostDraw(int state, double ticFrac)
+	{
+		m_StateMachine.PostDraw(state, ticFrac);
 	}
 
 	Object GetContext() const
 	{
 		return m_Context;
-	}
-
-	string GetLifecycleStageName() const
-	{
-		switch (m_LifecycleStage)
-		{
-			case UNINITIALIZED:
-				return "Uninitialized";
-			case PENDING_ACTIVATION:
-				return "PendingActivation";
-			case ACTIVE:
-				return "Active";
-			case PENDING_REMOVAL:
-				return "PendingRemoval";
-			default:
-				return "";
-		}
 	}
 
 	void Init(Object context)
@@ -87,37 +50,14 @@ class HUDExtension abstract
 		m_StateMachine.CallBuild();
 
 		Setup();
-		QueueActivate();
+		m_StateMachine.Start();
+		SendEventToSM('Activate');
 	}
 
 	void CallTick()
 	{
-		if (m_LifecycleStage != ACTIVE) return;
-
 		Tick();
 		m_StateMachine.Update();
-	}
-
-	void QueueActivate()
-	{
-		SendEventToSM('QueueActivate');
-		m_LifecycleStage = PENDING_ACTIVATION;
-	}
-
-	void Activate()
-	{
-		if (m_LifecycleStage != PENDING_ACTIVATION)
-		{
-			ThrowAbortException("Attempted to activate HUD extension at lifecycle stage %s." , GetLifecycleStageName());
-		}
-		m_LifecycleStage = ACTIVE;
-		m_StateMachine.Start();
-	}
-
-	void Remove()
-	{
-		m_LifecycleStage = PENDING_REMOVAL;
-		m_StateMachine.Shutdown();
 	}
 
 	void SendEventToSM(name eventId)
@@ -125,28 +65,30 @@ class HUDExtension abstract
 		m_StateMachine.SendEvent(eventId);
 	}
 
-	ui void CallDraw(RenderEvent event)
+	ui void CallUISetup()
 	{
-		if (m_LifecycleStage != ACTIVE) return;
+		if (m_IsUISetUp) return;
 
+		UISetup();
+		m_IsUISetUp = true;
+	}
+
+	ui void CallDraw(int state, double ticFrac)
+	{
 		// A little sloppy, but it can't be helped.
-		if (!m_IsUISetUp)
-		{
-			UISetup();
-			m_IsUISetUp = true;
-		}
+		CallUISetup();
 
-		PreDraw(event);
-		Draw(event);
-		PostDraw(event);
+		PreDraw(state, ticFrac);
+		Draw(state, ticFrac);
+		PostDraw(state, ticFrac);
 	}
 }
 
 class SMHUDState : SMState abstract
 {
-	virtual ui void PreDraw(RenderEvent event) { }
-	virtual ui void Draw(RenderEvent event) { }
-	virtual ui void PostDraw(RenderEvent event) { }
+	virtual ui void PreDraw(int state, double ticFrac) { }
+	virtual ui void Draw(int state, double ticFrac) { }
+	virtual ui void PostDraw(int state, double ticFrac) { }
 
 	HUDExtension GetHUDExtension() const
 	{
@@ -158,123 +100,51 @@ class SMHUDState : SMState abstract
 		return players[consoleplayer];
 	}
 
-	ui void CallPreDraw(RenderEvent event)
+	ui void CallPreDraw(int state, double ticFrac)
 	{
 		if (GetActiveChild() is "SMHUDState")
 		{
-			SMHUDState(GetActiveChild()).CallPreDraw(event);
+			SMHUDState(GetActiveChild()).CallPreDraw(state, ticFrac);
 		}
-		PreDraw(event);
+		PreDraw(state, ticFrac);
 	}
 
-	ui void CallDraw(RenderEvent event)
+	ui void CallDraw(int state, double ticFrac)
 	{
 		if (GetActiveChild() is "SMHUDState")
 		{
-			SMHUDState(GetActiveChild()).CallDraw(event);
+			SMHUDState(GetActiveChild()).CallDraw(state, ticFrac);
 		}
-		Draw(event);
+		Draw(state, ticFrac);
 	}
 
-	ui void CallPostDraw(RenderEvent event)
+	ui void CallPostDraw(int state, double ticFrac)
 	{
 		if (GetActiveChild() is "SMHUDState")
 		{
-			SMHUDState(GetActiveChild()).CallPostDraw(event);
+			SMHUDState(GetActiveChild()).CallPostDraw(state, ticFrac);
 		}
-		PostDraw(event);
-	}
-}
-
-class SMHUDActivating : SMHUDState
-{
-	override void EnterState()
-	{
-		GetHUDExtension().OnActivate();
-	}
-}
-
-class SMHUDActive : SMHUDState
-{
-}
-
-class SMHUDDeactivating : SMHUDState
-{
-	override void EnterState()
-	{
-		GetHUDExtension().OnDeactivate();
-	}
-}
-
-class SMHUDRemoved : SMHUDState
-{
-	override void EnterState()
-	{
-		GetHUDExtension().Remove();
+		PostDraw(state, ticFrac);
 	}
 }
 
 class SMHUDMachine : SMMachine
 {
-	override void Build()
-	{
-		AddChild(new("SMHUDRemoved"));
-		AddChild(new("SMHUDActivating"));
-		AddChild(new("SMHUDActive"));
-		AddChild(new("SMHUDDeactivating"));
-
-		AddTransition(new("SMTransition")
-			.From("SMHUDRemoved")
-			.To("SMHUDActivating")
-			.On('QueueActivate')
-		);
-		AddTransition(new("SMTransition")
-			.From("SMHUDActivating")
-			.To("SMHUDActive")
-			.On('ActivationComplete')
-		);
-		AddTransition(new("SMTransition")
-			.From("SMHUDActive")
-			.To("SMHUDDeactivating")
-			.On('Deactivate')
-		);
-		AddTransition(new("SMTransition")
-			.From("SMHUDDeactivating")
-			.To("SMHUDRemoved")
-			.On('DeactivationComplete')
-		);
-	}
-
-	SMHUDActivating GetHUDActivatingState() const
-	{
-		return SMHUDActivating(GetChild("SMHUDActivating"));
-	}
-
-	SMHUDActive GetHUDActiveState() const
-	{
-		return SMHUDActive(GetChild("SMHUDActive"));
-	}
-
-	SMHUDDeactivating GetHUDDeactivatingState() const
-	{
-		return SMHUDDeactivating(GetChild("SMHUDDeactivating"));
-	}
-
-	ui void PreDraw(RenderEvent event)
+	ui void PreDraw(int state, double ticFrac)
 	{
 		SMHUDState activeChild = SMHUDState(GetActiveChild());
-		if (activeChild) activeChild.CallPreDraw(event);
+		if (activeChild) activeChild.CallPreDraw(state, ticFrac);
 	}
 
-	ui void Draw(RenderEvent event)
+	ui void Draw(int state, double ticFrac)
 	{
 		SMHUDState activeChild = SMHUDState(GetActiveChild());
-		if (activeChild) activeChild.CallDraw(event);
+		if (activeChild) activeChild.CallDraw(state, ticFrac);
 	}
 
-	ui void PostDraw(RenderEvent event)
+	ui void PostDraw(int state, double ticFrac)
 	{
 		SMHUDState activeChild = SMHUDState(GetActiveChild());
-		if (activeChild) activeChild.CallPostDraw(event);
+		if (activeChild) activeChild.CallPostDraw(state, ticFrac);
 	}
 }

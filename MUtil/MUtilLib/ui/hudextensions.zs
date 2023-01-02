@@ -130,6 +130,10 @@ class SMHUDState : SMState abstract
 
 class SMHUDMachine : SMMachine
 {
+	override void Build()
+	{
+	}
+
 	ui void PreDraw(int state, double ticFrac)
 	{
 		SMHUDState activeChild = SMHUDState(GetActiveChild());

@@ -165,7 +165,7 @@ class DynamiteStick : Actor
 			A_NoGravity();
 			A_SetScale(1,1);
 			A_SetTranslucent(0.2);
-			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.5);
+			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.425);
 
 			ActorUtil.Explode3D(self, int(300 * FRandom(1.0, 1.33)), 300.0, 360.0);
 			A_AlertMonsters(4096.0);

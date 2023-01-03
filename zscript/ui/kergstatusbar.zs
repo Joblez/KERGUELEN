@@ -3,7 +3,7 @@ class KergStatusBar : BaseStatusBar
 	const HUD_WIDTH = 640;
 	const HUD_HEIGHT = 360;
 
-	const WEAPON_HUD_ORIGIN_X = -82;
+	const WEAPON_HUD_ORIGIN_X = -90;
 	const WEAPON_HUD_ORIGIN_Y = -60;
 
 	const TEXT_SCALE = 2.0;
@@ -37,7 +37,7 @@ class KergStatusBar : BaseStatusBar
 
 		// Draw health.
 
-		int hp = CPlayer.mo.Health;
+		int hp = max(0, CPlayer.mo.Health);
 
 		int healthTextXOrigin = m_Font.mFont.StringWidth("Health") * 0.5 * TEXT_SCALE + BASE_PADDING;
 
@@ -82,20 +82,20 @@ class KergStatusBar : BaseStatusBar
 	{
 		if (amount < 0) return;
 
-		int dividerHeight = m_Font.mFont.GetHeight() * TEXT_SCALE * 1.25;
+		int dividerHeight = m_Font.mFont.GetHeight() * TEXT_SCALE * 1.25 + 4;
 
 		vector2 reserveHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y + 10);
 
 		DrawImage(
 			"BPAKA0",
-			(reserveHUDOrigin.x - BASE_PADDING - DIVIDER_GIRTH - 2, reserveHUDOrigin.y + UPPERCASE_ALPHANUMERIC_TOP_OFFSET * TEXT_SCALE * 0.5),
+			(reserveHUDOrigin.x - BASE_PADDING - DIVIDER_GIRTH - 2, reserveHUDOrigin.y),
 			DI_ITEM_RIGHT_TOP,
 			scale: (0.75, 0.75));
 
 		Fill(
 			DIVIDER_FILL_COLOR,
 			reserveHUDOrigin.x - DIVIDER_GIRTH * 0.5,
-			reserveHUDOrigin.y,
+			reserveHUDOrigin.y - 2,
 			DIVIDER_GIRTH,
 			dividerHeight);
 		

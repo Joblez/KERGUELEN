@@ -161,11 +161,11 @@ actor Caribou 11003
 {
 	//$Category Friendlies
 	Monster
-	Health 300
+	Health 200
 	Radius 32
 	Height 48
 	Speed 6
-	Mass 300
+	Mass 100
 	Scale 0.8
 	PainChance 255
 	SeeSound "sheep/sight"

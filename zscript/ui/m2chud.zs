@@ -68,8 +68,6 @@ class SMHUDM2CState : SMHUDState
 
 		m_HUD.m_RoundsOffset.m_SmoothTime = m_RoundOffsetSmoothTime;
 
-		Console.Printf("Smooth time: %f", m_HUD.m_RoundsOffset.m_SmoothTime);
-
 		if (automapactive) return;
 
 		m_OriginalHUDTranslation = m_HUD.GetHUDTransform().GetLocalTranslation();

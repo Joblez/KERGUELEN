@@ -69,7 +69,7 @@ class WeatherSpawner : Thinker
 	{
 		int weatherSetting = GetWeatherAmountCVar().GetInt();
 
-		return (m_Range * 2) * weatherSetting + m_Range;
+		return m_Range * weatherSetting + m_Range;
 	}
 
 	double GetAdjustedFrequency() const
@@ -89,7 +89,7 @@ class WeatherSpawner : Thinker
 
 	double GetOutOfViewFrequencyReduction() const
 	{
-		return min(GetWeatherAmountCVar().GetInt() * 0.075, 0.4);
+		return GetWeatherAmountCVar().GetInt() * 0.05;
 	}
 
 	void SetDensity(double density)
@@ -101,17 +101,19 @@ class WeatherSpawner : Thinker
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
 
-		// Project the player's position forward to ensure particles fall into view, but
-		// divide by setting because it may look jarring with higher densities.
-		double attenuatedProjectionLength = m_ProjectionLength / (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0);
-		
-		Console.Printf("Projection length: %.2f", attenuatedProjectionLength);
+		// Project the player's position forward to ensure particles fall into view.
+		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
+		double floorZ = GetSector().LowestFloorAt(players[consoleplayer].mo.Pos.xy);
+
+		double projectionTime = abs(ceilingZ - floorZ) / (abs(GetDefaultByType(m_WeatherType).Vel.z) * GetAdjustedRange() ** 0.4);
+
+		double adjustedProjectionLength = projectionTime * TICRATE;
+		double range = GetAdjustedRange() ** 2.0;
 
 		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
-			+ (players[consoleplayer].mo.Vel.xy * attenuatedProjectionLength);
+			+ (players[consoleplayer].mo.Vel.xy * adjustedProjectionLength);
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = GetAdjustedRange() ** 2.0;
 
 		// Cull outside range.
 		if (distance > range) return;

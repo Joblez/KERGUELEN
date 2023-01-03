@@ -28,8 +28,8 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		while ((i = iterator.Next()) >= 0)
 		{
 			RainSpawner.Create(
-				12,
-				270.0,
+				10,
+				435.0,
 				level.Sectors[i],
 				m_WeatherAgent);
 		}
@@ -43,20 +43,18 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		snowParams.accel = (0.0, 0.0, -0.05);
 		snowParams.startalpha = 0.635;
 		snowParams.size = 8.0;
-		snowParams.vel = (0.0, 0.0, -3.5);
+		snowParams.vel = (0.0, 0.0, -10.0);
 
 		while ((i = iterator.Next()) >= 0)
 		{
-
 			WeatherParticleSpawner.Create(
-				10,
-				240.0,
+				12,
+				230.0,
 				level.Sectors[i],
 				m_WeatherAgent,
 				snowParams,
 				sizeDeviation: 3.0,
 				velDeviation: (2.0, 2.0, 1.0),
-				projectionTime: 3.0,
 				shouldSimulateParticles: true);
 		}
 	}

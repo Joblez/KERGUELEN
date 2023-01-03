@@ -8,7 +8,6 @@ class RainSpawner : WeatherParticleSpawner
 		double range,
 		Sector sec,
 		WeatherAgent agent,
-		double projectionTime = 1.0,
 		bool shouldSimulateParticles = true,
 		bool enableEndOfLifeCallbacks = true)
 	{
@@ -33,7 +32,6 @@ class RainSpawner : WeatherParticleSpawner
 			params,
 			sizeDeviation: 2.0,
 			velDeviation: (0.0, 0.0, 2.0),
-			projectionTime: projectionTime,
 			shouldSimulateParticles: shouldSimulateParticles,
 			enableEndOfLifeCallbacks: enableEndOfLifeCallbacks);
 
@@ -50,12 +48,15 @@ class RainSpawner : WeatherParticleSpawner
 
 		Actor pawn = players[consoleplayer].mo;
 
-		// Project the player's position forward to ensure particles fall into view, but
-		// scale down with weather setting because it may look jarring at higher densities.
-		// Base length could be calculated procedurally, but unsure if worth the trouble.
-		double attenuatedProjectionLength = m_ProjectionLength
-			/ (max(1.0, GetWeatherAmountCVar().GetInt()) * 2.0); // Avoid division by zero.
-		vector2 projectedPosition = pawn.Pos.xy + (pawn.Vel.xy * attenuatedProjectionLength);
+		// Project the player's position forward to ensure particles fall into view.
+		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
+		double floorZ = GetSector().LowestFloorAt(players[consoleplayer].mo.Pos.xy);
+
+		double projectionTime = abs(ceilingZ - floorZ) / (abs(m_Vel.z) * GetAdjustedRange() ** 0.4);
+
+		double adjustedProjectionLength = projectionTime * TICRATE;
+
+		vector2 projectedPosition = pawn.Pos.xy + (pawn.Vel.xy * adjustedProjectionLength);
 
 		vector2 point = m_Triangulation.GetRandomPoint();
 
@@ -69,7 +70,7 @@ class RainSpawner : WeatherParticleSpawner
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(projectedPosition.x - pawn.Pos.x, projectedPosition.y - pawn.Pos.y))
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - projectedPosition.x, point.y - projectedPosition.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
 
 		// Reduce spawn chance outside of horizontal view range.
@@ -115,7 +116,7 @@ class RainSpawner : WeatherParticleSpawner
 		}
 
 		// Scale distant rain drops up to make them more prominent.
-		outParams.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 2.0);
+		outParams.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 1.5);
 
 		level.SpawnParticle(outParams);
 	}
@@ -150,7 +151,7 @@ class RainSpawner : WeatherParticleSpawner
 
 			// Apply distant rain scaling.
 			double distance = MathVec2.SquareDistanceBetween(params.pos.xy, pawn.Pos.xy);
-			params.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 2.0);
+			params.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 1.5);
 
 			// Spawn with reconstructed state.
 			level.SpawnParticle(params);

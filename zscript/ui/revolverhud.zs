@@ -52,7 +52,6 @@ class SMHUDRevolverState : SMHUDState
 
 	override void UpdateState()
 	{
-		Console.Printf("State ticked.");
 		Revolver rev = m_RoundsHUD.m_Revolver;
 
 		// In case players use IDFA or IDKFA.

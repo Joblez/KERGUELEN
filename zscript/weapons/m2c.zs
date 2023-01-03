@@ -147,6 +147,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIfInventory(invoker.ammotype2, 1, 1);
 		Goto Ready;
 		TNT1 A 0 A_JumpIfInventory("RifleMag", RMAG, "Ready");
+		TNT1 A 0 { invoker.GetHUDExtension().SendEventToSM('ReloadStarted'); }
 		M2ST ABCDEFG 2;
 		M2ST H 1;
 		MOUT AB 1;
@@ -180,6 +181,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_StartSound("M2C/boltrel", 9, 0, 0.75);		
 		M2BT PQRSTU 1;
 		M2ED ABCDEFG 2;
+		M2ED G 1;
 	Loading:
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -199,11 +201,13 @@ class M2C : BaseWeapon replaces Chaingun
 			return ResolveState ("ReloadFinish");
 		}
 	ReloadFinish:
+		M2ED G 1;
+		TNT1 A 0 { invoker.GetHUDExtension().SendEventToSM('ReloadFinished'); }
 		Goto Ready;
 
 	NotEmpty:
-		M2ED BCDEFG 2 A_SetBaseOffset(0, 30);
-		TNT1 A 0 {
+		M2ED BCDEF 2 A_SetBaseOffset(0, 30);
+		M2ED G 1 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{
 				return ResolveState ("Ready");
@@ -220,7 +224,7 @@ class M2C : BaseWeapon replaces Chaingun
 
 			return ResolveState("ReloadFinish");
 		}
-		Goto Ready;
+		Goto ReloadFinish;
 
 	AltFire:
 		TNT1 A 0 {

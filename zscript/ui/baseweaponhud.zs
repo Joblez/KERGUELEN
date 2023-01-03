@@ -10,14 +10,19 @@ class BaseWeaponHUD : HUDExtension abstract
 	protected ui Transform2D m_HUDTransform;
 	protected ui transient CVar m_HUDAspectScale;
 
-	ui double GetAspectScaleX()
+	ui double GetAspectScaleX() const
 	{
 		return m_HUDAspectScale.GetBool() ? ScreenUtil.ASPECT_SCALE_X : 1.0;
 	}
 
-	ui double GetAspectScaleY()
+	ui double GetAspectScaleY() const
 	{
 		return m_HUDAspectScale.GetBool() ? ScreenUtil.ASPECT_SCALE_Y : 1.0;
+	}
+
+	ui Transform2D GetHUDTransform() const
+	{
+		return m_HUDTransform;
 	}
 
 	override void UISetup()

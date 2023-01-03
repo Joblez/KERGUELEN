@@ -29,6 +29,8 @@ class KergStatusBar : BaseStatusBar
 
 	override void Draw(int state, double TicFrac)
 	{
+		Super.Draw(state, TicFrac);
+
 		if (state == HUD_None) return;
 
 		BeginHUD(forcescaled: true);

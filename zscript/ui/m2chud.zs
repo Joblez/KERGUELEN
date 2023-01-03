@@ -39,9 +39,9 @@ class M2CHUD : BaseWeaponHUD
 		m_OriginalHUDRotation = m_HUDTransform.GetLocalRotation();
 		m_OriginalHUDScale = m_HUDTransform.GetLocalScale();
 
-		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 180, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 20));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 52, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 4));
 		m_HUDTransform.SetRotation(90.0);
-		m_HUDTransform.SetScale((2.0, 2.0));
+		m_HUDTransform.SetScale((0.75, 0.75));
 	}
 
 	override void Draw(int state, double ticFrac)

@@ -78,7 +78,7 @@ class SMHUDRevolverState : SMHUDState
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Empty) continue;
 
-			double scale = 2.0;
+			double scale = 1.0;
 			double radius = 20 * scale;
 
 			vector2 polarCoords = (
@@ -86,7 +86,7 @@ class SMHUDRevolverState : SMHUDState
 
 			vector2 offset = MathVec2.PolarToCartesian(polarCoords);
 
-			vector2 origin = (KergStatusBar.WEAPON_HUD_ORIGIN_X, KergStatusBar.WEAPON_HUD_ORIGIN_Y - radius - KergStatusBar.BASE_PADDING * scale);
+			vector2 origin = (KergStatusBar.WEAPON_HUD_ORIGIN_X, KergStatusBar.WEAPON_HUD_ORIGIN_Y - radius - (KergStatusBar.BASE_PADDING + 4) * scale);
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Ready)
 			{

@@ -124,7 +124,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Wait;
 	}
 
-	override int GetAmmo() const
+	override int GetReserveAmmo() const
 	{
 		return Ammo1.Amount;
 	}

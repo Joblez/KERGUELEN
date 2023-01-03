@@ -36,7 +36,7 @@ class BaseWeaponHUD : HUDExtension abstract
 		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;
 		m_OriginalVerticalResolution = StatusBar.VerticalResolution;
 
-		StatusBar.BeginHUD(forcescaled: false);
+		StatusBar.BeginHUD(forcescaled: true);
 		StatusBar.SetSize(0, KergStatusBar.HUD_WIDTH, KergStatusBar.HUD_HEIGHT);
 
 		Super.PreDraw(state, ticFrac);

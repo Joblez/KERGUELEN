@@ -82,7 +82,7 @@ class KergStatusBar : BaseStatusBar
 	{
 		if (amount < 0) return;
 
-		int dividerHeight = m_Font.mFont.GetHeight() * TEXT_SCALE * 1.25 + 4;
+		int dividerHeight = m_Font.mFont.GetHeight() * TEXT_SCALE * 1.25 + 2;
 
 		vector2 reserveHUDOrigin = (WEAPON_HUD_ORIGIN_X, WEAPON_HUD_ORIGIN_Y + 10);
 

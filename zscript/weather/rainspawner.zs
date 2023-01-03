@@ -49,19 +49,12 @@ class RainSpawner : WeatherParticleSpawner
 		Actor pawn = players[consoleplayer].mo;
 
 		// Project the player's position forward to ensure particles fall into view.
-		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
-		double floorZ = GetSector().LowestFloorAt(players[consoleplayer].mo.Pos.xy);
-
-		double projectionTime = abs(ceilingZ - floorZ) / (abs(m_Vel.z) * GetAdjustedRange() ** 0.4);
-
-		double adjustedProjectionLength = projectionTime * TICRATE;
-
-		vector2 projectedPosition = pawn.Pos.xy + (pawn.Vel.xy * adjustedProjectionLength);
+		vector2 projectedPosition = ProjectPlayerPosition(m_Vel.z);
 
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = GetAdjustedRange() ** 2.0;
+		double range = m_Range ** 2.0;
 
 		// Cull outside range.
 		if (distance > range) return;
@@ -70,7 +63,7 @@ class RainSpawner : WeatherParticleSpawner
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - projectedPosition.x, point.y - projectedPosition.y))
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
 
 		// Reduce spawn chance outside of horizontal view range.
@@ -82,7 +75,7 @@ class RainSpawner : WeatherParticleSpawner
 			(m_Sector.HighestCeilingAt(point)
 				// Particles can exist outside of level geometry, spawn above ceiling to make it
 				// seem as though the rain is falling from the sky.
-				+ 435.0
+				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)
 				- FRandom(2.0, 12.0)));
 
 
@@ -110,7 +103,7 @@ class RainSpawner : WeatherParticleSpawner
 		{
 			WeatherParticleSimulation result = SimulateParticle(outParams);
 
-			outParams.lifetime = result.GetLifetime() + 1; // Rain sometimes doesn't visibly touch the ground, add one extra tic.
+			outParams.lifetime = result.GetLifetime();
 
 			m_SimulationData.Push(result);
 		}
@@ -163,7 +156,7 @@ class RainSpawner : WeatherParticleSpawner
 		Actor pawn = players[consoleplayer].mo;
 
 		double distance = MathVec3.SquareDistanceBetween(data.GetEndPosition(), pawn.Pos);
-		double range = GetAdjustedRange();
+		double range = m_Range;
 
 		// Attenuate spawn chance over distance.
 		double spawnScore = FRandom(0.0, 1.0);
@@ -177,7 +170,7 @@ class RainSpawner : WeatherParticleSpawner
 
 		if (spawnScore >= spawnThreshold) return;
 
-		SpawnSplashEffect(data.GetEndPosition());
+		SpawnSplashEffect(data.GetEndPosition(), data.GetEndSector());
 
 		double splashParticleRange = GetSplashParticleDrawDistance() ** 2;
 
@@ -255,10 +248,10 @@ class RainSpawner : WeatherParticleSpawner
 		return m_SplashParticlesCVar;
 	}
 
-	private void SpawnSplashEffect(vector3 spawnPosition) const
+	private void SpawnSplashEffect(vector3 spawnPosition, Sector sec) const
 	{
 		// Spawn ripple effect when rain hits liquids.
-		if (m_Sector.GetFloorTerrain(Sector.floor).IsLiquid)
+		if (sec.GetFloorTerrain(Sector.floor).IsLiquid)
 		{
 			// Particles cannot be flat, fall back to actor.
 			Actor.Spawn("WaterRipple", spawnPosition);
@@ -275,7 +268,7 @@ class RainSpawner : WeatherParticleSpawner
 			params.lifetime = 4;
 			params.size = 10.0;
 			params.pos = spawnPosition + (0.0, 0.0, 1.75);
-			params.startalpha = 0.7;
+			params.startalpha = 0.4;
 
 			level.SpawnParticle(params);
 		}
@@ -286,7 +279,7 @@ class RainSpawner : WeatherParticleSpawner
 		Actor pawn = players[consoleplayer].mo;
 
 		// Spawn from max real splash range up to four times as far depending on FOV.
-		double minRange = GetAdjustedRange() ** 2.0;
+		double minRange = m_Range ** 2.0;
 		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 4.0, 1.0);
 
 		vector2 position = pawn.Pos.xy;
@@ -313,6 +306,6 @@ class RainSpawner : WeatherParticleSpawner
 		// Fake splashes appear instantly, cull everything out of view.
 		if (isOutOfView || spawnScore < spawnThreshold) return;
 
-		SpawnSplashEffect(spawnPosition);
+		SpawnSplashEffect(spawnPosition, m_Sector);
 	}
 }

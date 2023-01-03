@@ -30,6 +30,8 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
+	private double[TICRATE] elapsedTimes;
+
 	protected array<WeatherParticleSimulation> m_SimulationData;
 
 	static WeatherParticleSpawner Create(
@@ -145,6 +147,18 @@ class WeatherParticleSpawner : WeatherSpawner
 
 			data.Tick();
 		}
+
+		if (level.time > TICRATE && level.time % TICRATE == 0.0)
+		{
+			double time = 0.0;
+			foreach (timestamp : elapsedTimes)
+			{
+				time += timestamp;
+			}
+
+			time /= elapsedTimes.Size();
+			// Console.Printf("Average time: %f ms", time);
+		}
 	}
 
 	override void SpawnWeatherParticle()
@@ -152,21 +166,12 @@ class WeatherParticleSpawner : WeatherSpawner
 		Actor pawn = players[consoleplayer].mo;
 
 		// Project the player's position forward to ensure particles fall into view.
-		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
-		double floorZ = GetSector().LowestFloorAt(players[consoleplayer].mo.Pos.xy);
-
-		double projectionTime = abs(ceilingZ - floorZ) / (abs(m_Vel.z) * GetAdjustedRange() ** 0.4);
-
-		double adjustedProjectionLength = projectionTime * TICRATE;
-		Console.Printf("Projection length: %.2f", adjustedProjectionLength);
-
-		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
-			+ (players[consoleplayer].mo.Vel.xy * adjustedProjectionLength);
+		vector2 projectedPosition = ProjectPlayerPosition(m_Vel.z);
 
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = GetAdjustedRange() ** 2.0;
+		double range = m_Range ** 2.0;
 
 		// Cull outside range.
 		if (distance > range) return;
@@ -175,7 +180,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		double spawnScore = FRandom(0.0, 1.0);
 		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - projectedPosition.x, point.y - projectedPosition.y))
+		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
 
 		// Reduce spawn chance outside of horizontal view range.
@@ -187,7 +192,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			(m_Sector.HighestCeilingAt(point)
 				// Particles can exist outside of level geometry, spawn above ceiling to make it
 				// seem as though the rain is falling from the sky.
-				+ 435.0
+				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)
 				- FRandom(2.0, 12.0)));
 
 		FSpawnParticleParams outParams;
@@ -199,8 +204,8 @@ class WeatherParticleSpawner : WeatherSpawner
 		outParams.lifetime = m_Lifetime;
 		outParams.size = m_Size + FRandom(-m_SizeDeviation, m_SizeDeviation);
 		outParams.sizestep = m_SizeStep + FRandom(-m_SizeStepDeviation, m_SizeStepDeviation);
-		outParams.vel = m_Vel + Vec3Util.Random(-m_VelDeviation.x, -m_VelDeviation.y, -m_VelDeviation.z, m_VelDeviation.x, m_VelDeviation.y, m_VelDeviation.z);
-		outParams.accel = m_Accel + Vec3Util.Random(-m_AccelDeviation.x, -m_AccelDeviation.y, -m_AccelDeviation.z, m_AccelDeviation.x, m_AccelDeviation.y, m_AccelDeviation.z);
+		outParams.vel = m_Vel + Vec3Util.Random(-m_VelDeviation.x, m_VelDeviation.x, -m_VelDeviation.y, m_VelDeviation.y, -m_VelDeviation.z, m_VelDeviation.z);
+		outParams.accel = m_Accel + Vec3Util.Random(-m_AccelDeviation.x, m_AccelDeviation.x, -m_AccelDeviation.y, m_AccelDeviation.y, -m_AccelDeviation.z, m_AccelDeviation.z);
 		outParams.startalpha = m_StartAlpha + FRandom(-m_AlphaDeviation, m_AlphaDeviation);
 		outParams.fadestep = m_FadeStep + FRandom(-m_FadeDeviation, m_FadeDeviation);
 		outParams.startroll = m_StartRoll + FRandom(-m_RollDeviation, m_RollDeviation);
@@ -270,90 +275,73 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		vector3 endPosition;
 
-		// This is broken, fall back to iterative for now.
-		if (false /* velocity.xy ~== Vec2Util.Zero() && acceleration.xy ~== Vec2Util.Zero() */)
+		double startTime = MSTimeF();
+		double endTime;
+
+		if (velocity.xy ~== Vec2Util.Zero() && acceleration.xy ~== Vec2Util.Zero())
 		{
 			// One-dimensional trajectory, simulate without iteration.
-			if (acceleration.z == 0.0)
+			if (abs(acceleration.z) == 0.0)
 			{
 				// Constant velocity.
 				tics = int(round(abs((nextPlaneZ - position.z) / velocity.z)));
+
+				endTime = MSTimeF();
+				elapsedTimes[level.time % TICRATE] = endTime - startTime;
 			}
 			else
 			{
-				Console.Printf("position.z: %f", position.z);
-				Console.Printf("velocity.z: %f", velocity.z);
-				Console.Printf("acceleration.z: %f", acceleration.z);
+				[tics, endPosition] = SimulateParticleTravel(position, velocity, acceleration);
 
-				double floorZ = sec.NextLowestFloorAt(position.x, position.y, position.z);
-				double ceilZ;
+				endTime = MSTimeF();
+				elapsedTimes[level.time % TICRATE] = endTime - startTime;
 
-				// Sky check.
-				if (sec.GetTexture(Sector.ceiling) == skyflatnum)
-				{
-					ceilZ = 10000000.0; // Level geometry will realistically never reach this high.
-				}
-				else
-				{
-					ceilZ = sec.NextHighestCeilingAt(position.x, position.y, position.z, position.z);
-				}
+				// Breaks at higher distances, fall back to iterative for now.
 
-				Console.Printf("floorZ: %f", floorZ);
-				Console.Printf("ceilZ: %f", ceilZ);
+				// double floorZ = sec.NextLowestFloorAt(position.x, position.y, position.z);
+				// double ceilZ;
 
-				double fq = sqrt(velocity.z ** 2 - 4 * acceleration.z * (position.z - floorZ));
-				double cq = sqrt(velocity.z ** 2 - 4 * acceleration.z * (position.z - ceilZ));
+				// // Sky check.
+				// if (sec.GetTexture(Sector.ceiling) == skyflatnum)
+				// {
+				// 	// Sky height should be treated as practically infinite.
+				// 	ceilZ = Actor.ONCEILINGZ;
+				// }
+				// else
+				// {
+				// 	ceilZ = sec.NextHighestCeilingAt(position.x, position.y, position.z, position.z);
+				// }
 
-				Console.Printf("fq: %f", fq);
-				Console.Printf("cq: %f", cq);
+				// double fq = sqrt(velocity.z ** 2.0 - 4.0 * acceleration.z * (position.z - floorZ));
+				// double cq = sqrt(velocity.z ** 2.0 - 4.0 * acceleration.z * (position.z - ceilZ));
 
-				double pfq = (-velocity.z + fq) / 2 * acceleration.z;
-				double nfq = (-velocity.z - fq) / 2 * acceleration.z;
+				// double pfq = (-velocity.z + fq) / (2.0 * acceleration.z);
+				// double nfq = (-velocity.z - fq) / (2.0 * acceleration.z);
 
-				Console.Printf("pfq: %f", pfq);
-				Console.Printf("nfq: %f", nfq);
+				// double pcq = (-velocity.z + cq) / (2.0 * acceleration.z);
+				// double ncq = (-velocity.z - cq) / (2.0 * acceleration.z);
 
-				double pcq = (-velocity.z + cq) / 2 * acceleration.z;
-				double ncq = (-velocity.z - cq) / 2 * acceleration.z;
+				// fq = (pfq <= 0.0 || nfq <= 0.0) ? max(pfq, nfq) : min(pfq, nfq);
+				// cq = (pcq <= 0.0 || ncq <= 0.0) ? max(pcq, ncq) : min(pcq, ncq);
 
-				Console.Printf("pcq: %f", pcq);
-				Console.Printf("ncq: %f", ncq);
+				// double time = max(fq, cq);
+				// tics = ceil(time);
 
-				fq = (pfq <= 0.0 || nfq <= 0.0) ? max(pfq, nfq) : min(pfq, nfq);
-				cq = (pcq <= 0.0 || ncq <= 0.0) ? max(pcq, ncq) : min(pcq, ncq);
+				// // Clamp to three minutes in case particles move towards the sky
+				// // tics = min(tics, TICRATE * 60 * 3);
 
-				Console.Printf("new fq: %f", fq);
-				Console.Printf("new cq: %f", cq);
+				// endPosition = position + velocity * time + acceleration * time ** 2.0;
 
-				double time = max(fq, cq);
-
-				endPosition = position + velocity * time + acceleration * time ** 2;
-
-				Console.Printf("Tics: %i", tics);
+				// endTime = MSTimeF();
+				// elapsedTimes[level.time % TICRATE] = endTime - startTime;
 			}
 		}
 		else
 		{
-			while (true)
-			{
-				// If a particle hasn't hit a plane in over five minutes, it likely never will.
-				// Assume particle is stuck in a loop.
-				if (tics >= TICRATE * 60 * 5) ThrowAbortException("Particle simulation stuck.");
+			[tics, endPosition] = SimulateParticleTravel(position, velocity, acceleration);
 
-				position += velocity;
-
-				if (velocity.z < 0.0 && position.z < nextPlaneZ) break;
-				if (velocity.z > 0.0 && position.z > nextPlaneZ) break;
-
-				if ((acceleration != Vec3Util.Zero())) velocity += acceleration;
-
-				// Recheck next plane Z in case acceleration or lateral velocity changed the trajectory.
-				nextPlaneZ = GetApproachingPlaneZ(position, velocity, sec);
-
-				tics++;
-			}
-
-			endPosition = (position.xy, nextPlaneZ);
+			endTime = MSTimeF();
+			elapsedTimes[level.time % TICRATE] = endTime - startTime;
 		}
 
 		return WeatherParticleSimulation.Create(
@@ -370,6 +358,37 @@ class WeatherParticleSpawner : WeatherSpawner
 			params.rollacc,
 			sec,
 			endPosition);
+	}
+
+	private int, vector3 SimulateParticleTravel(vector3 position, vector3 velocity, vector3 acceleration)
+	{
+		int tics;
+		vector3 endPosition;
+		Sector sec = GetSector();
+		double nextPlaneZ = GetApproachingPlaneZ(position, velocity, sec);
+
+		while (true)
+		{
+			// If a particle hasn't hit a plane in over three minutes, it likely never will.
+			// Assume particle is stuck in a loop.
+			if (tics >= TICRATE * 60 * 3) ThrowAbortException("Particle simulation stuck.");
+
+			position += velocity;
+
+			if (velocity.z < 0.0 && position.z < nextPlaneZ) break;
+			if (velocity.z > 0.0 && position.z > nextPlaneZ) break;
+
+			if ((acceleration != Vec3Util.Zero())) velocity += acceleration;
+
+			// Recheck next plane Z in case acceleration or lateral velocity changed the trajectory.
+			nextPlaneZ = GetApproachingPlaneZ(position, velocity, sec);
+
+			tics++;
+		}
+		tics++; // Weather sometimes doesn't visibly touch the ground, add one extra tic.
+		endPosition = (position.xy, nextPlaneZ);
+
+		return tics, endPosition;
 	}
 
 	private double GetApproachingPlaneZ(vector3 position, vector3 velocity, out Sector sec)

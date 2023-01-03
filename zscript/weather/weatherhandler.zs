@@ -29,7 +29,7 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		{
 			RainSpawner.Create(
 				10,
-				435.0,
+				3000.0,
 				level.Sectors[i],
 				m_WeatherAgent);
 		}
@@ -40,16 +40,16 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		snowParams.color1 = 0xFFFFFFFF;
 		snowParams.texture = TexMan.CheckForTexture("SNOWA0");
 		snowParams.style = STYLE_Add;
-		snowParams.accel = (0.0, 0.0, -0.05);
+		snowParams.accel = (0.0, 0.0, 0.0);
 		snowParams.startalpha = 0.635;
 		snowParams.size = 8.0;
-		snowParams.vel = (0.0, 0.0, -10.0);
+		snowParams.vel = (0.0, 0.0, -8.0);
 
 		while ((i = iterator.Next()) >= 0)
 		{
 			WeatherParticleSpawner.Create(
-				12,
-				230.0,
+				10,
+				1400.0,
 				level.Sectors[i],
 				m_WeatherAgent,
 				snowParams,

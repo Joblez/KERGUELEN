@@ -65,13 +65,6 @@ class WeatherSpawner : Thinker
 		return m_WeatherAmountCVar;
 	}
 
-	double GetAdjustedRange() const
-	{
-		int weatherSetting = GetWeatherAmountCVar().GetInt();
-
-		return m_Range * weatherSetting + m_Range;
-	}
-
 	double GetAdjustedFrequency() const
 	{
 		switch (GetWeatherAmountCVar().GetInt())
@@ -102,18 +95,10 @@ class WeatherSpawner : Thinker
 		vector2 point = m_Triangulation.GetRandomPoint();
 
 		// Project the player's position forward to ensure particles fall into view.
-		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
-		double floorZ = GetSector().LowestFloorAt(players[consoleplayer].mo.Pos.xy);
-
-		double projectionTime = abs(ceilingZ - floorZ) / (abs(GetDefaultByType(m_WeatherType).Vel.z) * GetAdjustedRange() ** 0.4);
-
-		double adjustedProjectionLength = projectionTime * TICRATE;
-		double range = GetAdjustedRange() ** 2.0;
-
-		vector2 projectedPosition = players[consoleplayer].mo.Pos.xy
-			+ (players[consoleplayer].mo.Vel.xy * adjustedProjectionLength);
+		vector2 projectedPosition = ProjectPlayerPosition(abs(GetDefaultByType(m_WeatherType).Vel.z));
 
 		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
+		double range = m_Range ** 2.0;
 
 		// Cull outside range.
 		if (distance > range) return;
@@ -134,5 +119,20 @@ class WeatherSpawner : Thinker
 			Actor.Spawn(m_WeatherType, spawnPosition);
 		}
 		return;
+	}
+
+	protected vector2 ProjectPlayerPosition(double weatherVerticalSpeed)
+	{
+		Actor pawn = players[consoleplayer].mo;
+
+		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
+
+		// Might be inaccurate because of slopes, but there is no way to get the height at
+		// the projected position before projecting it.
+		double targetZ = pawn.Pos.z;
+
+		double projectionTime = abs(ceilingZ - targetZ) / (max(double.Epsilon, abs(weatherVerticalSpeed)) * m_Range) * TICRATE ** 2;
+
+		return pawn.Vel.xy * projectionTime + pawn.Pos.xy;
 	}
 }

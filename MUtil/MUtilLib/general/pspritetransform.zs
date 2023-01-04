@@ -106,15 +106,15 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 		Init(translation, rotation, scale);
 
 		m_InterpolatedTranslation = new("InterpolatedVector2");
-		m_InterpolatedTranslation.SetBaseValue(translation);
+		m_InterpolatedTranslation.m_Target = translation;
 		m_InterpolatedTranslation.m_SmoothTime = smoothTime;
 
 		m_InterpolatedRotation = new("InterpolatedDouble");
-		m_InterpolatedRotation.SetBaseValue(rotation);
+		m_InterpolatedRotation.m_Target = rotation;
 		m_InterpolatedRotation.m_SmoothTime = smoothTime;
 
 		m_InterpolatedScale = new("InterpolatedVector2");
-		m_InterpolatedScale.SetBaseValue(scale);
+		m_InterpolatedScale.m_Target = scale;
 		m_InterpolatedScale.m_SmoothTime = smoothTime;
 	}
 

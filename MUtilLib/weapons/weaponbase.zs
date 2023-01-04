@@ -198,17 +198,17 @@ class WeaponBase : DoomWeapon abstract
 		m_WeaponRecoilSwayer = WeaponSwayer.Create(
 			1.0 / m_RecoilResponseSpeed,
 			1.0 / m_RecoilReturnSpeed,
-			(m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
-			m_RecoilMaxRotation,
-			(m_RecoilMaxScaleX, m_RecoilMaxScaleY));
+			maxTranslation: (m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
+			maxRotation: m_RecoilMaxRotation,
+			maxScale: (m_RecoilMaxScaleX, m_RecoilMaxScaleY));
 		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
 		m_WeaponLookSwayer = WeaponSwayer.Create(
 			1.0 / m_LookSwayResponseSpeed,
 			1.0 / m_LookSwayReturnSpeed,
-			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
-			0.0,
-			(1.0, 1.0));
+			maxTranslation: (m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
+			maxRotation: 0.0,
+			maxScale: (1.0, 1.0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
 		m_BobAmplitude = new("InterpolatedDouble");

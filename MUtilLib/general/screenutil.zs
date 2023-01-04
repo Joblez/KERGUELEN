@@ -1,3 +1,4 @@
+// TODO: Document ScreenUtil.
 class ScreenUtil
 {
 	const ASPECT_SCALE_X = 1.2;

@@ -76,6 +76,23 @@ class Transform2D
 		return m_Scale;
 	}
 
+	vector2 GetGlobalTranslation() const
+	{
+		return (m_GlobalTransformMatrix[2][0], m_GlobalTransformMatrix[2][1]);
+	}
+
+	double GetGlobalRotation() const
+	{
+		return vectorangle((m_GlobalTransformMatrix[0][0], m_GlobalTransformMatrix[1][0]).Unit());
+	}
+
+	vector2 GetGlobalScale() const
+	{
+		double cr = cos(GetGlobalRotation());
+
+		return ((m_GlobalTransformMatrix[0][0] / cr, m_GlobalTransformMatrix[1][1] / cr));
+	}
+
 	// double GetGlobalScale() const
 	// {
 	// 	return m_Scale * m_Parent ? m_Parent.GetGlobalScale() : 1.0;

@@ -1,20 +1,33 @@
 class Math
 {
+	/** Returns 1.0 if the given number is positive, or -1.0 if it is negative. **/
 	static double Sign(double num)
 	{
 		return num >= 0.0 ? 1.0 : -1.0;
 	}
 
+	/**
+	 * Linearly interpolates between the given start and end values by the given step
+	 * value, where a step of 0.5 would yield the midpoint between the start and end
+	 * values.
+	**/
 	static double Lerp(double start, double end, double step)
 	{
 		return start + (end - start) * step;
 	}
 
-	static double Remap(double value, double aMin, double aMax, double bMin, double bMax)
+	/**
+	 * Returns a value that would lie at a position between the given bStart and bEnd values
+	 * that corresponds to the position of the given value between the aStart and aEnd values.
+	 * For instance, when aStart = 0.0, aEnd = 1.0, bStart = 2.0, and bEnd = 4.0, a value of
+	 * 0.5 would yield 3.0.
+	**/
+	static double Remap(double value, double aStart, double aEnd, double bStart, double bEnd)
 	{
-		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
+		return bStart + (value - aStart) * (bEnd - bStart) / (aEnd - aStart);
 	}
 
+	/** Modulo operation that wraps negative remainders back into the positive range. **/
 	static double PosMod(double a, double b)
 	{
 		b = abs(b);
@@ -59,7 +72,7 @@ class Math
 	{
 		if (delta == 0.0) return from; // Avoid division by zero.
 
-		smoothTime = max(0.001, smoothTime);
+		smoothTime = max(0.000001, smoothTime);
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1 / (1 + x + (0.48 * x * x) + (0.235 * x * x * x));
@@ -85,21 +98,34 @@ class Math
 
 class MathF
 {
+	/** Returns 1.0 if the given number is positive, or -1.0 if it is negative. **/
 	static float Sign(float num)
 	{
 		return num >= 0.0 ? 1.0 : -1.0;
 	}
 
+	/**
+	 * Linearly interpolates between the given start and end values by the given step
+	 * value, where a step of 0.5 would yield the midpoint between the start and end
+	 * values.
+	**/
 	static float Lerp(float start, float end, float step)
 	{
 		return start + (end - start) * step;
 	}
 
-	static float Remap(float value, float aMin, float aMax, float bMin, float bMax)
+	/**
+	 * Returns a value that would lie at a position between the given bStart and bEnd values
+	 * that corresponds to the position of the given value between the aStart and aEnd values.
+	 * For instance, when aStart = 0.0, aEnd = 1.0, bStart = 2.0, and bEnd = 4.0, a value of
+	 * 0.5 would yield 3.0.
+	**/
+	static float Remap(float value, float aStart, float aEnd, float bStart, float bEnd)
 	{
-		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
+		return bStart + (value - aStart) * (bEnd - bStart) / (aEnd - aStart);
 	}
 
+	/** Modulo operation that wraps negative remainders back into the positive range. **/
 	static float PosMod(float a, float b)
 	{
 		b = abs(b);
@@ -144,7 +170,7 @@ class MathF
 	{
 		if (delta == 0.0) return from; // Avoid division by zero.
 
-		smoothTime = max(0.001, smoothTime);
+		smoothTime = max(0.000001, smoothTime);
 		float omega = 2.0 / smoothTime;
 		float x = omega * delta;
 		float exponent = 1 / (1 + x + (0.48 * x * x) + (0.235 * x * x * x));
@@ -170,21 +196,34 @@ class MathF
 
 class MathI
 {
+	/** Returns 1 if the given number is positive, or -1 if it is negative. **/
 	static int Sign(int num)
 	{
 		return num >= 0 ? 1 : -1;
 	}
 
-	static int Lerp(int start, int end, int step)
+	/**
+	 * Linearly interpolates between the given start and end values by the given step
+	 * value, where a step of 0.5 would yield the midpoint between the start and end
+	 * values.
+	**/
+	static int Lerp(int start, int end, double step)
 	{
 		return start + (end - start) * step;
 	}
 
-	static int Remap(int value, int aMin, int aMax, int bMin, int bMax)
+	/**
+	 * Returns a value that would lie at a position between the given bStart and bEnd values
+	 * that corresponds to the position of the given value between the aStart and aEnd values.
+	 * For instance, when aStart = 0, aEnd = 2, bStart = 2, and bEnd = 4, a value of
+	 * 1 would yield 3.
+	**/
+	static int Remap(int value, int aStart, int aEnd, int bStart, int bEnd)
 	{
-		return bMin + (value - aMin) * (bMax - bMin) / (aMax - aMin);
+		return bStart + (value - aStart) * (bEnd - bStart) / (aEnd - aStart);
 	}
 
+	/** Modulo operation that wraps negative remainders back into the positive range. **/
 	static int PosMod(int a, int b)
 	{
 		b = abs(b);
@@ -248,7 +287,8 @@ class MathVec2
 
 	static vector2 Rotate(vector2 vector, double angle)
 	{
-		return (vector.x * cos(angle) - vector.y * sin(angle), vector.x * sin(angle) + vector.y * cos(angle));
+		return Actor.RotateVector(vector, angle);
+		// return (vector.x * cos(angle) - vector.y * sin(angle), vector.x * sin(angle) + vector.y * cos(angle));
 	}
 
 	static vector2 RotateAround(vector2 vector, vector2 pivot, double angle)
@@ -276,7 +316,7 @@ class MathVec2
 	{
 		if (delta == 0.0) return from; // Avoid division by zero.
 
-		smoothTime = max(0.001, smoothTime);
+		smoothTime = max(0.000001, smoothTime);
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1.0 / (1.0 + x + (0.48 * x * x) + (0.235 * x * x * x));
@@ -286,7 +326,6 @@ class MathVec2
 
 		double maxDifference = maxSpeed * smoothTime;
 		double maxDifferenceSquared = maxDifference * maxDifference;
-
 
 		double squareMagnitude = (xDifference * xDifference) + (yDifference * yDifference);
 
@@ -386,7 +425,7 @@ class MathVec3
 	{
 		if (delta == 0.0) return from; // Avoid division by zero.
 
-		smoothTime = max(0.001, smoothTime);
+		smoothTime = max(0.000001, smoothTime);
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1.0 / (1.0 + x + (0.48 * x * x) + (0.235 * x * x * x));

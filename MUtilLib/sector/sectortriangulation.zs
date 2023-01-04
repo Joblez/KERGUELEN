@@ -73,26 +73,31 @@ class SectorTriangulation
 		return triangulation;
 	}
 
+	/** Returns the SectorTriangle at the given index. **/
 	SectorTriangle GetTriangle(int index) const
 	{
 		return m_Triangles[index];
 	}
 
+	/** Returns the amount of triangles in this SectorTriangulation. **/
 	uint GetTriangleCount() const
 	{
 		return m_Triangles.Size();
 	}
 
+	/** Returns the sector that corresponds to this SectorTriangulation. **/
 	Sector GetSector() const
 	{
 		return m_Sector;
 	}
 
+	/** Returns the total area of this SectorTriangulation. **/
 	double GetArea() const
 	{
 		return m_Area;
 	}
 
+	/** Returns a random point within the area of this SectorTriangulation. **/
 	vector2 GetRandomPoint() const
 	{
 		SectorTriangle target = GetWeightedRandomTriangle();
@@ -395,6 +400,7 @@ class SectorShape
 	}
 }
 
+/** Represents a single triangle in a SectorTriangulation. **/
 class SectorTriangle
 {
 	private vector2[3] m_Points;
@@ -420,16 +426,19 @@ class SectorTriangle
 		return SectorTriangle.Create(a, b, c, sec);
 	}
 
+	/** Returns the point at the given index. **/
 	vector2 GetPoint(int index) const
 	{
 		return m_Points[index];
 	}
 
+	/** Returns the sector that corresponds to this SectorTriangle. **/
 	Sector GetSector() const
 	{
 		return m_Sector;
 	}
 
+	/** returns a random point within this SectorTriangle's area. **/
 	vector2 GetRandomPoint() const
 	{
 		double x = FRandom(0.0, 1.0);

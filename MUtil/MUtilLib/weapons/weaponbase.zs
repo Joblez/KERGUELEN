@@ -208,7 +208,7 @@ class WeaponBase : DoomWeapon abstract
 			1.0 / m_LookSwayReturnSpeed,
 			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
 			0.0,
-			(0.0, 0.0));
+			(1.0, 1.0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
 		m_BobAmplitude = new("InterpolatedDouble");
@@ -1164,7 +1164,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			clamp(m_InterpolatedScale.m_Target.x, -m_MaxScale.x, m_MaxScale.x),
 			clamp(m_InterpolatedScale.m_Target.y, -m_MaxScale.y, m_MaxScale.y));
 
-		Super.Update();
+		Super.Update(1.0 / TICRATE);
 
 		m_InterpolatedTranslation.m_Target = MathVec2.SmoothDamp(
 			m_InterpolatedTranslation.m_Target,

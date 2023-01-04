@@ -78,19 +78,19 @@ class Transform2D
 
 	vector2 GetGlobalTranslation() const
 	{
-		return (m_GlobalTransformMatrix[2][0], m_GlobalTransformMatrix[2][1]);
+		return (m_GlobalTransformMatrix.m_Values[2][0], m_GlobalTransformMatrix.m_Values[2][1]);
 	}
 
 	double GetGlobalRotation() const
 	{
-		return vectorangle((m_GlobalTransformMatrix[0][0], m_GlobalTransformMatrix[1][0]).Unit());
+		return vectorangle((m_GlobalTransformMatrix.m_Values[0][0], m_GlobalTransformMatrix.m_Values[1][0]).Unit());
 	}
 
 	vector2 GetGlobalScale() const
 	{
 		double cr = cos(GetGlobalRotation());
 
-		return ((m_GlobalTransformMatrix[0][0] / cr, m_GlobalTransformMatrix[1][1] / cr));
+		return ((m_GlobalTransformMatrix.m_Values[0][0] / cr, m_GlobalTransformMatrix.m_Values[1][1] / cr));
 	}
 
 	// double GetGlobalScale() const

@@ -42,7 +42,7 @@ class PSpriteTransform
 
 		m_Rotation = new("DoubleModifier");
 		m_Rotation.SetType(MD_Additive);
-		m_Rotation.SetValue(scale);
+		m_Rotation.SetValue(rotation);
 
 		m_Scale = new("Vector2Modifier");
 		m_Scale.SetType(MD_Multiplicative);
@@ -118,15 +118,13 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 	{
 		return string.Format(
 			"T: %s"..ToStr.Vec2(m_InterpolatedTranslation.GetValue())
-		.."\nR: %s"..ToStr.Double(m_InterpolatedScale.GetValue())
+		.."\nR: %s"..ToStr.Double(m_InterpolatedRotation.GetValue())
 		.."\nS: %s"..ToStr.Vec2(m_InterpolatedScale.GetValue()));
 	}
 
 	/** Advances the interpolation of this InterpolatedPSpriteTransform by the given time delta. **/
 	virtual void Update(double delta = 1.0 / 35.0)
 	{
-		if (!m_Initialized) return;
-
 		m_InterpolatedTranslation.Update(delta);
 		m_InterpolatedRotation.Update(delta);
 		m_InterpolatedScale.Update(delta);

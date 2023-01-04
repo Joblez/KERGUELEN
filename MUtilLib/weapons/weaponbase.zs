@@ -197,8 +197,10 @@ class WeaponBase : DoomWeapon abstract
 		if (m_Initialized) return;
 
 		m_PSpritePosition = new("ModifiableVector2");
+		m_PSpriteRotaion = new("ModifiableDouble");
 		m_PSpriteScale = new("ModifiableVector2");
 		m_PSpritePosition.SetBaseValue((0.0, WEAPONBOTTOM));
+		m_PSpriteRotation.SetBaseValue(0.0);
 		m_PSpriteScale.SetBaseValue((1.0, 1.0));
 
 		m_WeaponRecoilSwayer = WeaponSwayer.Create(

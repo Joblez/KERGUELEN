@@ -6,6 +6,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	const SPAWN_OFFSET_DEPTH_FACTOR = 0.00805528;
 
 	ModifiableVector2 m_PSpritePosition;
+	ModifiableDouble m_PSpriteRotation;
 	ModifiableVector2 m_PSpriteScale;
 
 	meta class<HUDExtension> m_HUDExtensionType;
@@ -70,19 +71,20 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	override void BeginPlay()
 	{
 		m_PSpritePosition = new("ModifiableVector2");
+		m_PSpriteRotation = new("ModifiableDouble");
 		m_PSpriteScale = new("ModifiableVector2");
 		m_PSpritePosition.SetBaseValue((0.0, WEAPONBOTTOM));
+		m_PSpriteRotation.SetBaseValue(0.0);
 		m_PSpriteScale.SetBaseValue((1.0, 1.0));
 
-		m_WeaponLookSwayer = new("WeaponSwayer");
-		m_WeaponLookSwayer.SwayerInit(
+		m_WeaponLookSwayer = WeaponSwayer.Create(
 			1.0 / m_LookSwayResponseSpeed,
 			1.0 / m_LookSwayReturnSpeed,
-			'LookSwayTranslation',
-			'LookSwayScale',
-			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
-			(0, 0));
-		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
+			maxTranslation: (m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
+			maxRotation: 0.0,
+			maxScale: (1.0, 1.0));
+		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
+		m_WeaponLookSwayer.ForceSet((0.0, 0.0), 0.0, (1.0, 1.0));
 
 		if (m_HUDExtensionType)
 		{

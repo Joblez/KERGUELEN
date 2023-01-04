@@ -1135,7 +1135,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		return swayer;
 	}
 
-	override void SwayerInit(
+	void SwayerInit(
 		double smoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,

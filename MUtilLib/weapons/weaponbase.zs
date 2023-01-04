@@ -1179,6 +1179,14 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			double.Infinity,
 			1.0 / TICRATE);
 
+		m_InterpolatedRotation.m_Target = Math.SmoothDamp(
+			m_InterpolatedRotation.m_Target,
+			(0.0, 0.0),
+			m_TargetRotationSpeed,
+			m_TargetSmoothTime,
+			double.Infinity,
+			1.0 / TICRATE);
+
 		m_InterpolatedScale.m_Target = MathVec2.SmoothDamp(
 			m_InterpolatedScale.m_Target,
 			(0.0, 0.0),
@@ -1188,18 +1196,21 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			1.0 / TICRATE);
 
 		m_Translation.SetValue(m_InterpolatedTranslation.GetValue());
+		m_Rotation.SetValue(m_InterpolatedRotation.GetValue());
 		m_Scale.SetValue(m_InterpolatedScale.GetValue());
 	}
 
-	void AddForce(vector2 xyForce, vector2 scaleForce = (0.0, 0.0))
+	void AddForce(vector2 translationForce, double rotationForce = 0.0, vector2 scaleForce = (1.0, 1.0))
 	{
-		m_InterpolatedTranslation.m_Target += xyForce;
+		m_InterpolatedTranslation.m_Target += translationForce;
+		m_InterpolatedRotation.m_Target += rotationForce;
 		m_InterpolatedScale.m_Target += scaleForce;
 	}
 
-	void SetForce(vector2 xyForce, vector2 scaleForce = (0.0, 0.0))
+	void SetForce(vector2 translationForce, double rotationForce = 0.0, vector2 scaleForce = (1.0, 1.0))
 	{
-		m_InterpolatedTranslation.m_Target = xyForce;
+		m_InterpolatedTranslation.m_Target = translationForce;
+		m_InterpolatedRotation.m_Target = rotationForce;
 		m_InterpolatedScale.m_Target = scaleForce;
 	}
 }

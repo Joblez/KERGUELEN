@@ -1136,11 +1136,11 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		vector2 maxScale = (double.Infinity, double.Infinity))
 	{
 		WeaponSwayer swayer = new("WeaponSwayer");
-		swayer.Init(smoothTime, translationName, scaleName);
+		swayer.SwayerInit(smoothTime, translationName, scaleName);
 		return swayer;
 	}
 
-	override void Init(
+	override void SwayerInit(
 		double smoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,
@@ -1149,7 +1149,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		double maxRotation = double.Infinity,
 		vector2 maxScale = (double.Infinity, double.Infinity))
 	{
-		Super.Init(smoothTime, translation, rotation, scale);
+		Init(smoothTime, translation, rotation, scale);
 
 		m_TargetSmoothTime = targetSmoothTime;
 		m_MaxTranslation = maxTranslation;

@@ -86,11 +86,11 @@ class ModifiableFloat
 
 		if (m_Modifiers.Size() > 0)
 		{
-			result.AppendFormat("\nModifiers:");
+			result.AppendFormat("\nModifiers:\n");
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
+				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -224,11 +224,11 @@ class ModifiableDouble
 
 		if (m_Modifiers.Size() > 0)
 		{
-			result.AppendFormat("\nModifiers:");
+			result.AppendFormat("\nModifiers:\n");
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
+				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -381,11 +381,11 @@ class ModifiableVector2
 
 		if (m_Modifiers.Size() > 0)
 		{
-			result.AppendFormat("\nModifiers:");
+			result.AppendFormat("\nModifiers:\n");
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
+				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -585,11 +585,11 @@ class ModifiableVector3
 
 		if (m_Modifiers.Size() > 0)
 		{
-			result.AppendFormat("\nModifiers:");
+			result.AppendFormat("\nModifiers:\n");
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
+				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
 			}
 		}
 

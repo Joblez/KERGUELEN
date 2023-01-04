@@ -97,7 +97,7 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 		return tr;
 	}
 
-	override void InterpolatedInit(
+	void InterpolatedInit(
 		double smoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,

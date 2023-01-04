@@ -1,5 +1,3 @@
-// TODO: Document modifiables.
-
 /**
  * The types of modification a modifier can apply to a modifiable value.
  *
@@ -20,8 +18,8 @@ class ModifierType
 	{
 		switch (type)
 		{
-			case MD_Additive: return "MD_Additive";
-			case MD_Multiplicative: return "MD_Multiplicative";
+			case MD_Additive: return "Additive";
+			case MD_Multiplicative: return "Multiplicative";
 			default:
 				ThrowAbortException("Invalid EModifierType.");
 				return ""; // Only here so the compiler stops complaining.
@@ -32,9 +30,6 @@ class ModifierType
 /** Represents a value that alters the value of a ModifiableFloat. **/
 class FloatModifier
 {
-	/** This modifier's name. **/
-	name m_Name;
-
 	/** The ModifiableFloat this modifier is applied to. **/
 	ModifiableFloat m_Target;
 
@@ -48,7 +43,7 @@ class FloatModifier
 	float GetValue() const { return m_Value; }
 
 	/** Returns a string representation of this modifier. **/
-	string ToString() const { return string.Format( "Name: %s\nType: %s\nValue: %f", m_Name, ModifierType.ToString(m_Type), m_Value); }
+	string ToString() const { return string.Format("Type: %s, Value: %f", ModifierType.ToString(m_Type), m_Value); }
 
 	/** Sets the EModifierType of this modifier. **/
 	void SetType(EModifierType newType)
@@ -95,7 +90,7 @@ class ModifiableFloat
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
 			}
 		}
 
@@ -149,26 +144,6 @@ class ModifiableFloat
 		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
-	/** Removes the FloatModifier with the given name from this ModifiableFloat, if found. **/
-	void RemoveModifierByName(name inName)
-	{
-		bool modifierFound = false;
-		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
-		{
-			if (m_Modifiers[i].m_Name == inName)
-			{
-				m_Modifiers.Delete(i);
-				m_IsDirty = true;
-				modifierFound = true;
-			}
-		}
-
-		if (!modifierFound)
-		{
-			Console.Printf("Modifiable does not contain a modifier named %s.", inName);
-		}
-	}
-
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
@@ -190,9 +165,6 @@ class ModifiableFloat
 /** Represents a value that alters the value of a ModifiableDouble. **/
 class DoubleModifier
 {
-	/** This modifier's name. **/
-	name m_Name;
-
 	/** The ModifiableDouble this modifier is applied to. **/
 	ModifiableDouble m_Target;
 	
@@ -208,8 +180,7 @@ class DoubleModifier
 	/** Returns a string representation of this modifier. **/
 	string ToString() const
 	{
-		return string.Format(
-			"Name: %s\nType: %s\nValue: %f", m_Name, ModifierType.ToString(m_Type), m_Value);
+		return string.Format("Type: %s, Value: %f", ModifierType.ToString(m_Type), m_Value);
 	}
 
 	/** Sets the EModifierType of this modifier. **/
@@ -257,7 +228,7 @@ class ModifiableDouble
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
 			}
 		}
 
@@ -311,23 +282,6 @@ class ModifiableDouble
 		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
-	/** Removes the DoubleModifier with the given name from this ModifiableDouble, if found. **/
-	void RemoveModifierByName(name inName)
-	{
-		bool modifierFound = false;
-		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
-		{
-			if (m_Modifiers[i].m_Name == inName)
-			{
-				m_Modifiers.Delete(i);
-				m_IsDirty = true;
-				modifierFound = true;
-			}
-		}
-
-		if (!modifierFound) Console.Printf("Modifiable does not contain a modifier named %s.", inName);
-	}
-
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
@@ -349,9 +303,6 @@ class ModifiableDouble
 /** Represents a value that alters the value of a ModifiableVector2. **/
 class Vector2Modifier
 {
-	/** This modifier's name. **/
-	name m_Name;
-
 	/** The ModifiableVector2 this modifier is applied to. **/
 	ModifiableVector2 m_Target;
 
@@ -367,8 +318,7 @@ class Vector2Modifier
 	/** Returns a string representation of this modifier. **/
 	string ToString() const
 	{
-		return string.Format(
-			"Name: %s\nType: %s\nValue: ", m_Name, ModifierType.ToString(m_Type))..ToStr.Vec2(m_Value);
+		return string.Format("Type: "..ModifierType.ToString(m_Type))..", Value: "..ToStr.Vec2(m_Value);
 	}
 
 	/** Sets the EModifierType of this modifier. **/
@@ -435,7 +385,7 @@ class ModifiableVector2
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
 			}
 		}
 
@@ -523,23 +473,6 @@ class ModifiableVector2
 		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
 	}
 
-	/** Removes the Vector2Modifier with the given name from this ModifiableVector2, if found. **/
-	void RemoveModifierByName(name inName)
-	{
-		bool modifierFound = false;
-		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
-		{
-			if (m_Modifiers[i].m_Name == inName)
-			{
-				m_Modifiers.Delete(i);
-				m_IsDirty = true;
-				modifierFound = true;
-			}
-		}
-
-		if (!modifierFound) Console.Printf("Modifiable does not contain a modifier named %s.", inName);
-	}
-
 	private void ApplyModifiers()
 	{
 		m_FinalValue = m_BaseValue;
@@ -563,9 +496,6 @@ class ModifiableVector2
 /** Represents a value that alters the value of a ModifiableVector3. **/
 class Vector3Modifier
 {
-	/** This modifier's name. **/
-	name m_Name;
-
 	/** The ModifiableVector3 this modifier is applied to. **/
 	ModifiableVector3 m_Target;
 
@@ -581,8 +511,7 @@ class Vector3Modifier
 	/** Returns a string representation of this modifier. **/
 	string ToString() const
 	{
-		return string.Format(
-			"Name: %s\nType: %s\nValue: ", m_Name, ModifierType.ToString(m_Type))..ToStr.Vec3(m_Value);
+		return string.Format("Type: "..ModifierType.ToString(m_Type))..", Value: "..ToStr.Vec3(m_Value);
 	}
 
 	/** Sets the EModifierType of this modifier. **/
@@ -660,7 +589,7 @@ class ModifiableVector3
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat("\t%s", m_Modifiers[i].m_Name);
+				result.AppendFormat(ToStr.Int(i + 1)..":\t", m_Modifiers[i].ToString());
 			}
 		}
 
@@ -763,23 +692,6 @@ class ModifiableVector3
 		uint index = m_Modifiers.Find(modifier);
 
 		if (index != m_Modifiers.Size()) m_Modifiers.Delete(index);
-	}
-
-	/** Removes the Vector3Modifier with the given name from this ModifiableVector3, if found. **/
-	void RemoveModifierByName(name inName)
-	{
-		bool modifierFound = false;
-		for (int i = m_Modifiers.Size() - 1; i >= 0; --i)
-		{
-			if (m_Modifiers[i].m_Name == inName)
-			{
-				m_Modifiers.Delete(i);
-				m_IsDirty = true;
-				modifierFound = true;
-			}
-		}
-
-		if (!modifierFound) Console.Printf("Modifiable does not contain a modifier named %s.", inName);
 	}
 
 	private void ApplyModifiers()

@@ -1,10 +1,8 @@
 class SectorDataRegistry : EventHandler
 {
 	private array<SectorTriangulation> m_Triangulations;
-	// TODO: Refactor into dedicated data class.
-	// TODO: Add bounding box cache.
-	// TODO: Add centroid cache.
 
+	/** Returns a SectorTriangulation for a given sector. **/
 	static SectorTriangulation GetTriangulation(Sector sec)
 	{
 		SectorDataRegistry instance = GetInstance();

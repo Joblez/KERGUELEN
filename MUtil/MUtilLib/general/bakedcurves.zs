@@ -5,6 +5,29 @@ class CurveValues
 
 // TODO: Document BakedCurve.
 // NOTE: BakedCurves are effectively LUTs describing an approximation of a function of time with a precision of 1 / TICRATE.
+/*
+-- CURVESET.txt --
+
+ExampleCurve
+{
+	0.000000
+	1.366310
+	2.657417
+}
+
+ExampleCurve2
+{
+	0.000000, 0.000000
+	1.366310, 1.334942
+	2.657417, 2.463233
+	3.848346, 3.288257
+	4.914121, 3.713391
+	5.829765, 3.640670
+	6.570305, 3.070058
+	7.110764, 2.130000
+	7.426166, 0.954839
+}
+*/
 class BakedCurve
 {
 	private name m_Name;

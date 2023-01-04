@@ -23,6 +23,7 @@ class WeaponBase : DoomWeapon abstract
 	property MachineType: m_StateMachineType;
 
 	ModifiableVector2 m_PSpritePosition;
+	ModifiableDouble m_PSpriteRotation;
 	ModifiableVector2 m_PSpriteScale;
 
 	ButtonEventQueue m_InputQueue;
@@ -45,12 +46,19 @@ class WeaponBase : DoomWeapon abstract
 	property ForcedVerticalAutoAim: m_ForcedVerticalAutoAim;
 
 	//=================== Recoil Parameters ==================//
+	// TODO: Merge XY parameters into vectors once vector properties are supported.
 
 	double m_RecoilMaxTranslationX;
 	property MaxRecoilTranslationX: m_RecoilMaxTranslationX;
 
 	double m_RecoilMaxTranslationY;
 	property MaxRecoilTranslationY: m_RecoilMaxTranslationY;
+
+	double m_RecoilMaxRotationX;
+	property MaxRecoilRotationX: m_RecoilMaxRotationX;
+
+	double m_RecoilMaxRotationY;
+	property MaxRecoilRotationY: m_RecoilMaxRotationY;
 
 	double m_RecoilMaxScaleX;
 	property MaxRecoilScaleX: m_RecoilMaxScaleX;
@@ -132,7 +140,7 @@ class WeaponBase : DoomWeapon abstract
 		WeaponBase.Range 8192.0;
 		WeaponBase.TicsPerAttack 8;
 
-		// Defaults approximate vanilla behavior.
+		// Defaults approximate native behavior.
 		WeaponBase.ForcedHorizontalAutoAim 0.0;
 		WeaponBase.ForcedVerticalAutoAim -1.0;
 
@@ -140,8 +148,10 @@ class WeaponBase : DoomWeapon abstract
 		WeaponBase.RecoilRigidity 12.0;
 		WeaponBase.MaxRecoilTranslationX 50.0;
 		WeaponBase.MaxRecoilTranslationY 50.0;
-		WeaponBase.MaxRecoilScaleX 0.75;
-		WeaponBase.MaxRecoilScaleY 0.75;
+		WeaponBase.MaxRecoilRotationX 0.0;
+		WeaponBase.MaxRecoilRotationY 0.0;
+		WeaponBase.MaxRecoilScaleY 1.5;
+		WeaponBase.MaxRecoilScaleY 1.5;
 
 		WeaponBase.LookSwayResponse 20.0;
 		WeaponBase.LookSwayRigidity 8.0;
@@ -191,25 +201,21 @@ class WeaponBase : DoomWeapon abstract
 		m_PSpritePosition.SetBaseValue((0.0, WEAPONBOTTOM));
 		m_PSpriteScale.SetBaseValue((1.0, 1.0));
 
-		m_WeaponRecoilSwayer = new("WeaponSwayer");
-		m_WeaponRecoilSwayer.SwayerInit(
+		m_WeaponRecoilSwayer = WeaponSwayer.Create(
 			1.0 / m_RecoilResponseSpeed,
 			1.0 / m_RecoilReturnSpeed,
-			'RecoilTranslation',
-			'RecoilScale',
 			(m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
+			(m_RecoilMaxRotationX, m_RecoilMaxRotationY)
 			(m_RecoilMaxScaleX, m_RecoilMaxScaleY));
-		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
+		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
-		m_WeaponLookSwayer = new("WeaponSwayer");
-		m_WeaponLookSwayer.SwayerInit(
+		m_WeaponLookSwayer = WeaponSwayer.Create(
 			1.0 / m_LookSwayResponseSpeed,
 			1.0 / m_LookSwayReturnSpeed,
-			'LookSwayTranslation',
-			'LookSwayScale',
 			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
-			(0, 0));
-		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteScale);
+			(0.0, 0.0),
+			(0.0, 0.0));
+		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
 		m_BobAmplitude = new("InterpolatedDouble");
 		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
@@ -217,8 +223,8 @@ class WeaponBase : DoomWeapon abstract
 		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
 
 		m_WeaponBobber = new("InterpolatedPSpriteTransform");
-		m_WeaponBobber.InterpolatedInit(1.0 / TICRATE, 'BobTranslation', 'BobScale');
-		m_WeaponBobber.AddTransform(m_PSpritePosition, m_PSpriteScale);
+		m_WeaponBobber.InterpolatedInit(1.0 / TICRATE);
+		m_WeaponBobber.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
 		if (m_BobAnimName != 'None') m_BobAnim = BakedCurve.LoadCurve(m_BobAnimName);
 
@@ -1105,26 +1111,44 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 	private WeaponBase m_Weapon;
 
 	vector2 m_MaxTranslation;
+	double m_MaxRotation;
 	vector2 m_MaxScale;
 
 	private double m_TargetSmoothTime;
 	private vector2 m_TargetTranslationSpeed;
+	private double m_TargetRotationSpeed;
 	private vector2 m_TargetScaleSpeed;
 
 	// Real constructors would come in handy...
-	void SwayerInit(double smoothTime, double targetSmoothTime, name translationName, name scaleName,
-		vector2 maxRecoilTranslation = (double.Infinity, double.Infinity), vector2 maxRecoilScale = (double.Infinity, double.Infinity))
+	static WeaponSwayer Create(
+		double smoothTime,
+		vector2 translation = (0.0, 0.0),
+		double rotation = 0.0,
+		vector2 scale = (1.0, 1.0)
+		vector2 maxTranslation = (double.Infinity, double.Infinity),
+		double maxRotation = double.Infinity,
+		vector2 maxScale = (double.Infinity, double.Infinity))
 	{
-		if (m_Initialized) return;
+		WeaponSwayer swayer = new("WeaponSwayer");
+		swayer.Init(smoothTime, translationName, scaleName);
+		return swayer;
+	}
 
-		InterpolatedInit(smoothTime, translationName, scaleName);
-
-		m_Initialized = false;
+	override void Init(
+		double smoothTime,
+		vector2 translation = (0.0, 0.0),
+		double rotation = 0.0,
+		vector2 scale = (1.0, 1.0)
+		vector2 maxTranslation = (double.Infinity, double.Infinity),
+		double maxRotation = double.Infinity,
+		vector2 maxScale = (double.Infinity, double.Infinity))
+	{
+		Super.Init(smoothTime, translation, rotation, scale);
 
 		m_TargetSmoothTime = targetSmoothTime;
-		m_MaxTranslation = maxRecoilTranslation;
-		m_MaxScale = maxRecoilScale;
-		m_Initialized = true;
+		m_MaxTranslation = maxTranslation;
+		m_MaxRotation = maxRotation;
+		m_MaxScale = maxScale;
 	}
 
 	override void Update()

@@ -1,6 +1,7 @@
 /**
  * Represents a float that interpolates to a target value over time.
 **/
+// Why does the compiler hate this one so much?
 // class InterpolatedFloat
 // {
 // 	/** The end value of this InterpolatedFloat. **/

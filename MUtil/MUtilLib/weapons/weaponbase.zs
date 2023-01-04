@@ -117,8 +117,6 @@ class WeaponBase : DoomWeapon abstract
 	protected InterpolatedDouble m_BobAmplitude;
 	protected InterpolatedDouble m_BobPlaybackSpeed;
 
-	private bool m_Initialized;
-
 	private int m_TicsSinceLastAttack;
 
 	private HUDExtension m_HUDExtension;
@@ -194,10 +192,8 @@ class WeaponBase : DoomWeapon abstract
 
 	override void BeginPlay()
 	{
-		if (m_Initialized) return;
-
 		m_PSpritePosition = new("ModifiableVector2");
-		m_PSpriteRotaion = new("ModifiableDouble");
+		m_PSpriteRotation = new("ModifiableDouble");
 		m_PSpriteScale = new("ModifiableVector2");
 		m_PSpritePosition.SetBaseValue((0.0, WEAPONBOTTOM));
 		m_PSpriteRotation.SetBaseValue(0.0);
@@ -240,8 +236,6 @@ class WeaponBase : DoomWeapon abstract
 			m_HUDExtension = HUDExtension(new(m_HUDExtensionType));
 			m_HUDExtension.Init(self);
 		}
-
-		m_Initialized = true;
 	}
 
 	override void Travelled()
@@ -1123,6 +1117,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 
 	static WeaponSwayer Create(
 		double smoothTime,
+		double targetSmoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,
 		vector2 scale = (1.0, 1.0),
@@ -1131,12 +1126,21 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		vector2 maxScale = (double.Infinity, double.Infinity))
 	{
 		WeaponSwayer swayer = new("WeaponSwayer");
-		swayer.SwayerInit(smoothTime, translationName, scaleName);
+		swayer.SwayerInit(
+			smoothTime,
+			targetSmoothTime,
+			translation,
+			rotation,
+			scale,
+			maxTranslation,
+			maxRotation,
+			maxScale);
 		return swayer;
 	}
 
 	void SwayerInit(
 		double smoothTime,
+		double targetSmoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,
 		vector2 scale = (1.0, 1.0),
@@ -1154,8 +1158,6 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 
 	override void Update()
 	{
-		if (!m_Initialized) return;
-
 		m_InterpolatedTranslation.m_Target = (
 			clamp(m_InterpolatedTranslation.m_Target.x, -m_MaxTranslation.x, m_MaxTranslation.x),
 			clamp(m_InterpolatedTranslation.m_Target.y, -m_MaxTranslation.y, m_MaxTranslation.y));

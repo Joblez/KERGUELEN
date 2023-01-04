@@ -90,7 +90,7 @@ class ModifiableFloat
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
+				result.AppendFormat(ToStr.Int(i + 1)..":    "..m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -228,7 +228,7 @@ class ModifiableDouble
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
+				result.AppendFormat(ToStr.Int(i + 1)..":    "..m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -385,7 +385,7 @@ class ModifiableVector2
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
+				result.AppendFormat(ToStr.Int(i + 1)..":    "..m_Modifiers[i].ToString().."\n");
 			}
 		}
 
@@ -589,10 +589,9 @@ class ModifiableVector3
 
 			for (int i = 0; i < m_Modifiers.Size(); ++i)
 			{
-				result.AppendFormat(ToStr.Int(i + 1)..":    ", m_Modifiers[i].ToString().."\n");
+				result.AppendFormat(ToStr.Int(i + 1)..":    "..m_Modifiers[i].ToString().."\n");
 			}
 		}
-
 		return result;
 	}
 

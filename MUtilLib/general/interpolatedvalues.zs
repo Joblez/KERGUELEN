@@ -206,17 +206,10 @@ class InterpolatedVector2
 	}
 
 	/** Resets the end value of this InterpolatedVector2 to zero. **/
-	void Reset()
-	{
-		m_Target = (0, 0);
-	}
+	void Reset() { m_Target = (0.0, 0.0); }
 
 	/** Resets the value of this InterpolatedVector2 immediately. **/
-	void HardReset()
-	{
-		m_Target = (0, 0);
-		m_Current = (0, 0);
-	}
+	void HardReset() { ForceSet((0.0, 0.0)); }
 }
 
 /**
@@ -291,15 +284,8 @@ class InterpolatedVector3
 	}
 
 	/** Resets the end value of this InterpolatedVector3 to zero. **/
-	void Reset()
-	{
-		m_Target = (0, 0, 0);
-	}
+	void Reset() { m_Target = (0.0, 0.0, 0.0); }
 
 	/** Resets the value of this InterpolatedVector3 immediately. **/
-	void HardReset()
-	{
-		m_Target = (0, 0, 0);
-		m_Current = (0, 0, 0);
-	}
+	void HardReset() { ForceSet((0.0, 0.0, 0.0)); }
 }

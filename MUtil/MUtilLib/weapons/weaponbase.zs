@@ -54,11 +54,8 @@ class WeaponBase : DoomWeapon abstract
 	double m_RecoilMaxTranslationY;
 	property MaxRecoilTranslationY: m_RecoilMaxTranslationY;
 
-	double m_RecoilMaxRotationX;
-	property MaxRecoilRotationX: m_RecoilMaxRotationX;
-
-	double m_RecoilMaxRotationY;
-	property MaxRecoilRotationY: m_RecoilMaxRotationY;
+	double m_RecoilMaxRotation;
+	property MaxRecoilRotation: m_RecoilMaxRotation;
 
 	double m_RecoilMaxScaleX;
 	property MaxRecoilScaleX: m_RecoilMaxScaleX;
@@ -146,8 +143,7 @@ class WeaponBase : DoomWeapon abstract
 		WeaponBase.RecoilRigidity 12.0;
 		WeaponBase.MaxRecoilTranslationX 50.0;
 		WeaponBase.MaxRecoilTranslationY 50.0;
-		WeaponBase.MaxRecoilRotationX 0.0;
-		WeaponBase.MaxRecoilRotationY 0.0;
+		WeaponBase.MaxRecoilRotation 0.0;
 		WeaponBase.MaxRecoilScaleY 1.5;
 		WeaponBase.MaxRecoilScaleY 1.5;
 
@@ -203,7 +199,7 @@ class WeaponBase : DoomWeapon abstract
 			1.0 / m_RecoilResponseSpeed,
 			1.0 / m_RecoilReturnSpeed,
 			(m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
-			(m_RecoilMaxRotationX, m_RecoilMaxRotationY),
+			m_RecoilMaxRotation,
 			(m_RecoilMaxScaleX, m_RecoilMaxScaleY));
 		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
@@ -211,7 +207,7 @@ class WeaponBase : DoomWeapon abstract
 			1.0 / m_LookSwayResponseSpeed,
 			1.0 / m_LookSwayReturnSpeed,
 			(m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
-			(0.0, 0.0),
+			0.0,
 			(0.0, 0.0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 
@@ -1161,6 +1157,8 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		m_InterpolatedTranslation.m_Target = (
 			clamp(m_InterpolatedTranslation.m_Target.x, -m_MaxTranslation.x, m_MaxTranslation.x),
 			clamp(m_InterpolatedTranslation.m_Target.y, -m_MaxTranslation.y, m_MaxTranslation.y));
+		
+		m_InterpolatedRotation.m_Target = clamp(m_InterpolatedRotation.m_Target, -m_MaxRotation, m_MaxRotation);
 
 		m_InterpolatedScale.m_Target = (
 			clamp(m_InterpolatedScale.m_Target.x, -m_MaxScale.x, m_MaxScale.x),

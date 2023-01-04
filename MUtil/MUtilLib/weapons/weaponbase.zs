@@ -485,9 +485,9 @@ class WeaponBase : DoomWeapon abstract
 		m_PSpritePosition.SetBaseValue((x, y));
 	}
 
-	void WeaponRecoil(vector2 offsetForce, vector2 scaleForce = (0.0, 0.0))
+	void WeaponRecoil(vector2 offsetForce, double spinForce = 0.0, vector2 scaleForce = (1.0, 1.0))
 	{
-		m_WeaponRecoilSwayer.AddForce(offsetForce, scaleForce);
+		m_WeaponRecoilSwayer.AddForce(offsetForce, spinForce, scaleForce);
 	}
 
 	void HardResetSway()

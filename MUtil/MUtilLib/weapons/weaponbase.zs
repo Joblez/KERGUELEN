@@ -596,10 +596,10 @@ class WeaponBase : DoomWeapon abstract
 		WeaponBase(invoker).WeaponReadyNoFire();
 	}
 
-	action void A_WeaponRecoil(vector2 offsetForce, vector2 scaleForce = (0.0, 0.0))
+	action void A_WeaponRecoil(vector2 offsetForce, double spinForce = 0.0, vector2 scaleForce = (1.0, 1.0))
 	{
 		let weapon = WeaponBase(invoker);
-		weapon.WeaponRecoil(offsetForce, scaleForce);
+		weapon.WeaponRecoil(offsetForce, spinForce, scaleForce);
 	}
 
 	action void A_SpawnEffect(
@@ -1164,7 +1164,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			clamp(m_InterpolatedScale.m_Target.x, -m_MaxScale.x, m_MaxScale.x),
 			clamp(m_InterpolatedScale.m_Target.y, -m_MaxScale.y, m_MaxScale.y));
 
-		Super.Update(1.0 / TICRATE);
+		Super.Update();
 
 		m_InterpolatedTranslation.m_Target = MathVec2.SmoothDamp(
 			m_InterpolatedTranslation.m_Target,
@@ -1176,7 +1176,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 
 		m_InterpolatedRotation.m_Target = Math.SmoothDamp(
 			m_InterpolatedRotation.m_Target,
-			(0.0, 0.0),
+			0.0,
 			m_TargetRotationSpeed,
 			m_TargetSmoothTime,
 			double.Infinity,

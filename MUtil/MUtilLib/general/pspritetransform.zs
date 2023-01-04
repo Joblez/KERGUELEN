@@ -93,17 +93,17 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 		vector2 scale = (1.0, 1.0))
 	{
 		InterpolatedPSpriteTransform tr = new("InterpolatedPSpriteTransform");
-		tr.Init(smoothTime, translation, rotation, scale);
+		tr.InterpolatedInit(smoothTime, translation, rotation, scale);
 		return tr;
 	}
 
-	override void Init(
+	override void InterpolatedInit(
 		double smoothTime,
 		vector2 translation = (0.0, 0.0),
 		double rotation = 0.0,
 		vector2 scale = (1.0, 1.0))
 	{
-		Super.Init(translation, rotation, scale);
+		Init(translation, rotation, scale);
 
 		m_InterpolatedTranslation = new("InterpolatedVector2");
 		m_InterpolatedTranslation.m_SmoothTime = smoothTime;

@@ -164,6 +164,18 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 		m_InterpolatedScale.m_Target = target;
 	}
 
+	/**
+	 * Forces the values of this InterpolatedPSpriteTransform to be set to the given value immediately.
+	 *
+	 * NOTE: This is an advanced use case.
+	**/
+	void ForceSet(vector2 translation, double rotation, vector2 scale)
+	{
+		m_InterpolatedTranslation.ForceSet(translation);
+		m_InterpolatedRotation.ForceSet(rotation);
+		m_InterpolatedScale.ForceSet(scale);
+	}
+
 	/** Resets the value of this InterpolatedPSpriteTransform's fields. **/
 	void Reset()
 	{

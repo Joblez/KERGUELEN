@@ -207,7 +207,7 @@ class WeaponBase : DoomWeapon abstract
 			1.0 / m_RecoilResponseSpeed,
 			1.0 / m_RecoilReturnSpeed,
 			(m_RecoilMaxTranslationX, m_RecoilMaxTranslationY),
-			(m_RecoilMaxRotationX, m_RecoilMaxRotationY)
+			(m_RecoilMaxRotationX, m_RecoilMaxRotationY),
 			(m_RecoilMaxScaleX, m_RecoilMaxScaleY));
 		m_WeaponRecoilSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 

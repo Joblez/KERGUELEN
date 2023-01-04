@@ -118,7 +118,7 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 	{
 		return string.Format(
 			"T: %s"..ToStr.Vec2(m_InterpolatedTranslation.GetValue())
-		.."\nR: %s"..ToStr.Double(m_InterpolatedScale.GetValue());
+		.."\nR: %s"..ToStr.Double(m_InterpolatedScale.GetValue())
 		.."\nS: %s"..ToStr.Vec2(m_InterpolatedScale.GetValue()));
 	}
 

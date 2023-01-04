@@ -1149,7 +1149,7 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		double maxRotation = double.Infinity,
 		vector2 maxScale = (double.Infinity, double.Infinity))
 	{
-		Init(smoothTime, translation, rotation, scale);
+		InterpolatedInit(smoothTime, translation, rotation, scale);
 
 		m_TargetSmoothTime = targetSmoothTime;
 		m_MaxTranslation = maxTranslation;

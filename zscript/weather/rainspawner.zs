@@ -174,7 +174,7 @@ class RainSpawner : WeatherParticleSpawner
 		if (setting == 0) return 0.0;
 
 		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
-		return 86 * setting + 256 * Math.Remap(players[consoleplayer].FOV, 10, 120, 12.0, 1.0);
+		return 256 + 86 * setting * Math.Remap(players[consoleplayer].FOV, 10, 120, 12.0, 1.0);
 	}
 	
 	CVar GetSplashParticlesCVar()

@@ -244,7 +244,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 	private action void A_DropCasings()
 	{
-		if (GetCVar("casing_toggle") == 1)
+		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
 		{
 			// Yuck.
 			RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());

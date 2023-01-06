@@ -250,7 +250,7 @@ class M2C : BaseWeapon replaces Chaingun
 
 	private action void A_SpawnCasing()
 	{
-		if (GetCVar("casing_toggle") == 1)
+		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool() == 1)
 		{
 			A_SpawnEffect(
 				"RifleCasing",

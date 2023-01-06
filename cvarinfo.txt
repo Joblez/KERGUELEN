@@ -3,15 +3,15 @@ user bool fs_enabled = true;
 server float fs_volume_mul = 1;
 server float fs_delay_mul = 1.4;
 
-user int casing_toggle = 1;
+user bool casing_toggle = true;
 
-user int smoke_toggle = 1;
+user bool smoke_toggle = true;
 
-user int weapon_particle_toggle = 1;
+user bool weapon_particle_toggle = true;
 
-user int fade_toggle = 1;
+user bool fade_toggle = true;
 
-user int recoil_toggle = 1;
+user bool recoil_toggle = true;
 
 user int weather_amount = 3;
 user int splash_particles = 3;

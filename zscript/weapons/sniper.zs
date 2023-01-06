@@ -285,7 +285,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	private action void A_SpawnCasing()
 	{
-		if (GetCVar("casing_toggle") == 1)
+		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
 		{
 			RifleCasing effect = RifleCasing(
 				invoker.SpawnEffect(
@@ -302,7 +302,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	private action void A_SpawnCasingAlt()
 	{
-		if (GetCVar("casing_toggle") == 1)
+		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
 		{
 			RifleCasing effect = RifleCasing(
 				invoker.SpawnEffect(

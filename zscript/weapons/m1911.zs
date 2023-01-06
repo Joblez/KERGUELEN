@@ -223,7 +223,7 @@ class Colt : BaseWeapon replaces Pistol
 
 	private action void A_SpawnCasing()
 	{
-		if (GetCVar("casing_toggle") == 1)
+		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
 		{
 			A_SpawnEffect(
 				"PistolCasing",

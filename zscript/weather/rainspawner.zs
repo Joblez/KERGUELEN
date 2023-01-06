@@ -43,75 +43,10 @@ class RainSpawner : WeatherParticleSpawner
 
 	override void SpawnWeatherParticle()
 	{
+		Super.SpawnWeatherParticle();
+
 		// Spawn additional fake splashes outside of weather range.
 		SpawnFakeSplash();
-
-		Actor pawn = players[consoleplayer].mo;
-
-		// Project the player's position forward to ensure particles fall into view.
-		vector2 projectedPosition = ProjectPlayerPosition(m_Vel.z);
-
-		vector2 point = m_Triangulation.GetRandomPoint();
-
-		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = m_Range ** 2.0;
-
-		// Cull outside range.
-		if (distance > range) return;
-
-		// Attenuate amount over distance.
-		double spawnScore = FRandom(0.0, 1.0);
-		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
-
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
-
-		// Reduce spawn chance outside of horizontal view range.
-		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
-
-		if (spawnScore < spawnThreshold) return;
-
-		vector3 spawnPosition = (point.x, point.y,
-			(m_Sector.HighestCeilingAt(point)
-				// Particles can exist outside of level geometry, spawn above ceiling to make it
-				// seem as though the rain is falling from the sky.
-				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)
-				- FRandom(2.0, 12.0)));
-
-
-		// Copy params for simulated lifetime.
-		FSpawnParticleParams outParams;
-
-		outParams.color1 = m_Color;
-		outParams.texture = m_Texture;
-		outParams.style = m_Style;
-		outParams.flags = m_Flags;
-		outParams.lifetime = m_Lifetime;
-		outParams.size = m_Size;
-		outParams.sizestep = m_SizeStep;
-		outParams.vel = m_Vel;
-		outParams.accel = m_Accel;
-		outParams.startalpha = m_StartAlpha;
-		outParams.fadestep = m_FadeStep;
-		outParams.startroll = m_StartRoll;
-		outParams.rollvel = m_RollVel;
-		outParams.rollacc = m_RollAcc;
-
-		outParams.pos = spawnPosition;
-
-		if (m_ShouldSimulateParticles)
-		{
-			WeatherParticleSimulation result = SimulateParticle(outParams);
-
-			outParams.lifetime = result.GetLifetime();
-
-			m_SimulationData.Push(result);
-		}
-
-		// Scale distant rain drops up to make them more prominent.
-		outParams.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 1.5);
-
-		level.SpawnParticle(outParams);
 	}
 
 	// Nearly identical to super method, but need to plug in the scaling logic somewhere.
@@ -244,7 +179,7 @@ class RainSpawner : WeatherParticleSpawner
 	
 	CVar GetSplashParticlesCVar()
 	{
-		if (!m_SplashParticlesCVar) m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
+		if (!m_SplashParticlesCVar) m_SplashParticlesCVar = CVar.GetCVar("splash_particles", players[consoleplayer]);
 		return m_SplashParticlesCVar;
 	}
 

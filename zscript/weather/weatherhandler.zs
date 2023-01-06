@@ -1,3 +1,4 @@
+// NOTE: When documenting for usae example, make sure to mention how multiplayer will hurt performance.
 class WeatherHandler : StaticEventHandler // Need to be save-game-aware to reconstruct the weather state from the sim.
 {
 	const RAIN_TAG = 3570;

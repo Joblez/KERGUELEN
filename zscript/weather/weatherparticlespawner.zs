@@ -163,35 +163,14 @@ class WeatherParticleSpawner : WeatherSpawner
 
 	override void SpawnWeatherParticle()
 	{
-		Actor pawn = players[consoleplayer].mo;
-
-		// Project the player's position forward to ensure particles fall into view.
-		vector2 projectedPosition = ProjectPlayerPosition(m_Vel.z);
-
 		vector2 point = m_Triangulation.GetRandomPoint();
-
-		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = m_Range ** 2.0;
-
-		// Cull outside range.
-		if (distance > range) return;
-
-		// Attenuate amount over distance.
 		double spawnScore = FRandom(0.0, 1.0);
-		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
-
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
-
-		// Reduce spawn chance outside of horizontal view range.
-		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
-
-		if (spawnScore < spawnThreshold) return;
+		if (!ShouldSpawn(point, spawnScore)) return;
 
 		vector3 spawnPosition = (point.x, point.y,
 			(m_Sector.HighestCeilingAt(point)
 				// Particles can exist outside of level geometry, spawn above ceiling to make it
-				// seem as though the rain is falling from the sky.
+				// seem as though the weather is coming from the sky.
 				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)
 				- FRandom(2.0, 12.0)));
 
@@ -224,6 +203,8 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		level.SpawnParticle(outParams);
 	}
+
+	override double GetWeatherVerticalSpeed() const { return m_Vel.z; }
 
 	// Only used to respawn particles lost to a save reload.
 	virtual void ReconstructWeatherState()

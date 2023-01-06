@@ -54,10 +54,7 @@ class WeatherSpawner : Thinker
 		}
 	}
 
-	Sector GetSector() const
-	{
-		return m_Sector;
-	}
+	Sector GetSector() const { return m_Sector; }
 
 	CVar GetWeatherAmountCVar() const
 	{
@@ -80,10 +77,7 @@ class WeatherSpawner : Thinker
 		}
 	}
 
-	double GetOutOfViewFrequencyReduction() const
-	{
-		return GetWeatherAmountCVar().GetInt() * 0.05;
-	}
+	double GetOutOfViewFrequencyReduction() const { return GetWeatherAmountCVar().GetInt() * 0.05; }
 
 	void SetDensity(double density)
 	{
@@ -93,45 +87,55 @@ class WeatherSpawner : Thinker
 	protected virtual void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
+		double spawnScore = FRandom(0.0, 1.0);
+		if (!ShouldSpawn(point, spawnScore)) return;
 
-		// Project the player's position forward to ensure particles fall into view.
-		vector2 projectedPosition = ProjectPlayerPosition(abs(GetDefaultByType(m_WeatherType).Vel.z));
-
-		double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
-		double range = m_Range ** 2.0;
-
-		// Cull outside range.
-		if (distance > range) return;
-
-		// Attenuate amount over distance.
-		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
-		if (FRandom(0.0, 1.0) < 1.0 - spawnThreshold) return;
-
-		vector3 spawnPosition = (point.x, point.y, (m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
-
-		Actor pawn = players[consoleplayer].mo;
-
-		// Reduce spawn chance outside of horizontal view range.
-		if (Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
-				>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio()
-			&& FRandom(0, 1) > GetOutOfViewFrequencyReduction())
-		{
-			Actor.Spawn(m_WeatherType, spawnPosition);
-		}
-		return;
+		Actor.Spawn(m_WeatherType, (point.x, point.y, m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
 	}
 
-	protected vector2 ProjectPlayerPosition(double weatherVerticalSpeed)
-	{
-		Actor pawn = players[consoleplayer].mo;
+	protected virtual double GetWeatherVerticalSpeed() const { return abs(GetDefaultByType(m_WeatherType).Vel.z); }
 
-		double ceilingZ = GetSector().HighestCeilingAt(players[consoleplayer].mo.Pos.xy);
+	protected bool ShouldSpawn(vector2 point, double spawnScore)
+	{
+		foreach (player : players)
+		{
+			if (!player.mo) continue;
+
+			// Project the player's position forward to ensure particles fall into view.
+			vector2 projectedPosition = ProjectPlayerPosition(player.mo);
+
+			double distance = MathVec2.SquareDistanceBetween(point, projectedPosition);
+			double range = m_Range ** 2.0;
+
+			// Cull outside range.
+			if (distance > range) continue;
+
+			// Attenuate amount over distance.
+			double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
+
+			// Screen dependency breaks multiplayer compat. Assume 16:9 for now.
+			bool isOutOfView = Actor.absangle(player.mo.Angle, vectorangle(point.x - player.mo.Pos.x, point.y - player.mo.Pos.y))
+				>= player.FOV * 0.5 * 1.77777777778; /* ScreenUtil.GetAspectRatio() */;
+
+			// Reduce spawn chance outside of horizontal view range.
+			if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
+
+			if (spawnScore >= spawnThreshold) return true;
+		}
+
+		return false;
+	}
+
+	protected vector2 ProjectPlayerPosition(PlayerPawn pawn)
+	{
+		double ceilingZ = GetSector().HighestCeilingAt(pawn.Pos.xy);
 
 		// Might be inaccurate because of slopes, but there is no way to get the height at
 		// the projected position before projecting it.
 		double targetZ = pawn.Pos.z;
 
-		double projectionTime = abs(ceilingZ - targetZ) / (max(double.Epsilon, abs(weatherVerticalSpeed)) * m_Range) * TICRATE ** 2;
+		// Not sure how to account for acceleration here.
+		double projectionTime = abs(ceilingZ - targetZ) / (max(double.Epsilon, abs(GetWeatherVerticalSpeed())) * m_Range) * TICRATE ** 2;
 
 		return pawn.Vel.xy * projectionTime + pawn.Pos.xy;
 	}

@@ -1,20 +1,20 @@
 // CVar Info
-server int fs_enabled = 1;
+user bool fs_enabled = true;
 server float fs_volume_mul = 1;
 server float fs_delay_mul = 1.4;
 
-server int casing_toggle = 1;
+user int casing_toggle = 1;
 
-server int smoke_toggle = 1;
+user int smoke_toggle = 1;
 
-server int weapon_particle_toggle = 1;
+user int weapon_particle_toggle = 1;
 
-server int fade_toggle = 1;
+user int fade_toggle = 1;
 
-server int recoil_toggle = 1;
+user int recoil_toggle = 1;
 
-server int weather_amount = 3;
-server int splash_particles = 3;
+user int weather_amount = 3;
+user int splash_particles = 3;
 
 //NASHGORE
 

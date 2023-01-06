@@ -1,31 +1,31 @@
-class StepAudioPlayer : Thinker
+class StepAudioData
 {
-	// Extents.
+	double m_StepInterval;
+	double m_StepPlayback;
+
+	static StepAudioData Create(double stepInterval)
+	{
+		StepAudioData stepAudioPlayer = new("StepAudioData");
+		stepAudioPlayer.m_StepInterval = stepInterval;
+
+		return stepAudioPlayer;
+	}
+}
+
+class FootstepEventHandler : EventHandler
+{
 	const MAX_FORWARD_MOVE = 12800;
 	const MAX_SIDE_MOVE = 10240;
 
-	//the player footsteps are attached to.
-	PlayerPawn m_PlayerPawn;
+	transient Map<int, StepAudioData> m_StepAudioDataMap;
 
-	array<string> m_StepSounds;
-	array<int> m_StepTextures;
-	string m_DefaultStepSound;
+	transient array<string> m_StepSounds;
+	transient array<int> m_StepTextures;
+	transient string m_DefaultStepSound;
 
-	double m_StepInterval;
-
-	//VSO: only needed for debug.
-	array<string> m_StepTextureNames;
-
-	private vector3 m_PreviousPlayerVel;
-	private double m_StepPlayback;
-
-	static StepAudioPlayer Create(PlayerPawn inPlayer, double stepInterval)
+	override void OnRegister()
 	{
-		StepAudioPlayer stepAudioPlayer = new("StepAudioPlayer");
-		stepAudioPlayer.m_StepInterval = stepInterval * TICRATE;
-		stepAudioPlayer.m_PlayerPawn = inPlayer;
-
-		stepAudioPlayer.m_DefaultStepSound = StringTable.Localize("$STEP_DEFAULT");
+		m_DefaultStepSound = StringTable.Localize("$STEP_DEFAULT");
 
 		array<String> sSTEP_FLATS_List;
 		StringTable.Localize("$STEP_FLATS").Split(sSTEP_FLATS_List, ":");
@@ -38,82 +38,70 @@ class StepAudioPlayer : Thinker
 				TextureID texID = TexMan.CheckForTexture(sSTEP_FLATS_List[i], TexMan.TYPE_ANY);
 
 				if (texID.Exists()) {
-					stepAudioPlayer.m_StepSounds.Push(singleFLAT_Sound);
-					stepAudioPlayer.m_StepTextures.Push(int(texID));
-
-					stepAudioPlayer.m_StepTextureNames.Push(sSTEP_FLATS_List[i]);
+					m_StepSounds.Push(singleFLAT_Sound);
+					m_StepTextures.Push(int(texID));
 				}
 			}
 		}
-
-		return stepAudioPlayer;
 	}
-
-	override void Tick()
-	{
-		if (CVar.GetCvar("fs_enabled").GetInt() == 0 || m_PlayerPawn.Pos.z - m_PlayerPawn.FloorZ > 0)
-		{
-			Super.Tick();
-			m_PreviousPlayerVel = m_PlayerPawn.Vel;
-			return;
-		}
-
-		double movementSpeed = m_PlayerPawn.Vel.xy.Length();
-		double maxSpeed = m_PlayerPawn.Speed * 8.3333333 * m_PlayerPawn.ForwardMove1;
-
-		double speedPercentage = min(movementSpeed / maxSpeed, 1.85);
-		int forwardMove = m_PlayerPawn.GetPlayerInput(MODINPUT_FORWARDMOVE);
-		int sideMove = m_PlayerPawn.GetPlayerInput(MODINPUT_SIDEMOVE);
-
-		m_StepPlayback += 1 * speedPercentage;
-
-		if (speedPercentage ~== 0.0)
-		{
-			m_StepPlayback = 0.0;
-		}
-
-		if (m_StepPlayback < m_StepInterval)
-		{
-			Super.Tick();
-			m_PreviousPlayerVel = m_PlayerPawn.Vel;
-			return;
-		}
-
-		double soundLevel = CVar.GetCvar("fs_volume_mul").GetFloat() * speedPercentage;
-
-		int floorTextureID = int(self.m_PlayerPawn.floorpic);
-		int foundIndex = m_StepTextures.Find(floorTextureID);
-
-		if (foundIndex != m_StepTextures.Size())
-		{
-			S_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, 0, soundLevel);
-		}
-		else
-		{
-			S_StartSound(m_DefaultStepSound, CHAN_AUTO,0, soundLevel);
-		}
-
-		m_StepPlayback = 0.0;
-
-		Super.Tick();
-		m_PreviousPlayerVel = m_PlayerPawn.Vel;
-	}
-}
-
-class FootstepEventHandler : EventHandler
-{
-	array<StepAudioPlayer> m_StepAudioPlayers;
 
 	override void PlayerEntered(PlayerEvent e)
 	{
-		let player = PlayerPawn(players[e.PlayerNumber].mo);
+		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(0.5 * TICRATE));
+	}
 
-		//BEGIN VSO : Some Wads crash here with VM Abort because player can be NULL
-		if (player == NULL) {
+	override void PlayerDisconnected(PlayerEvent e)
+	{
+		m_StepAudioDataMap.Remove(e.PlayerNumber);
+	}
+
+	override void WorldTick()
+	{
+		MapIterator<int, StepAudioData> it;
+		it.Init(m_StepAudioDataMap);
+
+		while (it.Next())
+		{
+			TickData(it.GetKey(), it.GetValue());
+		}
+	}
+
+	void TickData(int playerIndex, StepAudioData data)
+	{
+		PlayerPawn pawn = PlayerPawn(players[playerIndex].mo);
+
+		if (!CVar.GetCVar("fs_enabled", players[playerIndex]).GetBool() || pawn.Pos.z - pawn.FloorZ > 0)
+		{
 			return;
 		}
 
-		//VSO: Attach footsteps to player:
-		m_StepAudioPlayers.Push(StepAudioPlayer.Create(player, 0.45));
+		double movementSpeed = pawn.Vel.xy.Length();
+		double maxSpeed = pawn.Speed * 8.3333333 * pawn.ForwardMove1;
+
+		double speedPercentage = min(movementSpeed / maxSpeed, 1.85);
+		int forwardMove = pawn.GetPlayerInput(MODINPUT_FORWARDMOVE);
+		int sideMove = pawn.GetPlayerInput(MODINPUT_SIDEMOVE);
+
+		data.m_StepPlayback += 1 * speedPercentage;
+
+		if (speedPercentage ~== 0.0) data.m_StepPlayback = 0.0;
+
+		if (data.m_StepPlayback < data.m_StepInterval) return;
+
+		double soundLevel = CVar.GetCVar("fs_volume_mul").GetFloat() * speedPercentage;
+
+		TextureID floorTextureID = pawn.floorpic;
+		int foundIndex = m_StepTextures.Find(int(floorTextureID));
+
+		if (foundIndex != m_StepTextures.Size())
+		{
+			pawn.A_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, 0, soundLevel);
+		}
+		else
+		{
+			pawn.A_StartSound(m_DefaultStepSound, CHAN_AUTO, 0, soundLevel);
+		}
+
+		data.m_StepPlayback = 0.0;
 	}
 }

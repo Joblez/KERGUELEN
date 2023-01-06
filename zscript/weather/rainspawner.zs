@@ -19,9 +19,9 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Add;
 		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
 		params.lifetime = 35;
-		params.size = 52.0;
-		params.vel = (0.0, 0.0, -56.0);
-		params.accel = (0.0, 0.0, -0.1);
+		params.size = 56.0;
+		params.vel = (0.0, 0.0, -62.0);
+		params.accel = (0.0, 0.0, 0.0);
 		params.startalpha = 0.525;
 
 		spawner.Init(

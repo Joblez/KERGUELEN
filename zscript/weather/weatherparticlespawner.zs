@@ -30,8 +30,6 @@ class WeatherParticleSpawner : WeatherSpawner
 	bool m_ShouldSimulateParticles;
 	bool m_ShouldDoCallbackAtEndOfParticleLife;
 
-	private double[TICRATE] elapsedTimes;
-
 	protected array<WeatherParticleSimulation> m_SimulationData;
 
 	static WeatherParticleSpawner Create(
@@ -147,18 +145,6 @@ class WeatherParticleSpawner : WeatherSpawner
 
 			data.Tick();
 		}
-
-		if (level.time > TICRATE && level.time % TICRATE == 0.0)
-		{
-			double time = 0.0;
-			foreach (timestamp : elapsedTimes)
-			{
-				time += timestamp;
-			}
-
-			time /= elapsedTimes.Size();
-			// Console.Printf("Average time: %f ms", time);
-		}
 	}
 
 	override void SpawnWeatherParticle()
@@ -256,9 +242,6 @@ class WeatherParticleSpawner : WeatherSpawner
 
 		vector3 endPosition;
 
-		double startTime = MSTimeF();
-		double endTime;
-
 		if (velocity.xy ~== Vec2Util.Zero() && acceleration.xy ~== Vec2Util.Zero())
 		{
 			// One-dimensional trajectory, simulate without iteration.
@@ -266,16 +249,11 @@ class WeatherParticleSpawner : WeatherSpawner
 			{
 				// Constant velocity.
 				tics = int(round(abs((nextPlaneZ - position.z) / velocity.z)));
-
-				endTime = MSTimeF();
-				elapsedTimes[level.time % TICRATE] = endTime - startTime;
+				endPosition = (position.xy, nextPlaneZ);
 			}
 			else
 			{
 				[tics, endPosition] = SimulateParticleTravel(position, velocity, acceleration);
-
-				endTime = MSTimeF();
-				elapsedTimes[level.time % TICRATE] = endTime - startTime;
 
 				// Breaks at higher distances, fall back to iterative for now.
 
@@ -312,17 +290,11 @@ class WeatherParticleSpawner : WeatherSpawner
 				// // tics = min(tics, TICRATE * 60 * 3);
 
 				// endPosition = position + velocity * time + acceleration * time ** 2.0;
-
-				// endTime = MSTimeF();
-				// elapsedTimes[level.time % TICRATE] = endTime - startTime;
 			}
 		}
 		else
 		{
 			[tics, endPosition] = SimulateParticleTravel(position, velocity, acceleration);
-
-			endTime = MSTimeF();
-			elapsedTimes[level.time % TICRATE] = endTime - startTime;
 		}
 
 		return WeatherParticleSimulation.Create(

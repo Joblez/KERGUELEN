@@ -28,7 +28,7 @@ class WeatherSpawner : Thinker
 		m_WeatherType = weatherType;
 		m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
 		m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
+		m_Frequency = density * m_Triangulation.GetArea() / 4096.0 / TICRATE;
 		m_ProjectionLength = projectionTime * TICRATE;
 		m_WeatherAgent = agent;
 	}
@@ -64,17 +64,11 @@ class WeatherSpawner : Thinker
 
 	double GetAdjustedFrequency() const
 	{
-		switch (GetWeatherAmountCVar().GetInt())
-		{
-			case 0: return 0.0;
-			case 1: return m_Frequency * 0.2;
-			case 2: return m_Frequency * 0.45;
-			case 3: return m_Frequency * 0.7;
-			case 4:
-			default: return m_Frequency;
-			case 5: return m_Frequency * 1.4;
-			case 6: return m_Frequency * 2.0;
-		}
+		int amount = GetWeatherAmountCVar().GetInt();
+
+		if (amount == 6) return m_Frequency * 1.5;
+
+		return amount * 0.2;
 	}
 
 	double GetOutOfViewFrequencyReduction() const { return GetWeatherAmountCVar().GetInt() * 0.05; }
@@ -134,8 +128,9 @@ class WeatherSpawner : Thinker
 		// the projected position before projecting it.
 		double targetZ = pawn.Pos.z;
 
+		// Clamp to ten seconds.
 		// Not sure how to account for acceleration here.
-		double projectionTime = abs(ceilingZ - targetZ) / (max(double.Epsilon, abs(GetWeatherVerticalSpeed())) * m_Range) * TICRATE ** 2;
+		double projectionTime = min(10.0, abs(ceilingZ - targetZ) / (max(double.Epsilon, abs(GetWeatherVerticalSpeed())) * m_Range)) * TICRATE ** 2.0;
 
 		return pawn.Vel.xy * projectionTime + pawn.Pos.xy;
 	}

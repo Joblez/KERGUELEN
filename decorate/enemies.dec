@@ -5,7 +5,7 @@ actor Grarg replaces DoomImp
 	Height 56
 	Speed 12
 	PainChance 240
-	Mass 85
+	Mass 90
 	Scale 0.7
 	Bloodcolor "e8 00 21"
 	Monster

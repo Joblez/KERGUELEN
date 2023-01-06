@@ -46,6 +46,9 @@ class NashGoreHandler : EventHandler
 	override void PlayerEntered(PlayerEvent e)
 	{
 		PlayerPawn plr = players[e.PlayerNumber].mo;
+
+		if (!plr) return;
+
 		if (!plr.CountInv("NashGoreActor"))
 		{
 			plr.A_GiveInventory("NashGoreActor", 1);

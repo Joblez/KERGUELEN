@@ -68,7 +68,7 @@ class WeatherSpawner : Thinker
 
 		if (amount == 6) return m_Frequency * 1.5;
 
-		return amount * 0.2;
+		return m_Frequency * amount * 0.2;
 	}
 
 	double GetOutOfViewFrequencyReduction() const { return GetWeatherAmountCVar().GetInt() * 0.05; }

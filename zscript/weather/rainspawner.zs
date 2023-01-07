@@ -100,17 +100,15 @@ class RainSpawner : WeatherParticleSpawner
 		vector3 endPosition = data.GetEndPosition();
 		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(endPosition.x - pawn.Pos.x, endPosition.y - pawn.Pos.y))
 			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
-		
-		if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
 
-		if (spawnScore >= spawnThreshold) return;
+		if (isOutOfView || spawnScore >= spawnThreshold) return;
 
 		SpawnSplashEffect(data.GetEndPosition(), data.GetEndSector());
 
 		double splashParticleRange = GetSplashParticleDrawDistance() ** 2;
 
-		// Don't spawn splash particles out of view or too far away.
-		if (isOutOfView || distance > splashParticleRange) return;
+		// Don't spawn splash particles too far away.
+		if (distance > splashParticleRange) return;
 
 		int splashParticleSetting = GetSplashParticlesCVar().GetInt();
 
@@ -236,7 +234,7 @@ class RainSpawner : WeatherParticleSpawner
 		double spawnThreshold = Math.Remap(distance, minRange, maxRange, 0.5, 0.9);
 
 		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+			>= players[consoleplayer].FOV * 0.5 * 1.77777777778 /* ScreenUtil.GetAspectRatio() */;
 		
 		// Fake splashes appear instantly, cull everything out of view.
 		if (isOutOfView || spawnScore < spawnThreshold) return;

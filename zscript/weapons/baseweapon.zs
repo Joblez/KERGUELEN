@@ -49,7 +49,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 		BaseWeapon.LookSwayResponse 20.0;
 		BaseWeapon.LookSwayRigidity 8.0;
-		BaseWeapon.LookSwayStrengthX 8.0;
+		BaseWeapon.LookSwayStrengthX 10.0;
 		BaseWeapon.LookSwayStrengthY 0.0;
 		BaseWeapon.MaxLookSwayTranslationX 26.0;
 		BaseWeapon.MaxLookSwayTranslationY 0.0;

@@ -24,9 +24,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.UpSound("sniper/raise");
 
 		BaseWeapon.MaxLookSwayTranslationX 56.0;
-		BaseWeapon.LookSwayStrengthX 16.0;
+		BaseWeapon.LookSwayStrengthX 20.0;
 		BaseWeapon.LookSwayResponse 4.0;
-		BaseWeapon.LookSwayRigidity 6.0;
+		BaseWeapon.LookSwayRigidity 7.0;
 
 		Inventory.PickupMessage "[6] 7.62 Hunting Rifle";
 

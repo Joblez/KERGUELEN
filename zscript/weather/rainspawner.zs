@@ -18,8 +18,8 @@ class RainSpawner : WeatherParticleSpawner
 		params.style = STYLE_Add;
 		params.flags = SPF_NO_XY_BILLBOARD | SPF_RELVEL;
 		params.lifetime = 35;
-		params.size = 56.0;
-		params.vel = (0.0, 0.0, -62.0);
+		params.size = 60.0;
+		params.vel = (0.0, 0.0, -68.0);
 		params.accel = (0.0, 0.0, 0.0);
 		params.startalpha = 0.525;
 
@@ -191,10 +191,10 @@ class RainSpawner : WeatherParticleSpawner
 			params.texture = m_MainSplashTexture;
 			params.style = STYLE_Add;
 			params.flags = SPF_REPLACE;
-			params.lifetime = 4;
+			params.lifetime = 8;
 			params.size = 10.0;
 			params.pos = spawnPosition + (0.0, 0.0, 1.75);
-			params.startalpha = 0.4;
+			params.startalpha = 0.6;
 
 			level.SpawnParticle(params);
 		}

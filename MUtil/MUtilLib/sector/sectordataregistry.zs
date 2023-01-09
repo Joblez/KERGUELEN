@@ -1,3 +1,4 @@
+/** Holds computed data from select sectors. **/
 class SectorDataRegistry : EventHandler
 {
 	private array<SectorTriangulation> m_Triangulations;

@@ -1,3 +1,4 @@
+/** Represents a series of triangles encompassing the total area of a sector. **/
 class SectorTriangulation
 {
 	private array<SectorTriangle> m_Triangles;

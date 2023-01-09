@@ -19,8 +19,8 @@ Then include the main ZScript file from the library.
 ```
 This file will `#include` all other ZScript files contained in the library. However,
 GZDoom's preprocessor will include these after all other includes in the same file.
-`#include`s that contain extensions to or classes deriving from types defined in MUtil
-will need to be included from an additional file after the MUtilLib include, like so:
+`#include`s that contain extensions to types defined in MUtil will need to be included
+from an additional file after the MUtilLib include, like so:
 ```c
 // zscript.zs
 
@@ -54,7 +54,7 @@ You will need to add the follwoing event handlers in the `GameInfo` block.
 ```cs
 GameInfo
 {
-	AddEventHandlers = "HUDExtensionRegistry", "SectorDataRegistry", "WorldAgentHandler"
+	AddEventHandlers = "SectorDataRegistry", "WorldAgentHandler"
 }
 ```
 > If starting a new project, you may use the premade files in the `setuptemplate`

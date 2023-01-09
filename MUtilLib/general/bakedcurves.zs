@@ -80,6 +80,7 @@ class BakedCurve
 		switch (mode)
 		{
 			case IM_Quintic:
+			{
 				// Get point indices.
 				int i2 = int(round(time));
 				int i0 = i2 - 2;
@@ -117,8 +118,10 @@ class BakedCurve
 				double s1 = Math.Lerp(r1, r2, time);
 
 				return Math.Lerp(s0, s1, time);
+			}
 
 			case IM_Quadratic:
+			{
 				// Get point indices.
 				int i1 = int(round(time));
 				int i0 = i1 - 1;
@@ -141,6 +144,7 @@ class BakedCurve
 				double q1 = Math.Lerp(p1, p2, time);
 
 				return Math.Lerp(q0, q1, time);
+			}
 
 			case IM_Linear:
 			default:

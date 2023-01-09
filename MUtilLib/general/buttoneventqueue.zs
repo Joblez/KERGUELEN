@@ -79,7 +79,8 @@ struct ButtonEventQueue play
 
 		for (int i = 0; i < m_Events.Size(); ++i)
 		{
-			result.AppendFormat("\n    %i: ", i)..GetAsString(m_Events[i], m_EventTypes[i]);
+			result.AppendFormat("\n    %i: ", i);
+			result.Append(GetAsString(m_Events[i], m_EventTypes[i]));
 		}
 
 		return result;

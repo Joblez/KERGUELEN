@@ -1,3 +1,4 @@
+/** Contains several math functions for doubles. **/
 class Math
 {
 	/** Returns 1.0 if the given number is positive, or -1.0 if it is negative. **/
@@ -38,6 +39,7 @@ class Math
 		return remainder < 0 ? remainder + b : remainder;
 	}
 
+	/** Returns a value wrapped to the range described by the given start and end values. **/
 	static double Wrap(double value, double start, double end)
 	{
 		if (value < start)
@@ -52,41 +54,69 @@ class Math
 		return value;
 	}
 
+	/** Returns the given value in radians. **/
 	static double DegToRad(double degrees)
 	{
 		return degrees * (M_PI / 180.0);
 	}
 
+	/** Returns the given value in degrees. **/
 	static double RadToDeg(double radians)
 	{
 		return (180.0 / M_PI) * radians;
 	}
 
+	/**
+	 * Smoothly shifts the given current value to the given target value via a process
+	 * resembling a spring-damper function.
+	 * 
+	 * NOTE:
+	 *		Most use cases will want to pass the return value back into the current
+	 *		argument every time the method is called.
+	 *
+	 * Parameters;
+	 * - current: the current value.
+	 * - target: the value that the current value will move towards.
+	 * - currentSpeed: the rate of movement as of the last time the method was called.
+	 *		Most use cases will want to use a separate speed variable for every value
+	 *		that is to be shifted.
+	 * - smoothTime: the approximate time it should take for the current value to reach
+	 *		the target value.
+	 * - maxSpeed: the maximum speed at which the current value will move.
+	 * - delta: the time difference between the given current value and the resulting
+	 *		current value.
+	**/
 	static double SmoothDamp(
-		double from,
-		double to,
+		double current,
+		double target,
 		out double currentSpeed,
 		double smoothTime,
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return from; // Avoid division by zero.
+		if (delta == 0.0) return current; // Avoid division by zero.
 
+		if (smoothTime == 0.0) // Instant.
+		{
+			currentSpeed = target - current;
+			return target;
+		}
+		
 		smoothTime = max(0.000001, smoothTime);
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1 / (1 + x + (0.48 * x * x) + (0.235 * x * x * x));
-		double difference = from - to;
-		double originalTo = to;
+		double difference = current - target;
+		double originalTo = target;
 
 		double maxDifference = maxSpeed * smoothTime;
 		difference = clamp(difference, -maxDifference, maxDifference);
-		to = from - difference;
+		target = current - difference;
 		double temp = (currentSpeed + (omega * difference)) * delta;
 		currentSpeed = (currentSpeed - (omega * temp)) * exponent;
-		double result = to + ((difference + temp) * exponent);
+		double result = target + ((difference + temp) * exponent);
 
-		if (originalTo - from > 0.0 == result > originalTo)
+		if (originalTo - current > 0.0 == result > originalTo)
 		{
 			result = originalTo;
 			currentSpeed = (result - originalTo) / delta;
@@ -96,6 +126,7 @@ class Math
 	}
 }
 
+/** Contains several math functions for floats. **/
 class MathF
 {
 	/** Returns 1.0 if the given number is positive, or -1.0 if it is negative. **/
@@ -136,6 +167,7 @@ class MathF
 		return remainder < 0.0 ? remainder + b : remainder;
 	}
 
+	/** Returns a value wrapped to the range described by the given start and end values. **/
 	static float Wrap(float value, float start, float end)
 	{
 		if (value < start)
@@ -150,41 +182,68 @@ class MathF
 		return value;
 	}
 
+	/** Returns the given value in radians. **/
 	static float DegToRad(float degrees)
 	{
 		return degrees * (M_PI / 180.0);
 	}
 
+	/** Returns the given value in degrees. **/
 	static float RadToDeg(float radians)
 	{
 		return (180.0 / M_PI) * radians;
 	}
 
+	/**
+	 * Smoothly shifts the given current value to the given target value via a process
+	 * resembling a spring-damper function.
+	 * 
+	 * NOTE:
+	 *		Most use cases will want to pass the return value back into the current
+	 *		argument every time the method is called.
+	 *
+	 * Parameters;
+	 * - current: the current value.
+	 * - target: the value that the current value will move towards.
+	 * - currentSpeed: the rate of movement as of the last time the method was called.
+	 *		Most use cases will want to use a separate speed variable for every value
+	 *		that is to be shifted.
+	 * - smoothTime: the approximate time it should take for the current value to reach
+	 *		the target value.
+	 * - maxSpeed: the maximum speed at which the current value will move.
+	 * - delta: the time difference between the given current value and the resulting
+	 *		current value.
+	**/
 	static float SmoothDamp(
-		float from,
-		float to,
+		float current,
+		float target,
 		out float currentSpeed,
 		float smoothTime,
 		float maxSpeed,
 		float delta)
 	{
-		if (delta == 0.0) return from; // Avoid division by zero.
+		if (delta == 0.0) return current; // Avoid division by zero.
 
-		smoothTime = max(0.000001, smoothTime);
+		if (smoothTime == 0.0) // Instant.
+		{
+			currentSpeed = target - current;
+			return target;
+		}
+	
 		float omega = 2.0 / smoothTime;
 		float x = omega * delta;
 		float exponent = 1 / (1 + x + (0.48 * x * x) + (0.235 * x * x * x));
-		float difference = from - to;
-		float originalTo = to;
+		float difference = current - target;
+		float originalTo = target;
 
 		float maxDifference = maxSpeed * smoothTime;
 		difference = clamp(difference, -maxDifference, maxDifference);
-		to = from - difference;
+		target = current - difference;
 		float temp = (currentSpeed + (omega * difference)) * delta;
 		currentSpeed = (currentSpeed - (omega * temp)) * exponent;
-		float result = to + ((difference + temp) * exponent);
+		float result = target + ((difference + temp) * exponent);
 
-		if (originalTo - from > 0.0 == result > originalTo)
+		if (originalTo - current > 0.0 == result > originalTo)
 		{
 			result = originalTo;
 			currentSpeed = (result - originalTo) / delta;
@@ -194,6 +253,7 @@ class MathF
 	}
 }
 
+/** Contains several math functions for integers. **/
 class MathI
 {
 	/** Returns 1 if the given number is positive, or -1 if it is negative. **/
@@ -234,6 +294,7 @@ class MathI
 		return remainder < 0 ? remainder + b : remainder;
 	}
 
+	/** Returns a value wrapped to the range described by the given start and end values. **/
 	static int Wrap(int value, int start, int end)
 	{
 		if (value < start)
@@ -249,8 +310,10 @@ class MathI
 	}
 }
 
+/** Contains several math functions for two-component vectors. **/
 class MathVec2
 {
+	/** Clamps the given vector's magnitude between the given minimum and maximum values. **/
 	static vector2 Clamp(vector2 vector, double minLength, double maxLength)
 	{
 		if (minLength < 0.0) minLength = 0.0;
@@ -275,22 +338,26 @@ class MathVec2
 		return vector = (vector.x * (targetLength / length), vector.y * (targetLength / length));
 	}
 
+	/** Returns the distance between the given vectors. **/
 	static double DistanceBetween(vector2 a, vector2 b)
 	{
 		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 	}
 
+	/** Returns the squared distance between the given vectors. **/
 	static double SquareDistanceBetween(vector2 a, vector2 b)
 	{
 		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
 	}
 
+	/** Returns a vector rotated by the degrees in the given angle. **/
 	static vector2 Rotate(vector2 vector, double angle)
 	{
 		return Actor.RotateVector(vector, angle);
 		// return (vector.x * cos(angle) - vector.y * sin(angle), vector.x * sin(angle) + vector.y * cos(angle));
 	}
 
+	/** Returns a vector rotated around the given pivot by the degrees in the given angle. **/
 	static vector2 RotateAround(vector2 vector, vector2 pivot, double angle)
 	{
 		return pivot + Rotate(vector - pivot, angle);
@@ -306,23 +373,48 @@ class MathVec2
 		return (coords.x * cos(coords.y), coords.x * sin(coords.y));
 	}
 
+	/**
+	 * Smoothly shifts the given current value to the given target value via a process
+	 * resembling a spring-damper function.
+	 * 
+	 * NOTE:
+	 *		Most use cases will want to pass the return value back into the current
+	 *		argument every time the method is called.
+	 *
+	 * Parameters;
+	 * - current: the current value.
+	 * - target: the value that the current value will move towards.
+	 * - currentSpeed: the rate of movement as of the last time the method was called.
+	 *		Most use cases will want to use a separate speed variable for every value
+	 *		that is to be shifted.
+	 * - smoothTime: the approximate time it should take for the current value to reach
+	 *		the target value.
+	 * - maxSpeed: the maximum speed at which the current value will move.
+	 * - delta: the time difference between the given current value and the resulting
+	 *		current value.
+	**/
 	static vector2 SmoothDamp(
-		vector2 from,
-		vector2 to,
+		vector2 current,
+		vector2 target,
 		out vector2 currentSpeed,
 		double smoothTime,
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return from; // Avoid division by zero.
+		if (delta == 0.0) return current; // Avoid division by zero.
 
-		smoothTime = max(0.000001, smoothTime);
+		if (smoothTime == 0.0) // Instant.
+		{
+			currentSpeed = target - current;
+			return target;
+		}
+
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1.0 / (1.0 + x + (0.48 * x * x) + (0.235 * x * x * x));
-		double xDifference = from.x - to.x;
-		double yDifference = from.y - to.y;
-		vector2 originalTo = to;
+		double xDifference = current.x - target.x;
+		double yDifference = current.y - target.y;
+		vector2 originalTo = target;
 
 		double maxDifference = maxSpeed * smoothTime;
 		double maxDifferenceSquared = maxDifference * maxDifference;
@@ -336,19 +428,19 @@ class MathVec2
 			yDifference = yDifference / magnitude * maxDifference;
 		}
 
-		to.x = from.x - xDifference;
-		to.y = from.y - yDifference;
+		target.x = current.x - xDifference;
+		target.y = current.y - yDifference;
 
 		double xTemp = (currentSpeed.x + (omega * xDifference)) * delta;
 		double yTemp = (currentSpeed.y + (omega * yDifference)) * delta;
 		currentSpeed.x = (currentSpeed.x - (omega * xTemp)) * exponent;
 		currentSpeed.y = (currentSpeed.y - (omega * yTemp)) * exponent;
 
-		double xResult = to.x + ((xDifference + xTemp) * exponent);
-		double yResult = to.y + ((yDifference + yTemp) * exponent);
+		double xResult = target.x + ((xDifference + xTemp) * exponent);
+		double yResult = target.y + ((yDifference + yTemp) * exponent);
 
-		double bXDifference = originalTo.x - from.x;
-		double bYDifference = originalTo.y - from.y;
+		double bXDifference = originalTo.x - current.x;
+		double bYDifference = originalTo.y - current.y;
 		double bXResult = xResult - originalTo.x;
 		double bYResult = yResult - originalTo.y;
 
@@ -364,8 +456,10 @@ class MathVec2
 	}
 }
 
+/** Contains several math functions for three-component vectors. **/
 class MathVec3
 {
+	/** Clamps the given vector's magnitude between the given minimum and maximum values. **/
 	static vector3 Clamp(vector3 vector, double minLength, double maxLength)
 	{
 		double length = vector.Length();
@@ -388,16 +482,19 @@ class MathVec3
 		return vector = (vector.x * (targetLength / length), vector.y * (targetLength / length), vector.z * (targetLength / length));
 	}
 
+	/** Returns the distance between the given vectors. **/
 	static double DistanceBetween(vector3 a, vector3 b)
 	{
 		return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
 	}
 
+	/** Returns the squared distance between the given vectors. **/
 	static double SquareDistanceBetween(vector3 a, vector3 b)
 	{
 		return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z);
 	}
 
+	/** Returns a vector rotated by the degrees in the given angle along the given axis. **/
 	static vector3 Rotate(vector3 vector, vector3 axis, double angle)
 	{
 		vector3 a = axis cross vector;
@@ -405,34 +502,69 @@ class MathVec3
 		return vector + sin(angle) * a + (1 - cos(angle)) * b;
 	}
 
+	/** Returns a vector rotated around the given pivot by the degrees in the given angle along the given axis. **/
 	static vector3 RotateAround(vector3 vector, vector3 pivot, vector3 axis, double angle)
 	{
 		return pivot + Rotate(vector - pivot, axis, angle);
 	}
 
+	/**
+	 * Returns the yaw and pitch angles corresponding to the given direction vector.
+	 *
+	 * NOTE: Z-axis-aligned vectors will yield a yaw of zero.
+	**/
 	static vector2 ToYawAndPitch(vector3 vector)
 	{
+		vector = vector.Unit();
+
+		if (vector.xy == (0.0, 0.0)) return (0.0, 180.0 * vector.z);
+
 		return (atan2(vector.y, vector.x), atan(vector.z / sqrt(vector.x * vector.x + vector.y * vector.y)));
 	}
 
+	/**
+	 * Smoothly shifts the given current value to the given target value via a process
+	 * resembling a spring-damper function.
+	 * 
+	 * NOTE:
+	 *		Most use cases will want to pass the return value back into the current
+	 *		argument every time the method is called.
+	 *
+	 * Parameters;
+	 * - current: the current value.
+	 * - target: the value that the current value will move towards.
+	 * - currentSpeed: the rate of movement as of the last time the method was called.
+	 *		Most use cases will want to use a separate speed variable for every value
+	 *		that is to be shifted.
+	 * - smoothTime: the approximate time it should take for the current value to reach
+	 *		the target value.
+	 * - maxSpeed: the maximum speed at which the current value will move.
+	 * - delta: the time difference between the given current value and the resulting
+	 *		current value.
+	**/
 	static vector3 SmoothDamp(
-		vector3 from,
-		vector3 to,
+		vector3 current,
+		vector3 target,
 		out vector3 currentSpeed,
 		double smoothTime,
 		double maxSpeed,
 		double delta)
 	{
-		if (delta == 0.0) return from; // Avoid division by zero.
+		if (delta == 0.0) return current; // Avoid division by zero.
 
-		smoothTime = max(0.000001, smoothTime);
+		if (smoothTime == 0.0) // Instant.
+		{
+			currentSpeed = target - current;
+			return target;
+		}
+
 		double omega = 2.0 / smoothTime;
 		double x = omega * delta;
 		double exponent = 1.0 / (1.0 + x + (0.48 * x * x) + (0.235 * x * x * x));
-		double xDifference = from.x - to.x;
-		double yDifference = from.y - to.y;
-		double zDifference = from.z - to.z;
-		vector3 originalTo = to;
+		double xDifference = current.x - target.x;
+		double yDifference = current.y - target.y;
+		double zDifference = current.z - target.z;
+		vector3 originalTo = target;
 
 		double maxDifference = maxSpeed * smoothTime;
 		double maxDifferenceSquared = maxDifference * maxDifference;
@@ -446,9 +578,9 @@ class MathVec3
 			zDifference = zDifference / magnitude * maxDifference;
 		}
 
-		to.x = from.x - xDifference;
-		to.y = from.y - yDifference;
-		to.z = from.z - zDifference;
+		target.x = current.x - xDifference;
+		target.y = current.y - yDifference;
+		target.z = current.z - zDifference;
 		double xTemp = (currentSpeed.x + (omega * xDifference)) * delta;
 		double yTemp = (currentSpeed.y + (omega * yDifference)) * delta;
 		double zTemp = (currentSpeed.z + (omega * zDifference)) * delta;
@@ -456,13 +588,13 @@ class MathVec3
 		currentSpeed.y = (currentSpeed.y - (omega * yTemp)) * exponent;
 		currentSpeed.z = (currentSpeed.z - (omega * zTemp)) * exponent;
 
-		double xResult = to.x + ((xDifference + xTemp) * exponent);
-		double yResult = to.y + ((yDifference + yTemp) * exponent);
-		double zResult = to.z + ((zDifference + zTemp) * exponent);
+		double xResult = target.x + ((xDifference + xTemp) * exponent);
+		double yResult = target.y + ((yDifference + yTemp) * exponent);
+		double zResult = target.z + ((zDifference + zTemp) * exponent);
 
-		double bXDifference = originalTo.x - from.x;
-		double bYDifference = originalTo.y - from.y;
-		double bZDifference = originalTo.z - from.z;
+		double bXDifference = originalTo.x - current.x;
+		double bYDifference = originalTo.y - current.y;
+		double bZDifference = originalTo.z - current.z;
 		double bXResult = xResult - originalTo.x;
 		double bYResult = yResult - originalTo.y;
 		double bZResult = zResult - originalTo.z;
@@ -481,6 +613,7 @@ class MathVec3
 	}
 }
 
+/** Contains several geometry-related utilities. **/
 class Geometry
 {
 	/**
@@ -510,7 +643,7 @@ class Geometry
 	}
 
 	/**
-	 * Returns whether or not the given point is within the bounding box, defined
+	 * Returns whether or not the given point is within the given bounding box, defined
 	 * as bottom-left and top-right corners.
 	**/
 	static bool IsPointInBounds(vector2 point, vector2 bottomLeft, vector2 topRight)
@@ -521,6 +654,10 @@ class Geometry
 			&& point.y < topRight.y;
 	}
 
+	/**
+	 * Returns whether or not the given rectangle is within the given bounding box, where
+	 * both are defined as bottom-left and top-right corners.
+	**/
 	static bool IsBoxInBounds(vector2 bottomLeft, vector2 topRight, vector2 boundsBottomLeft, vector2 boundsTopRight)
 	{
 		return bottomLeft.x < topRight.x
@@ -531,6 +668,14 @@ class Geometry
 			&& topRight.y < boundsTopRight.y;
 	}
 
+	/**
+	 * Returns whether or not the given point is within the given shape, where the shape
+	 * is given as an array of edges (lines).
+	 *
+	 * NOTE:
+	 *		The edges must form a simple polygon, or in other words, a closed shape with
+	 *		no intersecting edges.
+	**/
 	static bool IsPointInPolygon(vector2 point, array<Edge> shape)
 	{
 		array<BoxedVector2> vertices;
@@ -566,9 +711,11 @@ class Geometry
 	}
 
 	/**
-	 * Returns whether or not lines A and B intersect.
+	 * Returns whether or not the line defined by the given aStart and aEnd points
+	 * intersects with the line defined by the given bStart and bEnd points.
+	 *
 	 * NOTE:
-		* Currently does not detect intersections between collinear segments.
+	 * 		Currently does not detect intersections between collinear segments.
 	**/
 	static bool LinesIntersect(vector2 aStart, vector2 aEnd, vector2 bStart, vector2 bEnd)
 	{
@@ -591,10 +738,12 @@ class Geometry
 	}
 
 	/**
-	 * Returns the intersection point between lines A and B, or a vector with
-	 * coordinates at infinity if no intersection is found.
+	 * Returns the intersection point between the line defined by the given aStart and aEnd points
+	 * and the line defined by the given bStart and bEnd points, or a vector with coordinates at
+	 * infinity if no intersection is found.
+	 *
 	 * NOTE:
-		* Collinear segments are considered non-intersecting.
+	 *		Collinear segments are considered non-intersecting.
 	**/
 	static vector2 IntersectionOf(vector2 aStart, vector2 aEnd, vector2 bStart, vector2 bEnd)
 	{
@@ -624,6 +773,7 @@ class Geometry
 		return result;
 	}
 
+	/** Returns whether or not the given vertices are arranged in clockwise order. **/
 	static bool IsClockwise(array<BoxedVector2> vertices)
 	{
 		if (vertices.Size() < 3)
@@ -651,11 +801,13 @@ class Geometry
 		return result.z < 0.0;
 	}
 
+	/** Returns the area of the given triangle. **/
 	static double GetTriangleArea(vector2 a, vector2 b, vector2 c)
 	{
 		return abs((a.x * b.y - a.y * b.x) + (b.x * c.y - b.y * c.x) + (c.x * a.y - c.y * a.x)) * 0.5;
 	}
 
+	/** Returns the area of the given polygon. **/
 	static double GetPolygonArea(array<BoxedVector2> vertices)
 	{
 		if (vertices.Size() < 3)
@@ -677,6 +829,7 @@ class Geometry
 		return abs(area) * 0.5;
 	}
 
+	/** Performs a triangulation on the given triangulatable data set. **/
 	static void Triangulate(Triangulatable t)
 	{
 		DTSweepContext ctx = new("DTSweepContext");
@@ -686,6 +839,7 @@ class Geometry
 	}
 }
 
+/** Workaround for lack of verctor array support. **/
 class BoxedVector2
 {
 	vector2 m_Value;
@@ -698,7 +852,7 @@ class BoxedVector2
 		return bV;
 	}
 
-	static BoxedVector2 FromVertex(Vertex v)
+	static BoxedVector2 currentVertex(Vertex v)
 	{
 		return BoxedVector2.Create(v.p);
 	}
@@ -727,6 +881,10 @@ class BoxedVector2
 	double DotProductBoxed(BoxedVector2 other) const { return m_Value dot other.m_Value; }
 }
 
+/**
+ * Constitutes a line formed by two points. Alternative to the internal Line type
+ * without the level data-related fields and methods.
+**/
 class Edge
 {
 	vector2 m_V1;

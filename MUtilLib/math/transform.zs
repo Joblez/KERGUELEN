@@ -1,3 +1,4 @@
+/** Represents a two-dimensional transform that can be placed into a transform hierarchy. **/
 class Transform2D
 {
 	private double m_Rotation;
@@ -31,14 +32,11 @@ class Transform2D
 		return tr;
 	}
 
+	/** Returns the given vector transformed by this transform. **/
 	vector2 TransformVector(vector2 v) const
 	{
 		Matrix3x3 mat;
 		mat.CopyFrom(m_GlobalTransformMatrix);
-
-		// Console.Printf("%f %f %f", mat.m_Values[0][0], mat.m_Values[0][1], mat.m_Values[0][2]);
-		// Console.Printf("%f %f %f", mat.m_Values[1][0], mat.m_Values[1][1], mat.m_Values[1][2]);
-		// Console.Printf("%f %f %f", mat.m_Values[2][0], mat.m_Values[2][1], mat.m_Values[2][2]);
 
 		double x = v.x * mat.m_Values[0][0] + v.y * mat.m_Values[1][0] + mat.m_Values[2][0];
 		double y = v.x * mat.m_Values[0][1] + v.y * mat.m_Values[1][1] + mat.m_Values[2][1];
@@ -46,6 +44,7 @@ class Transform2D
 		return (x, y);
 	}
 
+	/** Returns a string representation of this transform. **/
 	string ToString() const
 	{
 		string result =
@@ -55,37 +54,43 @@ class Transform2D
 		.."\nGlobal matrix:\n";
 
 		// Move matrix string a bit to the right.
-		string matrixString = "\t"..m_GlobalTransformMatrix.ToString();
-		matrixString.Replace("\n", "\n\t");
+		string matrixString = "    "..m_GlobalTransformMatrix.ToString();
+		matrixString.Replace("\n", "\n    ");
 
 		return result..matrixString;
 	}
 
+	/** Returns the local translation of this transform. **/
 	vector2 GetLocalTranslation() const
 	{
 		return m_Translation;
 	}
 
+	/** Returns the local rotation of this transform. **/
 	double GetLocalRotation() const
 	{
 		return m_Rotation;
 	}
 
+	/** Returns the local scale of this transform. **/
 	vector2 GetLocalScale() const
 	{
 		return m_Scale;
 	}
 
+	/** Returns the global translation of this transform. **/
 	vector2 GetGlobalTranslation() const
 	{
 		return (m_GlobalTransformMatrix.m_Values[2][0], m_GlobalTransformMatrix.m_Values[2][1]);
 	}
 
+	/** Returns the global rotation of this transform. **/
 	double GetGlobalRotation() const
 	{
 		return vectorangle((m_GlobalTransformMatrix.m_Values[0][0], m_GlobalTransformMatrix.m_Values[1][0]).Unit());
 	}
 
+	/** Returns the global scale of this transform. **/
 	vector2 GetGlobalScale() const
 	{
 		double cr = cos(GetGlobalRotation());
@@ -93,23 +98,13 @@ class Transform2D
 		return ((m_GlobalTransformMatrix.m_Values[0][0] / cr, m_GlobalTransformMatrix.m_Values[1][1] / cr));
 	}
 
-	// double GetGlobalScale() const
-	// {
-	// 	return m_Scale * m_Parent ? m_Parent.GetGlobalScale() : 1.0;
-	// }
-
-	double GetSumOfRotations() const
-	{
-		double combinedAngle = m_Rotation;
-		if (m_Parent) combinedAngle += m_Parent.GetSumOfRotations();
-		return combinedAngle;
-	}
-
+	/** Parents this transform to the given transform. **/
 	void ParentTo(Transform2D parent)
 	{
 		parent.AddChild(self);
 	}
 
+	/** Parents the given transform to this transform. **/
 	void AddChild(Transform2D child)
 	{
 		if (child.m_Parent)
@@ -122,36 +117,42 @@ class Transform2D
 		child.UpdateGlobalTransform();
 	}
 
+	/** Sets this transform's local translation. **/
 	void SetTranslation(vector2 translation)
 	{
 		m_Translation = translation;
 		UpdateGlobalTransform();
 	}
 
+	/** Sets this transform's local rotation. **/
 	void SetRotation(double rotation)
 	{
 		m_Rotation = Math.PosMod(rotation, 360.0);
 		UpdateGlobalTransform();
 	}
 
+	/** Sets this transform's local scale. **/
 	void SetScale(vector2 scale)
 	{
 		m_Scale = scale;
 		UpdateGlobalTransform();
 	}
 
+	/** Translates this transform by the given offset. **/
 	void Translate(vector2 offset)
 	{
 		m_Translation += offset;
 		UpdateGlobalTransform();
 	}
 
+	/** Rotates this transform by the given degrees. **/
 	void Rotate(double degrees)
 	{
 		m_Rotation = Math.PosMod(m_Rotation + degrees, 360.0);
 		UpdateGlobalTransform();
 	}
 
+	/** Scales this transform by the given factor. **/
 	void Scale(vector2 factor)
 	{
 		m_Scale += factor;

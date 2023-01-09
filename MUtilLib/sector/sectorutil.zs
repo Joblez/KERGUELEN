@@ -1,8 +1,9 @@
+/** Contains utilities for sectors. **/
 class SectorUtil play
 {
 	/**
 	 * Returns a vertex from one of the sector's lines with the given index,
-	 * or null if no matchinge vertex can be found.
+	 * or null if no matching vertex can be found.
 	**/
 	static Vertex FindVertex(int index, Sector sec)
 	{
@@ -16,13 +17,9 @@ class SectorUtil play
 		return null;
 	}
 
+	/** Returns a random point within the given sector's area. **/
 	static vector2 GetRandomPoint(Sector sec)
 	{
-		return GetTriangulation(sec).GetRandomPoint();
-	}
-
-	private static SectorTriangulation GetTriangulation(Sector sec)
-	{
-		return SectorDataRegistry.GetTriangulation(sec);
+		return SectorDataRegistry.GetTriangulation(sec).GetRandomPoint();
 	}
 }

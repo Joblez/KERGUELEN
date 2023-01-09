@@ -1,7 +1,10 @@
+/** Represents a matrix with two rows and two columns. **/
 struct Matrix2x2
 {
+	/** The values contained in this matrix. **/
 	double[2][2] m_Values;
 
+	/** Returns a string representation of this matrix. **/
 	string ToString(int precision = 6) const
 	{
 		return string.Format(
@@ -11,6 +14,11 @@ struct Matrix2x2
 			precision, m_Values[1][0], precision, m_Values[1][1]);
 	}
 
+	/**
+	 * Reassigns all the values of this matrix to form an identity matrix, like so:
+	 * ⌈1.0, 0.0⌉
+	 * ⌊0.0, 1.0⌋
+	**/
 	void MakeIdentity()
 	{
 		for (int i = 0; i < 2; ++i)
@@ -22,6 +30,7 @@ struct Matrix2x2
 		}
 	}
 
+	/** Copies the values from the given matrix into this matrix. **/
 	void CopyFrom(Matrix2x2 other)
 	{
 		for (int i = 0; i < 2; ++i)
@@ -33,6 +42,10 @@ struct Matrix2x2
 		}
 	}
 
+	/**
+	 * Adds the given matrix to this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Add(Matrix2x2 other, out Matrix2x2 result)
 	{
 		for (int i = 0; i < 2; ++i)
@@ -44,17 +57,25 @@ struct Matrix2x2
 		}
 	}
 
+	/**
+	 * Subtracts the given matrix from this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Sub(Matrix2x2 other, out Matrix2x2 result)
 	{
 		for (int i = 0; i < 2; ++i)
 		{
 			for (int j = 0; j < 2; ++j)
 			{
-				result.m_Values[i][j] = m_Values[i][j] + other.m_Values[i][j];
+				result.m_Values[i][j] = m_Values[i][j] - other.m_Values[i][j];
 			}
 		}
 	}
 
+	/**
+	 * Multiplies the given matrix by this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Mul(Matrix2x2 other, out Matrix2x2 result)
 	{
 		for (int i = 0; i < 2; ++i)
@@ -72,10 +93,13 @@ struct Matrix2x2
 	}
 }
 
+/** Represents a matrix with three rows and three columns. **/
 struct Matrix3x3
 {
+	/** The values contained in this matrix. **/
 	double[3][3] m_Values;
 
+	/** Returns a string representation of this matrix. **/
 	string ToString(int precision = 6) const
 	{
 		return string.Format(
@@ -87,6 +111,12 @@ struct Matrix3x3
 			precision, m_Values[2][0], precision, m_Values[2][1], precision, m_Values[2][2]);
 	}
 
+	/**
+	 * Reassigns all the values of this matrix to form an identity matrix, like so:
+	 * ⌈1.0, 0.0, 0.0⌉
+	 * |0.0, 1.0, 0.0|
+	 * ⌊0.0, 0.0, 1.0⌋
+	**/
 	void MakeIdentity()
 	{
 		for (int i = 0; i < 3; ++i)
@@ -98,6 +128,7 @@ struct Matrix3x3
 		}
 	}
 
+	/** Copies the values from the given matrix into this matrix. **/
 	void CopyFrom(Matrix3x3 other)
 	{
 		for (int i = 0; i < 3; ++i)
@@ -109,6 +140,10 @@ struct Matrix3x3
 		}
 	}
 
+	/**
+	 * Adds the given matrix to this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Add(Matrix3x3 other, out Matrix3x3 result)
 	{
 		for (int i = 0; i < 3; ++i)
@@ -120,17 +155,25 @@ struct Matrix3x3
 		}
 	}
 
+	/**
+	 * Subtracts the given matrix from this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Sub(Matrix3x3 other, out Matrix3x3 result)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				result.m_Values[i][j] = m_Values[i][j] + other.m_Values[i][j];
+				result.m_Values[i][j] = m_Values[i][j] - other.m_Values[i][j];
 			}
 		}
 	}
 
+	/**
+	 * Multiplies the given matrix by this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Mul(Matrix3x3 other, out Matrix3x3 result)
 	{
 		for (int i = 0; i < 3; ++i)
@@ -148,10 +191,13 @@ struct Matrix3x3
 	}
 }
 
+/** Represents a matrix with four rows and four columns. **/
 struct Matrix4x4
 {
+	/** The values contained in this matrix. **/
 	double[4][4] m_Values;
 
+	/** Returns a string representation of this matrix. **/
 	string ToString(int precision = 6) const
 	{
 		return string.Format(
@@ -165,6 +211,13 @@ struct Matrix4x4
 			precision, m_Values[3][0], precision, m_Values[3][1], precision, m_Values[3][2], precision, m_Values[3][3]);
 	}
 
+	/**
+	 * Reassigns all the values of this matrix to form an identity matrix, like so:
+	 * ⌈1.0, 0.0, 0.0, 0.0⌉
+	 * |0.0, 1.0, 0.0, 0.0|
+	 * |0.0, 0.0, 1.0, 0.0|
+	 * ⌊0.0, 0.0, 0.0, 1.0⌋
+	**/
 	void MakeIdentity()
 	{
 		for (int i = 0; i < 4; ++i)
@@ -176,6 +229,7 @@ struct Matrix4x4
 		}
 	}
 
+	/** Copies the values from the given matrix into this matrix. **/
 	void CopyFrom(Matrix4x4 other)
 	{
 		for (int i = 0; i < 4; ++i)
@@ -187,6 +241,10 @@ struct Matrix4x4
 		}
 	}
 
+	/**
+	 * Adds the given matrix to this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Add(Matrix4x4 other, out Matrix4x4 result)
 	{
 		for (int i = 0; i < 4; ++i)
@@ -198,17 +256,25 @@ struct Matrix4x4
 		}
 	}
 
+	/**
+	 * Subtracts the given matrix from this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Sub(Matrix4x4 other, out Matrix4x4 result)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
 			for (int j = 0; j < 4; ++j)
 			{
-				result.m_Values[i][j] = m_Values[i][j] + other.m_Values[i][j];
+				result.m_Values[i][j] = m_Values[i][j] - other.m_Values[i][j];
 			}
 		}
 	}
 
+	/**
+	 * Multiplies the given matrix by this matrix and assigns the result to the matrix given
+	 * in the result argument.
+	**/
 	void Mul(Matrix4x4 other, out Matrix4x4 result)
 	{
 		for (int i = 0; i < 4; ++i)

@@ -2,11 +2,12 @@
 /**
  * A one-way connection between two child states of a particular state.
  *
- * Transitions define a trigger event, an optional origin state, or "from"
- * state, and a target state, or "to" state. A transition is triggered when the
- * containing state receives an event that matches the transition's event ID,
- * if the type of the containing state's active child matches the transition's
- * origin state.
+ * Transitions define a target state, or "to" state, an optional origin state, or
+ * "from" state, and an optional target state, or "to" state. A transition is triggered
+ * when the containing state receives an event that matches the transition's event ID,
+ * if it has one, and if the type of the containing state's active child matches the
+ * transition's origin state, if it has one. However, transitions must at least have
+ * either a trigger event or an origin state.
  *
  * When a transition is successfully performed, the active child of the containing
  * state is exited, and the target state defined by the transition is entered. The
@@ -16,6 +17,12 @@
  * These transitions are known as unbound transitions, and may be performed
  * regardless of which child of the containing state is active. Only one unbound
  * transition for any given event ID may be contained within a state.
+ *
+ * Additionally, transitions that define origin states may instead choose not to
+ * define a trigger event. These are known as live transitions. States containing live
+ * transitions will attempt to perform them every time their CallUpdate() method is
+ * called. Only one live transition for any given child of a certain state may be
+ * contained within said state.
  *
  * Transitions may define a condition to be fulfilled before the transition may
  * be performed. Transitions that are not performed due to their condition not
@@ -29,6 +36,11 @@
  * child is changed, but before the new active child is entered. Transition
  * behaviors are given access to the state that performed the transition, such
  * that they may modify state data or propagate additional events.
+ *
+ * Ordinarily, the target state's active child is reset to default when a transition
+ * is successfully performed. However, transitions may choose to allow the target
+ * state to bypass this reset and keep the active hierarchy of its descendants intact.
+ * These are known as branch-resuming transitions.
 **/
 class SMTransition
 {
@@ -116,7 +128,6 @@ class SMTransition
 		if (m_FromSet)
 		{
 			Console.Printf("Origin state may only be set once.");
-			// Console.PrintfEx(PRINT_HIGH, "Origin state may only be set once.");
 			return self;
 		}
 
@@ -130,7 +141,6 @@ class SMTransition
 		if (m_ToSet)
 		{
 			Console.Printf("Target state may only be set once.");
-			// Console.PrintfEx(PRINT_HIGH, "Target state may only be set once.");
 			return self;
 		}
 
@@ -144,7 +154,6 @@ class SMTransition
 		if (m_EventIdSet)
 		{
 			Console.Printf("Event ID may only be set once.");
-			// Console.PrintfEx(PRINT_HIGH, "Event ID may only be set once.");
 			return self;
 		}
 
@@ -158,7 +167,6 @@ class SMTransition
 		if (m_EventIdSet)
 		{
 			Console.Printf("Branch resuming may only be set once.");
-			// Console.PrintfEx(PRINT_HIGH, "Branch resuming may only be set once.");
 			return self;
 		}
 
@@ -168,12 +176,13 @@ class SMTransition
 	}
 }
 
-// TODO: Implement live transitions.
 /**
  * A single unit of logic in a hierarchical finite state machine.
  *
  * States may contain any number of child states, also referred to as branches,
  * and consider only one of these children to be active at any given time.
+ * A state that coontains children will define a default child. Typically this is
+ * the first child added to the state. 
  *
  * States may define behavior to be executed upon the state initially becoming
  * active, behavior to be executed on demand, and behavior to be executed upon
@@ -197,7 +206,10 @@ class SMTransition
 **/
 class SMState
 {
+	/** This state's parent state. **/
 	protected SMState m_Parent;
+
+	/** This state's owning machine. **/
 	protected SMMachine m_Machine;
 
 	private class<SMState> m_ActiveChildClass;
@@ -208,7 +220,7 @@ class SMState
 	private array<SMState> m_Children;
 	private array<SMTransition> m_Transitions;
 
-	// TODO: Document Reset.
+	/** Sets this state's active child back to the default state. **/
 	protected void Reset()
 	{
 		SMState activeChild = m_ActiveChild;
@@ -225,22 +237,28 @@ class SMState
 
 	/**
 	 * The state's entry behavior.
-	 * Callers should avoid calling this method directly, consider using
-	 * CallEnter() instead.
+	 *
+	 * NOTE:
+	 *		Callers should avoid calling this method directly, consider using
+	 *		CallEnter() instead.
 	**/
 	protected virtual void EnterState() { }
 
 	/**
 	 * The state's update behavior.
-	 * Callers should avoid calling this method directly, consider using
-	 * CallUpdate() instead.
+	 *
+	 * NOTE:
+	 *		Callers should avoid calling this method directly, consider using
+	 *		CallUpdate() instead.
 	**/
 	protected virtual void UpdateState() { }
 
 	/**
 	 * The state's exit behavior.
-	 * Callers should avoid calling this method directly, consider using
-	 * CallExit() instead.
+	 *
+	 * NOTE:
+	 *		Callers should avoid calling this method directly, consider using
+	 *		CallExit() instead.
 	**/
 	protected virtual void ExitState() { }
 
@@ -287,7 +305,6 @@ class SMState
 		}
 
 		Console.Printf("State %s does not contain a child of type %s.",
-		// Console.PrintfEx(PRINT_HIGH, "State %s does not contain a child of type %s.",
 			GetClassName(), childClass.GetClassName());
 		return null;
 	}
@@ -295,8 +312,12 @@ class SMState
 	// TODO: Update GetTransition documentation.
 	/**
 	 * Returns the transition corresponding to the given event ID and origin state.
-	 * Returns null if no transition with the given ID and origin state is found,
-	 * or if the given ID or origin state are null.
+	 * If 'None' is provided as an event ID, this method will return the live transition
+	 * corresponding to the given origin state. If no origin state is provided, this
+	 * method will return the unbound transition corresponding to the given event ID.
+	 *
+	 * Returns null if no transition with the given ID or origin state is found, or if
+	 * the given event ID is 'None' and the given origin state is null.
 	**/
 	SMTransition GetTransition(name eventId, class<SMState> from) const
 	{
@@ -306,7 +327,7 @@ class SMState
 		{
 			SMTransition transition = m_Transitions[i];
 
-			// This should catch live or unbound transitions too
+			// This should catch live or unbound transitions too.
 			if (transition.GetEventId() == eventId && transition.GetFrom() == from)
 			{
 				return transition;
@@ -314,24 +335,27 @@ class SMState
 		}
 
 		Console.Printf("State %s does not contain a transition for the %s event "
-		// Console.PrintfEx(PRINT_HIGH, "State %s does not contain a transition for the %s event "
 			.."originating from the %s state.", GetClassName(), eventId, from.GetClassName());
 		return null;
 	}
 
-	// TODO: Implement GetUnboundTransition.
-	// TODO: Document GetUnboundTransition.
-	// SMTransition GetUnboundTransition(name eventId) const
-	// {
-	// 	return GetTransition(eventId, null);
-	// }
+	/**
+	 * Returns the unbound transition corresponding to the given event ID,
+	 * or null if none is found.
+	**/
+	SMTransition GetUnboundTransition(name eventId) const
+	{
+		return GetTransition(eventId, null);
+	}
 
-	// TODO: Implement GetLiveTransition.
-	// TODO: Document GetLiveTransition.
-	// SMTransition GetLiveTransition(class<SMState> from) const
-	// {
-	// 	return GetTransition('None', from);
-	// }
+	/**
+	 * Returns the live transition corresponding to the given origin state,
+	 * or null if none is found.
+	**/
+	SMTransition GetLiveTransition(class<SMState> from) const
+	{
+		return GetTransition('None', from);
+	}
 
 	/**
 	 * Returns the active child.
@@ -360,7 +384,8 @@ class SMState
 	}
 
 	/**
-	 * Adds the given child the the array of children
+	 * Adds the given child the the array of children.
+	 *
 	 * Returns itself upon success, so calls to this method can be chained to
 	 * other method calls on the same state.
 	 * Returns null upon failure.
@@ -372,7 +397,6 @@ class SMState
 			if (m_Children[i].GetClass() == newState.GetClass())
 			{
 				Console.Printf("State %s already contains a child of type %s.",
-				// Console.PrintfEx(PRINT_HIGH, "State %s already contains a child of type %s.",
 					GetClassName(), newState.GetClassName());
 				return null;
 			}
@@ -382,7 +406,7 @@ class SMState
 		newState.m_Parent = self;
 		newState.m_Machine = m_Machine;
 
-		// New state may have descendants, update those as well
+		// New state may have descendants, update those as well.
 		newState.UpdateHierarchyReferences();
 
 		UpdateDefaultAndActiveStates();
@@ -402,7 +426,6 @@ class SMState
 		if (childClass == m_DefaultChildClass && m_Children.Size() > 1u)
 		{
 			Console.Printf("Default child must be removed last.");
-			// Console.PrintfEx(PRINT_HIGH, "Default child must be removed last.");
 			return null;
 		}
 
@@ -414,13 +437,13 @@ class SMState
 				{
 					if (childClass != m_DefaultChildClass)
 					{
-						// Active child will be removed, fall back to default
+						// Active child will be removed, fall back to default.
 						PerformTransition(new("SMTransition")
 							.From(m_ActiveChildClass).To(m_DefaultChildClass));
 					}
 					else
 					{
-						// Default child will be removed, make it exit
+						// Default child will be removed, make it exit.
 						m_Children[i].CallExit();
 					}
 				}
@@ -429,7 +452,6 @@ class SMState
 		}
 
 		Console.Printf("State %s does not contain a child of type %s.",
-		// Console.PrintfEx(PRINT_HIGH, "State %s does not contain a child of type %s.",
 			GetClassName(), childClass.GetClassName());
 		return null;
 	}
@@ -454,26 +476,23 @@ class SMState
 		{
 			SMTransition transition = m_Transitions[i];
 
-			// This should catch live or unbound transitions too
+			// This should catch live or unbound transitions too.
 			if (transition.GetEventID() == newTransition.GetEventID()
 				&& transition.GetFrom() == newTransition.GetFrom())
 			{
 				if (transition.GetFrom() != null)
 				{
 					Console.Printf("State %s already contains a transition for the %s event originating from the %s state.",
-					// ConsoleEx.PRINT_HIGH, Printf("State %s already contains a transition for the %s event originating from the %s state.",
 						GetClassName(),transition.GetEventID(), transition.GetFrom().GetClassName());
 				}
 				else if (transition.GetEventID() == 'None')
 				{
 					Console.Printf("State %s already contains a live transition for the "
-					// Console.PrintfEx(PRINT_HIGH, "State %s already contains a live transition for the "
 						.."originating from the %s state.", GetClassName(), transition.GetFrom());
 				}
 				else
 				{
 					Console.Printf("State %s already contains an unbound transition for the "
-					// Console.PrintfEx(PRINT_HIGH, "State %s already contains an unbound transition for the "
 						.."%s event.", GetClassName(), transition.GetEventID());
 				}
 				return null;
@@ -498,7 +517,6 @@ class SMState
 		if (eventId == 'None' && from == null)
 		{
 			Console.Printf("Either a valid event ID or a valid origin state must be specified.");
-			// Console.PrintfEx(PRINT_HIGH, "Either a valid event ID or a valid origin state must be specified.");
 			return null;
 		}
 		for (uint i = 0u; i < m_Transitions.Size(); ++i)
@@ -516,50 +534,55 @@ class SMState
 		if (eventId == 'None')
 		{
 			Console.Printf("State %s does not contain a live transition "
-			// Console.PrintfEx(PRINT_HIGH, "State %s does not contain a live transition "
 				.."originating from the %s state.", GetClassName(), from.GetClassName());
 		}
 		else if (from != null)
 		{
 			Console.Printf("State %s does not contain an unbound "
-			// Console.PrintfEx(PRINT_HIGH, "State %s does not contain an unbound "
 				.."transition for the %s event.", GetClassName(), eventId);
 		}
 		else
 		{
 			Console.Printf("State %s does not contain a transition for the %s event originating from "
-			// ConsoleEx.PRINT_HIGH, Printf("State %s does not contain a transition for the %s event originating from "
 				.."the %s state.", GetClassName(), eventId, from.GetClassName());
 		}
 		return null;
 	}
 
-	// TODO: Document RemoveLiveTransition.
+	/**
+	 * Removes the live transition with the given origin state from this
+	 * state's transitions.
+	**/
 	SMState RemoveLiveTransition(class<SMState> from)
 	{
 		if (from == null)
 		{
 			Console.Printf("Origin state is null.");
-			// Console.PrintfEx(PRINT_HIGH, "Origin state is null.");
 			return null;
 		}
 		return RemoveTransition('None', from);
 	}
 
-	// TODO: Document RemoveUnboundTransition.
+	/**
+	 * Removes the unbound transition with the given trigger event from this
+	 * state's transitions.
+	**/
 	SMState RemoveUnboundTransition(name eventId)
 	{
 		if (eventId == 'None')
 		{
 			Console.Printf("Event ID is None.");
-			// Console.PrintfEx(PRINT_HIGH, "Event ID is None.");
 			return null;
 		}
 		return RemoveTransition(eventId, null);
 	}
 
-	// TODO: Document SetDefaultChild.
-	// NOTE: Be sure to mention how it must be called from the owning machine's Build method.
+	/**
+	 * Sets the child that the state will transition to by default when the active
+	 * child is removed.
+	 *
+	 * NOTE: This may only be called from within the owning machine's Build() method.
+	**/
 	protected SMState SetDefaultChild(class<SMState> newDefault)
 	{
 		if (!IsBuilding())
@@ -571,6 +594,11 @@ class SMState
 		return self;
 	}
 
+	/**
+	 * Inserts all of the state's children into the given array.
+	 *
+	 * NOTE: This may only be called from within the owning machine's Build() method.
+	**/
 	protected void GetAllChildren(out array<SMState> stateArray)
 	{
 		if (!IsBuilding())
@@ -609,9 +637,13 @@ class SMState
 		m_ActiveChild.DrillEvent(eventId);
 	}
 
-	// TODO: Document SetActiveState.
-	// NOTE: Be sure to warn about the dangers of using this.
-	protected void SetActiveState(class<SMState> newActiveClass)
+	/**
+	 * Forcibly assigns the given type to be this state's active child, without
+	 * performing any transitions.
+	 *
+	 * NOTE: This is an advanced use case.
+	**/
+	protected void ForceActiveState(class<SMState> newActiveClass)
 	{
 		let newActive = GetChild(newActiveClass);
 		if (!newActive) ThrowAbortException("Target state does not exist.");
@@ -676,6 +708,12 @@ class SMState
 
 	private bool TryConsumeEvent(name eventId)
 	{
+		if (eventId == 'None')
+		{
+			Console.Printf("'None' is not a valid event ID.");
+			return false;
+		}
+
 		if (TryHandleEvent(eventId) || TryPerformTransition(eventId)) return true;
 
 		return false;
@@ -845,6 +883,7 @@ class SMMachine : SMState abstract
 	 *				.From("SMEnemySuspicious")
 	 *				.To("SMEnemyIdle")
 	 *				.On('DispelledSuspicion')
+	 *				.ResumesBranch()
 	 *			)
 	 *		);
 	 *
@@ -874,7 +913,7 @@ class SMMachine : SMState abstract
 	 *			.On('DetectedPlayer').To(SMEnemyHostile")
 	 *		);
 	 *		AddTransition(new("SMTransition")
-	 *			.On('LostPlayerTrail).From("SMEnemyHostile").To("SMEnemyAlert")
+	 *			.On('LostPlayerTrail).From("SMEnemyHostile").To("SMEnemyAlert").ResumesBranch()
 	 *		);
 	 *	}
 	 *
@@ -1000,7 +1039,6 @@ class SMMachine : SMState abstract
 			if (childClass == null)
 			{
 				Console.Printf("Class name %s is invalid.", childClasses[i]);
-				// Console.PrintfEx(PRINT_HIGH, "Class name %s is invalid.", childClasses[i]);
 				return null;
 			}
 
@@ -1008,7 +1046,6 @@ class SMMachine : SMState abstract
 			if (outState == null)
 			{
 				Console.Printf("State not found.");
-				// Console.PrintfEx(PRINT_HIGH, "State not found.");
 				return null;
 			}
 		}
@@ -1026,6 +1063,5 @@ class SMMachine : SMState abstract
 			if (checkState != null) branch = branch.." -> ";
 		}
 		Console.Printf("Active: %s", branch);
-		// Console.PrintfEx(PRINT_HIGH, "Active: %s", branch);
 	}
 }

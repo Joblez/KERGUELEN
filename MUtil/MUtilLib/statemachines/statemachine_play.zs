@@ -93,6 +93,7 @@ class SMTransitionPlay play
 class SMStatePlay play
 {
 	protected SMStatePlay m_Parent;
+
 	protected SMMachinePlay m_Machine;
 	private class<SMStatePlay> m_ActiveChildClass;
 	private class<SMStatePlay> m_DefaultChildClass;
@@ -165,6 +166,16 @@ class SMStatePlay play
 		Console.Printf("State %s does not contain a transition for the %s event "
 			.."originating from the %s state.", GetClassName(), eventId, from.GetClassName());
 		return null;
+	}
+
+	SMTransitionPlay GetUnboundTransition(name eventId) const
+	{
+		return GetTransition(eventId, null);
+	}
+
+	SMTransitionPlay GetLiveTransition(class<SMStatePlay> from) const
+	{
+		return GetTransition('None', from);
 	}
 
 	SMStatePlay GetActiveChild() const
@@ -333,6 +344,7 @@ class SMStatePlay play
 		m_DefaultChildClass = newDefault;
 		return self;
 	}
+
 	protected void GetAllChildren(out array<SMStatePlay> stateArray)
 	{
 		if (!IsBuilding())
@@ -354,7 +366,7 @@ class SMStatePlay play
 		m_ActiveChild.DrillEvent(eventId);
 	}
 
-	protected void SetActiveState(class<SMStatePlay> newActiveClass)
+	protected void ForceActiveState(class<SMStatePlay> newActiveClass)
 	{
 		let newActive = GetChild(newActiveClass);
 		if (!newActive) ThrowAbortException("Target state does not exist.");
@@ -395,6 +407,11 @@ class SMStatePlay play
 	}
 	private bool TryConsumeEvent(name eventId)
 	{
+		if (eventId == 'None')
+		{
+			Console.Printf("'None' is not a valid event ID.");
+			return false;
+		}
 		if (TryHandleEvent(eventId) || TryPerformTransition(eventId)) return true;
 		return false;
 	}
@@ -496,6 +513,7 @@ class SMMachinePlay : SMStatePlay abstract
 	{
 		return m_IsBuilding;
 	}
+
 
 	protected abstract void Build();
 

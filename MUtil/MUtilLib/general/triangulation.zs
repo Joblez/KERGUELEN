@@ -652,9 +652,6 @@ class DelaunayTriangle
 		MarkConstrainedEdgePoints(edge.m_P, edge.m_Q);
 	}
 
-	/// <summary>
-	/// Mark edge as constrained
-	/// </summary>
 	void MarkConstrainedEdgePoints(TriangulationPoint p, TriangulationPoint q)
 	{
 		int i = EdgeIndex(p, q);
@@ -676,10 +673,6 @@ class DelaunayTriangle
 		return TriangulationPoint.Create(cx, cy);
 	}
 
-	/// <summary>
-	/// Get the index of the neighbor that shares this edge (or -1 if it isn't shared)
-	/// </summary>
-	/// <returns>index of the shared edge or -1 if edge isn't shared</returns>
 	int EdgeIndex(TriangulationPoint p1, TriangulationPoint p2)
 	{
 		int i1 = FindInPoints(p1);

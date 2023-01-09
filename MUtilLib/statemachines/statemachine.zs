@@ -1,4 +1,3 @@
-// TODO: Document resuming transitions.
 /**
  * A one-way connection between two child states of a particular state.
  *
@@ -121,8 +120,10 @@ class SMTransition
 		return m_ResumesBranch;
 	}
 
-	// TODO: Document call chain setup syntax.
-
+	/**
+	 * Sets the origin state of this transition. Returns itself so other setup-related
+	 * method calls may be chained to it.
+	**/
 	SMTransition From(class<SMState> _from)
 	{
 		if (m_FromSet)
@@ -136,6 +137,10 @@ class SMTransition
 		return self;
 	}
 
+	/**
+	 * Sets the target state of this transition. Returns itself so other setup-related
+	 * method calls may be chained to it.
+	**/
 	SMTransition To(class<SMState> _to)
 	{
 		if (m_ToSet)
@@ -149,6 +154,10 @@ class SMTransition
 		return self;
 	}
 
+	/**
+	 * Sets the trigger event for this transition. Returns itself so other setup-related
+	 * method calls may be chained to it.
+	**/
 	SMTransition On(name eventId)
 	{
 		if (m_EventIdSet)
@@ -162,6 +171,10 @@ class SMTransition
 		return self;
 	}
 
+	/**
+	 * Sets whether or not this transition will resume the target branch when performed.
+	 * Returns itself so other setup-related method calls may be chained to it.
+	**/
 	SMTransition ResumesBranch(bool resumes = true)
 	{
 		if (m_EventIdSet)
@@ -179,10 +192,13 @@ class SMTransition
 /**
  * A single unit of logic in a hierarchical finite state machine.
  *
- * States may contain any number of child states, also referred to as branches,
- * and consider only one of these children to be active at any given time.
- * A state that coontains children will define a default child. Typically this is
- * the first child added to the state. 
+ * States may contain any number of child states, and consider only one of these children
+ * to be active at any given time. Any individual lineage of children in a state machine
+ * is known as a branch.
+ *
+ * A state that contains children will define a default child. Typically this is
+ * the first child added to the state. The lineage of all children in the containing
+ * machine that are considered active at one time is known as the active branch.
  *
  * States may define behavior to be executed upon the state initially becoming
  * active, behavior to be executed on demand, and behavior to be executed upon
@@ -309,7 +325,6 @@ class SMState
 		return null;
 	}
 
-	// TODO: Update GetTransition documentation.
 	/**
 	 * Returns the transition corresponding to the given event ID and origin state.
 	 * If 'None' is provided as an event ID, this method will return the live transition
@@ -824,7 +839,6 @@ class SMState
 	}
 }
 
-// TODO: Document SMMachine.
 /**
  * A container for a finite hierarchy of states.
 **/
@@ -848,7 +862,7 @@ class SMMachine : SMState abstract
 	/**
 	 * Defines the hierarchy of this state machine.
 	 *
-	 * This method should not be called directly. Use CallBuild() instead.
+	 * NOTE: This method should not be called directly. Use CallBuild() instead.
 	 *
 	 * It is intended that overrides of this method use the hierarchy management
 	 * methods from SMState. Many of these methods return themselves, allowing
@@ -858,7 +872,7 @@ class SMMachine : SMState abstract
 	 * hierarchy by overriding this method and calling the super implementation
 	 * prior to making their own changes.
 	 *
-	 * Here is an example of a hypothetical complex enemy AI machine:
+	 * Below is an example of a hypothetical complex enemy AI machine:
 	 *
 	 *	override void Build()
 	 *	{

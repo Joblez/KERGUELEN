@@ -1,3 +1,4 @@
+/** Contains level-related utilities. **/
 class LevelUtil play
 {
 	/**

@@ -67,7 +67,7 @@ struct ButtonEventQueue play
 	/** Returns a string representation of this ButtonEventQueue. **/
 	string ToString() const
 	{
-		Console.Printf("Input events:")
+		Console.Printf("Input events:");
 		
 		if (m_Events.Size() == 0)
 		{

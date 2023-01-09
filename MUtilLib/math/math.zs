@@ -852,7 +852,7 @@ class BoxedVector2
 		return bV;
 	}
 
-	static BoxedVector2 currentVertex(Vertex v)
+	static BoxedVector2 FromVertex(Vertex v)
 	{
 		return BoxedVector2.Create(v.p);
 	}

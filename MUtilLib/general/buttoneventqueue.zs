@@ -67,18 +67,21 @@ struct ButtonEventQueue play
 	/** Returns a string representation of this ButtonEventQueue. **/
 	string ToString() const
 	{
-		Console.Printf("Input events:");
+		string result.
+		result.AppendFormat("Input events:");
 		
 		if (m_Events.Size() == 0)
 		{
-			Console.Printf("\n    None.");
-			return;
+			result.AppendFormat("\n    None.");
+			return result;
 		}
 
 		for (int i = 0; i < m_Events.Size(); ++i)
 		{
-			Console.Printf(string.Format("\n    %i: ", i)..GetAsString(m_Events[i], m_EventTypes[i]));
+			result.AppendFormat("\n    %i: ", i)..GetAsString(m_Events[i], m_EventTypes[i]);
 		}
+
+		return result;
 	}
 
 	/** Returns the next input event in the queue, or [0, 0] if there are none. **/

@@ -1,4 +1,4 @@
-// TODO: Document ScreenUtil.
+/** Contains utilities related to screen-relative positioning and scaling. **/
 class ScreenUtil
 {
 	const ASPECT_SCALE_X = 1.2;

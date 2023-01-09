@@ -70,7 +70,7 @@ class FootstepEventHandler : EventHandler
 	{
 		PlayerPawn pawn = PlayerPawn(players[playerIndex].mo);
 
-		if (!CVar.GetCVar("fs_enabled", players[playerIndex]).GetBool() || pawn.Pos.z - pawn.FloorZ > 0)
+		if (!CVar.GetCVar('fs_enabled', players[playerIndex]).GetBool() || pawn.Pos.z - pawn.FloorZ > 0)
 		{
 			return;
 		}
@@ -88,7 +88,7 @@ class FootstepEventHandler : EventHandler
 
 		if (data.m_StepPlayback < data.m_StepInterval) return;
 
-		double soundLevel = CVar.GetCVar("fs_volume_mul").GetFloat() * speedPercentage;
+		double soundLevel = CVar.GetCVar('fs_volume_mul').GetFloat() * speedPercentage;
 
 		TextureID floorTextureID = pawn.floorpic;
 		int foundIndex = m_StepTextures.Find(int(floorTextureID));

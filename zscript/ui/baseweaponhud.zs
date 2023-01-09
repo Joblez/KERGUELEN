@@ -28,14 +28,14 @@ class BaseWeaponHUD : HUDExtension abstract
 	override void UISetup()
 	{
 		m_HUDTransform = Transform2D.Create();
-		m_HUDAspectScale = CVar.GetCVar("hud_aspectscale");
+		m_HUDAspectScale = CVar.GetCVar('hud_aspectscale', players[consoleplayer]);
 	}
 
 	override void PreDraw(int state, double ticFrac)
 	{
 		if (automapactive) return;
 
-		if (!m_HUDAspectScale) m_HUDAspectScale = CVar.GetCVar("hud_aspectscale");
+		if (!m_HUDAspectScale) m_HUDAspectScale = CVar.GetCVar('hud_aspectscale', players[consoleplayer]);
 
 		m_OriginalRelTop = StatusBar.RelTop;
 		m_OriginalHorizontalResolution = StatusBar.HorizontalResolution;

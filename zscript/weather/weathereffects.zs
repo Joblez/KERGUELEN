@@ -48,7 +48,7 @@ class WaterRipple : WeatherActor
 	States
 	{
 	Spawn:
-		TNT1 A 0 { Angle = FRandom(0.0, 360.0); }
+		TNT1 A 0 { Angle = FRandom[Weather](0.0, 360.0); }
 		RAIN FFGGHHIIJJKKLL 1 Bright {
 			A_SetTranslucent(max(0.0, invoker.Alpha - 0.9 / 14.0), 1);
 			Scale += (0.075, 0.075);
@@ -73,7 +73,7 @@ class Snowflake : WeatherActor
 	Spawn:
 		TNT1 A 0 NoDelay {
 			Pitch = -90.0;
-			Scale += (FRandom(-0.1, 0.1), FRandom(-0.1, 0.1));
+			Scale += (FRandom[Weather](-0.1, 0.1), FRandom[Weather](-0.1, 0.1));
 			WeaveIndexXY = Random(0, 63);
 		}
 	Alive:

@@ -170,7 +170,7 @@ class DynamiteStick : Actor
 			ActorUtil.Explode3D(self, int(300 * FRandom(1.0, 1.33)), 330.0, 360.0);
 			A_AlertMonsters(4096.0);
 
-			if (CVar.GetCVar("weapon_particle_toggle", players[consoleplayer]).GetBool())
+			if (CVar.GetCVar('weapon_particle_toggle', target.player).GetBool())
 			{
 				for (int i = 0; i < 9; ++i)
 				{

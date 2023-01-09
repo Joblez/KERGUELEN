@@ -231,9 +231,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	
 	// Smoke
 
-	action void A_ShotgunSmoke (double x, double y)
+	action void A_ShotgunSmoke(double x, double y)
 	{
-		if (GetCVar("smoke_toggle") == 1)
+		if (GetCVar('smoke_toggle') == 1)
 		{
 			A_FireProjectile("SmokeSpawner", 0, 0, x, y);
 			A_FireProjectile("SmokeSpawner", 0, 0, x, y);
@@ -244,7 +244,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	action void A_SingleSmoke(double x, double y)
 	{
-		if (GetCvar("smoke_toggle") == 1)
+		if (GetCVar('smoke_toggle') == 1)
 		{
 			A_FireProjectile("SmokeSpawner", 0, 0, x, y);
 		}

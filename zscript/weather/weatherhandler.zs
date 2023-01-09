@@ -1,4 +1,4 @@
-// NOTE: When documenting for usae example, make sure to mention how multiplayer will hurt performance.
+// NOTE: When documenting for usage example, make sure to mention how multiplayer will hurt performance.
 class WeatherHandler : StaticEventHandler // Need to be save-game-aware to reconstruct the weather state from the sim.
 {
 	const RAIN_TAG = 3570;
@@ -29,8 +29,8 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		while ((i = iterator.Next()) >= 0)
 		{
 			RainSpawner.Create(
-				24,
-				3000.0,
+				28,
+				3200.0,
 				level.Sectors[i],
 				m_WeatherAgent);
 		}
@@ -49,8 +49,8 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		while ((i = iterator.Next()) >= 0)
 		{
 			WeatherParticleSpawner.Create(
-				16,
-				1400.0,
+				15,
+				1700.0,
 				level.Sectors[i],
 				m_WeatherAgent,
 				snowParams,

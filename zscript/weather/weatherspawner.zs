@@ -37,17 +37,16 @@ class WeatherSpawner : Thinker
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
 
-		double frequency = GetAdjustedFrequency();
-		if (frequency == 0) return;
+		if (m_Frequency == 0) return;
 
 		m_Time += 1.0 / TICRATE;
 
-		if (m_Time >= 1.0 / frequency)
+		if (m_Time >= 1.0 / m_Frequency)
 		{
 			do
 			{
 				SpawnWeatherParticle();
-				m_Time -= 1.0 / frequency;
+				m_Time -= 1.0 / m_Frequency;
 			}
 			while (m_Time > 0.0);
 			m_Time = 0.0;
@@ -56,40 +55,48 @@ class WeatherSpawner : Thinker
 
 	Sector GetSector() const { return m_Sector; }
 
-	CVar GetWeatherAmountCVar() const
+	CVar GetWeatherAmountCVar(PlayerInfo player) const
 	{
-		if (!m_WeatherAmountCVar) m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
-		return m_WeatherAmountCVar;
+		return CVar.GetCVar('weather_amount', player);
 	}
 
-	double GetAdjustedFrequency() const
+	double GetAdjustedSpawnChance(PlayerInfo player) const
 	{
-		int amount = GetWeatherAmountCVar().GetInt();
-
-		if (amount == 6) return m_Frequency * 1.5;
-
-		return m_Frequency * amount * 0.2;
+		switch (GetWeatherAmountCVar(player).GetInt())
+		{
+			default:
+			case 0: return 0.0;		// Off.
+			case 1: return 0.1;		// Very low.
+			case 2: return 0.3;		// Low.
+			case 3: return 0.5;		// Medium.
+			case 4: return 0.65;	// High.
+			case 5: return 0.8;		// Very high.
+			case 6: return 1.0;		// Ultra.
+		}
 	}
-
-	double GetOutOfViewFrequencyReduction() const { return GetWeatherAmountCVar().GetInt() * 0.05; }
 
 	void SetDensity(double density)
 	{
 		m_Frequency = density * m_Triangulation.GetArea() / 2048.0 / TICRATE;
 	}
 
-	protected virtual void SpawnWeatherParticle()
+	protected virtual void SpawnWeatherParticle() const
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
-		double spawnScore = FRandom(0.0, 1.0);
-		if (!ShouldSpawn(point, spawnScore)) return;
+		double spawnScore = FRandom[Weather](0.0, 1.0);
+		if (!ShouldSpawn(point, spawnScore, 0.0, 0.5, 0.3)) return;
 
-		Actor.Spawn(m_WeatherType, (point.x, point.y, m_Sector.HighestCeilingAt(point) - FRandom(2, 12)));
+		Actor.Spawn(m_WeatherType, (point.x, point.y, m_Sector.HighestCeilingAt(point) - FRandom[Weather](2, 12)));
 	}
 
 	protected virtual double GetWeatherVerticalSpeed() const { return abs(GetDefaultByType(m_WeatherType).Vel.z); }
 
-	protected bool ShouldSpawn(vector2 point, double spawnScore)
+	protected bool ShouldSpawn(
+		vector2 point,
+		double spawnScore,
+		double minSpawnThreshold,
+		double maxSpawnThreshold,
+		double outOfViewThreshold = 0.0) const
 	{
 		foreach (player : players)
 		{
@@ -104,23 +111,31 @@ class WeatherSpawner : Thinker
 			// Cull outside range.
 			if (distance > range) continue;
 
-			// Attenuate amount over distance.
-			double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
+			// Adjust spawn score with setting.
+			spawnScore *= GetAdjustedSpawnChance(player);
 
-			// Screen dependency breaks multiplayer compat. Assume 16:9 for now.
-			bool isOutOfView = Actor.absangle(player.mo.Angle, vectorangle(point.x - player.mo.Pos.x, point.y - player.mo.Pos.y))
-				>= player.FOV * 0.5 * 1.77777777778; /* ScreenUtil.GetAspectRatio() */;
+			// Map spawn threshold along distance.
+			double spawnThreshold = Math.Remap(distance, 0.0, range, minSpawnThreshold, maxSpawnThreshold);
 
-			// Reduce spawn chance outside of horizontal view range.
-			if (isOutOfView) spawnThreshold += GetOutOfViewFrequencyReduction();
+			if (spawnScore < spawnThreshold) continue;
 
-			if (spawnScore >= spawnThreshold) return true;
+			// Additional threshold for out-of-view effects.
+			if (IsOutOfView(player, point) && spawnScore < outOfViewThreshold) continue;
+
+			return true;
 		}
 
 		return false;
 	}
 
-	protected vector2 ProjectPlayerPosition(PlayerPawn pawn)
+	protected bool IsOutOfView(PlayerInfo player, vector2 point) const
+	{
+		// Screen dependency breaks multiplayer compat. Assume 16:9 for now.
+		return Actor.absangle(player.mo.Angle, vectorangle(point.x - player.mo.Pos.x, point.y - player.mo.Pos.y))
+			>= player.FOV * 0.5 * 1.77777777778; /* ScreenUtil.GetAspectRatio() */;
+	}
+
+	protected vector2 ProjectPlayerPosition(PlayerPawn pawn) const
 	{
 		double ceilingZ = GetSector().HighestCeilingAt(pawn.Pos.xy);
 

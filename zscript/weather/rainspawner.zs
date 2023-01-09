@@ -2,7 +2,6 @@ class RainSpawner : WeatherParticleSpawner
 {
 	private transient CVar m_SplashParticlesCVar;
 	private TextureID m_MainSplashTexture;
-
 	static RainSpawner Create(
 		double density,
 		double range,
@@ -35,7 +34,7 @@ class RainSpawner : WeatherParticleSpawner
 			shouldSimulateParticles: shouldSimulateParticles,
 			enableEndOfLifeCallbacks: enableEndOfLifeCallbacks);
 
-		spawner.m_SplashParticlesCVar = CVar.GetCVar("splash_particles");
+		spawner.m_SplashParticlesCVar = CVar.GetCVar('splash_particles');
 		spawner.m_MainSplashTexture = TexMan.CheckForTexture("RSPLSH1");
 
 		return spawner;
@@ -88,97 +87,91 @@ class RainSpawner : WeatherParticleSpawner
 
 	override void ParticleEndOfLifeCallback(WeatherParticleSimulation data)
 	{
-		Actor pawn = players[consoleplayer].mo;
-
-		double distance = MathVec3.SquareDistanceBetween(data.GetEndPosition(), pawn.Pos);
-		double range = m_Range;
-
-		// Attenuate spawn chance over distance.
-		double spawnScore = FRandom(0.0, 1.0);
-		double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
-
 		vector3 endPosition = data.GetEndPosition();
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(endPosition.x - pawn.Pos.x, endPosition.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * ScreenUtil.GetAspectRatio();
+		PlayerInfo spawnPlayer = null;
+		double distance;
 
-		if (isOutOfView || spawnScore >= spawnThreshold) return;
+		// Check if any player meets splash effect criteria.
+		// NOTE: Earlier players in the list take priority. Unfortunate but preferrable to
+		// the host player having configuration authority. Could be fixed if particle spawns
+		// could be made client-side only.
+		foreach (player : players)
+		{
+			if (!player.mo) continue;
 
-		SpawnSplashEffect(data.GetEndPosition(), data.GetEndSector());
+			distance = MathVec3.SquareDistanceBetween(endPosition, player.mo.Pos);
+			double range = m_Range ** 2;
 
-		double splashParticleRange = GetSplashParticleDrawDistance() ** 2;
+			// Attenuate spawn chance over distance.
+			double spawnScore = FRandom[Weather](0.0, 1.0);
 
-		// Don't spawn splash particles too far away.
-		if (distance > splashParticleRange) return;
+			// Gradually cull up to 50% of splashes along the radius.
+			double spawnThreshold = Math.Remap(distance, 0.0, range, 0.0, 0.5);
 
-		int splashParticleSetting = GetSplashParticlesCVar().GetInt();
+			// Cull 70% of splash effects out of view.
+			if (IsOutOfView(player, endPosition.xy) && spawnScore < 0.7) continue;
 
-		// Don't spawn if splash particles disabled.
+			if (spawnScore < spawnThreshold) continue;
+			
+			// All criteria met, splash should spawn for this player.
+			spawnPlayer = player;
+			break;
+		}
+
+		// No suitable player found, spawn nothing.
+		if (!spawnPlayer) return;
+
+		SpawnSplashEffect(endPosition, data.GetEndSector());
+
+		int splashParticleSetting = CVar.GetCVar('splash_particles', spawnPlayer).GetInt();
+
+		// Spawn player has splashes disabled, spawn nothing.
 		if (splashParticleSetting <= 0) return;
 
-		if (splashParticleSetting == 6) // Extra detail for Ultra
-		{
-			FSpawnParticleParams params;
+		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
+		double splashParticleRange = m_Range ** 2.0 * Math.Remap(spawnPlayer.FOV, 10, 120, 2.0, 0.5);
 
-			params.color1 = 0xFFFFFFFF;
-			params.style = STYLE_Normal;
-			params.lifetime = 14;
-			params.sizestep = -0.2;
+		// Don't spawn splashes out of range.
+		if (distance > splashParticleRange) return;
+
+		FSpawnParticleParams params;
+
+		params.color1 = 0xFFFFFFFF;
+		params.style = STYLE_Normal;
+		params.startalpha = 1.0;
+
+		if (splashParticleSetting == 6) // Extra detail for Ultra.
+		{
+			params.lifetime = 8;
 			params.pos = data.GetEndPosition() + (0.0, 0.0, 1.0);
 			params.accel = (0.0, 0.0, -0.15);
-			params.startalpha = 1.0;
 
 			// Attenuate amount over distance.
 			int amount = int(round(Math.Remap(distance, 0.0, splashParticleRange, 5.0, 0.0)));
 
 			for (int i = 0; i < amount; ++i)
 			{
-				params.size = FRandom(2.5, 3.0);
-				params.vel = MathVec3.Rotate(Vec3Util.Random(2.0, 4.5, 0.0, 0.0, 0.275, 1.55), Vec3Util.Up(), FRandom(0.0, 360.0));
+				params.size = FRandom[Weather](2.5, 3.0);
+				params.sizestep = -(params.size / params.lifetime);
+				params.vel = MathVec3.Rotate(Vec3Util.Random(2.0, 4.5, 0.0, 0.0, 0.275, 1.55), Vec3Util.Up(), FRandom[Weather](0.0, 360.0));
 				level.SpawnParticle(params);
 			}
 		}
 
-		FSpawnParticleParams params;
-
-		params.color1 = 0xFFFFFFFF;
-		params.style = STYLE_Normal;
-		params.lifetime = 16;
-		params.sizestep = -0.4;
+		params.lifetime = 10;
 		params.pos = data.GetEndPosition() + (0.0, 0.0, 2.0);
 		params.accel = (0.0, 0.0, -0.25);
-		params.startalpha = 1.0;
 
 		// Attenuate amount over distance.
 		int amount = int(round(Math.Remap(distance, 0.0, splashParticleRange, splashParticleSetting, 0.0)));
 
 		for (int i = 0; i < Random(amount - 2, amount); ++i)
 		{
-			params.size = FRandom(3.0, 6.0);
-			params.vel = MathVec3.Rotate(Vec3Util.Random(0.75, 2.25, 0.0, 0.0, 0.5, 2.5), Vec3Util.Up(), FRandom(0.0, 360.0));
+			params.size = FRandom[Weather](3.0, 6.0);
+			params.sizestep = -(params.size / params.lifetime);
+			params.vel = MathVec3.Rotate(Vec3Util.Random(0.75, 2.25, 0.0, 0.0, 0.5, 2.5), Vec3Util.Up(), FRandom[Weather](0.0, 360.0));
 			level.SpawnParticle(params);
 		}
-	}
-
-	double GetFakeSplashChance() const
-	{
-		int setting = GetWeatherAmountCVar().GetInt();
-
-		return max(0.0, setting * 0.2 - 0.2);
-	}
-
-	double GetSplashParticleDrawDistance() const
-	{
-		int setting = GetSplashParticlesCVar().GetInt();
-		if (setting == 0) return 0.0;
-
-		// Scale with FOV to avoid awkward cutoff at low values (e.g. sniper zoom).
-		return 256 + 86 * setting * Math.Remap(players[consoleplayer].FOV, 10, 120, 12.0, 1.0);
-	}
-	
-	CVar GetSplashParticlesCVar()
-	{
-		if (!m_SplashParticlesCVar) m_SplashParticlesCVar = CVar.GetCVar("splash_particles", players[consoleplayer]);
-		return m_SplashParticlesCVar;
 	}
 
 	private void SpawnSplashEffect(vector3 spawnPosition, Sector sec) const
@@ -209,36 +202,42 @@ class RainSpawner : WeatherParticleSpawner
 
 	private void SpawnFakeSplash() const
 	{
-		Actor pawn = players[consoleplayer].mo;
+		// Check if any player meets fake splash criteria.
+		foreach (player : players)
+		{
+			if (!player.mo) continue;
 
-		// Spawn from max real splash range up to four times as far depending on FOV.
-		double minRange = m_Range ** 2.0;
-		double maxRange = minRange * Math.Remap(players[consoleplayer].FOV, 10, 120, 4.0, 1.0);
+			// Spawn from max real splash range up to four times as far depending on FOV.
+			double minRange = m_Range ** 2.0;
+			double maxRange = minRange * Math.Remap(player.FOV, 10, 120, 4.0, 1.0);
 
-		vector2 position = pawn.Pos.xy;
-		vector2 point = m_Triangulation.GetRandomPoint();
-		double distance = MathVec2.SquareDistanceBetween(point, position);
+			vector2 point = m_Triangulation.GetRandomPoint();
 
-		// Cull if outside desired range.
-		if (distance < minRange || distance >= maxRange) return;
+			// Could use a line trace to ensure this handles 3D floors correctly, but it's
+			// too rare an edge case for an effect like this.
+			vector3 spawnPosition = (point, m_Sector.NextLowestFloorAt(point.x, point.y, m_Sector.HighestCeilingAt(point)));
+			double distance = MathVec3.SquareDistanceBetween(spawnPosition, player.mo.Pos);
 
-		// Fake splashes are more likely to appear at higher weather settings.
-		if (FRandom(0.0, 1.0) < 1.0 - GetFakeSplashChance()) return;
+			// Cull if outside desired range.
+			if (distance < minRange || distance >= maxRange) continue;
 
-		// Could use a line trace to ensure this handles 3D floors correctly, but it's
-		// too rare an edge case for an effect like this.
-		vector3 spawnPosition = (point, m_Sector.NextLowestFloorAt(point.x, point.y, m_Sector.HighestCeilingAt(point)));
+			// Fake splashes are more likely to appear at higher weather settings.
+			double fakeSplashThreshold = 1.0 - max(0.0, GetWeatherAmountCVar(player).GetInt() * 0.2 - 0.2);
 
-		// Attenuate spawn chance over distance.
-		double spawnScore = FRandom(0.0, 1.0);
-		double spawnThreshold = Math.Remap(distance, minRange, maxRange, 0.5, 0.9);
+			if (FRandom[Weather](0.0, 1.0) < fakeSplashThreshold) continue;
 
-		bool isOutOfView = Actor.absangle(pawn.Angle, vectorangle(point.x - pawn.Pos.x, point.y - pawn.Pos.y))
-			>= players[consoleplayer].FOV * 0.5 * 1.77777777778 /* ScreenUtil.GetAspectRatio() */;
-		
-		// Fake splashes appear instantly, cull everything out of view.
-		if (isOutOfView || spawnScore < spawnThreshold) return;
+			// Attenuate spawn chance over distance.
+			double spawnScore = FRandom[Weather](0.0, 1.0);
+			double spawnThreshold = Math.Remap(distance, minRange, maxRange, 0.5, 0.9);
 
-		SpawnSplashEffect(spawnPosition, m_Sector);
+			bool isOutOfView = IsOutOfView(player, point);
+
+			// Fake splashes appear instantly, cull everything out of view.
+			if (isOutOfView || spawnScore < spawnThreshold) continue;
+
+			// All criteria met, spawn fake splash.
+			SpawnSplashEffect(spawnPosition, m_Sector);
+			break;
+		}
 	}
 }

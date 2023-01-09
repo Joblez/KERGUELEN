@@ -127,6 +127,8 @@ class WeatherParticleSpawner : WeatherSpawner
 		m_ShouldDoCallbackAtEndOfParticleLife = enableEndOfLifeCallbacks;
 	}
 
+	override double GetWeatherVerticalSpeed() const { return m_Vel.z; }
+
 	override void Tick()
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
@@ -150,15 +152,15 @@ class WeatherParticleSpawner : WeatherSpawner
 	override void SpawnWeatherParticle()
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
-		double spawnScore = FRandom(0.0, 1.0);
-		if (!ShouldSpawn(point, spawnScore)) return;
+		double spawnScore = FRandom[Weather](0.0, 1.0);
+		if (!ShouldSpawn(point, spawnScore, 0.0, 0.5, 0.35)) return;
 
 		vector3 spawnPosition = (point.x, point.y,
 			(m_Sector.HighestCeilingAt(point)
 				// Particles can exist outside of level geometry, spawn above ceiling to make it
 				// seem as though the weather is coming from the sky.
 				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)
-				- FRandom(2.0, 12.0)));
+				- FRandom[Weather](2.0, 12.0))); // Desyncronize particles.
 
 		FSpawnParticleParams outParams;
 
@@ -167,15 +169,15 @@ class WeatherParticleSpawner : WeatherSpawner
 		outParams.style = m_Style;
 		outParams.flags = m_Flags;
 		outParams.lifetime = m_Lifetime;
-		outParams.size = m_Size + FRandom(-m_SizeDeviation, m_SizeDeviation);
-		outParams.sizestep = m_SizeStep + FRandom(-m_SizeStepDeviation, m_SizeStepDeviation);
+		outParams.size = m_Size + FRandom[Weather](-m_SizeDeviation, m_SizeDeviation);
+		outParams.sizestep = m_SizeStep + FRandom[Weather](-m_SizeStepDeviation, m_SizeStepDeviation);
 		outParams.vel = m_Vel + Vec3Util.Random(-m_VelDeviation.x, m_VelDeviation.x, -m_VelDeviation.y, m_VelDeviation.y, -m_VelDeviation.z, m_VelDeviation.z);
 		outParams.accel = m_Accel + Vec3Util.Random(-m_AccelDeviation.x, m_AccelDeviation.x, -m_AccelDeviation.y, m_AccelDeviation.y, -m_AccelDeviation.z, m_AccelDeviation.z);
-		outParams.startalpha = m_StartAlpha + FRandom(-m_AlphaDeviation, m_AlphaDeviation);
-		outParams.fadestep = m_FadeStep + FRandom(-m_FadeDeviation, m_FadeDeviation);
-		outParams.startroll = m_StartRoll + FRandom(-m_RollDeviation, m_RollDeviation);
-		outParams.rollvel = m_RollVel + FRandom(-m_RollVelDeviation, m_RollVelDeviation);
-		outParams.rollacc = m_RollAcc + FRandom(-m_RollAccDeviation, m_RollAccDeviation);
+		outParams.startalpha = m_StartAlpha + FRandom[Weather](-m_AlphaDeviation, m_AlphaDeviation);
+		outParams.fadestep = m_FadeStep + FRandom[Weather](-m_FadeDeviation, m_FadeDeviation);
+		outParams.startroll = m_StartRoll + FRandom[Weather](-m_RollDeviation, m_RollDeviation);
+		outParams.rollvel = m_RollVel + FRandom[Weather](-m_RollVelDeviation, m_RollVelDeviation);
+		outParams.rollacc = m_RollAcc + FRandom[Weather](-m_RollAccDeviation, m_RollAccDeviation);
 
 		outParams.pos = spawnPosition;
 
@@ -190,9 +192,8 @@ class WeatherParticleSpawner : WeatherSpawner
 		level.SpawnParticle(outParams);
 	}
 
-	override double GetWeatherVerticalSpeed() const { return m_Vel.z; }
-
 	// Only used to respawn particles lost to a save reload.
+	// Untested in multiplayer and likely to cause problems.
 	virtual void ReconstructWeatherState()
 	{
 		for (int i = m_SimulationData.Size() - 1; i >= 0; --i)
@@ -255,7 +256,7 @@ class WeatherParticleSpawner : WeatherSpawner
 			{
 				[tics, endPosition] = SimulateParticleTravel(position, velocity, acceleration);
 
-				// Breaks at higher distances, fall back to iterative for now.
+				// FIXME: The following breaks at higher distances, fall back to iterative for now.
 
 				// double floorZ = sec.NextLowestFloorAt(position.x, position.y, position.z);
 				// double ceilZ;
@@ -333,7 +334,8 @@ class WeatherParticleSpawner : WeatherSpawner
 
 			if ((acceleration != Vec3Util.Zero())) velocity += acceleration;
 
-			// Recheck next plane Z in case acceleration or lateral velocity changed the trajectory.
+			// Recheck next plane Z in case acceleration or lateral velocity changed the
+			// target floor height.
 			nextPlaneZ = GetApproachingPlaneZ(position, velocity, sec);
 
 			tics++;

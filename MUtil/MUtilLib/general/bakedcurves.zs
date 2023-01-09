@@ -74,7 +74,7 @@ class BakedCurve
 		if (mode == IM_Quadratic && GetLength() < 3)
 		{
 			// Not enough points for quadratic interpolation, fall back to linear.
-			mode = IM_Linear
+			mode = IM_Linear;
 		}
 		
 		switch (mode)
@@ -82,13 +82,13 @@ class BakedCurve
 			case IM_Quintic:
 				// Get point indices.
 				int i2 = int(round(time));
-				int i1 = i1 - 2;
-				int i0 = i1 - 1;
-				int i2 = i1 + 1;
-				int i3 = i1 + 2;
+				int i0 = i2 - 2;
+				int i1 = i2 - 1;
+				int i3 = i2 + 1;
+				int i4 = i2 + 2;
 
 				// Remap time.
-				time = Math.Remap(time, i0, i3, 0.0, 1.0);
+				time = Math.Remap(time, i0, i4, 0.0, 1.0);
 
 				// Wrap indices.
 				i0 = Mathf.PosMod(i0, GetLength());
@@ -220,13 +220,13 @@ class BakedCurve
 				values.m_Values.Push(valuesAsText[i].ToDouble());
 			}
 
-			if (previousValueCount > 0 && values.Size() != previousValueCount)
+			if (previousValueCount > 0 && values.m_Values.Size() != previousValueCount)
 			{
 				ThrowAbortException("All points on the curve must have the same "
 					.."number of dimensions.");
 			}
 
-			previousValueCount = values.Size();
+			previousValueCount = values.m_Values.Size();
 
 			curve.m_CurveValues.Push(values);
 			++currentLine;

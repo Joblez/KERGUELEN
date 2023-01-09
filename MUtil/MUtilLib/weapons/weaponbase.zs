@@ -635,7 +635,7 @@ class WeaponBase : DoomWeapon abstract
 		double movementSpeed = (owner.Vel.x, owner.Vel.y).Length();
 		double maxSpeed =
 			owner.Speed
-			* 8.33333333 // ??????? [10/2/2022]: (Pythagorean theorem apparently)
+			* 8.33333333
 			* owner.Player.mo.ForwardMove1;
 
 		double speedPercentage = movementSpeed / maxSpeed;

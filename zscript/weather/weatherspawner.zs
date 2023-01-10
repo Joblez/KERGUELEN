@@ -60,17 +60,17 @@ class WeatherSpawner : Thinker
 		return CVar.GetCVar('weather_amount', player);
 	}
 
-	double GetAdjustedSpawnChance(PlayerInfo player) const
+	double GetSpawnChanceReduction(PlayerInfo player) const
 	{
 		switch (GetWeatherAmountCVar(player).GetInt())
 		{
 			default:
 			case 0: return 0.0;		// Off.
 			case 1: return 0.1;		// Very low.
-			case 2: return 0.3;		// Low.
-			case 3: return 0.5;		// Medium.
-			case 4: return 0.65;	// High.
-			case 5: return 0.8;		// Very high.
+			case 2: return 0.2;		// Low.
+			case 3: return 0.35;	// Medium.
+			case 4: return 0.5;		// High.
+			case 5: return 0.75;	// Very high.
 			case 6: return 1.0;		// Ultra.
 		}
 	}
@@ -111,14 +111,14 @@ class WeatherSpawner : Thinker
 			// Cull outside range.
 			if (distance > range) continue;
 
-			// Adjust spawn score with setting.
-			spawnScore *= GetAdjustedSpawnChance(player);
+			// Cull based on weather setting.
+			if (spawnScore < 1.0 - GetSpawnChanceReduction(player)) continue;
 
 			// Map spawn threshold along distance.
 			double spawnThreshold = Math.Remap(distance, 0.0, range, minSpawnThreshold, maxSpawnThreshold);
 
 			if (spawnScore < spawnThreshold) continue;
-
+			
 			// Additional threshold for out-of-view effects.
 			if (IsOutOfView(player, point) && spawnScore < outOfViewThreshold) continue;
 

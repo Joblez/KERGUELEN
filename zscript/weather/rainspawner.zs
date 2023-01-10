@@ -1,6 +1,5 @@
 class RainSpawner : WeatherParticleSpawner
 {
-	private transient CVar m_SplashParticlesCVar;
 	private TextureID m_MainSplashTexture;
 	static RainSpawner Create(
 		double density,
@@ -34,7 +33,6 @@ class RainSpawner : WeatherParticleSpawner
 			shouldSimulateParticles: shouldSimulateParticles,
 			enableEndOfLifeCallbacks: enableEndOfLifeCallbacks);
 
-		spawner.m_SplashParticlesCVar = CVar.GetCVar('splash_particles');
 		spawner.m_MainSplashTexture = TexMan.CheckForTexture("RSPLSH1");
 
 		return spawner;
@@ -46,43 +44,6 @@ class RainSpawner : WeatherParticleSpawner
 
 		// Spawn additional fake splashes outside of weather range.
 		SpawnFakeSplash();
-	}
-
-	// Nearly identical to super method, but need to plug in the scaling logic somewhere.
-	override void ReconstructWeatherState()
-	{
-		for (int i = m_SimulationData.Size() - 1; i >= 0; --i)
-		{
-			FSpawnParticleParams params;
-
-			params.color1 = m_Color;
-			params.texture = m_Texture;
-			params.style = m_Style;
-			params.flags = m_Flags;
-
-			Actor pawn = players[consoleplayer].mo;
-
-			// Determine current state.
-			int time = m_SimulationData[i].GetCurrentTime();
-			params.lifetime = m_SimulationData[i].GetLifetime() - time;
-			params.pos = m_SimulationData[i].GetPositionAt(time);
-			params.vel = m_SimulationData[i].GetVelocityAt(time);
-			params.accel = m_SimulationData[i].GetAcceleration();
-			params.size = m_SimulationData[i].GetSizeAt(time);
-			params.sizestep = m_SimulationData[i].GetSizeStep();
-			params.startalpha = m_SimulationData[i].GetAlphaAt(time);
-			params.fadestep = m_SimulationData[i].GetFadeStep();
-			params.startroll = m_SimulationData[i].GetRollAt(time);
-			params.rollvel = m_SimulationData[i].GetRollVelocityAt(time);
-			params.rollacc = m_SimulationData[i].GetRollAcceleration();
-
-			// Apply distant rain scaling.
-			double distance = MathVec2.SquareDistanceBetween(params.pos.xy, pawn.Pos.xy);
-			params.size *= Math.Remap(distance, 0.0, 4000.0 ** 2, 1.0, 1.5);
-
-			// Spawn with reconstructed state.
-			level.SpawnParticle(params);
-		}
 	}
 
 	override void ParticleEndOfLifeCallback(WeatherParticleSimulation data)
@@ -191,7 +152,7 @@ class RainSpawner : WeatherParticleSpawner
 			params.texture = m_MainSplashTexture;
 			params.style = STYLE_Add;
 			params.flags = SPF_REPLACE;
-			params.lifetime = 8;
+			params.lifetime = 1;
 			params.size = 10.0;
 			params.pos = spawnPosition + (0.0, 0.0, 1.75);
 			params.startalpha = 0.6;

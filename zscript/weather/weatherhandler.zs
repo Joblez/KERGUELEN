@@ -13,6 +13,7 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		if (e.IsSaveGame)
 		{
 			// Already have spawners, respawn particles lost from loading the save.
+			// Untested in multiplayer, likely to break.
 			ReconstructWeatherParticleState();
 			return;
 		}

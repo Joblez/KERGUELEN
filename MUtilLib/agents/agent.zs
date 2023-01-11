@@ -20,12 +20,13 @@ class DebugAgent : Agent
 	Default
 	{
 		-NOSECTOR;
+		+FORCEXYBILLBOARD;
 	}
 
 	States
 	{
 	Spawn:
-		UNKN A 1;
-		Loop;
+		UNKN A 1 Bright;
+		Wait;
 	}
 }

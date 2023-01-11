@@ -30,6 +30,6 @@ class AmbientPlayer : Agent
 {
 	override void BeginPlay()
 	{
-		A_StartSound("Rain", CHAN_AUTO, CHANF_LOOPING, 1.0 * 0.2 * sqrt(256.0), 0.4);
+		A_StartSound("Rain", CHAN_AUTO, CHANF_LOOPING, 1.0 * 0.2 * sqrt(256.0), 0.4, startTime: FRandom(0.0, 0.2));
 	}
 }

@@ -56,6 +56,7 @@ class SMTransitionUI ui
 		m_FromSet = true;
 		return self;
 	}
+
 	SMTransitionUI To(class<SMStateUI> _to)
 	{
 		if (m_ToSet)
@@ -67,6 +68,7 @@ class SMTransitionUI ui
 		m_ToSet = true;
 		return self;
 	}
+
 	SMTransitionUI On(name eventId)
 	{
 		if (m_EventIdSet)
@@ -78,6 +80,7 @@ class SMTransitionUI ui
 		m_EventIdSet = true;
 		return self;
 	}
+
 	SMTransitionUI ResumesBranch(bool resumes = true)
 	{
 		if (m_EventIdSet)

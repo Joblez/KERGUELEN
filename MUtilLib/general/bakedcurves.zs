@@ -1,4 +1,3 @@
-
 /**
  * Represents an n-dimensional curve baked as a set of points, where each column holds the
  * nth-dimension of the curve, and each row represents a single point in the curve.

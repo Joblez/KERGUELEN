@@ -187,8 +187,8 @@ class InterpolatedPSpriteTransform : PSpriteTransform
 	/** Resets the value of this InterpolatedPSpriteTransform's fields immediately. **/
 	void HardReset()
 	{
-		m_InterpolatedTranslation.HardReset();
-		m_InterpolatedRotation.HardReset();
-		m_InterpolatedScale.HardReset();
+		m_InterpolatedTranslation.ForceSet((0.0, 0.0));
+		m_InterpolatedRotation.ForceSet(0.0);
+		m_InterpolatedScale.ForceSet((1.0, 1.0));
 	}
 }

@@ -13,3 +13,19 @@ class Agent : Actor
 		+NOSECTOR;
 	}
 }
+
+/** An Agent that is visible in-game, for debugging purposes. **/
+class DebugAgent : Agent
+{
+	Default
+	{
+		-NOSECTOR;
+	}
+
+	States
+	{
+	Spawn:
+		UNKN A 1;
+		Loop;
+	}
+}

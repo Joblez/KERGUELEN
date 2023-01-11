@@ -21,4 +21,3 @@
 #include "./statemachines/statemachine_play.zs"
 #include "./statemachines/statemachine_ui.zs"
 #include "./ui/hudextensions.zs"
-#include "./weapons/weaponbase.zs"

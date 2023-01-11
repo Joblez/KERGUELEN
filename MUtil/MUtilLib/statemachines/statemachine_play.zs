@@ -56,6 +56,7 @@ class SMTransitionPlay play
 		m_FromSet = true;
 		return self;
 	}
+
 	SMTransitionPlay To(class<SMStatePlay> _to)
 	{
 		if (m_ToSet)
@@ -67,6 +68,7 @@ class SMTransitionPlay play
 		m_ToSet = true;
 		return self;
 	}
+
 	SMTransitionPlay On(name eventId)
 	{
 		if (m_EventIdSet)
@@ -78,6 +80,7 @@ class SMTransitionPlay play
 		m_EventIdSet = true;
 		return self;
 	}
+
 	SMTransitionPlay ResumesBranch(bool resumes = true)
 	{
 		if (m_EventIdSet)

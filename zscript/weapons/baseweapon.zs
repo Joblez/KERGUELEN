@@ -300,3 +300,136 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	}
 }
 
+class WeaponSwayer : InterpolatedPSpriteTransform
+{
+	vector2 m_MaxTranslation;
+	double m_MaxRotation;
+	vector2 m_MaxScale;
+
+	private double m_TargetSmoothTime;
+	private vector2 m_TargetTranslationSpeed;
+	private double m_TargetRotationSpeed;
+	private vector2 m_TargetScaleSpeed;
+
+	static WeaponSwayer Create(
+		double smoothTime,
+		double targetSmoothTime,
+		vector2 translation = (0.0, 0.0),
+		double rotation = 0.0,
+		vector2 scale = (1.0, 1.0),
+		vector2 maxTranslation = (double.Infinity, double.Infinity),
+		double maxRotation = double.Infinity,
+		vector2 maxScale = (double.Infinity, double.Infinity))
+	{
+		WeaponSwayer swayer = new("WeaponSwayer");
+		swayer.SwayerInit(
+			smoothTime,
+			targetSmoothTime,
+			translation,
+			rotation,
+			scale,
+			maxTranslation,
+			maxRotation,
+			maxScale);
+		return swayer;
+	}
+
+	void SwayerInit(
+		double smoothTime,
+		double targetSmoothTime,
+		vector2 translation = (0.0, 0.0),
+		double rotation = 0.0,
+		vector2 scale = (1.0, 1.0),
+		vector2 maxTranslation = (double.Infinity, double.Infinity),
+		double maxRotation = double.Infinity,
+		vector2 maxScale = (double.Infinity, double.Infinity))
+	{
+		InterpolatedInit(smoothTime, translation, rotation, scale);
+
+		m_TargetSmoothTime = targetSmoothTime;
+		m_MaxTranslation = maxTranslation;
+		m_MaxRotation = maxRotation;
+		m_MaxScale = maxScale;
+	}
+
+	override void Update()
+	{
+		m_InterpolatedTranslation.m_Target = (
+			clamp(m_InterpolatedTranslation.m_Target.x, -m_MaxTranslation.x, m_MaxTranslation.x),
+			clamp(m_InterpolatedTranslation.m_Target.y, -m_MaxTranslation.y, m_MaxTranslation.y));
+		
+		m_InterpolatedRotation.m_Target = clamp(m_InterpolatedRotation.m_Target, -m_MaxRotation, m_MaxRotation);
+
+		m_InterpolatedScale.m_Target = (
+			clamp(m_InterpolatedScale.m_Target.x, -m_MaxScale.x, m_MaxScale.x),
+			clamp(m_InterpolatedScale.m_Target.y, -m_MaxScale.y, m_MaxScale.y));
+
+		Super.Update();
+
+		m_InterpolatedTranslation.m_Target = MathVec2.SmoothDamp(
+			m_InterpolatedTranslation.m_Target,
+			(0.0, 0.0),
+			m_TargetTranslationSpeed,
+			m_TargetSmoothTime,
+			double.Infinity,
+			1.0 / TICRATE);
+
+		m_InterpolatedRotation.m_Target = Math.SmoothDamp(
+			m_InterpolatedRotation.m_Target,
+			0.0,
+			m_TargetRotationSpeed,
+			m_TargetSmoothTime,
+			double.Infinity,
+			1.0 / TICRATE);
+
+		m_InterpolatedScale.m_Target = MathVec2.SmoothDamp(
+			m_InterpolatedScale.m_Target,
+			(1.0, 1.0),
+			m_TargetScaleSpeed,
+			m_TargetSmoothTime,
+			double.Infinity,
+			1.0 / TICRATE);
+
+		m_Translation.SetValue(m_InterpolatedTranslation.GetValue());
+		m_Rotation.SetValue(m_InterpolatedRotation.GetValue());
+		m_Scale.SetValue(m_InterpolatedScale.GetValue());
+	}
+
+	void AddForce(vector2 translationForce, double rotationForce = 0.0, vector2 scaleForce = (0.0, 0.0))
+	{
+		m_InterpolatedTranslation.m_Target += translationForce;
+		m_InterpolatedRotation.m_Target += rotationForce;
+		m_InterpolatedScale.m_Target += scaleForce;
+	}
+
+	void SetForce(vector2 translationForce, double rotationForce = 0.0, vector2 scaleForce = (1.0, 1.0))
+	{
+		m_InterpolatedTranslation.m_Target = translationForce;
+		m_InterpolatedRotation.m_Target = rotationForce;
+		m_InterpolatedScale.m_Target = scaleForce;
+	}
+}
+
+class ProjectileBase : Actor
+{
+	uint m_ProjectileFlags;
+
+	flagdef DrawFromHitboxCenter: m_ProjectileFlags, 0;
+
+	Default
+	{
+		RenderStyle "Normal";
+		Alpha 1.0;
+		Projectile;
+		+FORCEXYBILLBOARD;
+		+ProjectileBase.DRAWFROMHITBOXCENTER;
+	}
+
+	override void BeginPlay()
+	{
+		if (bDrawFromHitboxCenter)
+		{
+			A_SpriteOffset(0.0, -(Height / 2.0));
+		}
+	}
+}

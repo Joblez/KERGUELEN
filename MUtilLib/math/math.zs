@@ -1037,7 +1037,7 @@ class BoxedVector2
 	double DotProductBoxed(BoxedVector2 other) const { return m_Value dot other.m_Value; }
 }
 
-enum EEasingFunc
+enum EEasingFunction
 {
 	EASE_IN_SINE,		EASE_OUT_SINE,		EASE_INOUT_SINE,
 	EASE_IN_QUAD,		EASE_OUT_QUAD,		EASE_INOUT_QUAD,

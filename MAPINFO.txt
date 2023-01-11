@@ -9,12 +9,12 @@ GameInfo
 
 	AddEventHandlers = "NashGoreHandler"
 
-	AddEventHandlers = "FootstepEventHandler", "WeatherHandler"
+	AddEventHandlers = "FootstepEventHandler", "WeatherHandler", "AmbienceHandler"
 }
 
 DoomEdNums
 {
-	7002 = AmbientFollower
+	7002 = AmbienceFollower
 }
 
 Map "MAP01" "KERG01"

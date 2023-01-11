@@ -58,8 +58,8 @@ maps
 		overrideceilheight = false;
 		overridebrightness = false;
 		uselongtexturenames = false;
-		viewpositionx = 1967.68f;
-		viewpositiony = 1291.854f;
+		viewpositionx = 4994.397f;
+		viewpositiony = 2217.592f;
 		viewscale = 0.1378575f;
 		scriptcompiler = "zdoom_acs.cfg";
 		
@@ -110,12 +110,7 @@ maps
 			
 			sector
 			{
-				user_ambient_follower_tid = 0;
-			}
-			
-			thing
-			{
-				flags = 0;
+				user_ambient_sound = 2;
 			}
 		}
 	}

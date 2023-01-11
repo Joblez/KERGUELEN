@@ -32,7 +32,8 @@ version "4.10.0"
 #include "zscript/weather/rainspawner.zs"
 
 // Audio
-#include "zscript/audio/ambientfollower.zs"
+#include "zscript/audio/ambiencefollower.zs"
+#include "zscript/audio/ambiencehandler.zs"
 
 // Second-level includes.
 #include "zscript_nashgore.zs"

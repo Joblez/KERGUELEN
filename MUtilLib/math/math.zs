@@ -141,6 +141,8 @@ class Math
 				return value < 0.5
 					? (1.0 - Ease(1.0 - 2.0 * value, EASE_OUT_BOUNCE)) * 0.5
 					: (1.0 + Ease(2.0 * value - 1.0, EASE_OUT_BOUNCE)) * 0.5;
+			
+			default: return value;
 		}
 	}
 
@@ -347,6 +349,8 @@ class MathF
 				return value < 0.5
 					? (1.0 - Ease(1.0 - 2.0 * value, EASE_OUT_BOUNCE)) * 0.5
 					: (1.0 + Ease(2.0 * value - 1.0, EASE_OUT_BOUNCE)) * 0.5;
+			
+			default: return value;
 		}
 	}
 

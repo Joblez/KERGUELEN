@@ -127,9 +127,9 @@ class Math
 			case EASE_INOUT_ELASTIC:
 				if (value == 0.0) return 0.0;
 				if (value == 1.0) return 1.0;
-				return x < 0.5
-					? -((2.0 ** (20.0 * x - 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
-					: ((2.0 ** (-20.0 * x + 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
+				return value < 0.5
+					? -((2.0 ** (20.0 * value - 10.0)) * sin((20.0 * value - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
+					: ((2.0 ** (-20.0 * value + 10.0)) * sin((20.0 * value - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
 			
 			case EASE_IN_BOUNCE: return 1.0 - Ease(1.0 - value, EASE_OUT_BOUNCE);
 			case EASE_OUT_BOUNCE:
@@ -333,9 +333,9 @@ class MathF
 			case EASE_INOUT_ELASTIC:
 				if (value == 0.0) return 0.0;
 				if (value == 1.0) return 1.0;
-				return x < 0.5
-					? -((2.0 ** (20.0 * x - 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
-					: ((2.0 ** (-20.0 * x + 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
+				return value < 0.5
+					? -((2.0 ** (20.0 * value - 10.0)) * sin((20.0 * value - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
+					: ((2.0 ** (-20.0 * value + 10.0)) * sin((20.0 * value - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
 			
 			case EASE_IN_BOUNCE: return 1.0 - Ease(1.0 - value, EASE_OUT_BOUNCE);
 			case EASE_OUT_BOUNCE:

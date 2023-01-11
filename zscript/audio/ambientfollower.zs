@@ -32,16 +32,4 @@ class AmbientPlayer : Agent
 	{
 		A_StartSound("Rain", CHAN_AUTO, CHANF_LOOPING, 1.0 * 0.2 * sqrt(256.0), 0.4);
 	}
-
-	override void Tick()
-	{
-		FSpawnParticleParams p;
-		p.pos = Pos;
-		p.color1 = 0xFFFFFFFF;
-		p.lifetime = 1;
-		p.size = 30.0;
-		p.startalpha = 1.0;
-		p.fadestep = 0.0;
-		level.SpawnParticle(p);
-	}
 }

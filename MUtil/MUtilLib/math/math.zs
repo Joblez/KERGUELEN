@@ -72,7 +72,7 @@ class Math
 	**/
 	static double Ease(double value, EEasingFunction easeFunction)
 	{
-		switch (mode)
+		switch (easeFunction)
 		{
 			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
 			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);
@@ -278,7 +278,7 @@ class MathF
 	**/
 	static float Ease(float value, EEasingFunction easeFunction)
 	{
-		switch (mode)
+		switch (easeFunction)
 		{
 			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
 			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);

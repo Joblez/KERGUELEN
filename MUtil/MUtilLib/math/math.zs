@@ -67,6 +67,84 @@ class Math
 	}
 
 	/**
+	 * Returns the given value modified by the easing function specified in
+	 * the easeFunction parameter.
+	**/
+	static double Ease(double value, EEasingFunction easeFunction)
+	{
+		switch (mode)
+		{
+			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
+			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);
+			case EASE_INOUT_SINE: return -(cos(M_PI * value) - 1.0) * 0.5;
+
+			case EASE_IN_QUAD: return value ** 2;
+			case EASE_OUT_QUAD: return 1.0 - (1.0 - value) ** 2.0;
+			case EASE_INOUT_QUAD: return value < 0.5 ? 2.0 * value ** 2.0 : 1.0 - ((-2.0 * value + 2.0) ** 2.0) * 0.5;
+
+			case EASE_IN_CUBIC: return value ** 3;
+			case EASE_OUT_CUBIC: return 1.0 - (1.0 - value) ** 3.0;
+			case EASE_INOUT_CUBIC: return value < 0.5 ? 4.0 * value ** 3.0 : 1.0 - ((-2.0 * value + 2.0) ** 3.0) * 0.5;
+
+			case EASE_IN_QUART: return value ** 4;
+			case EASE_OUT_QUART: return 1.0 - (1.0 - value) ** 4.0;
+			case EASE_INOUT_QUART: return value < 0.5 ? 8.0 * value ** 4.0 : 1.0 - ((-2.0 * value + 2.0) ** 4.0) * 0.5;
+
+			case EASE_IN_QUINT: return value ** 5;
+			case EASE_OUT_QUINT: return 1.0 - (1.0 - value) ** 5.0;
+			case EASE_INOUT_QUINT: return value < 0.5 ? 16.0 * value ** 5.0 : 1.0 - ((-2.0 * value + 2.0) ** 5.0) * 0.5;
+
+			case EASE_IN_EXPO: return value == 0.0 ? 0.0 : 2.0 ** (10.0 * value - 10.0);
+			case EASE_OUT_EXPO: return value == 1.0 ? 1.0 : 1.0 - 2.0 ** (-10.0 * value);
+			case EASE_INOUT_EXPO:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return value < 0.5 ? (2.0 ** (20.0 * value - 10.0)) * 0.5 : (2.0 - (2.0 ** (-20.0 * value + 10.0))) * 0.5;
+			
+			case EASE_IN_CIRC: return 1.0 - sqrt(1.0 - value ** 2.0);
+			case EASE_OUT_CIRC: return sqrt(1.0 - (value - 1.0) ** 2.0);
+			case EASE_INOUT_CIRC:
+				return value < 0.5
+					? (1.0 -sqrt(1.0 - (2.0 * value) ** 2.0)) * 0.5
+					: ((sqrt(1.0 - (-2.0 * value + 2.0) ** 2.0)) + 1.0) * 0.5;
+
+			case EASE_IN_BACK: return 2.70158 * value ** 3.0 - 1.70158 * value ** 2.0;
+			case EASE_OUT_BACK: return 1.0 + 2.70158 * ((value - 1.0) ** 3.0) + 1.70158 * ((value - 1.0) ** 2.0);
+			case EASE_INOUT_BACK:
+				double a = 1.70158 * 1.525;
+				return value < 0.5
+					? ((2.0 * value) ** 2.0) * ((a + 1.0) * 2.0 * value - a) * 0.5
+					: (((2.0 * value - 2.0) ** 2.0) * ((a + 1.0) * (value * 2.0 - 2.0) + a) + 2.0) * 0.5;
+
+			case EASE_IN_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return -(2.0 ** (10.0 * value - 10.0)) * sin((value * 10.0 - 10.75) * ((2.0 * M_PI) / 3.0));
+			case EASE_OUT_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return (2.0 ** (-10.0 * value)) * sin((value * 10.0 - 0.75) * ((2.0 * M_PI) / 3.0)) + 1.0;
+			case EASE_INOUT_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return x < 0.5
+					? -((2.0 ** (20.0 * x - 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
+					: ((2.0 ** (-20.0 * x + 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
+			
+			case EASE_IN_BOUNCE: return 1.0 - Ease(1.0 - value, EASE_OUT_BOUNCE);
+			case EASE_OUT_BOUNCE:
+				if (value < 1.0 / 2.75) return 7.5625 * value ** 2.0;
+				if (value < 2.0 / 2.75) return 7.5625 * ((value - 1.5 / 2.75) ** 2.0) + 0.75;
+				if (value < 2.5 / 2.75) return 7.5625 * ((value - 2.25 / 2.75) ** 2.0) + 0.9375;
+				return 7.5625 * ((value - 2.625 / 2.75) ** 2.0) + 0.984375;
+			case EASE_INOUT_BOUNCE:
+				return value < 0.5
+					? (1.0 - Ease(1.0 - 2.0 * value, EASE_OUT_BOUNCE)) * 0.5
+					: (1.0 + Ease(2.0 * value - 1.0, EASE_OUT_BOUNCE)) * 0.5;
+		}
+	}
+
+	/**
 	 * Smoothly shifts the given current value to the given target value via a process
 	 * resembling a spring-damper function.
 	 * 
@@ -192,6 +270,84 @@ class MathF
 	static float RadToDeg(float radians)
 	{
 		return (180.0 / M_PI) * radians;
+	}
+
+	/**
+	 * Returns the given value modified by the easing function specified in
+	 * the easeFunction parameter.
+	**/
+	static float Ease(float value, EEasingFunction easeFunction)
+	{
+		switch (mode)
+		{
+			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
+			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);
+			case EASE_INOUT_SINE: return -(cos(M_PI * value) - 1.0) * 0.5;
+
+			case EASE_IN_QUAD: return value ** 2;
+			case EASE_OUT_QUAD: return 1.0 - (1.0 - value) ** 2.0;
+			case EASE_INOUT_QUAD: return value < 0.5 ? 2.0 * value ** 2.0 : 1.0 - ((-2.0 * value + 2.0) ** 2.0) * 0.5;
+
+			case EASE_IN_CUBIC: return value ** 3;
+			case EASE_OUT_CUBIC: return 1.0 - (1.0 - value) ** 3.0;
+			case EASE_INOUT_CUBIC: return value < 0.5 ? 4.0 * value ** 3.0 : 1.0 - ((-2.0 * value + 2.0) ** 3.0) * 0.5;
+
+			case EASE_IN_QUART: return value ** 4;
+			case EASE_OUT_QUART: return 1.0 - (1.0 - value) ** 4.0;
+			case EASE_INOUT_QUART: return value < 0.5 ? 8.0 * value ** 4.0 : 1.0 - ((-2.0 * value + 2.0) ** 4.0) * 0.5;
+
+			case EASE_IN_QUINT: return value ** 5;
+			case EASE_OUT_QUINT: return 1.0 - (1.0 - value) ** 5.0;
+			case EASE_INOUT_QUINT: return value < 0.5 ? 16.0 * value ** 5.0 : 1.0 - ((-2.0 * value + 2.0) ** 5.0) * 0.5;
+
+			case EASE_IN_EXPO: return value == 0.0 ? 0.0 : 2.0 ** (10.0 * value - 10.0);
+			case EASE_OUT_EXPO: return value == 1.0 ? 1.0 : 1.0 - 2.0 ** (-10.0 * value);
+			case EASE_INOUT_EXPO:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return value < 0.5 ? (2.0 ** (20.0 * value - 10.0)) * 0.5 : (2.0 - (2.0 ** (-20.0 * value + 10.0))) * 0.5;
+			
+			case EASE_IN_CIRC: return 1.0 - sqrt(1.0 - value ** 2.0);
+			case EASE_OUT_CIRC: return sqrt(1.0 - (value - 1.0) ** 2.0);
+			case EASE_INOUT_CIRC:
+				return value < 0.5
+					? (1.0 -sqrt(1.0 - (2.0 * value) ** 2.0)) * 0.5
+					: ((sqrt(1.0 - (-2.0 * value + 2.0) ** 2.0)) + 1.0) * 0.5;
+
+			case EASE_IN_BACK: return 2.70158 * value ** 3.0 - 1.70158 * value ** 2.0;
+			case EASE_OUT_BACK: return 1.0 + 2.70158 * ((value - 1.0) ** 3.0) + 1.70158 * ((value - 1.0) ** 2.0);
+			case EASE_INOUT_BACK:
+				double a = 1.70158 * 1.525;
+				return value < 0.5
+					? ((2.0 * value) ** 2.0) * ((a + 1.0) * 2.0 * value - a) * 0.5
+					: (((2.0 * value - 2.0) ** 2.0) * ((a + 1.0) * (value * 2.0 - 2.0) + a) + 2.0) * 0.5;
+
+			case EASE_IN_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return -(2.0 ** (10.0 * value - 10.0)) * sin((value * 10.0 - 10.75) * ((2.0 * M_PI) / 3.0));
+			case EASE_OUT_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return (2.0 ** (-10.0 * value)) * sin((value * 10.0 - 0.75) * ((2.0 * M_PI) / 3.0)) + 1.0;
+			case EASE_INOUT_ELASTIC:
+				if (value == 0.0) return 0.0;
+				if (value == 1.0) return 1.0;
+				return x < 0.5
+					? -((2.0 ** (20.0 * x - 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5
+					: ((2.0 ** (-20.0 * x + 10.0)) * sin((20.0 * x - 11.125) * ((2.0 * M_PI) / 4.5))) * 0.5 + 1.0;
+			
+			case EASE_IN_BOUNCE: return 1.0 - Ease(1.0 - value, EASE_OUT_BOUNCE);
+			case EASE_OUT_BOUNCE:
+				if (value < 1.0 / 2.75) return 7.5625 * value ** 2.0;
+				if (value < 2.0 / 2.75) return 7.5625 * ((value - 1.5 / 2.75) ** 2.0) + 0.75;
+				if (value < 2.5 / 2.75) return 7.5625 * ((value - 2.25 / 2.75) ** 2.0) + 0.9375;
+				return 7.5625 * ((value - 2.625 / 2.75) ** 2.0) + 0.984375;
+			case EASE_INOUT_BOUNCE:
+				return value < 0.5
+					? (1.0 - Ease(1.0 - 2.0 * value, EASE_OUT_BOUNCE)) * 0.5
+					: (1.0 + Ease(2.0 * value - 1.0, EASE_OUT_BOUNCE)) * 0.5;
+		}
 	}
 
 	/**
@@ -879,6 +1035,20 @@ class BoxedVector2
 
 	double DotProduct(vector2 other) const { return m_Value dot other; }
 	double DotProductBoxed(BoxedVector2 other) const { return m_Value dot other.m_Value; }
+}
+
+enum EEasingFunc
+{
+	EASE_IN_SINE,		EASE_OUT_SINE,		EASE_INOUT_SINE,
+	EASE_IN_QUAD,		EASE_OUT_QUAD,		EASE_INOUT_QUAD,
+	EASE_IN_CUBIC,		EASE_OUT_CUBIC,		EASE_INOUT_CUBIC,
+	EASE_IN_QUART,		EASE_OUT_QUART,		EASE_INOUT_QUART,
+	EASE_IN_QUINT,		EASE_OUT_QUINT,		EASE_INOUT_QUINT,
+	EASE_IN_EXPO,		EASE_OUT_EXPO,		EASE_INOUT_EXPO,
+	EASE_IN_CIRC,		EASE_OUT_CIRC,		EASE_INOUT_CIRC,
+	EASE_IN_BACK,		EASE_OUT_BACK,		EASE_INOUT_BACK,
+	EASE_IN_ELASTIC,	EASE_OUT_ELASTIC,	EASE_INOUT_ELASTIC,
+	EASE_IN_BOUNCE,		EASE_OUT_BOUNCE,	EASE_INOUT_BOUNCE,
 }
 
 /**

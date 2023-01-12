@@ -1,0 +1,216 @@
+DEFAULTLISTMENU
+{
+	Font "BIGFONT", "Grey", "Red"
+	Selector "M_SKULL1", -32, -5
+	Linespacing 16
+}
+
+
+LISTMENU "MainMenu"
+{
+	StaticPatch 94, 2, "M_DOOM"
+
+	Position 115, 68
+	TextItem "Play", "n", "PlayerclassMenu"
+	ifOption(SwapMenu)
+	{
+		Position 115, 84
+		TextItem "Load Game",	"l", "LoadGameMenu"
+		Position 115, 100
+		TextItem "Save Game",	"s", "SaveGameMenu"
+		Position 115, 116
+		TextItem "Options",		"o", "OptionsMenu"
+		Position 115, 132
+		TextItem "Mod Options",	"d", "VisualEffects"
+	}
+	else
+	{
+		Position 115, 84
+		TextItem "Options",		"o", "OptionsMenu"
+		Position 115, 100
+		TextItem "Mod Options",	"d", "VisualEffects"
+		Position 115, 116
+		TextItem "Load Game",	"l", "LoadGameMenu"
+		Position 115, 132
+		TextItem "Save Game",	"s", "SaveGameMenu"
+	}
+	Position 115, 148
+	TextItem "Tips & Credits",	"r", "ReadThisMenu"
+	Position 115, 164
+	TextItem "Quit Game",		"q", "QuitMenu"
+}
+
+ListMenu "PlayerclassMenu"
+{
+	IfGame(Doom, Heretic, Hexen, Strife)
+	{
+		NetgameMessage "$NEWGAME"
+	}
+	IfGame(Chex)
+	{
+		NetgameMessage "$CNEWGAME"
+	}
+
+	IfGame(Doom, Strife, Chex)
+	{
+		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
+		Position 48, 63
+		PlayerDisplay 220, 63, "20 00 00", "80 00 40"
+		MouseWindow 0, 220
+	}
+	IfGame(Heretic)
+	{
+		StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
+		Position 80, 50
+		PlayerDisplay 220, 50, "20 00 00", "80 00 40"
+		MouseWindow 0, 220
+	}
+	IfGame(Hexen)
+	{
+		StaticText 34, 24, "$MNU_CHOOSECLASS"
+		Position 66, 58
+		PlayerDisplay 174, 8, "00 07 00", "40 53 40"
+		MouseWindow 0, 174
+	}
+	// The rest of this menu will be set up based on the actual player definitions.
+}
+
+//-------------------------------------------------------------------------------------------
+//
+// The episode menu
+// The init code will set the first item to 'autoselect' if it's the only one.
+//
+//-------------------------------------------------------------------------------------------
+
+ListMenu "EpisodeMenu"
+{
+	NetgameMessage "$NEWGAME"
+	Position 48, 63
+	StaticPatch 54, 38, "M_EPISOD", 0 , "$MNU_EPISODE"
+}
+
+ListMenu "SkillMenu"
+{
+	StaticText 74, 16, "Difficulty"
+	Position 160, 44
+	centermenu
+}
+
+
+//==============================================================================
+
+AddOptionMenu "OptionsMenu"
+{
+	SubMenu "Effects", "VisualEffects"
+}
+
+OptionValue "GraphicsSettings"
+{
+	0, "Off"
+	1, "Very Low"
+	2, "Low"
+	3, "Medium"
+	4, "High"
+	5, "Very High"
+	6, "Ultra"
+}
+
+OptionMenu "VisualEffects"
+{
+	title "Mod Options"
+
+	StaticText " "
+
+	StaticText "Visual Effects"
+
+	Option "Bullet Casings", "casing_toggle","OnOff"
+
+	Option "Muzzle Smoke", "smoke_toggle","OnOff"
+
+	Option "Particles from Projectiles", "weapon_particle_toggle","OnOff"
+
+	Option "Fade-Ins/Fade-Outs", "fade_toggle", "OnOff"
+
+	Option "Visual Recoil", "recoil_toggle", "OnOff"
+
+	StaticText ""
+	StaticText "Graphics"
+
+	Option "Weather Amount", "weather_amount", "GraphicsSettings"
+	Option "Splash Particles", "splash_particles", "GraphicsSettings"
+
+	StaticText ""
+	StaticText "NOTE: Playing on Ultra settings may cause the game to exceed the default", "Cream"
+	StaticText "maximum particle amount. Please adjust your maximum amount accordingly.", "Cream"
+	StaticText ""
+
+	Slider "Max Particles", "r_maxparticles", 4000, 18000, 250, 0
+}
+
+//NASHGORE
+
+AddOptionMenu "OptionsMenu"
+{
+	StaticText ""
+	StaticText "Nash's Gore Mod: Vengeance Edition v1.01 Hotfix"
+	Submenu "$OPTMNU_NASHGORE", "NashGoreMenu"
+}
+
+OptionMenu "NashGoreMenu"
+{
+	Class "NashGoreMenu"
+	Title "$NASHGOREMNU_TITLE"
+	Position -32
+
+	StaticText ""
+
+	StaticText "$NASHGOREMNU_BLOOD_TITLE", 1
+	NashGoreOption "$NASHGOREMNU_BLOOD_TYPE",		"$NASHGOREMNU_HELPTEXT_BLOOD_TYPE",			"nashgore_bloodtype",	"NashGoreBloodTypes"
+	NashGoreSlider "$NASHGOREMNU_BLOOD_AMOUNT",		"$NASHGOREMNU_HELPTEXT_BLOOD_AMOUNT",		"nashgore_bloodamount",	0, 255, 1, 0
+	NashGoreOption "$NASHGOREMNU_BLOOD_SPRITES",	"$NASHGOREMNU_HELPTEXT_BLOOD_SPRITES",		"nashgore_spriteblood",	"NashGoreBloodSpriteValues"
+	NashGoreOption "$NASHGOREMNU_BLOOD_SPURTS",		"$NASHGOREMNU_HELPTEXT_BLOOD_SPURTS",		"nashgore_bloodspurt",	"OnOff"
+
+	StaticText ""
+
+	StaticText "$NASHGOREMNU_GIB_TITLE", 1
+	NashGoreOption "$NASHGOREMNU_GIB_TYPE",			"$NASHGOREMNU_HELPTEXT_GIB_TYPE",			"nashgore_gibtype",		"NashGoreGibTypes"
+	NashGoreSlider "$NASHGOREMNU_GIB_AMOUNT",		"$NASHGOREMNU_HELPTEXT_GIB_AMOUNT",			"nashgore_gibamount",	0, 255, 1, 0
+
+	StaticText ""
+
+	StaticText "$NASHGOREMNU_MISC_TITLE", 1
+	SafeCommand "$NASHGOREMNU_MISC_CLEARGORENOW",			"netevent EV_ClearGore"
+	NashGoreSlider "$NASHGOREMNU_MISC_MAXGORE",				"$NASHGOREMNU_HELPTEXT_MISC_MAXGORE",		"nashgore_maxgore",		0, 5000, 1, 0
+	NashGoreOption "$NASHGOREMNU_MISC_CORPSEBLOOD",			"$NASHGOREMNU_HELPTEXT_MISC_CORPSEBLOOD",	"nashgore_corpseblood",	"OnOff"
+	NashGoreOption "$NASHGOREMNU_MISC_FOOTPRINTS",			"$NASHGOREMNU_HELPTEXT_MISC_FOOTPRINTS",	"nashgore_footprints",	"OnOff"
+	NashGoreOption "$NASHGOREMNU_MISC_DEATHFLIP",			"$NASHGOREMNU_HELPTEXT_MISC_DEATHFLIP",		"nashgore_deathflip",	"OnOff"
+	NashGoreOption "$NASHGOREMNU_MISC_SQUISH",				"$NASHGOREMNU_HELPTEXT_MISC_SQUISH",		"nashgore_squish",		"OnOff"
+	NashGoreOption "$NASHGOREMNU_MISC_ICEDEATH",			"$NASHGOREMNU_HELPTEXT_MISC_ICEDEATH",		"nashgore_icedeath",	"OnOff"
+	NashGoreOption "$NASHGOREMNU_MISC_SPLAT",				"$NASHGOREMNU_HELPTEXT_MISC_SPLAT",			"nashgore_splat",		"OnOff"
+
+	StaticText ""
+
+	StaticText "$NASHGOREMNU_CONTROLS_TITLE", 1
+	NashGoreControl "$NASHGOREMNU_CONTROLS_CLEARGORE", "$NASHGOREMNU_HELPTEXT_CONTROLS_CLEARGORE", "netevent EV_ClearGore"
+}
+
+OptionValue "NashGoreBloodTypes"
+{
+	0, "$NASHGOREMNU_DEFAULT"
+	1, "$NASHGOREMNU_BLOOD_TYPE_CLASSIC"
+	2, "$NASHGOREMNU_VANILLA"
+}
+
+OptionValue "NashGoreBloodSpriteValues"
+{
+	0, "$NASHGOREMNU_BLOOD_SPRITE_DECALS"
+	1, "$NASHGOREMNU_BLOOD_SPRITE_SPRITES"
+}
+
+OptionValue "NashGoreGibTypes"
+{
+	0, "$NASHGOREMNU_DEFAULT"
+	1, "$NASHGOREMNU_GIB_TYPE_NOSTICKYGIBS"
+	2, "$NASHGOREMNU_VANILLA"
+}
+

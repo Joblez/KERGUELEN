@@ -1,0 +1,33 @@
+// CVar Info
+user bool fs_enabled = true;
+server float fs_volume_mul = 1;
+server float fs_delay_mul = 1.4;
+
+user bool casing_toggle = true;
+
+user bool smoke_toggle = true;
+
+user bool weapon_particle_toggle = true;
+
+user bool fade_toggle = true;
+
+user bool recoil_toggle = true;
+
+user int weather_amount = 3;
+user int splash_particles = 3;
+
+//NASHGORE
+
+server int nashgore_maxgore = 1024;
+server int nashgore_bloodtype = 0;
+server int nashgore_bloodamount = 255;
+server bool nashgore_spriteblood = false;
+server bool nashgore_bloodspurt = true;
+server int nashgore_gibtype = 0;
+server int nashgore_gibamount = 255;
+server bool nashgore_corpseblood = true;
+server bool nashgore_footprints = true;
+server bool nashgore_deathflip = true;
+server bool nashgore_squish = true;
+server bool nashgore_icedeath = true;
+server bool nashgore_splat = true;

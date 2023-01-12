@@ -15,6 +15,8 @@ class AmbienceHandler : EventHandler
 			string soundName = sec.GetUDMFString('user_ambient_sound');
 			if (!soundName) continue;
 
+			Console.Printf("Sound: %s", soundName);
+
 			Sound ambientSound = Sound(soundName);
 			AmbientSoundData data = m_AmbienceData.Get(ambientSound);
 
@@ -31,6 +33,8 @@ class AmbienceHandler : EventHandler
 			}
 		}
 
+		Console.Printf("Ambient sounds: %i", m_AmbienceData.CountUsed());
+
 		// Start ambient sounds.
 		MapIterator<Sound, AmbientSoundData> dataIter;
 		dataIter.Init(m_AmbienceData);
@@ -39,7 +43,7 @@ class AmbienceHandler : EventHandler
 		{
 			AmbientSoundData data = dataIter.GetValue();
 			
-			players[consoleplayer].mo.A_StartSound(data.m_Sound, data.m_Channel, 0, 1.0);
+			players[consoleplayer].mo.A_StartSound(data.m_Sound, data.m_Channel, CHANF_LOOPING, 1.0);
 		}
 	}
 
@@ -55,6 +59,18 @@ class AmbienceHandler : EventHandler
 			AmbientSoundData data = dataIter.GetValue();
 			
 			AmbienceFollower closestFollower;
+
+			foreach (follower : data.m_Followers)
+			{
+				FSpawnParticleParams params;
+				params.pos = (follower.m_Position.xy, follower.m_Position.z + 32.0);
+				params.color1 = 0xFFFFFFFF;
+				params.style = STYLE_Normal;
+				params.startalpha = 1.0;
+				params.size = 12.0;
+				params.lifetime = 1;
+				level.SpawnParticle(params);
+			}
 
 			foreach (follower : data.m_Followers)
 			{
@@ -79,6 +95,8 @@ class AmbienceHandler : EventHandler
 
 			double volume = 1.0 - clamp(MathVec3.DistanceBetween(closestFollower.m_Position, pawn.Pos) / data.m_Range, 0.0, 1.0);
 			volume = Math.Ease(volume, EASE_IN_QUAD);
+
+			Console.Printf("Volume: %f", volume);
 
 			pawn.A_SoundVolume(data.m_Channel, volume);
 		}

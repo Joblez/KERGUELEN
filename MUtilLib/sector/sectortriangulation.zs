@@ -493,6 +493,11 @@ class SectorTriangle
 		[bl, tr] = GetBoundingBox();
 		if (!Geometry.IsPointInBounds(point, bl, tr)) return false;
 
-		return Geometry.IsPointInTriangle(point, m_Points[0], m_Points[1], m_Points[2]);
+		array<BoxedVector2> boxedTriangle;
+		boxedtriangle.Push(BoxedVector2.Create(m_Points[0]));
+		boxedtriangle.Push(BoxedVector2.Create(m_Points[1]));
+		boxedtriangle.Push(BoxedVector2.Create(m_Points[2]));
+
+		return Geometry.IsPointInPolygon(point, boxedTriangle);
 	}
 }

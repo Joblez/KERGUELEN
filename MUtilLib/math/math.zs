@@ -961,17 +961,17 @@ class Geometry
 		return result.z < 0.0;
 	}
 
-	static bool IsPointInTriangle(vector2 point, vector2 a, vector2 b, vector2 c)
-	{
-		double denominator = ((b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y));
-		if (denominator == 0.0) return false;
+	// static bool IsPointInTriangle(vector2 point, vector2 a, vector2 b, vector2 c)
+	// {
+	// 	double denominator = ((b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y));
+	// 	if (denominator == 0.0) return false;
 
-		double d = ((b.y - c.y) * (point.x - c.y) + (c.x - b.x) * (point.y - c.y)) / denominator;
-		double e = ((c.y - a.y) * (point.x - c.x) + (a.x - c.x) * (point.y - c.y)) / denominator;
-		double f = 1.0 - d - e;
+	// 	double d = ((b.y - c.y) * (point.x - c.y) + (c.x - b.x) * (point.y - c.y)) / denominator;
+	// 	double e = ((c.y - a.y) * (point.x - c.x) + (a.x - c.x) * (point.y - c.y)) / denominator;
+	// 	double f = 1.0 - d - e;
 
-		return 0.0 <= d && d <= 1.0 && 0.0 <= e && e <= 1.0 && 0.0 <= f && f <= 1.0;
-	}
+	// 	return 0.0 <= d && d <= 1.0 && 0.0 <= e && e <= 1.0 && 0.0 <= f && f <= 1.0;
+	// }
 
 	/** Returns the area of the given triangle. **/
 	static double GetTriangleArea(vector2 a, vector2 b, vector2 c)

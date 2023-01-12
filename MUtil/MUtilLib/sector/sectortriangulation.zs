@@ -404,6 +404,7 @@ class SectorShape
 /** Represents a single triangle in a SectorTriangulation. **/
 class SectorTriangle
 {
+	private vector2[2] m_BoundingBox;
 	private vector2[3] m_Points;
 	private Sector m_Sector;
 
@@ -414,6 +415,22 @@ class SectorTriangle
 		triangle.m_Points[1] = b;
 		triangle.m_Points[2] = c;
 		triangle.m_Sector = sec;
+
+		// Calculate bounding box.
+		vector2 min = (triangle.m_Points[0].x, triangle.m_Points[0].y);
+		vector2 max = min;
+
+		for (int i = 1; i < triangle.m_Points.Size(); ++i)
+		{
+			vector2 point = triangle.m_Points[i];
+			if (point.x < min.x) min.x = point.x;
+			if (point.x > max.x) max.x = point.x;
+			if (point.y < min.y) min.y = point.y;
+			if (point.y > max.y) max.y = point.y;
+		}
+
+		triangle.m_BoundingBox[0] = min;
+		triangle.m_BoundingBox[1] = max;
 
 		return triangle;
 	}
@@ -456,5 +473,26 @@ class SectorTriangle
 		vector2 c = m_Points[2];
 
 		return (s * a.x + t * b.x + u * c.x, s * a.y + t * b.y + u * c.y);
+	}
+
+	vector2 GetCentroid() const
+	{
+		double cx = (m_Points[0].x + m_Points[1].x + m_Points[2].x) / 3.0;
+		double cy = (m_Points[0].y + m_Points[1].y + m_Points[2].y) / 3.0;
+		return (cx, cy);
+	}
+
+	vector2, vector2 GetBoundingBox() const
+	{
+		return m_BoundingBox[0], m_BoundingBox[1];
+	}
+
+	bool ContainsPoint(vector2 point) const
+	{
+		vector2 bl, tr;
+		[bl, tr] = GetBoundingBox();
+		if (!Geometry.IsPointInBounds(point, bl, tr)) return false;
+
+		return Geometry.IsPointInTriangle(point, m_Points[0], m_Points[1], m_Points[2]);
 	}
 }

@@ -9,16 +9,11 @@ class AmbienceHandler : EventHandler
 	override void WorldLoaded(WorldEvent event)
 	{
 		// Gather ambience data.
-		let thingIter = ThinkerIterator.Create("AmbienceFollower");
-		Thinker thing;
-		while (!!(thing = thingIter.Next()))
+		foreach (sec : level.Sectors)
 		{
-			AmbienceFollower follower = AmbienceFollower(thing);
-
-			string soundName = follower.cursector.GetUDMFString('user_ambient_sound');
+			// Check for ambient sound.
+			string soundName = sec.GetUDMFString('user_ambient_sound');
 			if (!soundName) continue;
-
-			follower.m_AmbientSoundName = soundName;
 
 			Sound ambientSound = Sound(soundName);
 			AmbientSoundData data = m_AmbienceData.Get(ambientSound);
@@ -26,7 +21,14 @@ class AmbienceHandler : EventHandler
 			if (!data) data = AmbientSoundData.Create(ambientSound, CHANNELS_START + m_AmbienceData.CountUsed(), GetAmbientSoundRange(soundName));
 			m_AmbienceData.Insert(ambientSound, data);
 
-			data.m_Followers.Push(follower);
+			// Place followers at every sector triangle.
+			SectorTriangulation triangulation = SectorDataRegistry.GetTriangulation(sec);
+
+			for (int i = 0; i < triangulation.GetTriangleCount(); ++i)
+			{
+				AmbienceFollower follower = AmbienceFollower.Create(triangulation.GetTriangle(i));
+				data.m_Followers.Push(follower);
+			}
 		}
 
 		// Start ambient sounds.
@@ -37,7 +39,6 @@ class AmbienceHandler : EventHandler
 		{
 			AmbientSoundData data = dataIter.GetValue();
 			
-			Console.Printf("Starting ambient sound on channel %i.", data.m_Channel);
 			players[consoleplayer].mo.A_StartSound(data.m_Sound, data.m_Channel, 0, 1.0);
 		}
 	}
@@ -63,18 +64,23 @@ class AmbienceHandler : EventHandler
 					continue;
 				}
 
-				if (follower.Distance3D(pawn) < closestFollower.Distance3D(pawn))
+				if (follower.m_Triangle.ContainsPoint(pawn.Pos.xy))
+				{
+					follower.m_Position = pawn.Pos;
+					closestFollower = follower;
+					break;
+				}
+
+				if (MathVec3.DistanceBetween(pawn.Pos, follower.m_Position) < MathVec3.DistanceBetween(pawn.Pos, closestFollower.m_Position))
 				{
 					closestFollower = follower;
 				}
 			}
 
-			double volume = 1.0 - clamp(closestFollower.Distance3D(pawn) / data.m_Range, 0.0, 1.0);
+			double volume = 1.0 - clamp(MathVec3.DistanceBetween(closestFollower.m_Position, pawn.Pos) / data.m_Range, 0.0, 1.0);
 			volume = Math.Ease(volume, EASE_IN_QUAD);
 
-			Console.Printf("Volume: %f", volume);
-
-			players[consoleplayer].mo.A_SoundVolume(data.m_Channel, volume);
+			pawn.A_SoundVolume(data.m_Channel, volume);
 		}
 	}
 
@@ -83,7 +89,7 @@ class AmbienceHandler : EventHandler
 	{
 		switch (Name(soundName))
 		{
-			case 'Rain': return 4096.0;
+			case 'Rain': return 3920.0;
 			default: return 512.0;
 		}
 	}

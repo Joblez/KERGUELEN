@@ -1,11 +1,17 @@
-class AmbienceFollower : DebugAgent
+class AmbienceFollower
 {
-	string m_AmbientSoundName;
+	vector3 m_Position;
+	SectorTriangle m_Triangle;
 
-	override void Tick()
+	static AmbienceFollower Create(SectorTriangle triangle)
 	{
-		string sectorAmbientSound = players[consoleplayer].mo.cursector.GetUDMFString('user_ambient_sound');
+		AmbienceFollower follower = new("AmbienceFollower");
 
-		if (m_AmbientSoundName == sectorAmbientSound) SetOrigin(players[consoleplayer].mo.Pos, true);
+		follower.m_Triangle = triangle;
+
+		vector2 point = triangle.GetCentroid();
+		follower.m_Position = (point, triangle.GetSector().LowestFloorAt(point));
+
+		return follower;
 	}
 }

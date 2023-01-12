@@ -12,11 +12,6 @@ GameInfo
 	AddEventHandlers = "FootstepEventHandler", "WeatherHandler", "AmbienceHandler"
 }
 
-DoomEdNums
-{
-	7002 = AmbienceFollower
-}
-
 Map "MAP01" "KERG01"
 {
 	LightMode = 3

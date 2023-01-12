@@ -967,10 +967,10 @@ class Geometry
 		if (denominator == 0.0) return false;
 
 		double d = ((b.y - c.y) * (point.x - c.y) + (c.x - b.x) * (point.y - c.y)) / denominator;
-		double e = ((c.y - a.y) * (point.x - x3) + (a.x - c.x)*(point.y - c.y)) / denominator;
-		double f:Number = 1 - a - b;
+		double e = ((c.y - a.y) * (point.x - c.x) + (a.x - c.x) * (point.y - c.y)) / denominator;
+		double f = 1.0 - a - b;
 
-		return 0 <= d && d <= 1 && 0 <= e && e <= 1 && 0 <= f && f <= 1;
+		return 0.0 <= d && d <= 1.0 && 0.0 <= e && e <= 1.0 && 0.0 <= f && f <= 1.0;
 	}
 
 	/** Returns the area of the given triangle. **/

@@ -60,17 +60,17 @@ class AmbienceHandler : EventHandler
 			
 			AmbienceFollower closestFollower;
 
-			foreach (follower : data.m_Followers)
-			{
-				FSpawnParticleParams params;
-				params.pos = (follower.m_Position.xy, follower.m_Position.z + 32.0);
-				params.color1 = 0xFFFFFFFF;
-				params.style = STYLE_Normal;
-				params.startalpha = 1.0;
-				params.size = 12.0;
-				params.lifetime = 1;
-				level.SpawnParticle(params);
-			}
+			// foreach (follower : data.m_Followers)
+			// {
+			// 	FSpawnParticleParams params;
+			// 	params.pos = (follower.m_Position.xy, follower.m_Position.z + 32.0);
+			// 	params.color1 = 0xFFFFFFFF;
+			// 	params.style = STYLE_Normal;
+			// 	params.startalpha = 1.0;
+			// 	params.size = 12.0;
+			// 	params.lifetime = 1;
+			// 	level.SpawnParticle(params);
+			// }
 
 			foreach (follower : data.m_Followers)
 			{

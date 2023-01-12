@@ -13,28 +13,8 @@ maps
 			
 			resource0
 			{
-				type = 0;
-				location = "D:\\_Personal\\GZD\\IWAD\\DOOM2.WAD";
-				option1 = 0;
-				option2 = 0;
-				notfortesting = 0;
-				requiredarchives = "";
-			}
-			
-			resource1
-			{
-				type = 2;
-				location = "D:\\_Personal\\GZD\\4.10.0\\gzdoom.pk3";
-				option1 = 0;
-				option2 = 0;
-				notfortesting = 1;
-				requiredarchives = "gzdoom";
-			}
-			
-			resource2
-			{
 				type = 1;
-				location = "D:\\_Personal\\GZD\\SLADE\\proj\\KERGUELEN";
+				location = "C:\\Users\\joble\\Documents\\GitHub\\KERGUELEN";
 				option1 = 0;
 				option2 = 0;
 				notfortesting = 0;
@@ -58,9 +38,9 @@ maps
 		overrideceilheight = false;
 		overridebrightness = false;
 		uselongtexturenames = false;
-		viewpositionx = 4994.397f;
-		viewpositiony = 2217.592f;
-		viewscale = 0.1378575f;
+		viewpositionx = -25.7801f;
+		viewpositiony = -622.8005f;
+		viewscale = 0.1792146f;
 		scriptcompiler = "zdoom_acs.cfg";
 		
 		grid
@@ -71,7 +51,7 @@ maps
 			backoffsety = 0;
 			backscalex = 100;
 			backscaley = 100;
-			gridsize = 512;
+			gridsize = 64;
 			gridrotate = 0;
 			gridoriginx = 0;
 			gridoriginy = 0;

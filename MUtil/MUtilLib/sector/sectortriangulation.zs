@@ -457,11 +457,4 @@ class SectorTriangle
 
 		return (s * a.x + t * b.x + u * c.x, s * a.y + t * b.y + u * c.y);
 	}
-
-	vector2 GetCentroid() const
-	{
-		double cx = (m_Points[0].x + m_Points[1].x + m_Points[2].x) / 3.0;
-		double cy = (m_Points[0].y + m_Points[1].y + m_Points[2].y) / 3.0;
-		return (cx, cy);
-	}
 }

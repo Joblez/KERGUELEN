@@ -20,15 +20,15 @@ maps
 			resource0
 			{
 				type = 1;
-				location = "C:\\Users\\Joe\\Desktop\\doomod\\joblmods\\jblz-kerguelen\\KERGUELEN";
+				location = "D:\\_Personal\\GZD\\SLADE\\proj\\KERGUELEN";
 				option1 = 0;
 				option2 = 0;
 				notfortesting = 0;
 				requiredarchives = "";
 			}
 		}
-		viewpositiony = -470.1699f;
-		viewpositionx = -536.3281f;
+		viewpositiony = -638.5044f;
+		viewpositionx = 887.6381f;
 		
 		testprecommand
 		{
@@ -48,11 +48,11 @@ maps
 			gridrotate = 0;
 			backscalex = 100;
 			gridoriginx = 0;
-			gridsize = 32;
+			gridsize = 256;
 			background = "";
 			backoffsety = 0;
 		}
-		viewscale = 1.758289f;
+		viewscale = 0.280212f;
 		
 		reloadresourceprecommand
 		{
@@ -83,6 +83,15 @@ maps
 			autocloseonsuccess = true;
 			exitcodeiserror = true;
 			stderriserror = true;
+		}
+		
+		fieldtypes
+		{
+			
+			sector
+			{
+				user_ambient_sound = 2;
+			}
 		}
 		
 		scriptdocuments

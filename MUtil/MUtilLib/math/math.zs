@@ -74,8 +74,8 @@ class Math
 	{
 		switch (easeFunction)
 		{
-			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
-			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);
+			case EASE_IN_SINE: return 1.0 - cos(value * Math.RadToDeg(M_PI_2));
+			case EASE_OUT_SINE: return sin(value * Math.RadToDeg(M_PI_2));
 			case EASE_INOUT_SINE: return -(cos(M_PI * value) - 1.0) * 0.5;
 
 			case EASE_IN_QUAD: return value ** 2;
@@ -142,6 +142,7 @@ class Math
 					? (1.0 - Ease(1.0 - 2.0 * value, EASE_OUT_BOUNCE)) * 0.5
 					: (1.0 + Ease(2.0 * value - 1.0, EASE_OUT_BOUNCE)) * 0.5;
 			
+			case LINEAR:
 			default: return value;
 		}
 	}
@@ -282,8 +283,8 @@ class MathF
 	{
 		switch (easeFunction)
 		{
-			case EASE_IN_SINE: return 1.0 - cos((value * M_PI) * 0.5);
-			case EASE_OUT_SINE: return sin((value * M_PI) * 0.5);
+			case EASE_IN_SINE: return 1.0 - cos(value * MathF.RadToDeg(M_PI_2));
+			case EASE_OUT_SINE: return sin(value * MathF.RadToDeg(M_PI_2));
 			case EASE_INOUT_SINE: return -(cos(M_PI * value) - 1.0) * 0.5;
 
 			case EASE_IN_QUAD: return value ** 2;
@@ -1055,6 +1056,7 @@ class BoxedVector2
 
 enum EEasingFunction
 {
+	LINEAR,
 	EASE_IN_SINE,		EASE_OUT_SINE,		EASE_INOUT_SINE,
 	EASE_IN_QUAD,		EASE_OUT_QUAD,		EASE_INOUT_QUAD,
 	EASE_IN_CUBIC,		EASE_OUT_CUBIC,		EASE_INOUT_CUBIC,

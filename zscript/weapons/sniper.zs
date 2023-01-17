@@ -137,6 +137,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_StartSound("sniper/load", 10);
 			A_SetBaseOffset(-1, 33);
 
+			invoker.m_Chambered = false;
+
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 		}
@@ -164,7 +166,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	ReloadEnd:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
 		ISRE ABC 1;
-		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
+		TNT1 A 0 {
+			invoker.m_Chambered = true;
+			A_StartSound("sniper/boltfor", 9);
+		}
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
 		ISRE DEFGH 1;
 		TNT1 A 0 A_SetBaseOffset(-1, 31);

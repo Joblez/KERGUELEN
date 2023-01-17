@@ -2,7 +2,6 @@ class IshaporeHUD : BaseWeaponHUD
 {
 	Ishapore m_Ishapore;
 
-	ui InterpolatedDouble m_FirstRoundOffset;
 	ui InterpolatedDouble m_RoundsOffset;
 
 	TextureID m_RoundTexture;
@@ -29,8 +28,6 @@ class IshaporeHUD : BaseWeaponHUD
 	{
 		Super.UISetup();
 
-		m_FirstRoundOffset = new("InterpolatedDouble");
-		m_FirstRoundOffset.m_SmoothTime = 0.05;
 		m_RoundsOffset = new("InterpolatedDouble");
 		m_RoundsOffset.m_SmoothTime = 0.05;
 	}
@@ -39,15 +36,13 @@ class IshaporeHUD : BaseWeaponHUD
 	{
 		Super.PreDraw(state, ticFrac);
 
-		if ((!m_Ishapore.m_Chambered && m_Ishapore.GetAmmo() > 0))
+		if ((!m_Ishapore.m_Chambered && !m_Ishapore.m_IsLoading && m_Ishapore.GetAmmo() > 0))
 		{
-			m_RoundsOffset.m_SmoothTime = 0.05;
-			m_FirstRoundOffset.m_SmoothTime = 0.0;
+			m_RoundsOffset.m_SmoothTime = 0.0;
 		}
 		else
 		{
 			m_RoundsOffset.m_SmoothTime = 0.05;
-			m_FirstRoundOffset.m_SmoothTime = 0.05;
 		}
 
 
@@ -68,32 +63,12 @@ class IshaporeHUD : BaseWeaponHUD
 
 		int rounds = m_Ishapore.GetAmmo();
 
-		int target = m_Ishapore.m_Chambered ? rounds - 1 : rounds;
+		int target = !m_Ishapore.m_Chambered ? rounds + 1 : rounds;
 
 		m_RoundsOffset.m_Target = target * m_TextureSize.y;
 		m_RoundsOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
 
-		m_FirstRoundOffset.m_Target = m_Ishapore.m_Chambered ? m_TextureSize.x + 2 : 0.0;
-		m_FirstRoundOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
-
-		if (rounds > 0)
-		{
-			vector2 roundVector =
-				(roundsOrigin.x, roundsOrigin.y - m_FirstRoundOffset.GetValue());
-
-			roundVector = m_HUDTransform.TransformVector(roundVector);
-
-			StatusBar.DrawTextureRotated(
-				m_RoundTexture,
-				roundVector,
-				StatusBarCore.DI_ITEM_CENTER | StatusBarCore.DI_MIRROR,
-				m_HUDTransform.GetLocalRotation() + 90.0,
-				1.0,
-				scale: invertedScale,
-				col: 0xFFFFFFFF);
-		}
-
-		for (int i = 1; i < rounds; ++i)
+		for (int i = 1; i <= rounds; ++i)
 		{
 			vector2 roundVector =
 				(roundsOrigin.x + m_TextureSize.y * i - m_RoundsOffset.GetValue(),

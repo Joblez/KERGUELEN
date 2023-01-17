@@ -907,7 +907,7 @@ class Geometry
 	static double DistanceToLine(vector2 point, vector2 p1, vector2 p2)
 	{
 		// Adapted from answer by @dorverbin at StackOverflow (https://stackoverflow.com/a/10984080).
-		double r = ((p2 - p1) dot (point - p1)) / ((p2 - p1) ** 2).Length();
+		double r = ((p2 - p1) dot (point - p1)) / ((p2 - p1).Length() ** 2);
 
 		if (r < 0.0)
 		{
@@ -919,7 +919,7 @@ class Geometry
 		}
 		else
 		{
-			return sqrt((x - p1).Length() ** 2 - (r * (p2-p1).Length() ** 2));
+			return sqrt((x - p1).Length() ** 2 - (r * (p2 - p1).Length() ** 2));
 		}
 	}
 

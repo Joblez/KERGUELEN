@@ -1,10 +1,8 @@
 class ColtHUD : BaseWeaponHUD
 {
-	const ROUND_X_OFFSET = 2.0;
-
 	Colt m_Colt;
 
-	ui InterpolatedVector2 m_RoundsOffset;
+	ui InterpolatedDouble m_RoundsOffset;
 
 	TextureID m_RoundTexture;
 	vector2 m_TextureSize;
@@ -29,7 +27,7 @@ class ColtHUD : BaseWeaponHUD
 	{
 		Super.UISetup();
 
-		m_RoundsOffset = new("InterpolatedVector2");
+		m_RoundsOffset = new("InterpolatedDouble");
 		m_RoundsOffset.m_SmoothTime = 0.03;
 	}
 
@@ -41,7 +39,7 @@ class ColtHUD : BaseWeaponHUD
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 
-		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 64));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 40, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 16));
 	}
 
 	override void Draw(int state, double ticFrac)
@@ -54,7 +52,7 @@ class ColtHUD : BaseWeaponHUD
 
 		int rounds = m_Colt.GetAmmo();
 
-		m_RoundsOffset.m_Target = (rounds * ROUND_X_OFFSET, rounds * m_TextureSize.y);
+		m_RoundsOffset.m_Target = rounds * m_TextureSize.y;
 		m_RoundsOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
 
 		double maxOffset = CMAG * m_TextureSize.y;
@@ -62,8 +60,8 @@ class ColtHUD : BaseWeaponHUD
 		for (int i = 1; i <= rounds; ++i)
 		{
 			vector2 roundVector =
-				(roundsOrigin.x - ROUND_X_OFFSET * i + m_RoundsOffset.GetX(),
-				roundsOrigin.y - m_TextureSize.y * i + m_RoundsOffset.GetY());
+				(roundsOrigin.x + m_TextureSize.y * i - m_RoundsOffset.GetValue(),
+				roundsOrigin.y);
 
 			roundVector = m_HUDTransform.TransformVector(roundVector);
 
@@ -71,7 +69,7 @@ class ColtHUD : BaseWeaponHUD
 				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER,
-				m_HUDTransform.GetLocalRotation(),
+				m_HUDTransform.GetLocalRotation() - 90.0,
 				1.0,
 				scale: invertedScale,
 				col: 0xFFFFFFFF);

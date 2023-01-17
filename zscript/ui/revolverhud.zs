@@ -20,7 +20,7 @@ class RevolverHUD : BaseWeaponHUD
 
 	override SMHUDMachine CreateHUDStateMachine()
 	{
-		return new("SMHUDRevolverMachine");
+		return new("SMRevolverHUDMachine");
 	}
 
 	override void Setup()
@@ -37,13 +37,9 @@ class RevolverHUD : BaseWeaponHUD
 	}
 }
 
-class SMHUDRevolverState : SMHUDState
+class SMRevolverHUDState : SMHUDState
 {
 	protected RevolverHUD m_RoundsHUD;
-
-	protected int m_OriginalRelTop;
-	protected int m_OriginalHorizontalResolution;
-	protected int m_OriginalVerticalResolution;
 
 	override void EnterState()
 	{
@@ -177,13 +173,13 @@ class SMHUDRevolverState : SMHUDState
 	}
 }
 
-class SMHUDRevolverMachine : SMHUDMachine
+class SMRevolverHUDMachine : SMHUDMachine
 {
 	override void Build()
 	{
 		Super.Build();
 
-		AddChild(new("SMHUDRevolverState"));
+		AddChild(new("SMRevolverHUDState"));
 	}
 }
 

@@ -26,6 +26,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Weapon.Kickback 50;
 		Weapon.UpSound("shotgun/draw");
 
+		BaseWeapon.HUDExtensionType "IthacaHUD";
 		BaseWeapon.MaxLookSwayTranslationX 48.0;
 		BaseWeapon.LookSwayStrengthX 18.0;
 		BaseWeapon.LookSwayResponse 5.0;
@@ -55,7 +56,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Stop;
 
 	Fire:
-		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If empty.
+		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && !invoker.m_IsLoading), "Pump"); // If empty.
+		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loading.
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loaded.
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", 1, 1);
 		Goto Empty;
@@ -126,12 +128,13 @@ class Ithaca : BaseWeapon replaces Shotgun
 		}
 	Pump:
 		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO, 0, 0.9);
+		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP ABC 1;
 		ITAP DE 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
 		TNT1 A 0 A_SpawnCasing();
 		ITAP FG 2;
-		TNT1 A 0 { invoker.m_Chambered = true; }
+		TNT1 A 0 A_JumpIf(invoker.m_IsLoading, "ReloadStart");
 		ITAP HIJ 2 A_WeaponReady();
 		Goto Ready;
 
@@ -218,17 +221,19 @@ class Ithaca : BaseWeapon replaces Shotgun
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
+			if (!invoker.m_Chambered) return ResolveState("ReloadEnd");
+
 			return ResolveState("ReloadRepeat");
 		}
 	ReloadEnd:
-		TNT1 A 0 { invoker.m_IsLoading = false; }
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ITRE ABCDE 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(1, 31);
 		ITRE FGHI 1 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		TNT1 A 0 A_JumpIf((invoker.m_Chambered), "Ready");
-		Goto Charge;
+		TNT1 A 0 A_JumpIf(!invoker.m_Chambered, "Pump");
+		TNT1 A 0 { invoker.m_IsLoading = false; }
+		Goto Ready;
 	}
 
 	override int GetAmmo() const

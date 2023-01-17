@@ -55,7 +55,7 @@ class M2CHUD : BaseWeaponHUD
 
 		vector2 roundsOrigin = Vec2Util.Zero();
 
-		int rounds = m_M2C.owner.CountInv(m_M2C.AmmoType1);
+		int rounds = m_M2C.GetAmmo();
 
 		int leftRow, rightRow;
 
@@ -91,7 +91,6 @@ class M2CHUD : BaseWeaponHUD
 				(roundsOrigin.x,
 				(roundsOrigin.y - m_TextureSize.y * i)
 					+ m_RoundsOffset.GetValue() + leftRowOffset);
-					
 
 			roundVector = m_HUDTransform.TransformVector(roundVector);
 

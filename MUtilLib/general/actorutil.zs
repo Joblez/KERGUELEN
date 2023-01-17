@@ -2,28 +2,12 @@
 class ActorUtil
 {
 	/**
-	 * Returns the pitch value that would point to the [other] Actor from the perspective
-	 * of the [this] Actor. Equivalent to Actor.AngleTo(), but for the Y-axis.
-	 *
-	 * Parameters:
-	 *	- this: The Actor used as a reference point.
-	 *	- other: The target Actor.
-	 *	- absolute: Whether or not the result should factor in portal offsets.
-	 *	- centerHeight: Whether or not the method should aim from the vertical centers of
-	 *		the Actors rather than their origins, which are usually at the bottom.
+	 * Convenience method for calling Actor.PitchTo() with offsets set to the vertical
+	 * centers of the given actors.
 	**/
 	static double PitchTo(Actor this, Actor other, bool absolute = false, bool centerHeight = true)
 	{
-		vector3 origin = this.Pos;
-		vector3 target = absolute ? other.Pos : other.PosRelative(this.cursector);
-
-		if (centerHeight)
-		{
-			origin.z += this.Height / 2.0;
-			target.z += other.Height / 2.0;
-		}
-
-		return -VectorAngle((target.xy - origin.xy).Length(), target.z - origin.z);
+		return this.PitchTo(other, (centerHeight ? this.Height / 2.0 : 0.0), (centerHeight ? other.Height / 2.0 : 0.0), absolute);
 	}
 
 	/**

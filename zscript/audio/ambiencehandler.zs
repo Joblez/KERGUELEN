@@ -88,7 +88,7 @@ class AmbienceHandler : EventHandler
 	{
 		switch (Name(soundName))
 		{
-			case 'Rain': return 5200.0;
+			case 'Rain': return 4800.0;
 			default: return 512.0;
 		}
 	}

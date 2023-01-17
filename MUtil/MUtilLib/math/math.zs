@@ -906,21 +906,13 @@ class Geometry
 	**/
 	static double DistanceToLine(vector2 point, vector2 p1, vector2 p2)
 	{
-		// Adapted from answer by @dorverbin at StackOverflow (https://stackoverflow.com/a/10984080).
-		double r = ((p2 - p1) dot (point - p1)) / ((p2 - p1).Length() ** 2);
+		double lengthSquared = MathVec2.SquareDistanceBetween(p1, p2);
+		if (lengthSquared == 0.0) return MathVec2.DistanceBetween(point, p1);
 
-		if (r < 0.0)
-		{
-			return (point - p1).Length();
-		}
-		else if (r > 1.0)
-		{
-			return (p2 - point).Length();
-		}
-		else
-		{
-			return sqrt((point - p1).Length() ** 2 - (r * (p2 - p1).Length() ** 2));
-		}
+		double delta = clamp((point - p1) dot (p2 - p1) / lengthSquared, 0.0, 1.0);
+		vector2 projection = p1 + delta * (p2 - p1);
+
+		return MathVec2.DistanceBetween(point, projection);
 	}
 
 	/**

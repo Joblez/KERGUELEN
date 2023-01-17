@@ -53,8 +53,9 @@ class IthacaHUD : BaseWeaponHUD
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 		m_OriginalHUDScale = m_HUDTransform.GetLocalTranslation();
+		m_OriginalHUDScale = m_HUDTransform.GetLocalTranslation();
 
-		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 16, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 4));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 24, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 4));
 		m_HUDTransform.SetScale((0.75, 0.75));
 	}
 

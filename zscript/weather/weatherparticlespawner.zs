@@ -156,7 +156,7 @@ class WeatherParticleSpawner : WeatherSpawner
 		if (!ShouldSpawn(point, spawnScore, 0.0, 0.5, 0.35)) return;
 
 		vector3 spawnPosition = (point.x, point.y,
-			(m_Sector.HighestCeilingAt(point)
+			(m_Sector.ceilingplane.ZatPoint(point)
 				// Particles can exist outside of level geometry, spawn above ceiling to make it
 				// seem as though the weather is coming from the sky.
 				+ (GetSector().GetTexture(Sector.ceiling) == skyflatnum ? 512.0 : 0.0)

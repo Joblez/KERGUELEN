@@ -919,7 +919,7 @@ class Geometry
 		}
 		else
 		{
-			return sqrt((x - p1).Length() ** 2 - (r * (p2 - p1).Length() ** 2));
+			return sqrt((point - p1).Length() ** 2 - (r * (p2 - p1).Length() ** 2));
 		}
 	}
 

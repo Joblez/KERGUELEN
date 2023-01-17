@@ -10,13 +10,13 @@ version "4.10.0"
 
 //Weapons
 #include "zscript/weapons/baseweapon.zs"
+#include "zscript/weapons/colt.zs"
 #include "zscript/weapons/revolver.zs"
 #include "zscript/weapons/hatchet.zs"
 #include "zscript/weapons/ithaca.zs"
 #include "zscript/weapons/m2c.zs"
 #include "zscript/weapons/dynamite.zs"
 #include "zscript/weapons/sniper.zs"
-#include "zscript/weapons/m1911.zs"
 
 // UI
 #include "zscript/ui/kergstatusbar.zs"

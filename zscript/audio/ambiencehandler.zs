@@ -78,7 +78,7 @@ class AmbienceHandler : EventHandler
 				volume = Math.Ease(volume, EASE_IN_SINE);
 			}
 
-			Console.Printf("Volume: %f", volume);
+			// Console.Printf("Volume: %f", volume);
 			pawn.A_SoundVolume(data.m_Channel, volume);
 		}
 	}

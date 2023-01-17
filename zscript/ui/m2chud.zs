@@ -30,7 +30,7 @@ class M2CHUD : BaseWeaponHUD
 		Super.UISetup();
 
 		m_RoundsOffset = new("InterpolatedDouble");
-		m_RoundsOffset.m_SmoothTime = 0.02;
+		m_RoundsOffset.m_SmoothTime = 0.025;
 	}
 
 	override void PreDraw(int state, double ticFrac)
@@ -38,7 +38,7 @@ class M2CHUD : BaseWeaponHUD
 		Super.PreDraw(state, ticFrac);
 
 		// One-size-fits-all solution...
-		m_RoundsOffset.m_SmoothTime = m_PreviousRounds < m_M2C.GetAmmo() ? 0.0 : 0.02;
+		m_RoundsOffset.m_SmoothTime = m_PreviousRounds < m_M2C.GetAmmo() ? 0.0 : 0.025;
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 		m_OriginalHUDRotation = m_HUDTransform.GetLocalRotation();

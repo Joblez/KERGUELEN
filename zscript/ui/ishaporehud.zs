@@ -1,6 +1,6 @@
-class IthacaHUD : BaseWeaponHUD
+class IshaporeHUD : BaseWeaponHUD
 {
-	Ithaca m_Ithaca;
+	Ishapore m_Ishapore;
 
 	ui InterpolatedDouble m_FirstRoundOffset;
 	ui InterpolatedDouble m_RoundsOffset;
@@ -17,9 +17,9 @@ class IthacaHUD : BaseWeaponHUD
 
 	override void Setup()
 	{
-		m_Ithaca = Ithaca(m_Context);
+		m_Ishapore = Ishapore(m_Context);
 
-		m_RoundTexture = TexMan.CheckForTexture("SHTRNRDY");
+		m_RoundTexture = TexMan.CheckForTexture("ISHRNRDY");
 		int textureWidth, textureHeight;
 		[textureWidth, textureHeight] = TexMan.GetSize(m_RoundTexture);
 		m_TextureSize = (textureWidth + 2, textureHeight);
@@ -39,7 +39,7 @@ class IthacaHUD : BaseWeaponHUD
 	{
 		Super.PreDraw(state, ticFrac);
 
-		if ((!m_Ithaca.m_Chambered && m_Ithaca.GetAmmo() > 0))
+		if ((!m_Ishapore.m_Chambered && m_Ishapore.GetAmmo() > 0))
 		{
 			m_RoundsOffset.m_SmoothTime = 0.05;
 			m_FirstRoundOffset.m_SmoothTime = 0.0;
@@ -53,9 +53,8 @@ class IthacaHUD : BaseWeaponHUD
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 		m_OriginalHUDScale = m_HUDTransform.GetLocalTranslation();
-		m_OriginalHUDScale = m_HUDTransform.GetLocalTranslation();
 
-		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 24, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 4));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 36, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 4));
 		m_HUDTransform.SetScale((0.75, 0.75));
 	}
 
@@ -67,14 +66,14 @@ class IthacaHUD : BaseWeaponHUD
 		vector2 roundScale = m_HUDTransform.GetLocalScale();
 		vector2 invertedScale = (1.0 / roundScale.x, 1.0 / roundScale.y);
 
-		int rounds = m_Ithaca.GetAmmo();
+		int rounds = m_Ishapore.GetAmmo();
 
-		int target = m_Ithaca.m_Chambered ? rounds - 1 : rounds;
+		int target = m_Ishapore.m_Chambered ? rounds - 1 : rounds;
 
-		m_RoundsOffset.m_Target = target * m_TextureSize.x;
+		m_RoundsOffset.m_Target = target * m_TextureSize.y;
 		m_RoundsOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
 
-		m_FirstRoundOffset.m_Target = m_Ithaca.m_Chambered ? m_TextureSize.y + 2 : 0.0;
+		m_FirstRoundOffset.m_Target = m_Ishapore.m_Chambered ? m_TextureSize.x + 2 : 0.0;
 		m_FirstRoundOffset.Update((level.time + ticFrac - m_PreviousTime) / TICRATE);
 
 		if (rounds > 0)
@@ -88,7 +87,7 @@ class IthacaHUD : BaseWeaponHUD
 				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBarCore.DI_MIRROR,
-				m_HUDTransform.GetLocalRotation(),
+				m_HUDTransform.GetLocalRotation() + 90.0,
 				1.0,
 				scale: invertedScale,
 				col: 0xFFFFFFFF);
@@ -97,7 +96,7 @@ class IthacaHUD : BaseWeaponHUD
 		for (int i = 1; i < rounds; ++i)
 		{
 			vector2 roundVector =
-				(roundsOrigin.x + m_TextureSize.x * i - m_RoundsOffset.GetValue(),
+				(roundsOrigin.x + m_TextureSize.y * i - m_RoundsOffset.GetValue(),
 				roundsOrigin.y);
 
 			roundVector = m_HUDTransform.TransformVector(roundVector);
@@ -106,7 +105,7 @@ class IthacaHUD : BaseWeaponHUD
 				m_RoundTexture,
 				roundVector,
 				StatusBarCore.DI_ITEM_CENTER | StatusBarCore.DI_MIRROR,
-				m_HUDTransform.GetLocalRotation(),
+				m_HUDTransform.GetLocalRotation() + 90.0,
 				1.0,
 				scale: invertedScale,
 				col: 0xFFFFFFFF);
@@ -117,7 +116,7 @@ class IthacaHUD : BaseWeaponHUD
 	{
 		Super.PostDraw(state, ticFrac);
 
-		m_PreviousRounds = m_Ithaca.GetAmmo();
+		m_PreviousRounds = m_Ishapore.GetAmmo();
 		m_PreviousTime = level.time + ticFrac;
 
 		m_HUDTransform.SetTranslation(m_OriginalHUDTranslation);

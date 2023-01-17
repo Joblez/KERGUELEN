@@ -24,6 +24,7 @@ version "4.10.0"
 #include "zscript/ui/revolverhud.zs"
 #include "zscript/ui/ithacahud.zs"
 #include "zscript/ui/m2chud.zs"
+#include "zscript/ui/ishaporehud.zs"
 
 // Weather
 #include "zscript/weather/weathereffects.zs"

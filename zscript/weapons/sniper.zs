@@ -1,17 +1,20 @@
 const SMAG = 10;
 
-class sniperammo: ammo
+class SniperAmmo: Ammo
 {
-	Default{
-	Inventory.MaxAmount SMAG;
-	Ammo.BackpackAmount 0;
-	Ammo.BackpackMaxAmount SMAG;
+	Default
+	{
+		Inventory.MaxAmount SMAG;
+		Ammo.BackpackAmount 0;
+		Ammo.BackpackMaxAmount SMAG;
 	}
 }
 
 class Ishapore : baseweapon replaces Plasmarifle {
+	bool m_Chambered; //checks if you are aiming down the Scope.
 	bool m_Shouldered; //checks if you are aiming down the Scope.
-	bool m_isloading; //checks if you are reloading.
+	bool m_IsLoading; //checks if you are reloading.
+
 	Default
 	{
 		Weapon.Kickback 20;
@@ -19,10 +22,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 10;
-		Weapon.AmmoType1 "Sniperammo";
+		Weapon.AmmoType1 "SniperAmmo";
 		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
 
+		BaseWeapon.HUDExtensionType "IshaporeHUD";
 		BaseWeapon.MaxLookSwayTranslationX 56.0;
 		BaseWeapon.LookSwayStrengthX 20.0;
 		BaseWeapon.LookSwayResponse 4.0;
@@ -53,7 +57,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Stop;
 
 	Ready:
-		ISHI A 1 A_Weaponready(WRF_ALLOWRELOAD);
+		ISHI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Empty:
@@ -64,9 +68,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Goto Ready;
 
 	Fire:
-		TNT1 A 0 A_JumpIf((invoker.m_Shouldered), "Shoulderedfire");
+		TNT1 A 0 A_JumpIf((!invoker.m_Shouldered && !invoker.m_Chambered), "Bolt");
+		TNT1 A 0 A_JumpIf((invoker.m_Shouldered && !invoker.m_Chambered), "ShoulderedBolt");
+		TNT1 A 0 A_JumpIf((invoker.m_Shouldered && invoker.m_Chambered), "ShoulderedFire");
 		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If empty.
-		TNT1 A 0 A_JumpIfInventory("Sniperammo", 1, 1);
+		TNT1 A 0 A_JumpIfInventory("SniperAmmo", 1, 1);
 		Goto Empty;
 		TNT1 A 0;
 		ISHF A 1 Bright {
@@ -79,11 +85,12 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_FireBullets(2, 2, -1, 80, "Bullet_Puff");
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
-			A_TakeInventory("Sniperammo", 1);
+			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
 			A_AlertMonsters();
-			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(8, 36);
+			invoker.m_Chambered = false;
 		}
 		ISHF A 1;
 		ISHF B 1 A_SetBaseOffset(4, 33);
@@ -96,35 +103,42 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHB DEFG 2;
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ISHB HIJ 1;
-		TNT1 A 0 A_SpawnCasing();
+		TNT1 A 0 {
+			A_SpawnCasing();
+			invoker.m_Chambered = true;
+		}
 		ISHB KL 2;
 		TNT1 A 0 A_StartSound("sniper/boltfor",9);
 		ISHB MN 1;
 		TNT1 A 0 A_SetBaseOffset(1, 31);
 		ISHB OPQR 2;
-		ISHB STUV 2 A_WeaponReady();
 		TNT1 A 0 A_SetBaseOffset(0, 30);
+		ISHB STUV 2 A_WeaponReady();
 		goto ready;
 
 	Reload:
+		TNT1 A 0 A_JumpIf(invoker.GetAmmo() == SMAG || invoker.GetReserveAmmo() == 0, "Ready");
 		ISRS ABCDE 1;
 		ISRS FGHI 1;
-		TNT1 A 0 A_StartSound("sniper/boltback",9);
+		TNT1 A 0 A_StartSound("sniper/boltback", 9);
 		ISRS J 1;
 		ISRS KL 2;
 		ISRS MNOPQ 1;
 		ISRS RSTUV 2;
 		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
-		TNT1 A 0 A_JumpIfInventory("Sniperammo", SMAG, "ReloadEnd");
+		TNT1 A 0 A_JumpIfInventory("SniperAmmo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo308", 1, "ProperReload");
 		Goto ReloadEnd;
 
 	ProperReload:
 		ISRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
-			A_StartSound("sniper/load",10);
+			A_StartSound("sniper/load", 10);
 			A_SetBaseOffset(-1, 33);
+
+			GiveInventory(invoker.AmmoType1, 1);
+			TakeInventory(invoker.AmmoType2, 1);
 		}
 		ISRL GH 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 A_SetBaseOffset(-1, 32);
@@ -145,13 +159,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			if (ammoAmount <= 0) return ResolveState("Ready");
 
-			GiveInventory(invoker.AmmoType1, 1);
-			TakeInventory(invoker.AmmoType2, 1);
-
 			return ResolveState("ReloadRepeat");
 		}	
 	ReloadEnd:
-		TNT1 A 0 { invoker.m_IsLoading = false; }	
+		TNT1 A 0 { invoker.m_IsLoading = false; }
 		ISRE ABC 1;
 		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
 		TNT1 A 0 A_SetBaseOffset(-2, 32);
@@ -161,9 +172,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		ISRE OP 2;
 		ISRE QRS 2 A_WeaponReady();
-		goto ready;
+		Goto Ready;
 
-	Altfire:
+	AltFire:
 		TNT1 A 0 {
 			if (invoker.m_Shouldered)
 			{
@@ -207,11 +218,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		goto ready;
 
 	AltReady:
-		ISAI A 1 A_Weaponready();
-		loop;
+		ISAI A 1 A_WeaponReady();
+		Loop;
 
 	EmptyScoped:
-		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
 		ISAF EF 2;
 		Goto AltReady;
 
@@ -219,13 +230,14 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_JumpIfInventory("SniperAmmo", 1, 1);
 		Goto EmptyScoped;
 		TNT1 A 0 A_FireBullets(0, 0, -1, 80, "Bullet_Puff");
-		ISAF A 2 BRIGHT {
+		ISAF A 2 Bright {
 			A_GunFlash("ZFScoped");
 			A_StartSound("sniper/fire", 1);
 			A_AlertMonsters();
 			A_FRecoil(2.5);
 			A_SingleSmoke(0, 0);
 			A_TakeInventory("SniperAmmo", 1);
+			invoker.m_Chambered = false;
 		}
 		ISAF BCDEF 2;
 
@@ -233,16 +245,19 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		TNT1 A 0 A_ZoomFactor(1.0);
 		ISRD ABC 2;
 		ISRD DEFGHIJ 2;
-		TNT1 A 0 A_StartSound("sniper/boltback",9);
+		TNT1 A 0 A_StartSound("sniper/boltback", 9);
 		ISRD KLMNOPQ 1;
-		TNT1 A 0 A_SpawnCasingAlt();
+		TNT1 A 0 {
+			invoker.m_Chambered = true;
+			A_SpawnCasingAlt();
+		}
 		ISRD RSTUV 2;
-		TNT1 A 0 A_StartSound("sniper/boltfor",9);
+		TNT1 A 0 A_StartSound("sniper/boltfor", 9);
 		ISRD WXYZ 2;
 		ISR2 ABCDE 2;
 		TNT1 A 0 A_ZoomFactor(4.0);
 		ISR2 FGHIJKL 2;
-		goto altready;
+		Goto AltReady;
 
 	Select:
 		TNT1 A 4 A_SetBaseOffset(-65, 81);

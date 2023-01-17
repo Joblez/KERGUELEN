@@ -21,6 +21,7 @@ version "4.10.0"
 // UI
 #include "zscript/ui/kergstatusbar.zs"
 #include "zscript/ui/baseweaponhud.zs"
+#include "zscript/ui/colthud.zs"
 #include "zscript/ui/revolverhud.zs"
 #include "zscript/ui/ithacahud.zs"
 #include "zscript/ui/m2chud.zs"

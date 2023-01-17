@@ -25,6 +25,8 @@ class Colt : BaseWeapon replaces Pistol
 		Weapon.AmmoType2 "Ammo45";
 		Weapon.UpSound("sw/raise");
 
+		BaseWeapon.HUDExtensionType "ColtHUD";
+
 		Inventory.PickupMessage "[2] .45 Handgun";
 
 		Tag "Colt M1911A1";

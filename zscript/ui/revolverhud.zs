@@ -73,7 +73,7 @@ class SMRevolverHUDState : SMHUDState
 
 			if (m_RoundsHUD.m_Rounds[roundIndex] == RevolverHUD.RS_Empty) continue;
 
-			double scale = 1.0;
+			double scale = 0.75;
 			double radius = 20 * scale;
 
 			vector2 polarCoords = (

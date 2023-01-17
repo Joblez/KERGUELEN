@@ -12,8 +12,6 @@ class IshaporeHUD : BaseWeaponHUD
 	private vector2 m_OriginalHUDTranslation;
 	private vector2 m_OriginalHUDScale;
 
-	private int m_PreviousRounds;
-
 	override void Setup()
 	{
 		m_Ishapore = Ishapore(m_Context);
@@ -91,7 +89,6 @@ class IshaporeHUD : BaseWeaponHUD
 	{
 		Super.PostDraw(state, ticFrac);
 
-		m_PreviousRounds = m_Ishapore.GetAmmo();
 		m_PreviousTime = level.time + ticFrac;
 
 		m_HUDTransform.SetTranslation(m_OriginalHUDTranslation);

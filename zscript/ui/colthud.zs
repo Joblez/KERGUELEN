@@ -39,7 +39,7 @@ class ColtHUD : BaseWeaponHUD
 
 		m_OriginalHUDTranslation = m_HUDTransform.GetLocalTranslation();
 
-		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 40, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 16));
+		m_HUDTransform.SetTranslation((KergStatusBar.WEAPON_HUD_ORIGIN_X + 40, KergStatusBar.WEAPON_HUD_ORIGIN_Y - 18));
 	}
 
 	override void Draw(int state, double ticFrac)

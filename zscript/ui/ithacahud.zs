@@ -19,10 +19,10 @@ class IthacaHUD : BaseWeaponHUD
 	{
 		m_Ithaca = Ithaca(m_Context);
 
-		m_RoundTexture = TexMan.CheckForTexture("FNRNRDY");
+		m_RoundTexture = TexMan.CheckForTexture("SHTNRDY");
 		int textureWidth, textureHeight;
 		[textureWidth, textureHeight] = TexMan.GetSize(m_RoundTexture);
-		m_TextureSize = (textureWidth, textureHeight);
+		m_TextureSize = (textureWidth + 2, textureHeight);
 	}
 
 	override void UISetup()
@@ -86,7 +86,7 @@ class IthacaHUD : BaseWeaponHUD
 			StatusBar.DrawTextureRotated(
 				m_RoundTexture,
 				roundVector,
-				StatusBarCore.DI_ITEM_CENTER,
+				StatusBarCore.DI_ITEM_CENTER | StatusBarCore.DI_MIRROR,
 				m_HUDTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,
@@ -104,7 +104,7 @@ class IthacaHUD : BaseWeaponHUD
 			StatusBar.DrawTextureRotated(
 				m_RoundTexture,
 				roundVector,
-				StatusBarCore.DI_ITEM_CENTER,
+				StatusBarCore.DI_ITEM_CENTER | StatusBarCore.DI_MIRROR,
 				m_HUDTransform.GetLocalRotation(),
 				1.0,
 				scale: invertedScale,

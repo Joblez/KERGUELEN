@@ -94,7 +94,7 @@ class AmbienceHandler : EventHandler
 			}
 
 			double volume = 1.0 - clamp(MathVec3.DistanceBetween(closestFollower.m_Position, pawn.Pos) / data.m_Range, 0.0, 1.0);
-			volume = Math.Ease(volume, EASE_IN_QUAD);
+			volume = Math.Ease(volume, EASE_IN_SINE);
 
 			Console.Printf("Volume: %f", volume);
 

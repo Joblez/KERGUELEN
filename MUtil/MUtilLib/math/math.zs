@@ -524,11 +524,13 @@ class MathVec2
 		return pivot + Rotate(vector - pivot, angle);
 	}
 
+	/** Returns the given polar (radius, angle) coordinates as Cartesian (x, y) coordinates. **/
 	static vector2 CartesianToPolar(vector2 coords)
 	{
 		return (sqrt(coords.x * coords.x + coords.y * coords.y), atan(coords.y / coords.x));
 	}
 
+	/** Returns the given Cartesian (x, y) coordinates as polar (radius, angle) coordinates. **/
 	static vector2 PolarToCartesian(vector2 coords)
 	{
 		return (coords.x * cos(coords.y), coords.x * sin(coords.y));
@@ -899,9 +901,32 @@ class Geometry
 	}
 
 	/**
-	 * Returns the intersection point between the line defined by the given aStart and aEnd points
-	 * and the line defined by the given bStart and bEnd points, or a vector with coordinates at
-	 * infinity if no intersection is found.
+	 * Returns the distance between the given point and the line defined by the given p1
+	 * and p2 points.
+	**/
+	static double DistanceToLine(vector2 point, vector2 p1, vector2 p2)
+	{
+		// Adapted from answer by @dorverbin at StackOverflow (https://stackoverflow.com/a/10984080).
+		double r = ((p2 - p1) dot (point - p1)) / ((p2 - p1) ** 2).Length();
+
+		if (r < 0.0)
+		{
+			return (point - p1).Length();
+		}
+		else if (r > 1.0)
+		{
+			return (p2 - point).Length();
+		}
+		else
+		{
+			return sqrt((x - p1).Length() ** 2 - (r * (p2-p1).Length() ** 2));
+		}
+	}
+
+	/**
+	 * Returns the intersection point between the line defined by the given aStart and
+	 * aEnd points and the line defined by the given bStart and bEnd points, or a vector
+	 * with coordinates at infinity if no intersection is found.
 	 *
 	 * NOTE:
 	 *		Collinear segments are considered non-intersecting.

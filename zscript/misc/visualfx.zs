@@ -313,12 +313,16 @@ class Melee_Puff: Bullet_Puff
 class BaseCasing : Actor
 {
 	double m_RollOrientation;
+	double m_RollSpeed;
 
 	meta double m_StartRoll;
 	property StartingRoll: m_StartRoll;
 
 	private double m_VirtualRoll;
 	private bool m_FirstTickPassed;
+	private bool m_FirstDeathTickPassed;
+
+	private InterpolatedDouble m_TipOverAngle;
 
 	Default
 	{
@@ -344,7 +348,11 @@ class BaseCasing : Actor
 	{
 		Super.BeginPlay();
 
+		m_TipOverAngle = new("InterpolatedDouble");
+		m_TipOverAngle.m_SmoothTime = 3.0 / TICRATE;
+
 		m_RollOrientation = FRandomPick(1.0, -1.0);
+		m_RollSpeed = FRandom(2.0, 4.5) * 360.0 / TICRATE;
 		SetVirtualRoll(m_StartRoll);
 	}
 
@@ -364,15 +372,31 @@ class BaseCasing : Actor
 
 		if (!InStateSequence(CurState, ResolveState("Death")))
 		{
-			m_VirtualRoll += FRandom(1.0, 3.0) * 360.0 / TICRATE * m_RollOrientation;
+			m_VirtualRoll += m_RollSpeed * m_RollOrientation;
 			ConvertVirtualRoll();
+			return;
 		}
-		else
+
+		if (!m_FirstDeathTickPassed)
 		{
-			bRollSprite = false;
-			double rollAngle = Math.PosMod(m_VirtualRoll, 360.0);
-			bXFlip = rollAngle < 180.0;
+			m_TipOverAngle.ForceSet(m_VirtualRoll);
+
+			// Get nearest multiple of 180.
+			m_TipOverAngle.m_Target = round(m_VirtualRoll / 180.0) * 180.0;
+
+			m_FirstDeathTickPassed = true;
 		}
+
+		if (!(m_TipOverAngle.GetValue() ~== m_TipOverAngle.m_Target))
+		{
+			m_TipOverAngle.Update();
+			SetVirtualRoll(m_TipOverAngle.GetValue());
+			return;
+		}
+
+		bRollSprite = false;
+		double rollAngle = Math.PosMod(m_VirtualRoll, 360.0);
+		frame = rollAngle < 180.0 ? 0 : 4;
 	}
 
 	void ConvertVirtualRoll()

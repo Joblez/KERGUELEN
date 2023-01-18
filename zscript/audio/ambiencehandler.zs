@@ -1,8 +1,9 @@
 class AmbienceHandler : EventHandler
 {
+	const AMBIENCE_UDMF_PROPERTY = "user_ambient_sound";
 	const AMBIENCE_CHANNELS_START = 11000;
-
-	const SOUND_RANGE = 4096.0;
+	const AMBIENCE_REBALANCE_AMOUNT = 0.5;
+	const DEFAULT_SOUND_RANGE = 4096.0;
 
 	Map<Sound, AmbientSoundData> m_AmbienceData;
 
@@ -12,7 +13,7 @@ class AmbienceHandler : EventHandler
 		foreach (sec : level.Sectors)
 		{
 			// Check for ambient sound.
-			string soundName = sec.GetUDMFString('user_ambient_sound');
+			string soundName = sec.GetUDMFString(AMBIENCE_UDMF_PROPERTY);
 			if (!soundName) continue;
 
 			// Console.Printf("Sound: %s", soundName);
@@ -49,15 +50,17 @@ class AmbienceHandler : EventHandler
 
 		PlayerPawn pawn = players[consoleplayer].mo;
 
+		double totalVolume = 0.0;
+
+		// Gather base volume per sound.
 		while (dataIter.Next())
 		{
 			AmbientSoundData data = dataIter.GetValue();
-			double volume;
 
 			if (data.m_Sectors.Find(pawn.cursector) < data.m_Sectors.Size())
 			{
-				// Full volume when player is in sector.
-				volume = 1.0;
+				// Full volume when pawn is in sector.
+				data.m_Volume = 1.0;
 			}
 			else
 			{
@@ -74,12 +77,30 @@ class AmbienceHandler : EventHandler
 					}
 				}
 
-				volume = 1.0 - clamp(shortestDistance / data.m_Range, 0.0, 1.0);
-				volume = Math.Ease(volume, EASE_IN_SINE);
+				data.m_Volume = 1.0 - clamp(shortestDistance / data.m_Range, 0.0, 1.0);
+				data.m_Volume = Math.Ease(data.m_Volume, EASE_IN_SINE);
 			}
 
-			// Console.Printf("Volume: %f", volume);
-			pawn.A_SoundVolume(data.m_Channel, volume);
+			totalVolume += data.m_Volume;
+		}
+
+		// Console.Printf("Total volume: %f", totalVolume);
+
+		dataIter.Reinit();
+
+		// Set all sound channel volumes.
+		while (dataIter.Next())
+		{
+			AmbientSoundData data = dataIter.GetValue();
+
+			double attenuationFactor = totalVolume;
+
+			// An amount of 0.0 doesn't attenuate, an amount of 1.0 rebalances all channel volumes to add up to 1.0;
+			attenuationFactor = Math.Remap(clamp(AMBIENCE_REBALANCE_AMOUNT, 0.0, 1.0), 0.0, 1.0, 1.0, totalVolume);
+
+			pawn.A_SoundVolume(data.m_Channel, data.m_Volume / attenuationFactor);
+
+			// Console.Printf("Channel: %i, Volume: %f", data.m_Channel, data.m_Volume / attenuationFactor);
 		}
 	}
 
@@ -88,8 +109,9 @@ class AmbienceHandler : EventHandler
 	{
 		switch (Name(soundName))
 		{
-			case 'Rain': return 4800.0;
-			default: return 512.0;
+			case 'Rain': return 3600.0;
+			case 'Cave': return 520.0;
+			default: return DEFAULT_SOUND_RANGE;
 		}
 	}
 }
@@ -99,6 +121,7 @@ class AmbientSoundData
 	Sound m_Sound;
 	int m_Channel;
 	double m_Range;
+	double m_Volume;
 	array<Sector> m_Sectors;
 
 	static AmbientSoundData Create(Sound ambientSound, int channel, double range)

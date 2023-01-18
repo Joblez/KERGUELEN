@@ -195,7 +195,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	ProperReload:
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		ITRL A 1 {
+		ITRL A 2 {
 			int flags = WRF_NOSWITCH | WRF_NOBOB;
 
 			if (invoker.GetAmmo() == 0) flags |= WRF_NOFIRE;

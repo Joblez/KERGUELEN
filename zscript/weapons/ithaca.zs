@@ -195,30 +195,28 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	ProperReload:
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		ITRL ABCD 1 {
+		ITRL A 1 {
 			int flags = WRF_NOSWITCH | WRF_NOBOB;
 
 			if (invoker.GetAmmo() == 0) flags |= WRF_NOFIRE;
 			A_WeaponReady(flags);
 		}
-		ITRL EF 2 {
-			int flags = WRF_NOSWITCH | WRF_NOBOB;
-
-			if (invoker.GetAmmo() == 0) flags |= WRF_NOFIRE;
-			A_WeaponReady(flags);
-		}
+		ITRL BCD 1;
+		ITRL EF 2;
 		ITRL G 1 {
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
+
+			A_StartSound("shotgun/load", 10, 0, 0.5);
 		}
-		TNT1 A 0 A_StartSound("shotgun/load", 10, 0, 0.5);
 		ITRL HI 1;
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		ITRL JKL 2;
+		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL M 2;
-		TNT1 A 0 A_SetBaseOffset(2, 32);
+		ITRL M 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 {
+			A_SetBaseOffset(2, 32);
+
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));

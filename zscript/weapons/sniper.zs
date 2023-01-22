@@ -28,7 +28,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 		BaseWeapon.HUDExtensionType "IshaporeHUD";
 		BaseWeapon.MaxLookSwayTranslationX 56.0;
-		BaseWeapon.LookSwayStrengthX 20.0;
+		BaseWeapon.LookSwayStrengthX 28.0;
 		BaseWeapon.LookSwayResponse 4.0;
 		BaseWeapon.LookSwayRigidity 7.0;
 

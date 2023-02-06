@@ -129,9 +129,10 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO, 0, 0.9);
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP ABC 1;
+		TNT1 A 0 A_SpawnCasing();		
 		ITAP DE 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
-		TNT1 A 0 A_SpawnCasing();
+
 		ITAP FG 2;
 		TNT1 A 0 A_JumpIf(invoker.m_IsLoading, "ReloadStart");
 		ITAP HIJ 1;
@@ -253,10 +254,10 @@ class Ithaca : BaseWeapon replaces Shotgun
 		{
 			A_SpawnEffect(
 				"ShotgunCasing",
-				(21.0, 19.0, 42.0),
-				FRandom(1.0, 9.0),
-				FRandom(-6.0, -6.75),
-				FRandom(6.0, 6.5),
+				(18.0, 22.0, 26.0),
+				FRandom(2.0, 4.0),
+				FRandom(-10.0, -10.75),
+				Frandom(1.0,1.5),
 				true);
 		}
 	}

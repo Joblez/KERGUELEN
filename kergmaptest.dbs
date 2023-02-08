@@ -20,15 +20,15 @@ maps
 			resource0
 			{
 				type = 1;
-				location = "D:\\_Personal\\GZD\\SLADE\\proj\\KERGUELEN";
+				location = "C:\\Users\\joble\\Documents\\GitHub\\KERGUELEN";
 				option1 = 0;
 				option2 = 0;
 				notfortesting = 0;
 				requiredarchives = "";
 			}
 		}
-		viewpositiony = -638.5044f;
-		viewpositionx = 887.6381f;
+		viewpositiony = -359.6375f;
+		viewpositionx = 1047.927f;
 		
 		testprecommand
 		{
@@ -52,7 +52,7 @@ maps
 			background = "";
 			backoffsety = 0;
 		}
-		viewscale = 0.280212f;
+		viewscale = 0.4735582f;
 		
 		reloadresourceprecommand
 		{
@@ -128,7 +128,7 @@ maps
 			resource0
 			{
 				type = 1;
-				location = "C:\\Users\\Joe\\Desktop\\doomod\\joblmods\\jblz-kerguelen\\KERGUELEN";
+				location = "C:\\Users\\joble\\Documents\\GitHub\\KERGUELEN";
 				option1 = 0;
 				option2 = 0;
 				notfortesting = 0;
@@ -152,9 +152,9 @@ maps
 		overrideceilheight = false;
 		overridebrightness = false;
 		uselongtexturenames = false;
-		viewpositionx = 5792.231f;
-		viewpositiony = -1082.66f;
-		viewscale = 0.07546884f;
+		viewpositionx = -238.4633f;
+		viewpositiony = -2813.522f;
+		viewscale = 0.8003066f;
 		scriptcompiler = "zdoom_acs.cfg";
 		
 		grid
@@ -165,7 +165,7 @@ maps
 			backoffsety = 0;
 			backscalex = 100;
 			backscaley = 100;
-			gridsize = 16;
+			gridsize = 1;
 			gridrotate = 0;
 			gridoriginx = 0;
 			gridoriginy = 0;

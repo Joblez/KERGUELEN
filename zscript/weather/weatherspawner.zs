@@ -27,17 +27,17 @@ class WeatherSpawner : Thinker
 		m_Sector = sec;
 		m_WeatherType = weatherType;
 		m_WeatherAmountCVar = CVar.GetCVar("weather_amount", players[consoleplayer]);
-		m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
-		m_Frequency = density * m_Triangulation.GetArea() / 4096.0 / TICRATE;
 		m_ProjectionLength = projectionTime * TICRATE;
 		m_WeatherAgent = agent;
+		m_Triangulation = SectorDataRegistry.GetTriangulation(sec);
+		m_Frequency = density * m_Triangulation.GetArea() / 4096.0 / TICRATE;
 	}
 
 	override void Tick()
 	{
 		if (m_WeatherAgent.IsFrozen()) return;
 
-		if (m_Frequency == 0) return;
+		if (m_Frequency == 0.0) return;
 
 		m_Time += 1.0 / TICRATE;
 

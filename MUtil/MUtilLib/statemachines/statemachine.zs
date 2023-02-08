@@ -312,7 +312,7 @@ class SMState
 	{
 		if (childClass == null) return null;
 
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == childClass)
 			{
@@ -338,7 +338,7 @@ class SMState
 	{
 		if (eventId == 'None' && from == null) return null;
 
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransition transition = m_Transitions[i];
 
@@ -407,7 +407,7 @@ class SMState
 	**/
 	SMState AddChild(SMState newState)
 	{
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == newState.GetClass())
 			{
@@ -444,7 +444,7 @@ class SMState
 			return null;
 		}
 
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == childClass)
 			{
@@ -487,7 +487,7 @@ class SMState
 		{
 			ThrowAbortException("Transitions may not be both live and unbound.");
 		}
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransition transition = m_Transitions[i];
 
@@ -534,7 +534,7 @@ class SMState
 			Console.Printf("Either a valid event ID or a valid origin state must be specified.");
 			return null;
 		}
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransition transition = m_Transitions[i];
 
@@ -673,7 +673,7 @@ class SMState
 	**/
 	protected void UpdateHierarchyReferences()
 	{
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			SMState child = m_Children[i];
 			child.m_Parent = self;
@@ -736,7 +736,7 @@ class SMState
 
 	private bool TryPerformTransition(name eventId)
 	{
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransition transition = m_Transitions[i];
 			if (transition.GetEventID() == eventId
@@ -761,7 +761,7 @@ class SMState
 
 	private void RemoveAllChildren()
 	{
-		for (uint i = m_Children.Size(); i > 0; --i)
+		for (int i = m_Children.Size(); i > 0; --i)
 		{
 			uint index = i = 1;
 			RemoveChildByIndex(index);
@@ -788,14 +788,14 @@ class SMState
 	private void UpdateDefaultAndActiveStates()
 	{
 		// No children, clear active and default
-		if (m_Children.Size() == 0u)
+		if (m_Children.Size() == 0)
 		{
 			m_ActiveChildClass = null;
 			m_DefaultChildClass = null;
 		}
 
 		// Single child, make it both active and default
-		if (m_Children.Size() == 1u)
+		if (m_Children.Size() == 1)
 		{
 			m_ActiveChildClass = m_Children[0].GetClass();
 			m_DefaultChildClass = m_ActiveChildClass;
@@ -814,7 +814,7 @@ class SMState
 		}
 
 		array< class<SMState> > childrenClasses;
-		for (uint i = 0; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			childrenClasses.Push(m_Children[i].GetClass());
 		}
@@ -1016,8 +1016,8 @@ class SMMachine : SMState abstract
 	**/
 	SMState GetState(string statePath)
 	{
-		uint pathLength = statePath.Length();
-		if (pathLength == 0u) return self;
+		int pathLength = statePath.Length();
+		if (pathLength == 0) return self;
 
 		array<string> pathNodes;
 		if (statePath.IndexOf("/") < 0)
@@ -1047,7 +1047,7 @@ class SMMachine : SMState abstract
 		if (childClasses == null) ThrowAbortException("Array of child classes must not be null.");
 
 		SMState outState = self;
-		for (uint i = 0u; i < childClasses.Size(); ++i)
+		for (int i = 0; i < childClasses.Size(); ++i)
 		{
 			class<SMState> childClass = childClasses[i];
 			if (childClass == null)

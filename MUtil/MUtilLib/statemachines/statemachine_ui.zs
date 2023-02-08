@@ -142,7 +142,7 @@ class SMStateUI ui
 	SMStateUI GetChild(class<SMStateUI> childClass) const
 	{
 		if (childClass == null) return null;
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == childClass)
 			{
@@ -157,7 +157,7 @@ class SMStateUI ui
 	SMTransitionUI GetTransition(name eventId, class<SMStateUI> from) const
 	{
 		if (eventId == 'None' && from == null) return null;
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionUI transition = m_Transitions[i];
 
@@ -199,7 +199,7 @@ class SMStateUI ui
 
 	SMStateUI AddChild(SMStateUI newState)
 	{
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == newState.GetClass())
 			{
@@ -224,7 +224,7 @@ class SMStateUI ui
 			Console.Printf("Default child must be removed last.");
 			return null;
 		}
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			if (m_Children[i].GetClass() == childClass)
 			{
@@ -254,7 +254,7 @@ class SMStateUI ui
 		{
 			ThrowAbortException("Transitions may not be both live and unbound.");
 		}
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionUI transition = m_Transitions[i];
 
@@ -290,7 +290,7 @@ class SMStateUI ui
 			Console.Printf("Either a valid event ID or a valid origin state must be specified.");
 			return null;
 		}
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionUI transition = m_Transitions[i];
 
@@ -379,7 +379,7 @@ class SMStateUI ui
 
 	protected void UpdateHierarchyReferences()
 	{
-		for (uint i = 0u; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			SMStateUI child = m_Children[i];
 			child.m_Parent = self;
@@ -420,7 +420,7 @@ class SMStateUI ui
 	}
 	private bool TryPerformTransition(name eventId)
 	{
-		for (uint i = 0u; i < m_Transitions.Size(); ++i)
+		for (int i = 0; i < m_Transitions.Size(); ++i)
 		{
 			SMTransitionUI transition = m_Transitions[i];
 			if (transition.GetEventID() == eventId
@@ -442,7 +442,7 @@ class SMStateUI ui
 	}
 	private void RemoveAllChildren()
 	{
-		for (uint i = m_Children.Size(); i > 0; --i)
+		for (int i = m_Children.Size(); i > 0; --i)
 		{
 			uint index = i = 1;
 			RemoveChildByIndex(index);
@@ -466,13 +466,13 @@ class SMStateUI ui
 	}
 	private void UpdateDefaultAndActiveStates()
 	{
-		if (m_Children.Size() == 0u)
+		if (m_Children.Size() == 0)
 		{
 			m_ActiveChildClass = null;
 			m_DefaultChildClass = null;
 		}
 
-		if (m_Children.Size() == 1u)
+		if (m_Children.Size() == 1)
 		{
 			m_ActiveChildClass = m_Children[0].GetClass();
 			m_DefaultChildClass = m_ActiveChildClass;
@@ -487,7 +487,7 @@ class SMStateUI ui
 			return;
 		}
 		array< class<SMStateUI> > childrenClasses;
-		for (uint i = 0; i < m_Children.Size(); ++i)
+		for (int i = 0; i < m_Children.Size(); ++i)
 		{
 			childrenClasses.Push(m_Children[i].GetClass());
 		}
@@ -555,8 +555,8 @@ class SMMachineUI : SMStateUI abstract
 
 	SMStateUI GetState(string statePath)
 	{
-		uint pathLength = statePath.Length();
-		if (pathLength == 0u) return self;
+		int pathLength = statePath.Length();
+		if (pathLength == 0) return self;
 		array<string> pathNodes;
 		if (statePath.IndexOf("/") < 0)
 		{
@@ -573,7 +573,7 @@ class SMMachineUI : SMStateUI abstract
 	{
 		if (childClasses == null) ThrowAbortException("Array of child classes must not be null.");
 		SMStateUI outState = self;
-		for (uint i = 0u; i < childClasses.Size(); ++i)
+		for (int i = 0; i < childClasses.Size(); ++i)
 		{
 			class<SMStateUI> childClass = childClasses[i];
 			if (childClass == null)

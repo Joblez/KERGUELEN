@@ -40,7 +40,7 @@ from an additional file after the MUtilLib include, like so:
 #include "zscript/extend.zs"
 #include "zscript/types.zs"
 #include "zscript/from.zs"
-#include "zscript/MUtillib.zs"
+#include "zscript/MUtilLib.zs"
 
 ```
 

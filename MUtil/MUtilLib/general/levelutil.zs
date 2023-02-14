@@ -129,6 +129,8 @@ class LevelUtil play
 	 *		direction.
 	 * - checkHit: Whether or not to check for blocking geometry or Actors when checking
 	 *		for affected Actors. When false, the explosion will go through walls.
+	 * - hitActors: An optional array to retrieve references to the actors that were hit
+	 *		by the explosion.
 	**/
 	static void Explode3D(
 		vector3 origin,
@@ -140,7 +142,8 @@ class LevelUtil play
 		Actor source = null,
 		Actor inflictor = null,
 		vector3 thrustOffset = (0.0, 0.0, 0.0),
-		bool checkHit = true)
+		bool checkHit = true,
+		out array<Actor> hitActors = null)
 	{
 		let iterator = BlockThingsIterator.CreateFromPos(origin.x, origin.y, origin.z, radius, radius, false);
 
@@ -196,6 +199,8 @@ class LevelUtil play
 			mo.DamageMobj(inflictor, source, attenuatedDamage, 'Explosive', DMG_THRUSTLESS | DMG_EXPLOSION);
 
 			ActorUtil.Thrust3D(mo, toTarget + thrustOffset, attenuatedForce);
+
+			if (hitActors) hitActors.Push(mo);
 		}
 	}
 

@@ -23,9 +23,10 @@ class ActorUtil
 		array<Actor> exclusions = null,
 		Actor inflictor = null,
 		vector3 thrustOffset = (0.0, 0.0, 0.0),
-		bool checkHit = true)
+		bool checkHit = true,
+		out array<Actor> hitActors = null)
 	{
-		LevelUtil.Explode3D(origin.Pos, damage, thrustForce, radius, thrustTarget, exclusions, origin, inflictor, thrustOffset, checkHit);
+		LevelUtil.Explode3D(origin.Pos, damage, thrustForce, radius, thrustTarget, exclusions, origin, inflictor, thrustOffset, checkHit, hitActors);
 	}
 
 	/**

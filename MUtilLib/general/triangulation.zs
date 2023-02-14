@@ -27,7 +27,6 @@
 	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *************************************************************************************/
-
 enum EOrientation
 {
 	ORI_CW,
@@ -59,6 +58,16 @@ class Triangulatable abstract
 
 		ctx.PrepareTriangulation(self);
 		DTSweep.Triangulate(ctx);
+
+		foreach (triangle : m_Triangles)
+		{
+			array<TriangulationPoint> pointArray;
+			pointArray.Push(triangle.m_Points[0]);
+			pointArray.Push(triangle.m_Points[1]);
+			pointArray.Push(triangle.m_Points[2]);
+
+			TriangulationUtil.UnshiftPoints(pointArray);
+		}
 	}
 }
 
@@ -67,7 +76,7 @@ class PointSet : Triangulatable
 	static PointSet Create(array<TriangulationPoint> points)
 	{
 		PointSet ps = new("PointSet");
-		ps.m_Points.Move(points);
+		ps.m_Points.Copy(points);
 		return ps;
 	}
 
@@ -95,10 +104,38 @@ class PointSet : Triangulatable
 	}
 }
 
+class ConstrainedPointSet : PointSet
+{
+	private array<int> m_EdgePairs;
+
+	static ConstrainedPointSet Create(array<TriangulationPoint> points, array<int> edgePairs)
+	{
+		ConstrainedPointSet ps = new("ConstrainedPointSet");
+		ps.m_Points.Copy(points);
+		ps.m_EdgePairs.Copy(edgePairs);
+		return ps;
+	}
+
+	override ETriangulationMode GetTriangulationMode() { return TM_Constrained; }
+
+	override void Prepare(DTSweepContext tcx)
+	{
+		m_Triangles.Clear();
+		tcx.m_Points.Append(m_Points);
+
+		for (int i = 0; i < m_EdgePairs.Size(); i += 2)
+		{
+			tcx.NewConstraint(m_Points[m_EdgePairs[i]], m_Points[m_EdgePairs[i + 1]]);
+		}
+	}
+}
+
 class TriangulationPoint
 {
 	double m_X;
 	double m_Y;
+
+	vector2 shiftDisplacement;
 
 	array<DTSweepConstraint> m_Edges;
 
@@ -107,6 +144,7 @@ class TriangulationPoint
 		TriangulationPoint p = new("TriangulationPoint");
 		p.m_X = x;
 		p.m_Y = y;
+		p.shiftDisplacement = (0.0, 0.0);
 		return p;
 	}
 
@@ -144,7 +182,7 @@ class TriangulationPoint
 
 class TriangulationUtil
 {
-	const EPSILON = 0.0000001;
+	const EPSILON = 0.000000001;
 
 	static bool SmartInCircle(TriangulationPoint pa, TriangulationPoint pb, TriangulationPoint pc, TriangulationPoint pd)
 	{
@@ -212,14 +250,30 @@ class TriangulationUtil
 		return true;
 	}
 
-	static EOrientation Orient2d(TriangulationPoint pa, TriangulationPoint pb, TriangulationPoint pc)
+	static EOrientation Orient2d(TriangulationPoint pa, TriangulationPoint pb, TriangulationPoint pc, bool moveCollinear = true)
 	{
 		double detleft = (pa.m_X - pc.m_X) * (pb.m_Y - pc.m_Y);
 		double detright = (pa.m_Y - pc.m_Y) * (pb.m_X - pc.m_X);
 		double val = detleft - detright;
 		if (val > -EPSILON && val < EPSILON)
 		{
-			return ORI_Collinear;
+			// ThrowAbortException("Collinear points not handled.");
+			if (moveCollinear)
+			{
+				EOrientation shifted;
+				do
+				{
+					ShiftPoint(pb);
+					shifted = Orient2d(pa, pb, pc, false);
+				}
+				while (shifted == ORI_Collinear);
+
+				return shifted;
+			}
+			else
+			{
+				return ORI_Collinear;
+			}
 		}
 		else if (val > 0)
 		{
@@ -228,22 +282,29 @@ class TriangulationUtil
 		return ORI_CW;
 	}
 
-	static TriangulationPoint ToTriangulationPoint(Vector2 v)
+	static TriangulationPoint ToTriangulationPoint(vector2 v)
 	{
 		return TriangulationPoint.Create(v.x, v.y);
 	}
 
-	static PolygonPoint ToPolygonPoint(Vector2 v)
+	static PolygonPoint ToPolygonPoint(vector2 v)
 	{
 		return PolygonPoint.Create(v.x, v.y);
+	}
+
+	static void VerticesToTriangulationPoints(array<Vertex> vertices, out array<TriangulationPoint> points)
+	{
+		for (int i = 0; i < vertices.Size(); ++i)
+		{
+			points.Push(TriangulationPoint.FromVertex(vertices[i]));
+		}
 	}
 
 	static void Vector2sToTriangulationPoints(array<BoxedVector2> vectors, out array<TriangulationPoint> points)
 	{
 		for (int i = 0; i < vectors.Size(); ++i)
 		{
-			Vector2 v = vectors[i].m_Value;
-			points.Push(TriangulationPoint.Create(v.x, v.y));
+			points.Push(TriangulationPoint.FromVec2(vectors[i].m_Value));
 		}
 	}
 
@@ -251,8 +312,7 @@ class TriangulationUtil
 	{
 		for (int i = 0; i < vectors.Size(); ++i)
 		{
-			Vector2 v = vectors[i].m_Value;
-			points.Push(PolygonPoint.Create(v.x, v.y));
+			points.Push(PolygonPoint.FromVec2(vectors[i].m_Value));
 		}
 	}
 
@@ -301,6 +361,30 @@ class TriangulationUtil
 
 		return left;
 	}
+
+	static void ShiftPoint(TriangulationPoint p, vector2 displacement = (0.0, 0.0))
+	{
+		if (abs(displacement.x) <= TriangulationUtil.EPSILON) displacement.x = -TriangulationUtil.EPSILON * Random(1, 10);
+		if (abs(displacement.y) <= TriangulationUtil.EPSILON) displacement.y = TriangulationUtil.EPSILON * Random(1, 10);
+		p.m_X += displacement.x;
+		p.m_Y += displacement.y;
+		p.shiftDisplacement += displacement;
+	}
+
+	static void UnshiftPoint(TriangulationPoint p)
+	{
+		p.m_X -= p.shiftDisplacement.x;
+		p.m_Y -= p.shiftDisplacement.y;
+		p.shiftDisplacement = (0.0, 0.0);
+	}
+
+	static void UnshiftPoints(out array<TriangulationPoint> points)
+	{
+		foreach (point : points)
+		{
+			UnshiftPoint(point);
+		}
+	}
 }
 
 class PolygonPoint : TriangulationPoint
@@ -311,6 +395,11 @@ class PolygonPoint : TriangulationPoint
 		p.m_X = x;
 		p.m_Y = y;
 		return p;
+	}
+
+	static PolygonPoint FromVec2(vector2 v)
+	{
+		return PolygonPoint.Create(v.x, v.y);
 	}
 
 	static PolygonPoint FromVertex(Vertex v)
@@ -349,17 +438,17 @@ class Polygon : Triangulatable
 	{
 		array<PolygonPoint> points;
 
-		for (int i = 0; i < shape.m_Points.Size(); ++i)
+		foreach (point : shape.m_Points)
 		{
-			points.Push(PolygonPoint.FromVertex(shape.m_Points[i]));
+			points.Push(PolygonPoint.FromVec2(point.m_Value));
 		}
 
 		Polygon poly = Polygon.Create(points);
 		if (shape.m_Inner) return poly;
 
-		for (int i = 0; i < shape.m_Children.Size(); ++i)
+		foreach (child : shape.m_Children)
 		{
-			poly.AddHole(Polygon.FromSectorShape(shape.m_Children[i]));
+			poly.AddHole(Polygon.FromSectorShape(child));
 		}
 
 		return poly;
@@ -464,10 +553,8 @@ class Polygon : Triangulatable
 		m_Triangles.Clear();
 		int count = m_Points.Size();
 
-		ShiftCollinearPoints();
-
 		// Outer constraints
-		for (int i = 0; i < count - 1; i++)
+		for (int i = 0; i < count - 1; ++i)
 		{
 			DTSweepContext.NewConstraint(m_Points[i], m_Points[i + 1]);
 		}
@@ -479,7 +566,7 @@ class Polygon : Triangulatable
 		{
 			Polygon p = m_Holes[i];
 			int holeCount = p.m_Points.Size();
-			for (int i = 0; i < holeCount - 1; i++)
+			for (int i = 0; i < holeCount - 1; ++i)
 			{
 				DTSweepContext.NewConstraint(p.m_Points[i], p.m_Points[i + 1]);
 			}
@@ -488,23 +575,6 @@ class Polygon : Triangulatable
 		}
 
 		tcx.m_Points.Append(m_SteinerPoints);
-	}
-
-	private void ShiftCollinearPoints()
-	{
-		int count = m_Points.Size();
-		for (int i = 0; i < count; ++i)
-		{
-			TriangulationPoint a = m_Points[i];
-			TriangulationPoint b = m_Points[(i + 1) % count];
-			TriangulationPoint c = m_Points[(i + 2) % count];
-
-			if (TriangulationUtil.Orient2d(a, b, c) == ORI_Collinear)
-			{
-				b.m_X += TriangulationUtil.EPSILON * 2;
-				b.m_Y += TriangulationUtil.EPSILON * 2;
-			}
-		}
 	}
 }
 
@@ -519,6 +589,7 @@ class DelaunayTriangle
 	static DelaunayTriangle Create(TriangulationPoint p1, TriangulationPoint p2, TriangulationPoint p3)
 	{
 		DelaunayTriangle triangle = new("DelaunayTriangle");
+
 		triangle.m_Points[0] = p1;
 		triangle.m_Points[1] = p2;
 		triangle.m_Points[2] = p3;
@@ -579,8 +650,6 @@ class DelaunayTriangle
 		}
 	}
 
-	/// <param name="t">Opposite triangle</param>
-	/// <param name="p">The point in t that isn't shared between the triangles</param>
 	TriangulationPoint OppositePoint(DelaunayTriangle t, TriangulationPoint p)
 	{
 		if (t == self) { ThrowAbortException("Opposite triangle must not be self."); }
@@ -610,15 +679,18 @@ class DelaunayTriangle
 
 	void MarkNeighborEdges()
 	{
-		for (int i = 0; i < 3; i++) if (m_EdgeIsConstrained[i] && m_Neighbors[i] != null)
+		for (int i = 0; i < 3; ++i)
 		{
-			m_Neighbors[i].MarkConstrainedEdgePoints(m_Points[(i + 1) % 3], m_Points[(i + 2) % 3]);
+			if (m_EdgeIsConstrained[i] && m_Neighbors[i] != null)
+			{
+				m_Neighbors[i].MarkConstrainedEdgePoints(m_Points[(i + 1) % 3], m_Points[(i + 2) % 3]);
+			}
 		}
 	}
 
 	void MarkEdge(DelaunayTriangle triangle)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 3; ++i)
 		{
 			if (m_EdgeIsConstrained[i])
 			{
@@ -663,7 +735,7 @@ class DelaunayTriangle
 		double b = m_Points[0].m_X - m_Points[1].m_X;
 		double h = m_Points[2].m_Y - m_Points[1].m_Y;
 
-		return abs((b * h * 0.5f));
+		return abs((b * h * 0.5));
 	}
 
 	TriangulationPoint Centroid()
@@ -824,6 +896,11 @@ class DTSweep
 
 		Sweep(tcx);
 
+		foreach (t : tcx.m_Triangles)
+		{
+			Legalize(tcx, t);
+		}
+
 		if (tcx.m_TriangulationMode == TM_Polygon)
 		{
 			FinalizationPolygon(tcx);
@@ -901,6 +978,7 @@ class DTSweep
 			t1 = t1.NeighborCCWFrom(p1);
 		} while (true);
 
+
 		first = tcx.m_Front.m_Head.m_Next.m_Point;
 		p1 = t1.PointCWFrom(tcx.m_Front.m_Head.m_Point);
 		t1 = t1.NeighborCWFrom(tcx.m_Front.m_Head.m_Point);
@@ -908,7 +986,17 @@ class DTSweep
 		do
 		{
 			tcx.RemoveFromList(t1);
+			if (t1 == null)
+			{
+				Console.Printf("Failed to create convex hull for triangulatable.");
+				break;
+			}
 			p1 = t1.PointCCWFrom(p1);
+			if (t1 == null)
+			{
+				Console.Printf("Failed to create convex hull for triangulatable.");
+				break;
+			}
 			t1 = t1.NeighborCCWFrom(p1);
 		} while (p1 != first);
 
@@ -1153,17 +1241,9 @@ class DTSweep
 
 		p1 = triangle.PointCCWFrom(point);
 		EOrientation o1 = TriangulationUtil.Orient2d(eq, p1, ep);
-		if (o1 == ORI_Collinear)
-		{
-			ThrowAbortException("EdgeEvent - m_Point on constrained edge not supported yet");
-		}
 
 		p2 = triangle.PointCWFrom(point);
 		EOrientation o2 = TriangulationUtil.Orient2d(eq, p2, ep);
-		if (o2 == ORI_Collinear)
-		{
-			ThrowAbortException("EdgeEvent - m_Point on constrained edge not supported yet");
-		}
 
 		if (o1 == o2)
 		{
@@ -1234,7 +1314,6 @@ class DTSweep
 			case ORI_CW: return ot.PointCCWFrom(op);
 			case ORI_CCW: return ot.PointCWFrom(op);
 			case ORI_Collinear:
-				ThrowAbortException("m_Point on constrained edge not supported yet");
 			default:
 				ThrowAbortException("Orientation not handled");
 		}
@@ -1545,19 +1624,13 @@ class DTSweepConstraint
 		DTSweepConstraint t = new("DTSweepConstraint");
 		t.m_P = p1;
 		t.m_Q = p2;
-		if (p1.m_Y > p2.m_Y)
+
+		if (p1.m_Y > p2.m_Y || (p1.m_Y == p2.m_Y && p1.m_X > p2.m_X))
 		{
 			t.m_Q = p1;
 			t.m_P = p2;
 		}
-		else if (p1.m_Y == p2.m_Y)
-		{
-			if (p1.m_X > p2.m_X)
-			{
-				t.m_Q = p1;
-				t.m_P = p2;
-			}
-		}
+
 		t.m_Q.AddEdge(t);
 
 		return t;
@@ -1610,7 +1683,7 @@ class DTSweepContext
 
 	private void MeshCleanReq(DelaunayTriangle triangle)
 	{
-		if (triangle != null && !triangle.m_IsInterior)
+		if (triangle && !triangle.m_IsInterior)
 		{
 			triangle.m_IsInterior = true;
 			m_Triangulatable.AddTriangle(triangle);
@@ -1676,6 +1749,8 @@ class DTSweepContext
 		m_TriangulationMode = t.GetTriangulationMode();
 		t.Prepare(self);
 
+		TriangulationUtil.SortPointsVertically(m_Points);
+
 		float xmax, xmin;
 		float ymax, ymin;
 
@@ -1699,12 +1774,11 @@ class DTSweepContext
 
 		m_Head = p1;
 		m_Tail = p2;
-
-		TriangulationUtil.SortPointsVertically(m_Points);
 	}
 
 	void FinalizeTriangulation()
 	{
+		m_Triangulatable.AddTriangles(m_Triangles);
 		m_Triangles.Clear();
 	}
 

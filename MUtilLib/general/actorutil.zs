@@ -23,9 +23,10 @@ class ActorUtil
 		array<Actor> exclusions = null,
 		Actor inflictor = null,
 		vector3 thrustOffset = (0.0, 0.0, 0.0),
-		bool checkHit = true)
+		bool checkHit = true,
+		out array<Actor> hitActors = null)
 	{
-		LevelUtil.Explode3D(origin.Pos, damage, thrustForce, radius, thrustTarget, exclusions, origin, inflictor, thrustOffset, checkHit);
+		LevelUtil.Explode3D(origin.Pos, damage, thrustForce, radius, thrustTarget, exclusions, origin, inflictor, thrustOffset, checkHit, hitActors);
 	}
 
 	/**
@@ -51,5 +52,35 @@ class ActorUtil
 
 		target.Vel = (overrideMomentum ? Vec3Util.Zero() : target.Vel)
 			+ (direction.Unit() * force / (ignoreMass ? 1 : target.Mass * 0.175));
+	}
+
+	/**
+	 * Returns whether or not the given actor could move along a straight line to the
+	 * given newpos.
+	 *
+	 * Parameters:
+	 * - this: the Actor to perform the check for.
+	 * - newpos: the endpoint of the movement check.
+	 * - flags: the bit flags to be passed to the movement check. Identical to CheckMove
+	 *		flags.
+	 * - cw: an optional FCheckPosition struct to store information about the check.
+	**/
+	static play bool CheckWalk(Actor this, vector2 newpos, int flags = 0, FCheckPosition tm = null)
+	{
+		vector2 virtualPos = this.Pos.xy;
+
+		// Iterate until virtualPos is within +-radius of newpos.
+		for (vector2 difference = level.Vec2Diff(virtualPos, newpos);
+			difference.Length() > this.Radius;
+			difference = level.Vec2Diff(virtualPos, newpos))
+		{
+			vector2 step = difference.Unit() * this.Radius;
+
+			if (!this.CheckMove(virtualPos + step, flags, tm)) return false;
+
+			virtualPos += step;
+		}
+
+		return this.CheckMove(newpos, flags, tm);
 	}
 }

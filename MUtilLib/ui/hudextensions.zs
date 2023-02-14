@@ -1,9 +1,3 @@
-// TODO: Document HUDExtension.
-
-// Note: HUDExtensions represent HUD drawing behavior with state, you retrieve them from
-// your status bar's Draw() method and call CallDraw() to draw them. You can also tick their
-// state machines with their CallTick() method.
-
 /**
  * Represents a drawer for a custom HUD element, to be drawn on demand.
  *

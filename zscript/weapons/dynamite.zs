@@ -64,7 +64,7 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		TNT1 A 0 A_Refire();
 	Release:
-		TNT1 A 0 A_StartSound("hatchet/swing",9);
+		TNT1 A 0 A_StartSound("hatchet/swing", 9);
 		TNT1 A 0 A_TakeInventory(invoker.AmmoType1, 1);
 		DYNT ABC 1;
 		TNT1 A 0 {
@@ -132,12 +132,17 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 
 class DynamiteStick : Actor
 {
+	meta double m_ThrustForce;
+	property ThrustForce : m_ThrustForce;
+
 	Default
 	{
 		Radius 8;
 		Height 8;
 		Speed 20;
 		Damage 0;
+		ExplosionDamage 320;
+		ExplosionRadius 360;
 		Gravity 0.9;
 		Scale 0.5;
 		DeathSound "";
@@ -145,6 +150,9 @@ class DynamiteStick : Actor
 		Obituary "$OB_GRENADE"; // "%o caught %k's grenade."
 		DamageType "Explosive";
 		Projectile;
+
+		DynamiteStick.ThrustForce 360;
+
 		//+DOOMBOUNCE;
 		-NOGRAVITY;
 		+NOEXTREMEDEATH;
@@ -160,29 +168,72 @@ class DynamiteStick : Actor
 		DYNP ABCDEFGH 2 BRIGHT;
 		Loop;
 	Death:
-		TNT1 A 0 {
+		TNT1 A 1 {
 			A_StopSound(7);
 			A_NoGravity();
 			A_SetScale(1,1);
 			A_SetTranslucent(0.2);
-			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.425);
-
-			ActorUtil.Explode3D(self, int(300 * FRandom(1.0, 1.33)), 330.0, 360.0);
-			A_AlertMonsters(4096.0);
+			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.4);
 
 			if (CVar.GetCVar('weapon_particle_toggle', target.player).GetBool())
 			{
 				for (int i = 0; i < 9; ++i)
 				{
-					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile("RocketDebris", 0, 0, random (0, 360), 2, random (0, 360));
-					A_SpawnProjectile("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360));
+					A_SpawnProjectile("RocketDebris", 0.0, 0.0, FRandom(0.0, 360.0), 2, FRandom(0.0, 360.0));
+					A_SpawnProjectile("ExplosionSmoke", 0.0, 0.0, FRandom(0.0, 360.0), 2, FRandom(0.0, 360.0));
+					A_SpawnProjectile("RocketDebris", 0.0, 0.0, FRandom(0.0, 360.0), 2, FRandom(0.0, 360.0));
+					A_SpawnProjectile("ExplosionSmoke", 0.0, 0.0, FRandom(0.0, 360.0), 2, FRandom(0.0, 360.0));
 				}
 			}
+
+			ActorUtil.Explode3D(self, int(ExplosionDamage * FRandom(1.0, 1.15)), m_ThrustForce, ExplosionRadius);
+			A_AlertMonsters(4096.0);
+
 		}
-		BOOM TRPMKJIHGFEDCBAPQR 1 Bright Radius_Quake(100,8,0,15,0);
-		// BOOM ABCDEFGHIJKLMOPQRST 1 Bright Radius_Quake(100,8,0,15,0);
+		BOOM TRP 1 Bright Radius_Quake(100,8,0,15,0);
+		BOOM M 1 Bright {
+			Radius_Quake(100,8,0,15,0);
+
+			// Thrust nashgore gibs.
+			array<Actor> gibs;
+			Actor a;
+
+			let iterator = ThinkerIterator.Create("NashGoreGibs");
+			while ((a = Actor(iterator.Next()))) gibs.Push(a);
+
+			iterator = ThinkerIterator.Create("NashGoreRealGibs");
+			while ((a = Actor(iterator.Next()))) gibs.Push(a);
+
+			iterator = ThinkerIterator.Create("NashGoreBlood");
+			while ((a = Actor(iterator.Next()))) gibs.Push(a);
+
+			foreach (mo : gibs)
+			{
+				// Avoid division by zero and negative radius.
+				double radius = ExplosionRadius > 0.0 ? ExplosionRadius : double.Epsilon;
+
+				vector3 toTarget = LevelLocals.Vec3Diff(Pos, mo.Pos);
+				double distance = toTarget.Length();
+
+				if (distance > radius) continue;
+
+				FLineTraceData traceData;
+				LineTrace(AngleTo(mo), radius, PitchTo(mo), data: traceData);
+	
+				if (traceData.HitType == TRACE_HitWall
+					|| traceData.HitType == TRACE_HitCeiling
+					|| traceData.HitType == TRACE_HitFloor
+					|| (traceData.HitType == TRACE_HitActor && traceData.HitActor && traceData.HitActor != mo))
+				{
+					continue;
+				}
+
+				double attenuatedForce = (radius - distance) / radius * (m_ThrustForce * 0.6);
+
+				ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
+			}
+		}
+		BOOM KJIHGFEDCBAPQR 1 Bright Radius_Quake(100,8,0,15,0);
 		Stop;
 	Grenade:
 		DYPP ABC 10 A_Die;

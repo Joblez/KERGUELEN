@@ -48,6 +48,7 @@ class NashGoreGibs : Actor
 		+FLOORCLIP
 		+MOVEWITHSECTOR
 		+FORCEXYBILLBOARD
+		+USEBOUNCESTATE
 		-SOLID
 	}
 
@@ -108,7 +109,11 @@ class NashGoreGibs : Actor
 				zofs: spawnHeight,
 				frandom(-5.5, 5.5), frandom(-5.5, 5.5), frandom(0, 12.5),
 				flags: SXF_USEBLOODCOLOR, 100);
-			if (obj) obj.target = mo;
+			if (obj)
+			{
+				obj.target = mo;
+				obj.Mass = mo.Mass * 0.85;
+			}
 
 			// spawn lots of blood
 			if (random() < 70)
@@ -118,7 +123,11 @@ class NashGoreGibs : Actor
 					frandom(-spawnRadius, spawnRadius), frandom(-spawnRadius, spawnRadius), spawnHeight,
 					frandom(-2.0, 2.0), frandom(-2.0, 2.0), frandom(0.0, 4.0),
 					frandom(0, 360), SXF_USEBLOODCOLOR);
-				if (obj) obj.target = mo;
+				if (obj)
+				{
+					obj.target = mo;
+					obj.Mass = mo.Mass * 0.85;
+				}
 			}
 
 			// spawn sticky gibs and ceiling blood
@@ -149,6 +158,7 @@ class NashGoreGibs : Actor
 							obj.Gravity = 0;
 							obj.SetOrigin(t.HitLocation, true);
 							NashGoreBloodSpot(obj).bOnCeiling = true;
+							obj.Mass = mo.Mass * 0.85;
 
 							// flip sprite Y
 							if (nashgore_spriteblood) obj.Scale.Y *= -1;
@@ -161,6 +171,7 @@ class NashGoreGibs : Actor
 					{
 						obj.SetOrigin(t.HitLocation, true);
 						NashGoreStickyGibsCeiling(obj).bOnCeiling = true;
+						obj.Mass = mo.Mass * 0.85;
 					}
 				}
 
@@ -176,6 +187,7 @@ class NashGoreGibs : Actor
 						double posAdjust = -4.f;
 						Vector3 stickPos = (t.HitLocation.X + cos(ang) * posAdjust, t.HitLocation.Y + sin(ang) * posAdjust, t.HitLocation.Z);
 						obj.SetOrigin(stickPos, true);
+						obj.Mass = mo.Mass * 0.85;
 					}
 				}
 			}
@@ -226,13 +238,23 @@ class NashGoreGibs : Actor
 	SpawnLoop:
 		"####" ABCD 3;
 		Loop;
+	Bounce.Ceiling:
+	Bounce.Floor:
+		"####" # 0
+		{
+			class<Actor> cls;
+			if (nashgore_bloodtype == 0)		cls = "NashGoreBloodSpot";
+			else if (nashgore_bloodtype == 1)	cls = "NashGoreBloodSpotClassic";
+			A_SpawnItemEx(cls, flags: (NashGoreBloodBase.BLOOD_FLAGS | SXF_TRANSFERPOINTERS) & ~SXF_NOCHECKPOSITION, 50);
+		}
+		Goto SpawnLoop;
 	Death:
 		"####" E 0
 		{
 			class<Actor> cls;
 			if (nashgore_bloodtype == 0)		cls = "NashGoreBloodSpot";
 			else if (nashgore_bloodtype == 1)	cls = "NashGoreBloodSpotClassic";
-			A_SpawnItemEx(cls, flags: (NashGoreBloodBase.BLOOD_FLAGS | SXF_TRANSFERPOINTERS) & ~SXF_NOCHECKPOSITION, 150);
+			A_SpawnItemEx(cls, flags: (NashGoreBloodBase.BLOOD_FLAGS | SXF_TRANSFERPOINTERS) & ~SXF_NOCHECKPOSITION, 50);
 		}
 		"####" EEEEEEEEEE 1
 		{

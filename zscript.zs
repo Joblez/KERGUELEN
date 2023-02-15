@@ -8,7 +8,7 @@ version "4.10.0"
 #include "zscript/misc/Barrel.zs"
 #include "zscript/misc/visualfx.zs"
 
-//Weapons
+// Weapons
 #include "zscript/weapons/baseweapon.zs"
 #include "zscript/weapons/colt.zs"
 #include "zscript/weapons/revolver.zs"

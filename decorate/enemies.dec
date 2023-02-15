@@ -282,6 +282,7 @@ actor Dryad replaces Stealthdoomimp
 	Mass 180
 	Painchance 220
 	Health 400
+	GibHealth -100
 	BloodColor "42 97 51"
 	DeathSound "Dryad/death"
 	PainSound "seed/hit"

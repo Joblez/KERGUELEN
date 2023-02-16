@@ -172,7 +172,7 @@ class LevelUtil play
 					break;
 			}
 
-			vector3 toTarget = position - origin;
+			vector3 toTarget = LevelLocals.Vec3Diff(origin, position);
 			double distance = toTarget.Length();
 
 			// Avoid division by zero and negative radius.

@@ -709,7 +709,7 @@ class MathVec3
 	**/
 	static vector3 SphericalToCartesian(vector3 coords)
 	{
-		return (coords.z * sin(coords.y) * cos(coords.x), coords.z * sin(coords.) * sin(coords.x), coords.z * cos(coords.y));
+		return ((coords.z * sin(coords.y) * cos(coords.x), coords.z * sin(coords.) * sin(coords.x), coords.z * cos(coords.y)));
 	}
 
 	/**

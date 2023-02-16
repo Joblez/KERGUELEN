@@ -697,13 +697,19 @@ class MathVec3
 	 *
 	 * NOTE: Z-axis-aligned vectors will yield a yaw of zero.
 	**/
+	deprecated("4.9.0", "Use Level.SphericalCoords() instead")
 	static vector2 ToYawAndPitch(vector3 vector)
 	{
-		vector = vector.Unit();
+		return Vec3Util.YX(LevelLocals.SphericalCoords(Vec3Util.Zero(), vector.Unit(), absolute: true).xy);
+	}
 
-		if (vector.xy == (0.0, 0.0)) return (0.0, 180.0 * vector.z);
-
-		return (atan2(vector.y, vector.x), atan(vector.z / sqrt(vector.x * vector.x + vector.y * vector.y)));
+	/**
+	 * Returns the Cartesian coordinates corresponding to spherical coordinates given as
+	 * (yaw, pitch, radius).
+	**/
+	static vector3 SphericalToCartesian(vector3 coords)
+	{
+		return (coords.z * sin(coords.y) * cos(coords.x), coords.z * sin(coords.) * sin(coords.x), coords.z * cos(coords.y));
 	}
 
 	/**

@@ -295,9 +295,10 @@ class Vec3Util
 	}
 
 	/** Returns a direction vector from the given yaw and pitch angles. **/
+	deprecated("4.9.0", "Use MathVec3.SphericalToCartesian() instead")
 	static vector3 FromAngles(double yaw, double pitch, double length = 1)
 	{
-		return (length * cos(yaw), length * sin(yaw), length * -sin(pitch));
+		return MathVec3.SphericalToCartesian((yaw, pitch, length));
 	}
 
 	/**

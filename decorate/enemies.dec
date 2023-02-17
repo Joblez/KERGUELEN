@@ -7,6 +7,7 @@ actor Grarg replaces Demon
 	PainChance 240
 	Mass 90
 	Scale 0.7
+	DamageFactor "Explosive", 1.5
 	Bloodcolor "e8 00 21"
 	Monster
 	Dropitem "Ammo357",96

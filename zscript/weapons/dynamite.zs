@@ -183,7 +183,7 @@ class DynamiteStick : Actor
 			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.4);
 
 			array<Actor> hitActors;
-			ActorUtil.Explode3D(self, int(ExplosionDamage * FRandom(1.0, 1.15)), m_ThrustForce, ExplosionRadius, hitActors: hitActors);
+			ActorUtil.Explode3D(self, int(ExplosionDamage * FRandom(1.0, 1.1)), m_ThrustForce, ExplosionRadius, hitActors: hitActors);
 
 			if (CVar.GetCVar('weapon_particle_toggle', target.player).GetBool())
 			{

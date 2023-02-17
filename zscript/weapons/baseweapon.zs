@@ -191,7 +191,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			direction = MathVec3.Rotate(direction, Vec3Util.Right(), pawn.Pitch);
 			direction = MathVec3.Rotate(direction, Vec3Util.Up(), pawn.Angle);
 			vector2 angles = MathVec3.ToYawAndPitch(direction);
-			Console.Printf("Yaw: %f, Pitch: %f", angles.x, angles.y);
 			yaw = angles.x;
 			pitch = angles.y;
 		}

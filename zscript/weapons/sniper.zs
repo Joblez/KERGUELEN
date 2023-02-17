@@ -82,7 +82,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 220.0, true);
 
-			A_FireBullets(2, 2, -1, 80, "Bullet_Puff");
+			A_FireBullets(2, 2, -1, Random(80, 120), "Bullet_Puff", FBF_NORANDOM);
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
 			A_TakeInventory("SniperAmmo", 1);

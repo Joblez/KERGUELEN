@@ -1,2 +1,2 @@
-TEXTURE B_WAT1 RANGE B_WAT8 tics 8
-TEXTURE RSPLSH1 RANGE RSPLSH4 tics 1
+texture B_WAT1 range B_WAT8 tics 8
+texture RSPLSH1 range RSPLSH4 tics 1

@@ -47,6 +47,10 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		snowParams.size = 12.0;
 		snowParams.vel = (0.0, 0.0, -10.0);
 
+		// Texture is flipped internally, use roll to correct it.
+		snowParams.flags = SPF_ROLL;
+		snowParams.startroll = 180.0;
+
 		while ((i = iterator.Next()) >= 0)
 		{
 			WeatherParticleSpawner.Create(

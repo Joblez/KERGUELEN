@@ -5,7 +5,7 @@ version "4.10.0"
 
 // Miscellaneous
 #include "zscript/misc/footsteps.zs"
-#include "zscript/misc/Barrel.zs"
+#include "zscript/misc/hura.zs"
 #include "zscript/misc/visualfx.zs"
 
 // Weapons

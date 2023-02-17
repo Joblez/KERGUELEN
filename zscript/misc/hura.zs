@@ -13,6 +13,7 @@ Class Hura : Actor replaces ExplosiveBarrel
 		+SOLID;
 		+SHOOTABLE;
 		+STANDSTILL;
+		+DONTTHRUST;
 		+ACTIVATEMCROSS;
 		+NOICEDEATH;
 	}

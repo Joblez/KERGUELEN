@@ -35,9 +35,7 @@ class WeatherSpawner : Thinker
 
 	override void Tick()
 	{
-		if (m_WeatherAgent.IsFrozen()) return;
-
-		if (m_Frequency == 0.0) return;
+		if (m_Frequency <= 0.0 || m_WeatherAgent.IsFrozen()) return;
 
 		m_Time += 1.0 / TICRATE;
 

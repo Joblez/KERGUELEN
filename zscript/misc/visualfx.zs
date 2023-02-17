@@ -3,7 +3,7 @@ class MuzzleSmoke : Actor
 	Default
 	{
 		Speed -1;
-		RenderStyle "Add";
+		RenderStyle "Normal";
 		Alpha 0.4;
 		Radius 0;
 		Height 0;
@@ -19,8 +19,7 @@ class MuzzleSmoke : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay A_SetTranslucent(0.25);
-		SMOK ABCDEFGHIJKLMNOPQ 2 A_FadeOut(0.005);
+		SMOK BCDEFGHIJ 2 NoDelay A_FadeOut(0.005);
 		Stop;
 	}
 }
@@ -29,18 +28,8 @@ class MuzzleSmoke2 : MuzzleSmoke
 {
 	Default
 	{
-		Speed 1;
 		Alpha 0.5;
-		Radius 0;
-		Height 0;
 		Scale 1.0;
-		+NOGRAVITY
-		+NOBLOCKMAP
-		+FLOORCLIP
-		+FORCEXYBILLBOARD
-		+NOINTERACTION
-		+DONTSPLASH
-		+CLIENTSIDEONLY
 	}
 }
 
@@ -70,20 +59,165 @@ class ExplosionSmoke : Actor
 	}
 }
 
-class ExplosiveSmokeSpawner : Actor
+class EffectTrail : Actor abstract
 {
+	meta double m_Spacing;
+	property Spacing: m_Spacing;
+
+	double m_AirFriction;
+	property AirResistance: m_AirFriction;
+
+	private double m_DistanceDelta;
+	private vector3 m_MaxSpeed;
+
 	Default
 	{
-		Speed 30;
-		+NOCLIP
+		Projectile;
+		Speed 0.0;
+		Radius 0.1;
+		Height 8;
+		Mass 30;
+
+		EffectTrail.Spacing 64.0;
+		EffectTrail.AirResistance 1.15;
+		+SOLID
+		+SHOOTABLE
+		-NOGRAVITY
 	}
+
+	abstract void SpawnEffect(vector3 position);
+
 	States
 	{
-		Spawn:
-		TNT1 A 0 NoDelay A_SpawnProjectile("ExplosionSmoke", 32, 0, random(0, 360), 2, random(0, 180));
+	Spawn:
+		TNT1 A 1 {
+			vector3 delta = LevelLocals.Vec3Diff(Prev, Pos);
+			m_DistanceDelta += delta.Length();
+
+			if (m_DistanceDelta >= m_Spacing)
+			{
+				vector3 spawnPos = Pos;
+				if (m_DistanceDelta / m_Spacing < 2.0)
+				{
+					SpawnEffect(spawnPos);
+				}
+				else
+				{
+					for (m_DistanceDelta; m_DistanceDelta >= 0.0; m_DistanceDelta -= m_Spacing)
+					{
+						SpawnEffect(spawnPos);
+						spawnPos -= delta.Unit() * m_Spacing;
+						// Console.Printf("Spawned smoke effect.");
+					}
+				}
+				m_DistanceDelta = 0.0;
+			}
+	
+			Vel.x /= m_AirFriction;
+			Vel.y /= m_AirFriction;
+			Vel.z /= m_AirFriction;
+		}
+		Loop;
+	
+	Death:
+		TNT1 A 0;
 		Stop;
 	}
 }
+
+class SmokeTrail : EffectTrail
+{
+	Default
+	{
+		Mass 55;
+		Gravity 3.5;
+		EffectTrail.Spacing 12.0;
+		EffectTrail.AirResistance 1.1;
+	}
+
+	override void SpawnEffect(vector3 position)
+	{
+		Spawn("MuzzleSmoke2", position);
+	}
+}
+
+class ParticleTrail : EffectTrail
+{
+	// FSpawnParticleParams doesn't serialize to save games, so all of these need to
+	// be stored in fields.
+	color m_Color;
+	TextureID m_Texture;
+	int m_Style;
+	int m_Flags;
+	int m_Lifetime;
+	double m_Size;
+	double m_SizeStep;
+	vector3 m_Vel;
+	vector3 m_Accel;
+	double m_StartAlpha;
+	double m_FadeStep;
+	double m_StartRoll;
+	float m_RollVel;
+	float m_RollAcc;
+
+	Default
+	{
+		Gravity 2.5;
+		BounceCount 6;
+		BounceType "Grenade";
+
+		EffectTrail.Spacing 2.0;
+
+		+BOUNCEAUTOOFFFLOORONLY
+	}
+
+	static ParticleTrail Create(vector3 position, FSpawnParticleParams params)
+	{
+		ParticleTrail trail = ParticleTrail(Spawn("ParticleTrail", position));
+
+		trail.m_Color = params.color1;
+		trail.m_Texture = params.texture;
+		trail.m_Style = params.style;
+		trail.m_Flags = params.flags;
+		trail.m_Lifetime = params.lifetime;
+		trail.m_Size = params.size;
+		trail.m_SizeStep = params.sizestep;
+		trail.m_Vel = params.vel;
+		trail.m_Accel = params.accel;
+		trail.m_StartAlpha = params.startalpha;
+		trail.m_FadeStep = params.fadestep;
+		trail.m_StartRoll = params.startroll;
+		trail.m_RollVel = params.rollvel;
+		trail.m_RollAcc = params.rollacc;
+
+		return trail;
+	}
+
+	override void SpawnEffect(vector3 position)
+	{
+		FSpawnParticleParams params;
+
+		params.pos = position;
+		params.color1 = m_Color;
+		params.texture = m_Texture;
+		params.style = m_Style;
+		params.flags = m_Flags;
+		params.lifetime = m_Lifetime;
+		params.size = m_Size;
+		params.sizestep = m_SizeStep;
+		params.vel = m_Vel;
+		params.accel = m_Accel;
+		params.startalpha = m_StartAlpha;
+		params.fadestep = m_FadeStep;
+		params.startroll = m_StartRoll;
+		params.rollvel = m_RollVel;
+		params.rollacc = m_RollAcc;
+
+		level.SpawnParticle(params);
+	}
+}
+
+
 
 class SmokeSpawner2 : Actor
 {

@@ -146,7 +146,7 @@ class DynamiteStick : Actor
 		Speed 20;
 		Damage 0;
 		ExplosionDamage 320;
-		ExplosionRadius 425;
+		ExplosionRadius 370;
 		Gravity 0.9;
 		Scale 0.5;
 		Alpha 1.0;
@@ -255,8 +255,6 @@ class DynamiteStick : Actor
 						trail.A_ChangeLinkFlags(0);
 					}
 				}
-
-				Console.Printf("Spawned effects: %i", m_SpawnedEffects.Size());
 			}
 
 			ActorUtil.Explode3D(self, 0, m_ThrustForce, ExplosionRadius, THRTARGET_Origin, hitActors);

@@ -258,7 +258,7 @@ class SparkLightTrail : ParticleTrail
 	States
 	{
 	Spawn:
-		TNT1 A 1 Light("Spark") { Console.Printf("Alive."); }
+		TNT1 A 1 Light("Spark");
 		Loop;
 	
 	Death:

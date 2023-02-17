@@ -135,7 +135,7 @@ class DynamiteStick : Actor
 	meta double m_ThrustForce;
 	property ThrustForce : m_ThrustForce;
 
-	private PointLightAdditive m_ExplosionFadeLight;
+	private PointLight m_ExplosionFadeLight;
 
 	private array<Actor> m_SpawnedEffects;
 
@@ -207,11 +207,11 @@ class DynamiteStick : Actor
 					double pitch = 0.0;
 					if (i % 2 == 0)
 					{
-						pitch = FRandom(-170.0, -20.0);
+						pitch = FRandom(-180.0, -20.0);
 					}
 					else
 					{
-						pitch = FRandom(20.0, 170.0);
+						pitch = FRandom(20.0, 180.0);
 					}
 
 					effect = Spawn("SmokeTrail", Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(2.0, 4.0)));
@@ -225,7 +225,7 @@ class DynamiteStick : Actor
 				// Particle trails.
 				for (int i = 0; i < 40; ++i)
 				{
-					params.size = FRandom(2.0, 8.0);
+					params.size = FRandom(4.0, 8.0);
 					params.startalpha = FRandom(0.15, 0.6);
 					params.lifetime = int(round(params.size));
 
@@ -233,19 +233,21 @@ class DynamiteStick : Actor
 					double pitch = 0.0;
 					if (i % 2 == 0)
 					{
-						pitch = FRandom(-170.0, -20.0);
+						pitch = FRandom(-180.0, -20.0);
 						params.startalpha = FRandom(0.15, 0.3);
 					}
 					else
 					{
-						pitch = FRandom(20.0, 170.0);
+						pitch = FRandom(20.0, 180.0);
 						params.startalpha = FRandom(0.2, 0.6);
 					}
 
-					ParticleTrail trail = ParticleTrail.Create(Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(1.0, 12.0)), params);
-					trail.m_AirFriction += FRandom(0.0, 0.2);
+					SparkLightTrail trail = SparkLightTrail.Create(Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(5.0, 12.0)), params);
+					trail.m_AirFriction += FRandom(0.0, 0.3);
 					trail.Mass += FRandom(0.0, 25.0);
 					trail.Gravity += FRandom(0.0, 2.5);
+					trail.bouncefactor = FRandom(0.3, 0.8);
+					trail.wallbouncefactor = trail.bouncefactor;
 					
 					if (trail)
 					{
@@ -275,9 +277,10 @@ class DynamiteStick : Actor
 
 		}
 		BOOM T 1 {
-			m_ExplosionFadeLight = PointLightAdditive(Spawn("PointLightAdditive", Pos));
+			m_ExplosionFadeLight = PointLight(Spawn("PointLight", Pos));
+			m_ExplosionFadeLight.bNoGravity = true;
 			m_ExplosionFadeLight.args[PointLight.LIGHT_RED] = int(255 * 0.5);
-			m_ExplosionFadeLight.args[PointLight.LIGHT_GREEN] = int(255 * 0.2);
+			m_ExplosionFadeLight.args[PointLight.LIGHT_GREEN] = int(255 * 0.25);
 			m_ExplosionFadeLight.args[PointLight.LIGHT_BLUE] = int(255 * 0.0);
 			m_ExplosionFadeLight.args[PointLight.LIGHT_INTENSITY] += int(256.0 / 2.0);
 		}

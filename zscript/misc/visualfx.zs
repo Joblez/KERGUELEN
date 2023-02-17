@@ -82,41 +82,52 @@ class EffectTrail : Actor abstract
 		EffectTrail.AirResistance 1.15;
 		+SOLID
 		+SHOOTABLE
+		+VULNERABLE
 		-NOGRAVITY
 	}
 
 	abstract void SpawnEffect(vector3 position);
 
+	override void Tick()
+	{
+		Super.Tick();
+
+		vector3 delta = LevelLocals.Vec3Diff(Prev, Pos);
+		m_DistanceDelta += delta.Length();
+
+		if (m_DistanceDelta >= m_Spacing)
+		{
+			vector3 spawnPos = Pos;
+			if (m_DistanceDelta / m_Spacing < 2.0)
+			{
+				SpawnEffect(spawnPos);
+			}
+			else
+			{
+				for (m_DistanceDelta; m_DistanceDelta >= 0.0; m_DistanceDelta -= m_Spacing)
+				{
+					SpawnEffect(spawnPos);
+					spawnPos -= delta.Unit() * m_Spacing;
+					// Console.Printf("Spawned smoke effect.");
+				}
+			}
+			m_DistanceDelta = 0.0;
+		}
+
+		Vel.x /= m_AirFriction;
+		Vel.y /= m_AirFriction;
+		Vel.z /= m_AirFriction;
+
+		if (Vel.Length() <= 0.1)
+		{
+			A_Die();
+		}
+	}
+
 	States
 	{
 	Spawn:
-		TNT1 A 1 {
-			vector3 delta = LevelLocals.Vec3Diff(Prev, Pos);
-			m_DistanceDelta += delta.Length();
-
-			if (m_DistanceDelta >= m_Spacing)
-			{
-				vector3 spawnPos = Pos;
-				if (m_DistanceDelta / m_Spacing < 2.0)
-				{
-					SpawnEffect(spawnPos);
-				}
-				else
-				{
-					for (m_DistanceDelta; m_DistanceDelta >= 0.0; m_DistanceDelta -= m_Spacing)
-					{
-						SpawnEffect(spawnPos);
-						spawnPos -= delta.Unit() * m_Spacing;
-						// Console.Printf("Spawned smoke effect.");
-					}
-				}
-				m_DistanceDelta = 0.0;
-			}
-	
-			Vel.x /= m_AirFriction;
-			Vel.y /= m_AirFriction;
-			Vel.z /= m_AirFriction;
-		}
+		TNT1 A 1;
 		Loop;
 	
 	Death:
@@ -162,13 +173,16 @@ class ParticleTrail : EffectTrail
 
 	Default
 	{
-		Gravity 2.5;
+		Mass 35;
+		Gravity 3.0;
+		BounceFactor 0.7;
+		WallBounceFactor 0.7;
 		BounceCount 6;
-		BounceType "Grenade";
 
 		EffectTrail.Spacing 2.0;
+		EffectTrail.AirResistance 1.075;
 
-		+BOUNCEAUTOOFFFLOORONLY
+		+DOOMBOUNCE
 	}
 
 	static ParticleTrail Create(vector3 position, FSpawnParticleParams params)
@@ -217,7 +231,41 @@ class ParticleTrail : EffectTrail
 	}
 }
 
+class SparkLightTrail : ParticleTrail
+{
+	static SparkLightTrail Create(vector3 position, FSpawnParticleParams params)
+	{
+		SparkLightTrail trail = SparkLightTrail(Spawn("SparkLightTrail", position));
 
+		trail.m_Color = params.color1;
+		trail.m_Texture = params.texture;
+		trail.m_Style = params.style;
+		trail.m_Flags = params.flags;
+		trail.m_Lifetime = params.lifetime;
+		trail.m_Size = params.size;
+		trail.m_SizeStep = params.sizestep;
+		trail.m_Vel = params.vel;
+		trail.m_Accel = params.accel;
+		trail.m_StartAlpha = params.startalpha;
+		trail.m_FadeStep = params.fadestep;
+		trail.m_StartRoll = params.startroll;
+		trail.m_RollVel = params.rollvel;
+		trail.m_RollAcc = params.rollacc;
+
+		return trail;
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 1 Light("Spark") { Console.Printf("Alive."); }
+		Loop;
+	
+	Death:
+		TNT1 A 0;
+		Stop;
+	}
+}
 
 class SmokeSpawner2 : Actor
 {

@@ -100,6 +100,7 @@ class M2C : BaseWeapon replaces Chaingun
 			A_StartSound("M2C/fire", CHAN_AUTO, 0, 0.9);
 			A_AlertMonsters();
 			A_GunFlash("ZF",GFF_NOEXTCHANGE);
+			A_SpawnFlash(6, -1);
 			let psp = player.FindPSprite(PSP_WEAPON);
 			if (psp) psp.frame = random(0, 3);
 		}
@@ -119,6 +120,7 @@ class M2C : BaseWeapon replaces Chaingun
 			A_FRecoil(0.8);
 			A_SpawnCasing();
 			A_SingleSmoke(5, -3);
+			A_SpawnFlash(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
 			A_StartSound("M2C/loop", CHAN_WEAPON, CHANF_LOOPING);
@@ -169,16 +171,16 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2BT ABCD 1;
 		M2BT E 2;
-		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");		
+		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, "Notempty");
 		TNT1 A 0  A_SetBaseOffset(0, 30);
 		M2BT FG 2;
 		TNT1 A 0 A_SetBaseOffset(4, 34);
 		M2BT HIJ 1;
-		TNT1 A 0 A_StartSound("M2C/boltback", 9, 0, 0.75);		
+		TNT1 A 0 A_StartSound("M2C/boltback", 9, 0, 0.75);
 		M2BT KL 2;
 		M2BT M 2 A_SetBaseOffset(0, 30);
 		M2BT NO 2;
-		TNT1 A 0 A_StartSound("M2C/boltrel", 9, 0, 0.75);		
+		TNT1 A 0 A_StartSound("M2C/boltrel", 9, 0, 0.75);
 		M2BT PQRSTU 1;
 		M2ED ABCDEFG 2;
 		M2ED G 1;
@@ -250,17 +252,16 @@ class M2C : BaseWeapon replaces Chaingun
 
 	private action void A_SpawnCasing()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool() == 1)
-		{
-			A_SpawnEffect(
-				"RifleCasing",
-				(Math.Remap(Pitch, -90.0, 90.0, 34.0, 20.0),
-				Math.Remap(abs(Pitch), 0.0, 90.0, 19.0, 23.0),
-				31.0),
-				-90.0 + FRandom(-5.0, 5.0),
-				FRandom(40.0, 65.0),
-				FRandom(3.0, 5.5),
-				true);
-		}
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		A_SpawnEffect(
+			"RifleCasing",
+			(Math.Remap(Pitch, -90.0, 90.0, 34.0, 20.0),
+			Math.Remap(abs(Pitch), 0.0, 90.0, 19.0, 23.0),
+			31.0),
+			-90.0 + FRandom(-5.0, 5.0),
+			FRandom(40.0, 65.0),
+			FRandom(3.0, 5.5),
+			true);
 	}
 }

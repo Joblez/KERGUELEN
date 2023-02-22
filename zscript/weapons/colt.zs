@@ -97,6 +97,7 @@ class Colt : BaseWeapon replaces Pistol
 			A_FireBullets(3,3, -1, 15, "BulletPuff");
 			A_FRecoil(1);
 			A_SingleSmoke(6, -1);
+			A_SpawnFlash(6, -1);
 		}
 		M19F B 1 A_SpawnCasing();
 		M19F CDE 1;
@@ -113,6 +114,7 @@ class Colt : BaseWeapon replaces Pistol
 			A_FireBullets(3, 3, -1, 10, "BulletPuff");
 			A_FRecoil(1);
 			A_SingleSmoke(6, -1);
+			A_SpawnFlash(6, -1);
 		}
 		M1FE B 1 A_SpawnCasing();
 		M1FE CEFGHI 1;
@@ -225,16 +227,15 @@ class Colt : BaseWeapon replaces Pistol
 
 	private action void A_SpawnCasing()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
-		{
-			A_SpawnEffect(
-				"PistolCasing",
-				(15.0, 7.0, 24.0),
-				-90.0 + FRandom(0.0, 15.0),
-				FRandom(20.0, 35.0),
-				FRandom(4.0, 6.0),
-				true);
-		}
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+		
+		A_SpawnEffect(
+			"PistolCasing",
+			(15.0, 7.0, 24.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
 	}
 
 	private action State A_BranchOnEmpty(statelabel emptyState, statelabel nonEmptyState)

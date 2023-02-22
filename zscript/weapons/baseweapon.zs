@@ -242,6 +242,12 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		}
 	}
 
+	action void A_SpawnFlash(double x, double y)
+	{
+		WeaponFlash flash = WeaponFlash(A_FireProjectile("WeaponFlash", 0, 0, 6, -1));
+		flash.m_Duration = 1;
+	}
+
 	action void A_SingleSmoke(double x, double y)
 	{
 		if (GetCVar('smoke_toggle') == 1)

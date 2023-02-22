@@ -19,6 +19,7 @@ actor NewPlayer : PlayerPawn
 	Player.crouchsprite "PLYC"
 	Gravity 1
 	Speed 0.65
+	DamageFactor "Explosive", 0.7
 	+NOSKIN
 
 	States

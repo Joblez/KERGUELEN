@@ -73,6 +73,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 35, "BulletPuff");
 			A_FRecoil(1);
 			A_ShotgunSmoke(7, -1);
+			A_SpawnFlash(7, -1);
 		}
 		TNT1 A 0 { invoker.m_SingleAction = false; }
 		Goto PostShot;
@@ -244,22 +245,21 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 	private action void A_DropCasings()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
-		{
-			// Yuck.
-			RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
 
-			for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
-			{
-				vector2 coords = MathVec2.PolarToCartesian((3.0, (360.0 - double(i) * 60.0)));
-				A_SpawnEffect(
-					"RevolverCasing",
-					(coords.x, coords.y + 8.0, -2.0),
-					210.0,
-					FRandom(-62.0, -63.0),
-					FRandom(2.0, 2.5),
-					true);
-			}
+		// Yuck.
+		RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
+
+		for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
+		{
+			vector2 coords = MathVec2.PolarToCartesian((3.0, (360.0 - double(i) * 60.0)));
+			A_SpawnEffect(
+				"RevolverCasing",
+				(coords.x, coords.y + 8.0, -2.0),
+				210.0,
+				FRandom(-62.0, -63.0),
+				FRandom(2.0, 2.5),
+				true);
 		}
 	}
 }

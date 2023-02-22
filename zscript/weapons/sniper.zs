@@ -85,6 +85,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_FireBullets(2, 2, -1, Random(80, 120), "Bullet_Puff", FBF_NORANDOM);
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
+			A_SpawnFlash(5, -3);
 			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
 			A_AlertMonsters();
@@ -241,6 +242,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_AlertMonsters();
 			A_FRecoil(2.5);
 			A_SingleSmoke(0, 0);
+			A_SpawnFlash(0, 0);
 			A_TakeInventory("SniperAmmo", 1);
 			invoker.m_Chambered = false;
 		}
@@ -305,35 +307,33 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	private action void A_SpawnCasing()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
-		{
-			RifleCasing effect = RifleCasing(
-				invoker.SpawnEffect(
-					"RifleCasing",
-					(17.0, 17.0, 23.0),
-					-90.0 + FRandom(-5.0, 1.0),
-					FRandom(70.0, 75.0),
-					FRandom(5.35, 5.45),
-					true));
-			
-			effect.SetVirtualRoll(130.0);
-		}
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		RifleCasing effect = RifleCasing(
+			invoker.SpawnEffect(
+				"RifleCasing",
+				(17.0, 17.0, 23.0),
+				-90.0 + FRandom(-5.0, 1.0),
+				FRandom(70.0, 75.0),
+				FRandom(5.35, 5.45),
+				true));
+		
+		effect.SetVirtualRoll(130.0);
 	}
 
 	private action void A_SpawnCasingAlt()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
-		{
-			RifleCasing effect = RifleCasing(
-				invoker.SpawnEffect(
-					"RifleCasing",
-					(-2.0, 10.0, 11.0),
-					-16.0 + FRandom(-2.0, 2.0),
-					FRandom(50.0, 57.5),
-					FRandom(4.35, 4.65),
-					true));
-			
-			effect.SetVirtualRoll(175.0);
-		}
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		RifleCasing effect = RifleCasing(
+			invoker.SpawnEffect(
+				"RifleCasing",
+				(-2.0, 10.0, 11.0),
+				-16.0 + FRandom(-2.0, 2.0),
+				FRandom(50.0, 57.5),
+				FRandom(4.35, 4.65),
+				true));
+		
+		effect.SetVirtualRoll(175.0);
 	}
 }

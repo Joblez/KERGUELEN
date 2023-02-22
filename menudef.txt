@@ -123,8 +123,6 @@ OptionMenu "VisualEffects"
 
 	StaticText "Visual Effects"
 
-	Option "Bullet Casings", "casing_toggle","OnOff"
-
 	Option "Muzzle Smoke", "smoke_toggle","OnOff"
 
 	Option "Particles from Projectiles", "weapon_particle_toggle","OnOff"
@@ -138,6 +136,9 @@ OptionMenu "VisualEffects"
 
 	Option "Weather Amount", "weather_amount", "GraphicsSettings"
 	Option "Splash Particles", "splash_particles", "GraphicsSettings"
+	StaticText ""
+	Option "Weapon Effects", "weapon_effects", "GraphicsSettings"
+	Option "Weapon Casings", "weapon_casings", "GraphicsSettings"
 
 	StaticText ""
 	StaticText "NOTE: Playing on Ultra settings may cause the game to exceed the default", "Cream"

@@ -1,11 +1,17 @@
 version "4.10.0"
 
+struct Settings
+{
+	enum Values { OFF, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH, ULTRA }
+}
+
 // MUtil
 #include "MUtil/MUtilLib/zscript.zs"
 
 // Miscellaneous
 #include "zscript/misc/footsteps.zs"
 #include "zscript/misc/hura.zs"
+#include "zscript/misc/projectileext.zs"
 #include "zscript/misc/visualfx.zs"
 
 // Weapons
@@ -39,5 +45,3 @@ version "4.10.0"
 
 // Second-level includes.
 #include "zscript_nashgore.zs"
-
-

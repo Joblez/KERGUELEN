@@ -1,3 +1,37 @@
+class WeaponFlash : Actor
+{
+	int m_Duration;
+	private int m_TimeAlive;
+
+	Default
+	{
+		+NOCLIP
+		+NOBLOCKMAP
+		+NOGRAVITY
+		+VULNERABLE
+	}
+
+	override void Tick()
+	{
+		Super.Tick();
+
+		m_TimeAlive++;
+
+		if (m_TimeAlive > m_Duration) A_Die();
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 1 Light("Flash");
+		Loop;
+	
+	Death:
+		TNT1 A 0;
+		Stop;
+	}
+}
+
 class MuzzleSmoke : Actor
 {
 	Default
@@ -61,14 +95,16 @@ class ExplosionSmoke : Actor
 
 class EffectTrail : Actor abstract
 {
-	meta double m_Spacing;
-	property Spacing: m_Spacing;
-
 	double m_AirFriction;
 	property AirResistance: m_AirFriction;
 
+	private double m_Spacing;
+	property Spacing: m_Spacing;
+
 	private double m_DistanceDelta;
 	private vector3 m_MaxSpeed;
+
+	mixin ProjectileExt;
 
 	Default
 	{
@@ -92,22 +128,29 @@ class EffectTrail : Actor abstract
 	{
 		Super.Tick();
 
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", GetTargetPlayerOrConsolePlayer()).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		double factor = 2.0 - (weaponEffectSetting / Settings.ULTRA);
+		double spacing = m_Spacing * factor;
+
 		vector3 delta = LevelLocals.Vec3Diff(Prev, Pos);
 		m_DistanceDelta += delta.Length();
 
-		if (m_DistanceDelta >= m_Spacing)
+		if (m_DistanceDelta >= spacing)
 		{
 			vector3 spawnPos = Pos;
-			if (m_DistanceDelta / m_Spacing < 2.0)
+			if (m_DistanceDelta / spacing < 2.0)
 			{
 				SpawnEffect(spawnPos);
 			}
 			else
 			{
-				for (m_DistanceDelta; m_DistanceDelta >= 0.0; m_DistanceDelta -= m_Spacing)
+				for (m_DistanceDelta; m_DistanceDelta >= 0.0; m_DistanceDelta -= spacing)
 				{
 					SpawnEffect(spawnPos);
-					spawnPos -= delta.Unit() * m_Spacing;
+					spawnPos -= delta.Unit() * spacing;
 					// Console.Printf("Spawned smoke effect.");
 				}
 			}
@@ -142,7 +185,7 @@ class SmokeTrail : EffectTrail
 	{
 		Mass 55;
 		Gravity 3.5;
-		EffectTrail.Spacing 12.0;
+		EffectTrail.Spacing 10.0;
 		EffectTrail.AirResistance 1.1;
 	}
 
@@ -494,11 +537,14 @@ class Melee_Puff: Bullet_Puff
 
 class BaseCasing : Actor
 {
+	const MAX_TIME = TICRATE * 20;
 	double m_RollOrientation;
 	double m_RollSpeed;
 
 	meta double m_StartRoll;
 	property StartingRoll: m_StartRoll;
+
+	private int m_TimeAlive;
 
 	private double m_VirtualRoll;
 	private bool m_FirstTickPassed;
@@ -506,10 +552,12 @@ class BaseCasing : Actor
 
 	private InterpolatedDouble m_TipOverAngle;
 
+	mixin ProjectileExt;
+
 	Default
 	{
-		Height 2;
-		Radius 3;
+		Height 0.75;
+		Radius 1;
 		Speed 8;
 		Gravity 0.8;
 		BounceFactor 0.5;
@@ -530,6 +578,14 @@ class BaseCasing : Actor
 	{
 		Super.BeginPlay();
 
+		int weaponCasingSetting = CVar.GetCVar("weapon_casings", GetTargetPlayerOrConsolePlayer()).GetInt();
+
+		if (weaponCasingSetting <= Settings.OFF)
+		{
+			Destroy();
+			return;
+		}
+
 		m_TipOverAngle = new("InterpolatedDouble");
 		m_TipOverAngle.m_SmoothTime = 3.0 / TICRATE;
 
@@ -548,6 +604,31 @@ class BaseCasing : Actor
 			m_FirstTickPassed = true;
 			ConvertVirtualRoll();
 			return;
+		}
+
+		// Despawn logic before freeze check to ensure consistent performance.
+		m_TimeAlive++;
+
+		int weaponCasingSetting = CVar.GetCVar("weapon_casings", GetTargetPlayerOrConsolePlayer()).GetInt();
+
+		int maxTimeAlive = MAX_TIME * (double(weaponCasingSetting) / Settings.ULTRA);
+
+		if (m_TimeAlive > maxTimeAlive)
+		{
+			Destroy();
+			return;
+		}
+
+		// Fade out over last 10% of lifetime.
+		if (m_TimeAlive > maxTimeAlive * 0.9)
+		{
+			A_SetRenderStyle(
+				Math.Remap(m_TimeAlive,
+					maxTimeAlive * 0.9,
+					maxTimeAlive,
+					1.0,
+					0.0),
+				STYLE_Translucent);
 		}
 
 		if (IsFrozen()) return;
@@ -619,12 +700,8 @@ class PistolCasing : BaseCasing
 		Loop;
 
 	Death:
-		CAS3 I 350;
-		CAS3 I 3 A_SetTranslucent(0.8, 0);
-		CAS3 I 3 A_SetTranslucent(0.6, 0);
-		CAS3 I 3 A_SetTranslucent(0.4, 0);
-		CAS3 I 3 A_SetTranslucent(0.2, 0);
-		Stop;
+		CAS3 I 1;
+		Wait;
 	}
 
 }
@@ -646,12 +723,8 @@ class RevolverCasing : BaseCasing
 		Loop;
 
 	Death:
-		CAS5 I 350;
-		CAS5 I 3 A_SetTranslucent(0.8, 0);
-		CAS5 I 3 A_SetTranslucent(0.6, 0);
-		CAS5 I 3 A_SetTranslucent(0.4, 0);
-		CAS5 I 3 A_SetTranslucent(0.2, 0);
-		Stop;
+		CAS5 I 1;
+		Wait;
 	}
 }
 
@@ -673,13 +746,8 @@ class RifleCasing : BaseCasing
 		Wait;
 
 	Death:
-		CAS4 I 350;
-		CAS4 I 3 A_SetTranslucent(0.8, 0);
-		CAS4 I 3 A_SetTranslucent(0.6, 0);
-		CAS4 I 3 A_SetTranslucent(0.4, 0);
-		CAS4 I 3 A_SetTranslucent(0.2, 0);
-		CAS4 I 3 A_SetTranslucent(0.0, 0);
-		Stop;
+		CAS4 I 1;
+		Wait;
 	}
 }
 
@@ -687,8 +755,7 @@ class ShotgunCasing : BaseCasing
 {
 	Default
 	{
-		Height 3;
-		Radius 3;
+		Radius 2;
 		Speed 4;
 		Scale 0.18;
 		BounceSound "weapons/shell3";
@@ -703,15 +770,11 @@ class ShotgunCasing : BaseCasing
 		Loop;
 
 	Death:
-		CAS2 I 350;
-		CAS2 I 3 A_SetTranslucent(0.8, 0);
-		CAS2 I 3 A_SetTranslucent(0.6, 0);
-		CAS2 I 3 A_SetTranslucent(0.4, 0);
-		CAS2 I 3 A_SetTranslucent(0.2, 0);
-		CAS2 I 3 A_SetTranslucent(0.0, 0);
-		Stop;
+		CAS2 I 1;
+		Wait;
 	}
 }
+
 class RocketCasing : BaseCasing
 {
 	Default
@@ -729,12 +792,8 @@ class RocketCasing : BaseCasing
 		Loop;
 
 	Death:
-		RCCA A 350;
-		RCCA A 3 A_SetTranslucent(0.8, 0);
-		RCCA A 3 A_SetTranslucent(0.6, 0);
-		RCCA A 3 A_SetTranslucent(0.4, 0);
-		RCCA A 3 A_SetTranslucent(0.2, 0);
-		Stop;
+		RCCA I 1;
+		Wait;
 	}
 }
 

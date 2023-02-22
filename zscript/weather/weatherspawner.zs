@@ -63,13 +63,13 @@ class WeatherSpawner : Thinker
 		switch (GetWeatherAmountCVar(player).GetInt())
 		{
 			default:
-			case 0: return 0.0;		// Off.
-			case 1: return 0.1;		// Very low.
-			case 2: return 0.2;		// Low.
-			case 3: return 0.35;	// Medium.
-			case 4: return 0.5;		// High.
-			case 5: return 0.75;	// Very high.
-			case 6: return 1.0;		// Ultra.
+			case Settings.OFF:			return 0.0;
+			case Settings.VERY_LOW:		return 0.1;
+			case Settings.LOW:			return 0.2;
+			case Settings.MEDIUM:		return 0.35;
+			case Settings.HIGH:			return 0.5;
+			case Settings.VERY_HIGH:	return 0.75;
+			case Settings.ULTRA:		return 1.0;
 		}
 	}
 

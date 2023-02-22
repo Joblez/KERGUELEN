@@ -108,6 +108,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_AlertMonsters();
 			A_ShotgunSmoke(4, -4);
 			A_ShotgunSmoke(4, -4);
+			A_SpawnFlash(4, -4);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", CHAN_WEAPON);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
@@ -250,15 +251,14 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	private action void A_SpawnCasing()
 	{
-		if (CVar.GetCVar("casing_toggle", players[consoleplayer]).GetBool())
-		{
-			A_SpawnEffect(
-				"ShotgunCasing",
-				(18.0, 22.0, 26.0),
-				FRandom(2.0, 4.0),
-				FRandom(-10.0, -10.75),
-				FRandom(1.0, 1.5),
-				true);
-		}
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		A_SpawnEffect(
+			"ShotgunCasing",
+			(18.0, 22.0, 26.0),
+			FRandom(2.0, 4.0),
+			FRandom(-10.0, -10.75),
+			FRandom(1.0, 1.5),
+			true);
 	}
 }

@@ -13,8 +13,10 @@ user bool fade_toggle = true;
 
 user bool recoil_toggle = true;
 
+user int weapon_casings = 3;
 user int weather_amount = 3;
 user int splash_particles = 3;
+user int weapon_effects = 3;
 
 //NASHGORE
 

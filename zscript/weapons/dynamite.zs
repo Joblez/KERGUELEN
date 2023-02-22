@@ -33,18 +33,21 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Stop;
 
 	Ready:
-		DYNI ABCD 3 BRIGHT A_WeaponReady();
+		TNT1 A 0 A_AttachLightDef('lighter', 'Lighter');
+	ReadyLoop:
+		DYNI ABCD 3 A_WeaponReady();
 		Loop;
 
 	Fire:
-		DYNH AB 1 BRIGHT;
-		DYNH CDE 1 BRIGHT;
+		DYNH ABCDE 1;
 		TNT1 A 0 A_StartSound("dynamite/fuse", 9);
-		DYNH FHJLMN 1 BRIGHT;
+		DYNH FHJL 1;
+		TNT1 A 0 A_RemoveLight('lighter');
+		DYNH MN 1;
 		TNT1 A 0 A_StartSound("dynamite/close", 10);
-		DYNH OP 1 BRIGHT;
+		DYNH OP 1;
 	Hold:
-		DYNH S 1 BRIGHT {
+		DYNH S 1 {
 			if (invoker.m_Throw >= 5)
 			{
 				Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12 ,0, 0);
@@ -85,20 +88,23 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		}
 		DYNS A 2 A_StartSound("dynamite/open", 10);
 		DYNS BCD 2;
-		DYNS E 2 A_StartSound("dynamite/light", 10);
-		DYNS FGHI 2;
+		TNT1 A 0 A_AttachLightDef('lighter', 'Lighter');
+		DYNS E 2 Light("Flash") A_StartSound("dynamite/light", 10);
+		DYNS FGHI 2 Light("Flash");
 		TNT1 A 0 A_Refire("Fire");
 		Goto Ready;
 
 	SelfDetonate:
 		TNT1 A 0 {
 			if (Health <= 0) return ResolveState("DIE"); // Ugly, but...
+			A_RemoveLight('lighter');
 
 			return ResolveState(null);
 		}
 		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 		Goto NewStick;
 	DIE:
+		TNT1 A 0 A_RemoveLight('lighter');
 		DYNH SSSSSSSS 1 A_SetBaseOffset(0, invoker.m_PSpritePosition.GetBaseY() + 10);
 		DYNS B 2 A_Lower(1);
 		Wait;
@@ -108,15 +114,19 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS A 2 A_SetBaseOffset(1, 85);
 		DYNS B 2 A_SetBaseOffset(1, 60);
 		TNT1 A 0 A_StartSound("dynamite/open", 10);
-		DYNS CDE 2 A_SetBaseOffset(1, 50);
+		DYNS CD 2 A_SetBaseOffset(1, 50);
+		TNT1 A 0 A_AttachLightDef('lighter', 'Lighter');
 		TNT1 A 0 A_StartSound("dynamite/light", 10);
+		DYNS E 2 A_SetBaseOffset(1, 50);
 		DYNS FGH 2 A_SetBaseOffset(1, 30);
 		DYNS I 2 A_SetBaseOffset(0, WEAPONTOP);
 		TNT1 A 0 A_Raise(16);
 		Wait;
 
 	Deselect:
-		DYNS FEDCB 2;
+		DYNS FED 2;
+		TNT1 A 0 A_RemoveLight('lighter');
+		DYNS CB 2;
 		TNT1 A 0 A_StartSound("dynamite/close", 10);
 		DYNS A 2;
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
@@ -135,6 +145,12 @@ class DynamiteStick : Actor
 	meta double m_ThrustForce;
 	property ThrustForce : m_ThrustForce;
 
+	meta int m_SmokeTrails;
+	property SmokeTrails : m_SmokeTrails;
+
+	meta int m_SparkTrails;
+	property SparkTrails : m_SparkTrails;
+
 	private PointLight m_ExplosionFadeLight;
 
 	private array<Actor> m_SpawnedEffects;
@@ -146,7 +162,7 @@ class DynamiteStick : Actor
 		Speed 20;
 		Damage 0;
 		ExplosionDamage 320;
-		ExplosionRadius 370;
+		ExplosionRadius 360;
 		Gravity 0.9;
 		Scale 0.5;
 		Alpha 1.0;
@@ -158,6 +174,8 @@ class DynamiteStick : Actor
 		Projectile;
 
 		DynamiteStick.ThrustForce 360;
+		DynamiteStick.SmokeTrails 16;
+		DynamiteStick.SparkTrails 40;
 
 		//+DOOMBOUNCE;
 		-NOGRAVITY;
@@ -172,94 +190,102 @@ class DynamiteStick : Actor
 	States
 	{
 	Spawn:
-		DYNP ABCDEFGH 2;
+		DYNP ABCDEFGH 2 Light("Stick");
 		Loop;
 	Death:
 		TNT1 A 1 {
-			A_StopSound(7);
 			A_NoGravity();
+			A_StopSound(7);
 			A_SetScale(2.0, 2.0);
+			A_AlertMonsters(4096.0);
 			A_SetRenderStyle(1.0, STYLE_Add);
 			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.4);
 
 			array<Actor> hitActors;
 			ActorUtil.Explode3D(self, int(ExplosionDamage * FRandom(1.0, 1.1)), m_ThrustForce, ExplosionRadius, hitActors: hitActors);
 
-			if (CVar.GetCVar('weapon_particle_toggle', target.player).GetBool())
+			int weaponEffectSetting = CVar.GetCVar('weapon_effects', target.player).GetInt();
+
+			if (weaponEffectSetting <= Settings.OFF) return;
+
+			array<Actor> spawnedEffects;
+
+			FSpawnParticleParams params;
+			params.color1 = 0xFFFFFFFF;
+			params.texture = TexMan.CheckForTexture("PRBMA0");
+			params.style = STYLE_Add;
+			params.flags = SPF_ROLL | SPF_FULLBRIGHT;
+			params.startroll = 180.0;
+			params.sizestep = -1.0;
+			// params.fadestep = -1;
+
+			int smokeTrailCount = round(MathI.Lerp(0, m_SmokeTrails, double(weaponEffectSetting) / Settings.ULTRA));
+
+			// Smoke trails.
+			for (int i = 0; i < smokeTrailCount; ++i)
 			{
-				FSpawnParticleParams params;
-				params.color1 = 0xFFFFFFFF;
-				params.texture = TexMan.CheckForTexture("PRBMA0");
-				params.style = STYLE_Add;
-				params.flags = SPF_ROLL | SPF_FULLBRIGHT;
-				params.startroll = 180.0;
-				params.sizestep = -1.0;
-				// params.fadestep = -1;
+				Actor effect = null;
 
-				// Lower hemisphere.
-
-				// Smoke trails.
-				for (int i = 0; i < 16; ++i)
+				// Distribute evenly across hemispheres.
+				double pitch = 0.0;
+				if (i % 2 == 0)
 				{
-					Actor effect = null;
-
-					// Distribute evenly across hemispheres.
-					double pitch = 0.0;
-					if (i % 2 == 0)
-					{
-						pitch = FRandom(-180.0, -20.0);
-					}
-					else
-					{
-						pitch = FRandom(20.0, 180.0);
-					}
-
-					effect = Spawn("SmokeTrail", Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(2.0, 4.0)));
-					if (effect)
-					{
-						m_SpawnedEffects.Push(effect);
-						effect.A_ChangeLinkFlags(0);
-					}
+					pitch = FRandom(-180.0, -20.0);
+				}
+				else
+				{
+					pitch = FRandom(20.0, 180.0);
 				}
 
-				// Particle trails.
-				for (int i = 0; i < 40; ++i)
+				effect = Spawn("SmokeTrail", Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(2.0, 4.0)));
+				if (effect)
 				{
-					params.size = FRandom(4.0, 8.0);
-					params.startalpha = FRandom(0.15, 0.6);
-					params.lifetime = int(round(params.size));
+					spawnedEffects.Push(effect);
+					effect.A_ChangeLinkFlags(0);
+					effect.target = target;
+				}
+			}
 
-					// Distribute evenly across hemispheres.
-					double pitch = 0.0;
-					if (i % 2 == 0)
-					{
-						pitch = FRandom(-180.0, -20.0);
-						params.startalpha = FRandom(0.15, 0.3);
-					}
-					else
-					{
-						pitch = FRandom(20.0, 180.0);
-						params.startalpha = FRandom(0.2, 0.6);
-					}
+			int sparkTrailCount = round(MathI.Lerp(0, m_SparkTrails, double(weaponEffectSetting) / Settings.ULTRA));
 
-					SparkLightTrail trail = SparkLightTrail.Create(Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(5.0, 12.0)), params);
-					trail.m_AirFriction += FRandom(0.0, 0.3);
-					trail.Mass += FRandom(0.0, 25.0);
-					trail.Gravity += FRandom(0.0, 2.5);
-					trail.bouncefactor = FRandom(0.3, 0.8);
-					trail.wallbouncefactor = trail.bouncefactor;
-					
-					if (trail)
-					{
-						m_SpawnedEffects.Push(trail);
-						trail.A_ChangeLinkFlags(0);
-					}
+			// Spark trails.
+			for (int i = 0; i < sparkTrailCount; ++i)
+			{
+				params.size = FRandom(4.0, 8.0);
+				params.startalpha = FRandom(0.15, 0.6);
+				params.lifetime = int(round(params.size));
+
+				// Distribute evenly across hemispheres.
+				double pitch = 0.0;
+				if (i % 2 == 0)
+				{
+					pitch = FRandom(-180.0, -20.0);
+					params.startalpha = FRandom(0.15, 0.3);
+				}
+				else
+				{
+					pitch = FRandom(20.0, 180.0);
+					params.startalpha = FRandom(0.2, 0.6);
+				}
+
+				SparkLightTrail trail = SparkLightTrail.Create(Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(5.0, 12.0)), params);
+				trail.m_AirFriction += FRandom(0.0, 0.3);
+				trail.Mass += FRandom(0.0, 25.0);
+				trail.Gravity += FRandom(0.0, 2.5);
+				trail.bouncefactor = FRandom(0.3, 0.8);
+				trail.wallbouncefactor = trail.bouncefactor;
+				
+				if (trail)
+				{
+					spawnedEffects.Push(trail);
+					trail.A_ChangeLinkFlags(0);
+					trail.target = target;
 				}
 			}
 
 			ActorUtil.Explode3D(self, 0, m_ThrustForce, ExplosionRadius, THRTARGET_Origin, hitActors);
 
-			foreach (effect : m_SpawnedEffects)
+			foreach (effect : spawnedEffects)
 			{
 				if (effect)
 				{
@@ -268,11 +294,7 @@ class DynamiteStick : Actor
 					effect.bShootable = false;
 				}
 			}
-			m_SpawnedEffects.Clear();
-
-			A_AlertMonsters(4096.0);
-
-
+			spawnedEffects.Clear();
 		}
 		BOOM T 1 {
 			m_ExplosionFadeLight = PointLight(Spawn("PointLight", Pos));
@@ -281,12 +303,14 @@ class DynamiteStick : Actor
 			m_ExplosionFadeLight.args[PointLight.LIGHT_GREEN] = int(255 * 0.25);
 			m_ExplosionFadeLight.args[PointLight.LIGHT_BLUE] = int(255 * 0.0);
 			m_ExplosionFadeLight.args[PointLight.LIGHT_INTENSITY] += int(256.0 / 2.0);
-		}
-		BOOM R 1 { m_ExplosionFadeLight.args[PointLight.LIGHT_INTENSITY] += int(256.0 / 2.0); }
-		BOOM P 1 /* Light("Explosion") */ {
 			Radius_Quake(100, 8, 0, 15, 0);
 		}
-		BOOM M 1 /* Light("Explosion") */ {
+		BOOM R 1 {
+			m_ExplosionFadeLight.args[PointLight.LIGHT_INTENSITY] += int(256.0 / 2.0);
+			Radius_Quake(100, 8, 0, 15, 0);
+		}
+		BOOM P 1 Radius_Quake(100, 8, 0, 15, 0);
+		BOOM M 1 {
 			Radius_Quake(100, 8, 0, 15, 0);
 
 			// Thrust nashgore gibs.
@@ -328,7 +352,7 @@ class DynamiteStick : Actor
 				ActorUtil.Thrust3D(mo, toTarget, attenuatedForce);
 			}
 		}
-		BOOM KJIHGFE 1 /* Light("Explosion") */ Radius_Quake(100, 8, 0, 15, 0);
+		BOOM KJIHGFE 1 Radius_Quake(100, 8, 0, 15, 0);
 		BOOM DCBAPQ 1 {
 			m_ExplosionFadeLight.args[PointLight.LIGHT_INTENSITY] -= 256.0 / 7.0;
 			Radius_Quake(100, 8, 0, 15, 0);

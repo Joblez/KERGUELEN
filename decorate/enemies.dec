@@ -1,6 +1,6 @@
 actor Grarg replaces Demon
 {
-	Health 120
+	Health 180
 	Radius 16
 	Height 56
 	Speed 12
@@ -82,7 +82,7 @@ actor Grarg replaces Demon
 
 actor Lesco replaces ZombieMan
 {
-	Health 50
+	Health 40
 	Radius 16
 	Height 48
 	Speed 10
@@ -152,11 +152,6 @@ actor Lesco replaces ZombieMan
 		GGLD E -1
 		Stop
 
-	Xdeath:
-		GGLD A 1 A_XSCREAM
-		TNT1 A 0 A_Tossgib
-		TNT1 A 0 A_NoBlocking
-		Stop
 	}
 }
 
@@ -191,6 +186,92 @@ actor RockProjectile
 	Death:
 		PROC A 12
 		Stop
+	}
+}
+
+actor RockProjectile2
+{
+Radius 10
+Height 10
+Missileheight 10
+Speed 35
+Gravity 0.2
+Scale 1
+Damage(15)
+}
+
+actor BigLesco replaces Doomimp
+{
+	Health 120
+	Radius 24
+	Height 56
+	Speed 22
+	PainChance 255
+	Mass 65
+	Scale 0.6
+	Monster
+	Dropitem "Ammo45",96
+	Bloodcolor "e8 00 21"
+	SeeSound "GLG/Attack"
+	DeathSound "GLG/Death"
+	ActiveSound "GLG/Idle"
+	PainSound "GLG/Pain"
+	Obituary "Amerigo was slashed to ribbons by a Lesco."
+	+FLOORCLIP
+	+SEEFRIENDLYMONSTERS
+	+JUMPDOWN
+
+	States
+	{
+	Spawn:
+		TNT1 A 0 A_Jump(20, "Grumble")
+		BGLC A 4 A_Look()
+		Loop
+
+	JumpDown:
+		BGLC C 1 A_CheckFloor("Land")
+		BGLC C 1
+		BGLC C 1 A_CustomMeleeAttack(random(3, 5) * 5, "imp/melee", "Melee", true)
+		Loop
+
+	Land:
+		BGLC FA 2 A_Stop
+		Goto See
+
+	See:
+		BGLC ABCDEFG 3 A_Chase
+		Loop
+
+	Missile:
+		BGLC I 6 A_FaceTarget
+		TNT1 A 0 A_SpawnProjectile("RockProjectile2", 56)
+		TNT1 A 0 A_PlaySound("GLG/Attack")
+		BGLC JKLM 3 
+		Goto See
+
+	Melee:
+		TNT1 A 0 A_PlaySound("GLG/Attack")
+		BGLC I 6 A_FaceTarget
+		BGLC JKLM 6 A_CustomMeleeAttack(random(2, 5) * 3, "imp/melee", "Melee", true)
+		Goto See
+
+	Grumble:
+		TNT1 A 0 A_PlaySound("GLG/Idle",CHAN_AUTO,0.25)
+		Goto Spawn
+
+	Pain:
+		BGLC H 2 A_Pain
+		Goto See
+
+	Death:
+		TNT1 A 0 A_Scream
+		TNT1 A 0 A_PlaySound("GLG/Death")
+		BGLD A 7
+		BGLD BCDE 4
+		TNT1 A 0 A_NoBlocking
+		BGLD F -1
+		Stop
+
 	}
 }
 

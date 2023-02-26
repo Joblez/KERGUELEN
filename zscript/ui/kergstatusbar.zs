@@ -47,6 +47,9 @@ class KergStatusBar : BaseStatusBar
 		DrawString(m_Font, "Health", (healthTextXOrigin, healthYOrigin), DI_TEXT_ALIGN_CENTER, scale: (TEXT_SCALE, TEXT_SCALE));
 		DrawString(m_Font, FormatNumber(hp), (healthTextXOrigin, healthYOrigin + healthAmountYOffset), DI_TEXT_ALIGN_CENTER, scale: (TEXT_SCALE, TEXT_SCALE));
 
+		//Draw Keys
+		DrawKeyHUD();
+
 		// Draw weapon HUD.
 
 		BaseWeapon weap = BaseWeapon(CPlayer.ReadyWeapon);
@@ -67,7 +70,38 @@ class KergStatusBar : BaseStatusBar
 				DrawAmmoHUD(weap.GetAmmo());
 			}
 		}
+
 	}
+
+	void DrawKeyHUD()
+	{
+		{
+		// Draw the keys. This does not use a special draw function like SBARINFO because the specifics will be different for each mod
+		// so it's easier to copy or reimplement the following piece of code instead of trying to write a complicated all-encompassing solution.
+		int keyXOrigin = -45;		
+		int keyYOrigin = 10;
+
+		Vector2 keypos = (keyXOrigin + BASE_PADDING, keyYOrigin + BASE_PADDING);		
+		int rowc = 0;
+		double roww = 0;
+		for(let i = CPlayer.mo.Inv; i != null; i = i.Inv)
+		{
+			if (i is "Key" && i.Icon.IsValid())
+			{
+				DrawTexture(i.Icon, keypos, DI_SCREEN_RIGHT_TOP|DI_ITEM_LEFT_TOP);
+				Vector2 size = TexMan.GetScaledSize(i.Icon);
+				keypos.Y += size.Y + 2;
+				roww = max(roww, size.X);
+				if (++rowc == 3)
+				{
+					keypos.y += roww + 2;
+					roww = 0;
+					rowc = 0;
+					}
+				}
+			}
+		}
+	}	
 
 	void DrawAmmoHUD(int amount)
 	{
@@ -106,4 +140,5 @@ class KergStatusBar : BaseStatusBar
 			DI_TEXT_ALIGN_LEFT,
 			scale: (TEXT_SCALE, TEXT_SCALE));
 	}
+		
 }

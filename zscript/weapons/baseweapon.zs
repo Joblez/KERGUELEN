@@ -14,25 +14,72 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	//=================== Look Sway Parameters ================//
 
-	double m_LookSwayStrengthX;
+	meta double m_LookSwayXRange;
+	property LookSwayXRange: m_LookSwayXRange;
+
+	meta double m_LookSwayYRange;
+	property LookSwayYRange: m_LookSwayYRange;
+
+	meta double m_LookSwayStrengthX;
 	property LookSwayStrengthX: m_LookSwayStrengthX;
 
-	double m_LookSwayStrengthY;
+	meta double m_LookSwayStrengthY;
 	property LookSwayStrengthY: m_LookSwayStrengthY;
 
-	double m_LookSwayMaxTranslationX;
-	property MaxLookSwayTranslationX: m_LookSwayMaxTranslationX;
-
-	double m_LookSwayMaxTranslationY;
-	property MaxLookSwayTranslationY: m_LookSwayMaxTranslationY;
-
-	double m_LookSwayResponseSpeed;
+	meta double m_LookSwayResponseSpeed;
 	property LookSwayResponse: m_LookSwayResponseSpeed;
 
-	double m_LookSwayReturnSpeed;
+	meta double m_LookSwayReturnSpeed;
 	property LookSwayRigidity: m_LookSwayReturnSpeed;
 
+	//=================== Move Sway Parameters ================//
+
+	meta double m_MoveSwayUpRange;
+	property MoveSwayUpRange: m_MoveSwayUpRange;
+
+	meta double m_MoveSwayDownRange;
+	property MoveSwayDownRange: m_MoveSwayDownRange;
+
+	meta double m_MoveSwayLeftRange;
+	property MoveSwayLeftRange: m_MoveSwayLeftRange;
+
+	meta double m_MoveSwayRightRange;
+	property MoveSwayRightRange: m_MoveSwayRightRange;
+
+	meta double m_MoveSwayWeight;
+	property MoveSwayWeight: m_MoveSwayWeight;
+
+	meta double m_MoveSwayResponseSpeed;
+	property MoveSwayResponse: m_MoveSwayResponseSpeed;
+
+	//====================== Bob Parameters ===================//
+
+	meta double m_BobIntensity;
+	property BobIntensity: m_BobIntensity;
+
+	meta double m_BobIntensityResponseTime;
+	property BobIntensityResponseTime: m_BobIntensityResponseTime;
+
+	meta double m_BobInputAcceleratingResponseTime;
+	property BobInputAcceleratingResponseTime: m_BobInputAcceleratingResponseTime;
+	
+	meta double m_BobInputDeceleratingResponseTime;
+	property BobInputDeceleratingResponseTime: m_BobInputDeceleratingResponseTime;
+
+	meta double m_BobSpeedResponseTime;
+	property BobSpeedResponseTime: m_BobIntensityResponseTime;
+
+	protected WeaponSwayer m_WeaponMoveSwayer;
 	protected WeaponSwayer m_WeaponLookSwayer;
+	protected InterpolatedPSpriteTransform m_WeaponBobber;
+
+	protected InterpolatedDouble m_BobAmplitude;
+	protected InterpolatedDouble m_BobPlaybackSpeed;
+
+	private InterpolatedDouble m_BobInput;
+
+	private double m_FallMomentum;
+	private double m_BobPlayback;
 
 	private double m_PreviousPlayerYaw;
 	private double m_PreviousPlayerPitch;
@@ -41,18 +88,31 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	Default
 	{
-		Weapon.BobRangeX 0.3;
-		Weapon.BobRangeY 0.3;
-		Weapon.BobSpeed 2.2;
-		Weapon.BobStyle "Alpha";
+		Weapon.BobRangeX 5.0;
+		Weapon.BobRangeY 2.5;
+		Weapon.BobSpeed 1.0;
 		Weapon.UpSound "weapon/select";
 
+		BaseWeapon.MoveSwayUpRange 2.0;
+		BaseWeapon.MoveSwayDownRange 10.0;
+		BaseWeapon.MoveSwayLeftRange 8.0;
+		BaseWeapon.MoveSwayRightRange 8.0;
+		BaseWeapon.MoveSwayWeight 2.0;
+		BaseWeapon.MoveSwayResponse 20.0;
+
+		BaseWeapon.LookSwayXRange 26.0;
+		BaseWeapon.LookSwayYRange 0.0;
 		BaseWeapon.LookSwayResponse 20.0;
 		BaseWeapon.LookSwayRigidity 8.0;
-		BaseWeapon.LookSwayStrengthX 10.0;
+		BaseWeapon.LookSwayStrengthX 12.0;
 		BaseWeapon.LookSwayStrengthY 0.0;
-		BaseWeapon.MaxLookSwayTranslationX 26.0;
-		BaseWeapon.MaxLookSwayTranslationY 0.0;
+
+		BaseWeapon.BobIntensity 1.0;
+		BaseWeapon.BobInputAcceleratingResponseTime 0.08;
+		BaseWeapon.BobInputDeceleratingResponseTime 1.5;
+		BaseWeapon.BobIntensityResponseTime 0.05;
+		BaseWeapon.BobSpeedResponseTime 0.05;
+
 		BaseWeapon.HUDExtensionType "";
 
 		Inventory.PickupSound "weapon/pickup";
@@ -60,6 +120,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		+WEAPON.NOAUTOFIRE;
 		+WEAPON.NOALERT;
 		+WEAPON.NOAUTOAIM;
+		+WEAPON.DONTBOB; // Disable native bobbing in favor of custom implementation.
 	}
 
 	States
@@ -82,11 +143,32 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		m_WeaponLookSwayer = WeaponSwayer.Create(
 			1.0 / m_LookSwayResponseSpeed,
 			1.0 / m_LookSwayReturnSpeed,
-			maxTranslation: (m_LookSwayMaxTranslationX, m_LookSwayMaxTranslationY),
+			maxTranslation: (m_LookSwayXRange, m_LookSwayYRange),
 			maxRotation: 0.0,
 			maxScale: (1.0, 1.0));
 		m_WeaponLookSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 		m_WeaponLookSwayer.ForceSet((0.0, 0.0), 0.0, (1.0, 1.0));
+
+		m_WeaponMoveSwayer = WeaponSwayer.Create(
+			1.0 / m_MoveSwayResponseSpeed,
+			m_MoveSwayWeight / 16.0,
+			maxRotation: 0.0,
+			maxScale: (1.0, 1.0),
+			maxTranslationSplit: (-m_MoveSwayLeftRange, m_MoveSwayRightRange, -m_MoveSwayUpRange, m_MoveSwayDownRange));
+		m_WeaponMoveSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
+		m_WeaponMoveSwayer.ForceSet((0.0, 0.0), 0.0, (1.0, 1.0));
+
+		m_BobAmplitude = new("InterpolatedDouble");
+		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
+		m_BobPlaybackSpeed = new("InterpolatedDouble");
+		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
+		m_BobInput = new("InterpolatedDouble");
+		m_BobInput.m_SmoothTime = m_BobInputAcceleratingResponseTime;
+
+		m_WeaponBobber = new("InterpolatedPSpriteTransform");
+		m_WeaponBobber.InterpolatedInit(1.0 / TICRATE);
+		m_WeaponBobber.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
+		m_WeaponBobber.ForceSet((0.0, 0.0), 0.0, (1.0, 1.0));
 
 		if (m_HUDExtensionType)
 		{
@@ -100,7 +182,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		if (IsSelected())
 		{
 			WeaponLookSway();
-			m_WeaponLookSwayer.Update();
+			WeaponMoveSway();
+			WeaponBob();
 
 			let psp = owner.Player.GetPSprite(PSP_WEAPON);
 
@@ -274,10 +357,62 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	private void WeaponLookSway()
 	{
 		let swayForce = (
-			(owner.Angle - m_PreviousPlayerYaw) * (M_PI / 180) * -m_LookSwayStrengthX,
-			(owner.Pitch - m_PreviousPlayerPitch) * (M_PI / 180) * m_LookSwayStrengthY);
+			(owner.Angle - m_PreviousPlayerYaw) * (M_PI / 180.0) * -m_LookSwayStrengthX,
+			(owner.Pitch - m_PreviousPlayerPitch) * (M_PI / 180.0) * m_LookSwayStrengthY);
 
 		m_WeaponLookSwayer.AddForce(swayForce);
+		m_WeaponLookSwayer.Update();
+	}
+
+	private void WeaponMoveSway()
+	{
+		vector2 swayForce;
+
+		swayForce.y = owner.Vel.z * m_MoveSwayWeight / 16.0;
+
+		if (!owner.Player.onground && owner.Vel.z < 0.0)
+		{
+			m_FallMomentum += -owner.Vel.z * m_MoveSwayWeight / 16.0;
+		}
+		else
+		{
+			m_WeaponMoveSwayer.AddForce((0.0, m_FallMomentum));
+			m_FallMomentum = 0.0;
+		}
+
+		m_WeaponMoveSwayer.AddForce(swayForce);
+		m_WeaponMoveSwayer.Update();
+	}
+
+	private void WeaponBob()
+	{
+		KergPlayer pawn = KergPlayer(owner);
+
+		double inputStrength = pawn.GetNormalizedInput().Length();
+
+		m_BobInput.m_Target = owner.Player.onground ? inputStrength : 0.0;
+		m_BobInput.Update();
+
+		m_BobAmplitude.m_Target = min(m_BobInput.GetValue(), owner.player.Vel.Length() / pawn.GetMaxPlayerVelocity());
+		m_BobAmplitude.Update();
+	
+		m_BobPlaybackSpeed.m_Target = m_BobAmplitude.m_Target;
+		m_BobPlaybackSpeed.Update();
+
+		m_BobPlayback += m_BobPlaybackSpeed.GetValue();
+
+		if (m_BobAmplitude.GetValue() < 0.001) m_BobPlayback = 0.0;
+
+		double xAmplitude = BobRangeX * m_BobAmplitude.GetValue();
+		double yAmplitude = BobRangeY * m_BobAmplitude.GetValue();
+		double frequency = BobSpeed;
+
+		vector2 bobPosition;
+		bobPosition.x = cos(m_BobPlayback * TICRATE * frequency / 2.0) * xAmplitude;
+		bobPosition.y = sin(m_BobPlayback * TICRATE * frequency) * yAmplitude;
+
+		m_WeaponBobber.SetTargetTranslation(bobPosition);
+		m_WeaponBobber.Update();
 	}
 
 	private Actor SpawnProjectile(class<Actor> projectileType, vector3 position, double yaw, double pitch, double speed = double.Infinity)
@@ -317,7 +452,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 class WeaponSwayer : InterpolatedPSpriteTransform
 {
-	vector2 m_MaxTranslation;
+	vector2 m_MaxTranslationXRange;
+	vector2 m_MaxTranslationYRange;
 	double m_MaxRotation;
 	vector2 m_MaxScale;
 
@@ -334,7 +470,8 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		vector2 scale = (1.0, 1.0),
 		vector2 maxTranslation = (double.Infinity, double.Infinity),
 		double maxRotation = double.Infinity,
-		vector2 maxScale = (double.Infinity, double.Infinity))
+		vector2 maxScale = (double.Infinity, double.Infinity),
+		vector4 maxTranslationSplit = (double.Infinity, double.Infinity, double.Infinity, double.Infinity))
 	{
 		WeaponSwayer swayer = new("WeaponSwayer");
 		swayer.SwayerInit(
@@ -345,7 +482,8 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			scale,
 			maxTranslation,
 			maxRotation,
-			maxScale);
+			maxScale,
+			maxTranslationSplit);
 		return swayer;
 	}
 
@@ -357,22 +495,32 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 		vector2 scale = (1.0, 1.0),
 		vector2 maxTranslation = (double.Infinity, double.Infinity),
 		double maxRotation = double.Infinity,
-		vector2 maxScale = (double.Infinity, double.Infinity))
+		vector2 maxScale = (double.Infinity, double.Infinity),
+		vector4 maxTranslationSplit = (double.Infinity, double.Infinity, double.Infinity, double.Infinity))
 	{
 		InterpolatedInit(smoothTime, translation, rotation, scale);
 
 		m_TargetSmoothTime = targetSmoothTime;
-		m_MaxTranslation = maxTranslation;
 		m_MaxRotation = maxRotation;
+		m_MaxTranslationXRange = (-maxTranslation.x, maxTranslation.x);
+		m_MaxTranslationYRange = (-maxTranslation.y, maxTranslation.y);
 		m_MaxScale = maxScale;
+
+		if (maxTranslationSplit != (double.Infinity, double.Infinity, double.Infinity, double.Infinity))
+		{
+			m_MaxTranslationXRange = (maxTranslationSplit.x, maxTranslationSplit.y);
+			m_MaxTranslationYRange = (maxTranslationSplit.z, maxTranslationSplit.w);
+		}
 	}
 
 	override void Update()
 	{
+		// Console.Printf("Translation target: %s", ToStr.Vec2(m_InterpolatedTranslation.m_Target));
+
 		m_InterpolatedTranslation.m_Target = (
-			clamp(m_InterpolatedTranslation.m_Target.x, -m_MaxTranslation.x, m_MaxTranslation.x),
-			clamp(m_InterpolatedTranslation.m_Target.y, -m_MaxTranslation.y, m_MaxTranslation.y));
-		
+			clamp(m_InterpolatedTranslation.m_Target.x, m_MaxTranslationXRange.x, m_MaxTranslationXRange.y),
+			clamp(m_InterpolatedTranslation.m_Target.y, m_MaxTranslationYRange.x, m_MaxTranslationYRange.y));
+
 		m_InterpolatedRotation.m_Target = clamp(m_InterpolatedRotation.m_Target, -m_MaxRotation, m_MaxRotation);
 
 		m_InterpolatedScale.m_Target = (
@@ -388,6 +536,8 @@ class WeaponSwayer : InterpolatedPSpriteTransform
 			m_TargetSmoothTime,
 			double.Infinity,
 			1.0 / TICRATE);
+
+		// Console.Printf("Dampened translation target: %s", ToStr.Vec2(m_InterpolatedTranslation.m_Target));
 
 		m_InterpolatedRotation.m_Target = Math.SmoothDamp(
 			m_InterpolatedRotation.m_Target,

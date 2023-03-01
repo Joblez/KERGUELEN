@@ -22,15 +22,20 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 10;
+		Weapon.BobRangeX 6.0;
+		Weapon.BobRangeY 2.0;
 		Weapon.AmmoType1 "SniperAmmo";
 		Weapon.AmmoType2 "Ammo308";
 		Weapon.UpSound("sniper/raise");
 
 		BaseWeapon.HUDExtensionType "IshaporeHUD";
-		BaseWeapon.MaxLookSwayTranslationX 56.0;
+		BaseWeapon.LookSwayXRange 56.0;
 		BaseWeapon.LookSwayStrengthX 28.0;
 		BaseWeapon.LookSwayResponse 4.0;
 		BaseWeapon.LookSwayRigidity 7.0;
+
+		BaseWeapon.MoveSwayWeight 16.0;
+		BaseWeapon.MoveSwayResponse 10.0;
 
 		Inventory.PickupMessage "[6] 7.62 Hunting Rifle";
 
@@ -45,11 +50,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Stop;
 
 	ZF:
-		TNT1 A 1 A_VRecoil(35, 1, 4);
+		TNT1 A 1 A_VRecoil(40, 1, 4);
 		Stop;
 
 	ZFScoped:
-		TNT1 A 1 A_VRecoil(90, 1, 4);
+		TNT1 A 1 A_VRecoil(120, 1, 4);
 		Stop;
 
 	Ready:

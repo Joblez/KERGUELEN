@@ -91,9 +91,9 @@ class Colt : BaseWeapon replaces Pistol
 			M19F A 1 BRIGHT {
 				A_AlertMonsters();
 				A_TakeInventory("ColtMag", 1);
-				A_StartSound("colt/fire", CHAN_WEAPON);
+				A_StartSound("colt/fire", CHAN_AUTO);
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
-				A_FireBullets(2,2, -1, 10, "BulletPuff");
+				A_FireBullets(2, 2, -1, 10, "BulletPuff");
 				A_FRecoil(1);
 				A_SingleSmoke(6, -1);
 				A_SpawnFlash(6, -1);

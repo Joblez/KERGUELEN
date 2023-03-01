@@ -1,10 +1,10 @@
 class KergPlayer : PlayerPawn
 {
-	meta double m_BobXAmplitude;
-	property BobXAmplitude : m_BobXAmplitude;
+	meta double m_BobXRange;
+	property BobXRange : m_BobXRange;
 
-	meta double m_BobYAmplitude;
-	property BobYAmplitude : m_BobYAmplitude;
+	meta double m_BobYRange;
+	property BobYRange : m_BobYRange;
 
 	meta double m_BobRollAmplitude;
 	property BobRollAmplitude : m_BobRollAmplitude;
@@ -74,11 +74,11 @@ class KergPlayer : PlayerPawn
 		Player.WeaponSlot 6, "Ishapore";
 		Player.CrouchSprite "PLYC";
 
+		KergPlayer.BobXRange 5.0;
+		KergPlayer.BobYRange 2.5;
 		KergPlayer.BobSpeed 1.0;
 		KergPlayer.BobIntensityResponseTime 0.05;
 		KergPlayer.BobSpeedResponseTime 0.05;
-		KergPlayer.BobXAmplitude 5.0;
-		KergPlayer.BobYAmplitude 2.5;
 		KergPlayer.BobRollAmplitude 0.3;
 		KergPlayer.BobInputAcceleratingResponseTime 0.07;
 		KergPlayer.BobInputDeceleratingResponseTime 0.7;
@@ -133,8 +133,6 @@ class KergPlayer : PlayerPawn
 	{
 		Super.PlayerThink();
 		ApplyViewBobAndTilt();
-
-		Console.Printf("Target FOV: %f", player.DesiredFOV);
 
 		m_FOVAdjust.m_Target = Math.SmoothDamp(
 			m_FOVAdjust.m_Target,
@@ -362,6 +360,28 @@ class KergPlayer : PlayerPawn
 		m_FOVAdjust.m_Target += force;
 	}
 
+	double GetMaxPlayerVelocity() const
+	{
+		return m_MaxPlayerVelocity;
+	}
+
+	vector2 GetNormalizedInput() const
+	{
+		UserCmd cmd = player.cmd;
+
+		vector2 input = MathVec2.Clamp((double(cmd.forwardmove) / MAX_FORWARD_MOVE, -double(cmd.sidemove) / MAX_SIDE_MOVE), 0.0, 1.0);
+
+		// Ensure keyboard walking is properly normalized.
+		if ((cmd.buttons & BT_FORWARD || cmd.buttons & BT_BACK || cmd.buttons & BT_MOVELEFT || cmd.buttons & BT_MOVERIGHT))
+		{
+			if (input.Length() != 0.0) input = input.Unit();
+
+			if (!(cmd.buttons & BT_RUN)) input *= 0.5;
+		}
+
+		return input;
+	}
+
 	private void ApplyViewBobAndTilt()
 	{
 		vector2 input = GetNormalizedInput();
@@ -387,8 +407,8 @@ class KergPlayer : PlayerPawn
 
 		if (m_BobAmplitude.GetValue() <= Geometry.EPSILON) m_BobPlayback = 0.0;
 
-		double xAmplitude = m_BobXAmplitude * m_BobAmplitude.GetValue();
-		double yAmplitude = m_BobYAmplitude * m_BobAmplitude.GetValue();
+		double xAmplitude = m_BobXRange * m_BobAmplitude.GetValue();
+		double yAmplitude = m_BobYRange * m_BobAmplitude.GetValue();
 		double frequency = m_BobSpeed;
 
 		vector2 viewBob;
@@ -403,7 +423,10 @@ class KergPlayer : PlayerPawn
 		m_ViewTilt.m_Target = input * m_ViewTiltDistance * min(inputStrength, player.Vel.Length() / m_MaxPlayerVelocity);
 		m_ViewTilt.Update();
 
-		vector2 viewTilt = m_ViewTilt.GetValue();
+		vector3 viewTilt = (m_ViewTilt.GetValue(), 0.0);
+
+		// Rotate view tilt to negate pitch.
+		viewTilt = MathVec3.Rotate(viewTilt, Vec3Util.Left(), -Pitch);
 
 		// Combined view offset.
 
@@ -411,7 +434,7 @@ class KergPlayer : PlayerPawn
 
 		offset.x = viewTilt.x;
 		offset.y = viewBob.x + viewTilt.y;
-		offset.z = viewBob.y;
+		offset.z = viewBob.y + viewTilt.z;
 
 		// View stabilization.
 
@@ -423,23 +446,6 @@ class KergPlayer : PlayerPawn
 		A_SetViewAngle(angles.x, SPF_INTERPOLATE);
 		A_SetViewPitch(angles.y, SPF_INTERPOLATE);
 		A_SetViewRoll(-cos(m_BobPlayback * TICRATE * frequency / 2.0) * rollAmplitude, SPF_INTERPOLATE);
-	}
-
-	private vector2 GetNormalizedInput()
-	{
-		UserCmd cmd = player.cmd;
-
-		vector2 input = MathVec2.Clamp((double(cmd.forwardmove) / MAX_FORWARD_MOVE, -double(cmd.sidemove) / MAX_SIDE_MOVE), 0.0, 1.0);
-
-		// Ensure keyboard walking is properly normalized.
-		if ((cmd.buttons & BT_FORWARD || cmd.buttons & BT_BACK || cmd.buttons & BT_MOVELEFT || cmd.buttons & BT_MOVERIGHT))
-		{
-			if (input.Length() != 0.0) input = input.Unit();
-
-			if (!(cmd.buttons & BT_RUN)) input *= 0.5;
-		}
-
-		return input;
 	}
 
 	private void CalculateMaxPlayerVelocity()

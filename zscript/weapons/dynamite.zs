@@ -19,6 +19,8 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		Dynamite.BaseThrowFactor 1.0;
 
 		BaseWeapon.LookSwayResponse 0.0;
+		BaseWeapon.MoveSwayWeight 1.0;
+		BaseWeapon.MoveSwayResponse 26.0;
 
 		Inventory.PickupMessage "[5] Dynamite Stick";
 		Tag "Dynamite";

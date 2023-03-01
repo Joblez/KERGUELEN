@@ -20,12 +20,17 @@ class M2C : BaseWeapon replaces Chaingun
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 RMAG;
-		Weapon.AmmoType1 "RifleMag";
-		Weapon.AmmoType2 "Ammo30";
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
+		Weapon.BobRangeX 5.0;
+		Weapon.BobRangeY 1.0;
+		Weapon.AmmoType1 "RifleMag";
+		Weapon.AmmoType2 "Ammo30";
 		Weapon.UpSound("M2C/draw");
 
+		BaseWeapon.MoveSwayUpRange 1.0;
+		BaseWeapon.MoveSwayWeight 4.0;
+		BaseWeapon.MoveSwayResponse 18.0;
 		BaseWeapon.HUDExtensionType "M2CHUD";
 
 		DamageType "Normal";
@@ -74,7 +79,7 @@ class M2C : BaseWeapon replaces Chaingun
 		M2CF DEF 2;
 		Goto Ready;
 	ZF:
-		TNT1 A 1 A_VRecoil(6, 1, 4);
+		TNT1 A 1 A_VRecoil(7, 1, 4);
 		stop;
 	Fire:
 		TNT1 A 0 {

@@ -47,7 +47,7 @@ class FootstepEventHandler : EventHandler
 
 	override void PlayerEntered(PlayerEvent e)
 	{
-		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(0.5 * TICRATE));
+		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(100));
 	}
 
 	override void PlayerDisconnected(PlayerEvent e)
@@ -75,18 +75,15 @@ class FootstepEventHandler : EventHandler
 			return;
 		}
 
-		double movementSpeed = pawn.Vel.xy.Length();
-		double maxSpeed = pawn.Speed * 8.3333333 * pawn.ForwardMove1;
+		double delta = pawn.Vel.xy.Length();
 
-		double speedPercentage = min(movementSpeed / maxSpeed, 1.85);
-		int forwardMove = pawn.GetPlayerInput(MODINPUT_FORWARDMOVE);
-		int sideMove = pawn.GetPlayerInput(MODINPUT_SIDEMOVE);
+		data.m_StepPlayback += delta;
 
-		data.m_StepPlayback += 1 * speedPercentage;
-
-		if (speedPercentage ~== 0.0) data.m_StepPlayback = 0.0;
+		if (delta ~== 0.0) data.m_StepPlayback = 0.0;
 
 		if (data.m_StepPlayback < data.m_StepInterval) return;
+
+		double speedPercentage = min(delta / data.m_StepPlayback * 8.0, 1.0);
 
 		double soundLevel = CVar.GetCVar('fs_volume_mul').GetFloat() * speedPercentage;
 

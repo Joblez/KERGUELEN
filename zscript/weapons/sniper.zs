@@ -85,7 +85,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_FireBullets(2, 2, -1, Random(80, 120), "Bullet_Puff", FBF_NORANDOM);
 			A_FRecoil(2);
 			A_SingleSmoke(5, -3);
-			A_SpawnFlash(5, -3);
+			A_SpawnFlash(5, -3, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
 			A_AlertMonsters();
@@ -242,7 +242,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_AlertMonsters();
 			A_FRecoil(2.5);
 			A_SingleSmoke(0, 0);
-			A_SpawnFlash(0, 0);
+			A_SpawnFlash(0, 0, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			invoker.m_Chambered = false;
 		}

@@ -108,7 +108,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_AlertMonsters();
 			A_ShotgunSmoke(4, -4);
 			A_ShotgunSmoke(4, -4);
-			A_SpawnFlash(4, -4);
+			A_SpawnFlash(4, -4, 2);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", CHAN_WEAPON);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);

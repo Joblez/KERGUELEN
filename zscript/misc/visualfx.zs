@@ -1,6 +1,7 @@
 class WeaponFlash : Actor
 {
 	int m_Duration;
+	
 	private int m_TimeAlive;
 
 	Default
@@ -485,28 +486,28 @@ class Bullet_Puff : Actor replaces BulletPuff
 	Crash:
 		TNT1 A 0 A_Jump(128, "Crash2", "Crash3");
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 A 1 Bright;
-		FX57 BC 1 Bright;
+		FX57 A 1 Bright Light("Spark");
+		FX57 BC 1 Bright Light("Spark");
 		FX57 D 1 Bright;
 		FX57 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash2:
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 J 1 Bright;
-		FX57 KL 1 Bright;
+		FX57 J 1 Bright Light("Spark");
+		FX57 KL 1 Bright Light("Spark");
 		FX57 M 1 Bright;
 		FX57 N 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash3:
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 F 1 Bright;
-		FX57 GH 1 Bright;
+		FX57 F 1 Bright Light("Spark");
+		FX57 GH 1 Bright Light("Spark");
 		FX57 I 1 Bright;
 		Stop;
 	}
 }
 
-class Melee_Puff: Bullet_Puff
+class Melee_Puff : Bullet_Puff
 {
 	Default
 	{
@@ -522,10 +523,10 @@ class Melee_Puff: Bullet_Puff
 
 	Crash:
 		TNT1 A 0 A_SetScale(0.5);
-		FX57 A 1 Bright A_StartSound("hatchet/hitwall", CHAN_AUTO);
-		FX57 BC 1 Bright A_SetTranslucent(.8, 1);
+		FX57 A 1 Bright Light("Spark") A_StartSound("hatchet/hitwall", CHAN_AUTO);
+		FX57 BC 1 Bright Light("Spark") A_SetTranslucent(.8, 1);
 		FX57 DE 1 Bright A_SetTranslucent(.6, 1);
-		FX57 FG 1 Bright A_SetTranslucent(.4, 1);
+		FX57 FG 1 Bright Light("Spark") A_SetTranslucent(.4, 1);
 		FX57 HIJ 1 Bright A_SetTranslucent(.2, 1);
 		Stop;
 	Melee:

@@ -50,9 +50,9 @@ class Ithaca : BaseWeapon replaces Shotgun
 		Loop;
 
 	ZF:
-		TNT1 A 1 A_VRecoil(0.9,1,4);
-		TNT1 A 1 A_VRecoil(0.95,1,4);
-		TNT1 A 1 A_VRecoil(1.0,1,4);
+		TNT1 A 1 A_VRecoil(0.9, 1, 4);
+		TNT1 A 1 A_VRecoil(0.95, 1, 4);
+		TNT1 A 1 A_VRecoil(1.0, 1, 4);
 		Stop;
 
 	Fire:

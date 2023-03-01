@@ -154,11 +154,20 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		bool followPSpriteOffset = true,
 		bool directionRelativeToPawn = true)
 	{
-		let pawn = PlayerPawn(owner);
+		PlayerPawn pawn = owner.Player.mo;
 
-		// Bring to eye level
+		// Bring to eye level.
 		let spawnPoint = (0, 0, pawn.Player.viewz - pawn.Pos.z);
-		if (pawn.ViewPos) spawnPoint += pawn.ViewPos.Offset;
+		vector3 viewOffset;
+
+		if (pawn.ViewPos)
+		{
+			viewOffset = pawn.ViewPos.offset;
+
+			// Rotate view offset offset to view direction
+			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Left(), pawn.Pitch);
+			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Up(), pawn.Angle);
+		}
 
 		if (followPSpriteOffset)
 		{
@@ -176,14 +185,14 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			spawnOffset.z *= GetSpawnOffsetFovFactor();
 		}
 
-		// Remap offset coordinates
+		// Remap offset coordinates.
 		vector3 zxyOffset = (spawnOffset.z, -spawnOffset.x, -spawnOffset.y);
 
-		// Rotate offset to view direction
+		// Rotate offset to view direction.
 		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch);
 		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle);
 
-		let position = spawnPoint + zxyOffset;
+		let position = spawnPoint + zxyOffset + viewOffset;
 
 		if (directionRelativeToPawn)
 		{

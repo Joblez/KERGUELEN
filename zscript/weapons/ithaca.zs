@@ -255,7 +255,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 		A_SpawnEffect(
 			"ShotgunCasing",
-			(18.0, 22.0, 26.0),
+			(16.0, 20.0, 20.0),
 			FRandom(2.0, 4.0),
 			FRandom(-10.0, -10.75),
 			FRandom(1.0, 1.5),

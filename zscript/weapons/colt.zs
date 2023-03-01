@@ -231,7 +231,7 @@ class Colt : BaseWeapon replaces Pistol
 		
 		A_SpawnEffect(
 			"PistolCasing",
-			(15.0, 7.0, 24.0),
+			(12.5, 4.25, 16.0),
 			-90.0 + FRandom(0.0, 15.0),
 			FRandom(20.0, 35.0),
 			FRandom(4.0, 6.0),

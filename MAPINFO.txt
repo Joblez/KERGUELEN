@@ -1,6 +1,6 @@
 GameInfo
 {
-	PlayerClasses = "NewPlayer"
+	PlayerClasses = "KergPlayer"
 
 	StatusBarClass = "KergStatusBar"
 

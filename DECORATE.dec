@@ -1,5 +1,3 @@
-#include "decorate/PLAYER.dec"
-
 #include "decorate/items.dec"
 
 #include "decorate/ammo.dec"

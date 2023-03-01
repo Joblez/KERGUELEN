@@ -1,5 +1,8 @@
 version "4.10.0"
 
+const MAX_FORWARD_MOVE = 12800;
+const MAX_SIDE_MOVE = 10240;
+
 struct Settings
 {
 	enum Values { OFF, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH, ULTRA }
@@ -42,6 +45,8 @@ struct Settings
 
 // Audio
 #include "zscript/audio/ambiencehandler.zs"
+
+#include "zscript/kergplayer.zs"
 
 // Second-level includes.
 #include "zscript_nashgore.zs"

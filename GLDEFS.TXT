@@ -9,10 +9,10 @@
 FlickerLight2 Lighter
 {
     Color 0.5 0.25 0.0
-    Offset 0 32 0
+    Offset 0 32 -16
     Size 64
-    secondarySize 70
-    interval 0.0075
+    SecondarySize 70
+    Interval 0.0075
 }
 
 PointLight Flash
@@ -20,6 +20,13 @@ PointLight Flash
     Offset 0 0 0
     Color 0.5 0.25 0.0
     Size 64
+}
+
+PointLight LargeFlash
+{
+    Offset 0 0 0
+    Color 0.5 0.25 0.0
+    Size 128
 }
 
 PointLight Stick

@@ -14,7 +14,7 @@ class AmbienceHandler : EventHandler
 		{
 			// Check for ambient sound.
 			string soundName = sec.GetUDMFString(AMBIENCE_UDMF_PROPERTY);
-			if (!soundName) continue;
+			if (soundName == "") continue;
 
 			// Console.Printf("Sound: %s", soundName);
 

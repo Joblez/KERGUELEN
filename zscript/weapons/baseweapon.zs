@@ -41,9 +41,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	Default
 	{
-		Weapon.BobRangeX 0.4;
-		Weapon.BobRangeY 0.4;
-		Weapon.BobSpeed 1.7;
+		Weapon.BobRangeX 0.3;
+		Weapon.BobRangeY 0.3;
+		Weapon.BobSpeed 2.2;
 		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
 
@@ -242,10 +242,10 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		}
 	}
 
-	action void A_SpawnFlash(double x, double y)
+	action void A_SpawnFlash(double x, double y, int duration = 1)
 	{
 		WeaponFlash flash = WeaponFlash(A_FireProjectile("WeaponFlash", 0, 0, 6, -1));
-		flash.m_Duration = 1;
+		flash.m_Duration = duration;
 	}
 
 	action void A_SingleSmoke(double x, double y)

@@ -687,7 +687,7 @@ class PistolCasing : BaseCasing
 {
 	Default
 	{
-		Scale 0.14;
+		Scale 0.09;
 		BounceSound "weapons/shell4";
 
 		BaseCasing.StartingRoll 110.0;
@@ -711,7 +711,7 @@ class RevolverCasing : BaseCasing
 	Default
 	{
 		Radius 2;
-		Scale 0.14;
+		Scale 0.10;
 		BounceSound "weapons/shell4";
 
 	}
@@ -733,7 +733,7 @@ class RifleCasing : BaseCasing
 	Default
 	{
 		Speed 8;
-		Scale 0.14;
+		Scale 0.10;
 		BounceSound "weapons/shell2";
 
 		BaseCasing.StartingRoll 140.0;
@@ -757,7 +757,7 @@ class ShotgunCasing : BaseCasing
 	{
 		Radius 2;
 		Speed 4;
-		Scale 0.18;
+		Scale 0.11;
 		BounceSound "weapons/shell3";
 
 		BaseCasing.StartingRoll 130.0;

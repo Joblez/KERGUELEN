@@ -39,8 +39,7 @@ class Colt : BaseWeapon replaces Pistol
 			Stop;
 
 		ZF:
-			TNT1 A 1 A_VRecoil(0.99, 1, 4);
-			TNT1 A 1 A_VRecoil(1.0, 1, 4);
+			TNT1 A 1 A_VRecoil(5, 1, 4);
 			Stop;
 		
 		Select:

@@ -226,7 +226,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 		if (GetCVar("recoil_toggle") == 1)
 		{
-			A_ZoomFactor(zf, ZOOM_NOSCALETURNING);
+			KergPlayer(self.player.mo).AddFOVForce(zf);
 			A_Quake(quakeInt, 1, 0, quakeTrem);
 		}
 	}

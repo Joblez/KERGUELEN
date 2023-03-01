@@ -74,8 +74,7 @@ class M2C : BaseWeapon replaces Chaingun
 		M2CF DEF 2;
 		Goto Ready;
 	ZF:
-		TNT1 A 1 A_VRecoil(0.99, 1, 4);
-		TNT1 A 1 A_VRecoil(1.0, 1, 4);
+		TNT1 A 1 A_VRecoil(6, 1, 4);
 		stop;
 	Fire:
 		TNT1 A 0 {

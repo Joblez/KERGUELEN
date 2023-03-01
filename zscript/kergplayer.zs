@@ -30,13 +30,26 @@ class KergPlayer : PlayerPawn
 	meta double m_ViewTiltResponseTime;
 	property ViewTiltResponseTime: m_ViewTiltResponseTime;
 
+	meta double m_FOVAdjustResponseTime;
+	property FOVAdjustResponse: m_FOVAdjustResponseTime;
+
+	meta double m_FOVAdjustReturnSpeed;
+	property FOVAdjustRigidity: m_FOVAdjustReturnSpeed;
+
+	meta double m_ZoomFactorResponseTime;
+	property ZoomResponseTime: m_ZoomFactorResponseTime;
+
 	private InterpolatedVector2 m_ViewTilt;
 
+	private InterpolatedDouble m_FOVAdjust;
 	private InterpolatedDouble m_BobInput;
 	private InterpolatedDouble m_BobAmplitude;
+	private InterpolatedDouble m_ZoomFactor;
 
 	protected InterpolatedDouble m_BobPlaybackSpeed;
 	private double m_BobPlayback;
+
+	private double m_FOVAdjustTargetSpeed;
 
 	private double m_MaxPlayerVelocity;
 
@@ -73,6 +86,11 @@ class KergPlayer : PlayerPawn
 		KergPlayer.ViewTiltDistance 12.0;
 		KergPlayer.ViewTiltResponseTime 0.165;
 
+		KergPlayer.FOVAdjustResponse 0.045;
+		KergPlayer.FOVAdjustRigidity 16.0;
+
+		KergPlayer.ZoomResponseTime 0.08;
+
 		Radius 16.025;
 		// Speed 16;
 		Speed 3.47005242;
@@ -87,16 +105,27 @@ class KergPlayer : PlayerPawn
 	{
 		Super.BeginPlay();
 
-		CalculateMaxPlayerVelocity();
+		m_ZoomFactor = new("InterpolatedDouble");
+		m_ZoomFactor.m_SmoothTime = m_ZoomFactorResponseTime;
+		m_ZoomFactor.ForceSet(1.0);
+
+		m_FOVAdjust = new("InterpolatedDouble");
+		m_FOVAdjust.m_SmoothTime = m_FOVAdjustResponseTime;
+		m_FOVAdjust.ForceSet(players[consoleplayer].DesiredFOV);
+
 		m_ViewTilt = new("InterpolatedVector2");
 		m_ViewTilt.m_SmoothTime = m_ViewTiltResponseTime;
+
 		m_BobAmplitude = new("InterpolatedDouble");
 		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
+
 		m_BobPlaybackSpeed = new("InterpolatedDouble");
 		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
+
 		m_BobInput = new("InterpolatedDouble");
 		m_BobInput.m_SmoothTime = m_BobInputAcceleratingResponseTime;
 
+		CalculateMaxPlayerVelocity();
 		m_PrevSpeed = Speed;
 	}
 
@@ -104,6 +133,23 @@ class KergPlayer : PlayerPawn
 	{
 		Super.PlayerThink();
 		ApplyViewBobAndTilt();
+
+		Console.Printf("Target FOV: %f", player.DesiredFOV);
+
+		m_FOVAdjust.m_Target = Math.SmoothDamp(
+			m_FOVAdjust.m_Target,
+			player.DesiredFOV,
+			m_FOVAdjustTargetSpeed,
+			1.0 / m_FOVAdjustReturnSpeed,
+			double.Infinity,
+			1.0 / TICRATE);
+
+		m_ZoomFactor.m_Target = max(0.0001, m_ZoomFactor.m_Target);
+
+		m_FOVAdjust.Update();
+		m_ZoomFactor.Update();
+
+		player.FOV = m_FOVAdjust.GetValue() / m_ZoomFactor.GetValue();
 
 		if (Speed != m_PrevSpeed)
 		{
@@ -304,6 +350,16 @@ class KergPlayer : PlayerPawn
 				player.camera = player.mo;
 			}
 		}
+	}
+
+	void SetZoomFactor(double factor)
+	{
+		m_ZoomFactor.m_Target = factor;
+	}
+
+	void AddFOVForce(double force)
+	{
+		m_FOVAdjust.m_Target += force;
 	}
 
 	private void ApplyViewBobAndTilt()

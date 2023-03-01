@@ -45,15 +45,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Stop;
 
 	ZF:
-		TNT1 A 1 A_VRecoil(0.9,1,4);
-		TNT1 A 1 A_VRecoil(0.95,1,4);
-		TNT1 A 1 A_VRecoil(1.0,1,4);
+		TNT1 A 1 A_VRecoil(35, 1, 4);
 		Stop;
 
 	ZFScoped:
-		TNT1 A 1 A_VRecoil(2.9,1,4);
-		TNT1 A 1 A_VRecoil(2.95,1,4);
-		TNT1 A 1 A_VRecoil(3.0,1,4);
+		TNT1 A 1 A_VRecoil(90, 1, 4);
 		Stop;
 
 	Ready:
@@ -61,7 +57,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Loop;
 
 	Empty:
-		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ISHF FF 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
@@ -195,30 +191,31 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	Shoulder:
 		TNT1 A 0 A_SetCrosshair(58);
-		ISAS A 1 A_ZoomFactor(1.0, ZOOM_INSTANT);
-		ISAS A 1 A_ZoomFactor(1.33, ZOOM_INSTANT);
-		ISAS B 1 A_ZoomFactor(1.67, ZOOM_INSTANT);
-		ISAS B 1 A_ZoomFactor(2.0, ZOOM_INSTANT);
-		ISAS C 1 A_ZoomFactor(2.33, ZOOM_INSTANT);
-		ISAS C 1 A_ZoomFactor(2.67, ZOOM_INSTANT);
-		ISAS D 1 A_ZoomFactor(3.0, ZOOM_INSTANT);
-		ISAS D 1 A_ZoomFactor(3.33, ZOOM_INSTANT);
-		ISAS E 1 A_ZoomFactor(3.67, ZOOM_INSTANT);
-		ISAS E 1 A_ZoomFactor(4.0, ZOOM_INSTANT);
+		TNT1 A 0 A_ZoomFactor(4.0);
+		ISAS A 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		ISAS A 1 { KergPlayer(self).SetZoomFactor(1.33); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.67); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(2.0); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.33); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.67); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.0); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.33); }
+		ISAS E 1 { KergPlayer(self).SetZoomFactor(3.67); }
+		ISAS E 1 { KergPlayer(self).SetZoomFactor(4.0); }
 		TNT1 A 0 { invoker.m_Shouldered = true; }
 		Goto AltReady;
 
 	Deshoulder:
-		ISAS E 1 A_ZoomFactor(4.0, ZOOM_INSTANT);
-		ISAS E 1 A_ZoomFactor(3.67, ZOOM_INSTANT);
-		ISAS D 1 A_ZoomFactor(3.33, ZOOM_INSTANT);
-		ISAS D 1 A_ZoomFactor(3.0, ZOOM_INSTANT);
-		ISAS C 1 A_ZoomFactor(2.67, ZOOM_INSTANT);
-		ISAS C 1 A_ZoomFactor(2.33, ZOOM_INSTANT);
-		ISAS B 1 A_ZoomFactor(2.0, ZOOM_INSTANT);
-		ISAS B 1 A_ZoomFactor(1.67, ZOOM_INSTANT);
-		ISAS A 1 A_ZoomFactor(1.33, ZOOM_INSTANT);
-		ISAS A 1 A_ZoomFactor(1.0, ZOOM_INSTANT);
+		TNT1 A 0 A_ZoomFactor(1.0);
+		ISAS E 1 { KergPlayer(self).SetZoomFactor(4.0); }
+		ISAS E 1 { KergPlayer(self).SetZoomFactor(3.6); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.2); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(2.8); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.4); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.0); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.5); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		ISAS A 2;
 		TNT1 A 0 A_SetCrosshair(0);
 		TNT1 A 0 { invoker.m_Shouldered = false; }
 		goto ready;
@@ -250,8 +247,17 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	ShoulderedBolt:
 		TNT1 A 0 A_ZoomFactor(1.0);
-		ISRD ABC 2;
-		ISRD DEFGHIJ 2;
+		ISRD A 1 { KergPlayer(self).SetZoomFactor(4.0); }
+		ISRD A 1 { KergPlayer(self).SetZoomFactor(3.67); }
+		ISRD B 1 { KergPlayer(self).SetZoomFactor(3.33); }
+		ISRD B 1 { KergPlayer(self).SetZoomFactor(3.0); }
+		ISRD C 1 { KergPlayer(self).SetZoomFactor(2.67); }
+		ISRD C 1 { KergPlayer(self).SetZoomFactor(2.33); }
+		ISRD D 1 { KergPlayer(self).SetZoomFactor(2.0); }
+		ISRD D 1 { KergPlayer(self).SetZoomFactor(1.67); }
+		ISRD E 1 { KergPlayer(self).SetZoomFactor(1.33); }
+		ISRD E 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		ISRD FGHIJ 2;
 		TNT1 A 0 A_StartSound("sniper/boltback", 9);
 		ISRD KLMNOPQ 1;
 		TNT1 A 0 {
@@ -263,7 +269,17 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISRD WXYZ 2;
 		ISR2 ABCDE 2;
 		TNT1 A 0 A_ZoomFactor(4.0);
-		ISR2 FGHIJKL 2;
+		ISR2 F 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		ISR2 F 1 { KergPlayer(self).SetZoomFactor(1.33); }
+		ISR2 G 1 { KergPlayer(self).SetZoomFactor(1.67); }
+		ISR2 G 1 { KergPlayer(self).SetZoomFactor(2.0); }
+		ISR2 H 1 { KergPlayer(self).SetZoomFactor(2.33); }
+		ISR2 H 1 { KergPlayer(self).SetZoomFactor(2.67); }
+		ISR2 I 1 { KergPlayer(self).SetZoomFactor(3.0); }
+		ISR2 I 1 { KergPlayer(self).SetZoomFactor(3.33); }
+		ISR2 J 1 { KergPlayer(self).SetZoomFactor(3.67); }
+		ISR2 J 1 { KergPlayer(self).SetZoomFactor(4.0); }
+		ISR2 KL 2;
 		Goto AltReady;
 
 	Select:
@@ -280,6 +296,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	Deselect:
 		TNT1 A 0 {
+			KergPlayer(self).SetZoomFactor(1.0);
 			A_ZoomFactor(1.0);
 			invoker.m_Shouldered = false;
 		}

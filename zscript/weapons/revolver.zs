@@ -45,9 +45,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Stop;
 
 	ZF:
-		TNT1 A 1 A_VRecoil(0.9,1,4);
-		TNT1 A 1 A_VRecoil(0.95,1,4);
-		TNT1 A 1 A_VRecoil(1.0,1,4);
+		TNT1 A 1 A_VRecoil(10, 1, 4);
 		stop;
 	Fire:
 		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.

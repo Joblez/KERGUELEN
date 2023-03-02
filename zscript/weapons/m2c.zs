@@ -23,13 +23,13 @@ class M2C : BaseWeapon replaces Chaingun
 		Weapon.SlotNumber 4;
 		Weapon.Kickback 5;
 		Weapon.BobRangeX 5.0;
-		Weapon.BobRangeY 1.0;
+		Weapon.BobRangeY 2.0;
 		Weapon.AmmoType1 "RifleMag";
 		Weapon.AmmoType2 "Ammo30";
 		Weapon.UpSound("M2C/draw");
 
 		BaseWeapon.MoveSwayUpRange 1.0;
-		BaseWeapon.MoveSwayWeight 4.0;
+		BaseWeapon.MoveSwayWeight 3.75;
 		BaseWeapon.MoveSwayResponse 18.0;
 		BaseWeapon.HUDExtensionType "M2CHUD";
 

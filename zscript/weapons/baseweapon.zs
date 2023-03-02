@@ -12,6 +12,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	meta class<HUDExtension> m_HUDExtensionType;
 	property HUDExtensionType: m_HUDExtensionType;
 
+	property BobStyle : BobStyle;
+
 	//=================== Look Sway Parameters ================//
 
 	meta double m_LookSwayXRange;
@@ -52,9 +54,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	meta double m_MoveSwayResponseSpeed;
 	property MoveSwayResponse: m_MoveSwayResponseSpeed;
 
-	meta double m_BobSpeedResponseTime;
-	property BobSpeedResponseTime: m_BobSpeedResponseTime;
-
 	protected WeaponSwayer m_WeaponMoveSwayer;
 	protected WeaponSwayer m_WeaponLookSwayer;
 	protected InterpolatedPSpriteTransform m_WeaponBobber;
@@ -71,9 +70,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	{
 		Weapon.BobRangeX 8.0;
 		Weapon.BobRangeY 4.0;
-		Weapon.BobSpeed 0.5;
-		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
+
+		BaseWeapon.BobStyle Bob_Alpha;
 
 		BaseWeapon.MoveSwayUpRange 2.0;
 		BaseWeapon.MoveSwayDownRange 10.0;
@@ -362,7 +361,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		double xAmplitude = BobRangeX * pawn.GetBobAmplitude();
 		double yAmplitude = BobRangeY * pawn.GetBobAmplitude();
 
-		vector2 bobPosition = ProceduralWeaponBob(bobPlayback, xAmplitude, yAmplitude, pawn.m_BobSpeed);
+		vector2 bobPosition = ProceduralWeaponBob(bobPlayback, xAmplitude, yAmplitude, pawn.m_BobTime);
 
 		m_WeaponBobber.SetTargetTranslation(bobPosition);
 		m_WeaponBobber.Update();
@@ -370,44 +369,50 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	
 	private vector2 ProceduralWeaponBob(double playback, double xRange, double yRange, double frequency)
 	{
-		frequency *= 0.5;
+		double a = playback / TICRATE * 360.0 * (1.0 / (frequency * 2.0));
 
 		switch (BobStyle)
 		{
 			case Bob_Normal:
 				return (
-					xRange * cos(playback * TICRATE * frequency),
-					yRange * abs(sin(playback * TICRATE * frequency)));
+					xRange * cos(a),
+					yRange * abs(sin(a)));
 
 			case Bob_Inverse:
 				return (
-					xRange * cos(playback * TICRATE * frequency),
-					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+					xRange * cos(a),
+					yRange * (1.0 - abs(sin(a))));
 
 			case Bob_Alpha:
 				return (
-					xRange * sin(playback * TICRATE * frequency),
-					yRange * abs(sin(playback * TICRATE * frequency)));
+					xRange * sin(a),
+					yRange * abs(sin(a)));
 
 			case Bob_InverseAlpha:
 				return (
-					xRange * sin(playback * TICRATE * frequency),
-					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+					xRange * sin(a),
+					yRange * (1.0 - abs(sin(a))));
 
 			case Bob_Smooth:
 				return (
-					xRange * cos(playback * TICRATE * frequency),
-					0.5 * (yRange * (1.0 - cos(playback * TICRATE * frequency * 2.0))));
+					xRange * cos(a),
+					0.5 * (yRange * (1.0 - cos(a * 2.0))));
 
 			case Bob_InverseSmooth:
 				return (
-					xRange * cos(playback * TICRATE * frequency),
-					0.5 * (yRange * (1.0 + cos(playback * TICRATE * frequency * 2.0))));
+					xRange * cos(a),
+					0.5 * (yRange * (1.0 + cos(a * 2.0))));
 
+			case Bob_FigureEight:
 			default:
 				return (
-					xRange * cos(playback * TICRATE * frequency / 2.0),
-					yRange * sin(playback * TICRATE * frequency));
+					xRange * sin(a / 2.0),
+					yRange * cos(a));
+
+			case Bob_Snap:
+				return (
+					BobRangeX * Math.Sign(sin(a)),
+					BobRangeY * Math.Sign(cos(a * 2.0)));
 		}
 	}
 

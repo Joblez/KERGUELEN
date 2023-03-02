@@ -12,20 +12,14 @@ class KergPlayer : PlayerPawn
 	meta double m_BobRollAmplitude;
 	property BobRollAmplitude : m_BobRollAmplitude;
 
-	meta double m_BobSpeed;
-	property BobSpeed: m_BobSpeed;
+	meta double m_BobTime;
+	property BobTime: m_BobTime;
 
-	meta double m_BobIntensityResponseTime;
-	property BobIntensityResponseTime: m_BobIntensityResponseTime;
-
-	meta double m_BobSpeedResponseTime;
-	property BobSpeedResponseTime: m_BobIntensityResponseTime;
-
-	meta double m_BobInputAcceleratingResponseTime;
-	property BobInputAcceleratingResponseTime: m_BobInputAcceleratingResponseTime;
+	meta double m_BobAcceleratingResponseTime;
+	property BobAcceleratingResponseTime: m_BobAcceleratingResponseTime;
 	
-	meta double m_BobInputDeceleratingResponseTime;
-	property BobInputDeceleratingResponseTime: m_BobInputDeceleratingResponseTime;
+	meta double m_BobDeceleratingResponseTime;
+	property BobDeceleratingResponseTime: m_BobDeceleratingResponseTime;
 
 	meta double m_ViewTiltDistance;
 	property ViewTiltDistance: m_ViewTiltDistance;
@@ -51,6 +45,7 @@ class KergPlayer : PlayerPawn
 
 	protected InterpolatedDouble m_BobPlaybackSpeed;
 	private double m_BobPlayback;
+	private double m_BobPlaybackDelta;
 
 	private double m_FOVAdjustTargetSpeed;
 
@@ -67,7 +62,7 @@ class KergPlayer : PlayerPawn
 		Player.StartItem "Colt", 1;
 		Player.StartItem "Hatchet", 1;
 		Player.StartItem "Ammo45", 48;
-		Player.Startitem "RevoCylinder",6;
+		Player.Startitem "RevoCylinder", 6;
 		Player.SoundClass "player";
 		Player.WeaponSlot 1, "Hatchet";
 		Player.WeaponSlot 2, "Colt","Revolver";
@@ -77,14 +72,15 @@ class KergPlayer : PlayerPawn
 		Player.WeaponSlot 6, "Ishapore";
 		Player.CrouchSprite "PLYC";
 
-		KergPlayer.BobXRange 6.0;
-		KergPlayer.BobYRange 3.0;
-		KergPlayer.BobSpeed 0.7;
-		KergPlayer.BobIntensityResponseTime 0.08;
-		KergPlayer.BobSpeedResponseTime 0.08;
-		KergPlayer.BobRollAmplitude 0.35;
-		KergPlayer.BobInputAcceleratingResponseTime 0.07;
-		KergPlayer.BobInputDeceleratingResponseTime 0.7;
+		KergPlayer.BobXRange 7.0;
+		KergPlayer.BobYRange 3.5;
+		// KergPlayer.BobXRange 32.0;
+		// KergPlayer.BobYRange 16.0;
+		KergPlayer.BobRollAmplitude 0.325;
+		// KergPlayer.BobRollAmplitude 10.0;
+		KergPlayer.BobTime 0.325;
+		KergPlayer.BobAcceleratingResponseTime 0.033;
+		KergPlayer.BobDeceleratingResponseTime 0.125;
 		KergPlayer.BobStyle Bob_Alpha;
 
 		KergPlayer.ViewTiltDistance 12.0;
@@ -121,13 +117,12 @@ class KergPlayer : PlayerPawn
 		m_ViewTilt.m_SmoothTime = m_ViewTiltResponseTime;
 
 		m_BobAmplitude = new("InterpolatedDouble");
-		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
+		m_BobAmplitude.m_SmoothTime = m_BobAcceleratingResponseTime;
 
 		m_BobPlaybackSpeed = new("InterpolatedDouble");
-		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
 
 		m_BobInput = new("InterpolatedDouble");
-		m_BobInput.m_SmoothTime = m_BobInputAcceleratingResponseTime;
+		m_BobInput.m_SmoothTime = m_BobAcceleratingResponseTime;
 
 		CalculateMaxPlayerVelocity();
 		m_PrevSpeed = Speed;
@@ -136,7 +131,7 @@ class KergPlayer : PlayerPawn
 	override void PlayerThink()
 	{
 		Super.PlayerThink();
-		ApplyViewBobAndTilt();
+		BobPlayer();
 
 		m_FOVAdjust.m_Target = Math.SmoothDamp(
 			m_FOVAdjust.m_Target,
@@ -289,25 +284,11 @@ class KergPlayer : PlayerPawn
 
 		player.onground = (pos.z <= floorz) || bOnMobj || bMBFBouncer || (player.cheats & CF_NOCLIP2);
 
-		// killough 10/98:
-		//
-		// We must apply thrust to the player and bobbing separately, to avoid
-		// anomalies. The thrust applied to bobbing is always the same strength on
-		// ice, because the player still "works just as hard" to move, while the
-		// thrust applied to the movement varies with 'movefactor'.
-
 		if (cmd.forwardmove | cmd.sidemove)
 		{
 			vector2 input = GetNormalizedInput();
 
 			input = RotateVector(input, Angle);
-
-			double forwardmove, sidemove;
-			double bobfactor;
-			double friction, movefactor;
-			double fm, sm;
-
-			[friction, movefactor] = GetFriction();
 
 			double moveforce = Speed * input.Length();
 
@@ -315,33 +296,18 @@ class KergPlayer : PlayerPawn
 			{
 				// [RH] allow very limited movement if not on ground.
 				moveforce *= level.aircontrol;
-				movefactor *= level.aircontrol;
-				bobfactor *= level.aircontrol;
 			}
-
-			fm = cmd.forwardmove;
-			sm = cmd.sidemove;
-			[fm, sm] = TweakSpeeds (fm, sm);
-			fm *= Speed / 256;
-			sm *= Speed / 256;
 
 			// When crouching, speed and bobbing have to be reduced
 			if (CanCrouch() && player.crouchfactor != 1)
 			{
 				moveforce *= player.crouchfactor;
-				movefactor *= player.crouchfactor;
-				fm *= player.crouchfactor;
-				sm *= player.crouchfactor;
-				bobfactor *= player.crouchfactor;
 			}
-
-			forwardmove = fm * movefactor * (35 / TICRATE);
-			sidemove = sm * movefactor * (35 / TICRATE);
 
 			Thrust(moveforce, vectorangle(input.x, input.y));
 			Bob(vectorangle(input.x, input.y), moveforce, false);
 
-			if (!(player.cheats & CF_PREDICTING) && (forwardmove != 0 || sidemove != 0))
+			if (!(player.cheats & CF_PREDICTING) && (moveforce != 0.0))
 			{
 				PlayRunning();
 			}
@@ -374,6 +340,11 @@ class KergPlayer : PlayerPawn
 		return m_BobPlayback;
 	}
 
+	double GetBobPlaybackDelta() const
+	{
+		return m_BobPlaybackDelta;
+	}
+
 	double GetMaxPlayerVelocity() const
 	{
 		return m_MaxPlayerVelocity;
@@ -396,7 +367,7 @@ class KergPlayer : PlayerPawn
 		return input;
 	}
 
-	private void ApplyViewBobAndTilt()
+	private void BobPlayer()
 	{
 		vector2 input = GetNormalizedInput();
 
@@ -404,42 +375,29 @@ class KergPlayer : PlayerPawn
 
 		// View bob.
 
-		m_BobInput.m_SmoothTime = m_BobInput.GetValue() <= inputStrength
-			? m_BobInputAcceleratingResponseTime
-			: m_BobInputDeceleratingResponseTime;
+		m_BobInput.m_SmoothTime = (m_BobInput.GetValue() <= inputStrength
+			? m_BobAcceleratingResponseTime
+			: m_BobDeceleratingResponseTime);
 
 		m_BobInput.m_Target = player.onground ? inputStrength : 0.0;
 		m_BobInput.Update();
 
 		m_BobAmplitude.m_Target = min(m_BobInput.GetValue(), player.Vel.Length() / m_MaxPlayerVelocity);
+		m_BobAmplitude.m_SmoothTime = m_BobInput.m_SmoothTime;
 		m_BobAmplitude.Update();
 	
 		m_BobPlaybackSpeed.m_Target = m_BobAmplitude.m_Target;
+		m_BobPlaybackSpeed.m_SmoothTime = m_BobInput.m_SmoothTime;
 		m_BobPlaybackSpeed.Update();
 
-		m_BobPlayback += m_BobPlaybackSpeed.GetValue();
+		m_BobPlaybackDelta = m_BobPlaybackSpeed.GetValue();
+		m_BobPlayback += m_BobPlaybackDelta;
 
-		if (m_BobAmplitude.GetValue() <= Geometry.EPSILON) m_BobPlayback = 0.0;
+		if (m_BobPlaybackDelta ~== 0.0) m_BobPlayback = 0.0;
 
-		double xAmplitude = m_BobXRange * m_BobAmplitude.GetValue();
-		double yAmplitude = m_BobYRange * m_BobAmplitude.GetValue();
-
-		vector2 viewBob = ProceduralViewBob(m_BobPlayback, xAmplitude, yAmplitude, m_BobSpeed);
-
-		// Roll effect.
-		double rollAmplitude = m_BobRollAmplitude * m_BobAmplitude.GetValue();
-		double roll = m_BobPlayback * TICRATE * m_BobSpeed * 0.5;
-
-		if (m_BobStyle == Bob_Alpha || m_BobStyle == Bob_InverseAlpha)
-		{
-			roll = sin(roll);
-		}
-		else
-		{
-			roll = -cos(roll);
-		}
-
-		roll *= rollAmplitude;
+		vector2 viewBob;
+		double roll;
+		[viewBob, roll] = ProceduralViewBob();
 
 		// View tilt.
 
@@ -471,47 +429,87 @@ class KergPlayer : PlayerPawn
 		A_SetViewRoll(roll, SPF_INTERPOLATE);
 	}
 
-	private vector2 ProceduralViewBob(double playback, double xRange, double yRange, double frequency)
+	private vector2, double ProceduralViewBob()
 	{
-		frequency *= 0.5;
+		double xRange = m_BobXRange * m_BobAmplitude.GetValue();
+		double yRange = m_BobYRange * m_BobAmplitude.GetValue();
+
+		double a = m_BobPlayback / TICRATE * 360.0 * (1.0 / (m_BobTime * 2.0));
+
+		vector2 viewBob;
 
 		switch (m_BobStyle)
 		{
 			case Bob_Normal:
-				return (
-					xRange * cos(playback * TICRATE * frequency),
-					yRange * abs(sin(playback * TICRATE * frequency)));
+				viewBob = (
+					xRange * cos(a),
+					yRange * abs(sin(a)));
+					break;
 
 			case Bob_Inverse:
-				return (
-					xRange * cos(playback * TICRATE * frequency),
-					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+				viewBob = (
+					xRange * cos(a),
+					yRange * (1.0 - abs(sin(a))));
+					break;
 
 			case Bob_Alpha:
-				return (
-					xRange * sin(playback * TICRATE * frequency),
-					yRange * abs(sin(playback * TICRATE * frequency)));
+				viewBob = (
+					xRange * sin(a),
+					yRange * abs(sin(a)));
+					break;
 
 			case Bob_InverseAlpha:
-				return (
-					xRange * sin(playback * TICRATE * frequency),
-					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+				viewBob = (
+					xRange * sin(a),
+					yRange * (1.0 - abs(sin(a))));
+					break;
 
 			case Bob_Smooth:
-				return (
-					xRange * cos(playback * TICRATE * frequency),
-					0.5 * (yRange * (1.0 - cos(playback * TICRATE * frequency * 2.0))));
+				viewBob = (
+					xRange * cos(a),
+					0.5 * (yRange * (1.0 - cos(a * 2.0))));
+					break;
 
 			case Bob_InverseSmooth:
-				return (
-					xRange * cos(playback * TICRATE * frequency),
-					0.5 * (yRange * (1.0 + cos(playback * TICRATE * frequency * 2.0))));
+				viewBob = (
+					xRange * cos(a),
+					0.5 * (yRange * (1.0 + cos(a * 2.0))));
+					break;
 
+			case Bob_FigureEight:
 			default:
-				return (
-					xRange * cos(playback * TICRATE * frequency),
-					yRange * sin(playback * TICRATE * frequency * 2.0));
+				viewBob = (
+					xRange * sin(a),
+					yRange * cos(a * 2.0));
+					break;
+
+			case Bob_Snap:
+				viewBob = (
+					m_BobXRange * Math.Sign(sin(a)),
+					m_BobYRange * Math.Sign(cos(a * 2.0)));
+					break;
 		}
+
+		double roll = -a;
+		double rollAmplitude = m_BobRollAmplitude * m_BobAmplitude.GetValue();
+
+		if (m_BobStyle == Bob_Alpha || m_BobStyle == Bob_InverseAlpha)
+		{
+			roll = sin(roll);
+		}
+		else if (m_BobStyle == Bob_Snap)
+		{
+			roll = Math.Sign(sin(roll));
+			rollAmplitude = m_BobRollAmplitude;
+		}
+		else
+		{
+			roll = cos(roll);
+		}
+
+		roll *= rollAmplitude;
+
+		return viewBob, roll;
 	}
 
 	private void CalculateMaxPlayerVelocity()

@@ -33,8 +33,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 		BaseWeapon.LookSwayStrengthX 18.0;
 		BaseWeapon.LookSwayResponse 5.0;
 		BaseWeapon.LookSwayRigidity 10.0;
-		BaseWeapon.MoveSwayWeight 4.0;
-		BaseWeapon.MoveSwayResponse 16.0;
+		BaseWeapon.MoveSwayWeight 5.0;
+		BaseWeapon.MoveSwayResponse 14.0;
 
 		Inventory.PickupMessage "(3)12 Gauge Hunting Shotgun";
 

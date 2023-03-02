@@ -1,23 +1,9 @@
-class StepAudioData
-{
-	double m_StepInterval;
-	double m_StepPlayback;
-
-	static StepAudioData Create(double stepInterval)
-	{
-		StepAudioData stepAudioPlayer = new("StepAudioData");
-		stepAudioPlayer.m_StepInterval = stepInterval;
-
-		return stepAudioPlayer;
-	}
-}
-
 class FootstepEventHandler : EventHandler
 {
 	const MAX_FORWARD_MOVE = 12800;
 	const MAX_SIDE_MOVE = 10240;
 
-	transient Map<int, StepAudioData> m_StepAudioDataMap;
+	transient Map<int, double> m_StepPlaybackMap;
 
 	transient array<string> m_StepSounds;
 	transient array<int> m_StepTextures;
@@ -47,58 +33,68 @@ class FootstepEventHandler : EventHandler
 
 	override void PlayerEntered(PlayerEvent e)
 	{
-		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(200));
+		m_StepPlaybackMap.Insert(e.PlayerNumber, 0.0);
 	}
 
 	override void PlayerDisconnected(PlayerEvent e)
 	{
-		m_StepAudioDataMap.Remove(e.PlayerNumber);
+		m_StepPlaybackMap.Remove(e.PlayerNumber);
 	}
 
 	override void WorldTick()
 	{
-		MapIterator<int, StepAudioData> it;
-		it.Init(m_StepAudioDataMap);
+		MapIterator<int, double> it;
+		it.Init(m_StepPlaybackMap);
 
 		while (it.Next())
 		{
-			TickData(it.GetKey(), it.GetValue());
+			it.SetValue(TickPlayback(it.GetKey()));
 		}
 	}
 
-	void TickData(int playerIndex, StepAudioData data)
+	double TickPlayback(int playerIndex)
 	{
-		PlayerPawn pawn = PlayerPawn(players[playerIndex].mo);
+		KergPlayer pawn = KergPlayer(players[playerIndex].mo);
 
-		if (!CVar.GetCVar('fs_enabled', players[playerIndex]).GetBool() || pawn.Pos.z - pawn.FloorZ > 0)
+		double playback = m_StepPlaybackMap.Get(playerIndex);
+
+		if (!CVar.GetCVar('fs_enabled', players[playerIndex]).GetBool() || !pawn.Player.onground)
 		{
-			return;
+			playback = 0.0;
+			return playback;
 		}
 
-		double delta = pawn.Vel.xy.Length();
+		double delta = pawn.GetBobPlaybackDelta();
 
-		data.m_StepPlayback += delta;
-
-		if (delta ~== 0.0) data.m_StepPlayback = 0.0;
-
-		if (data.m_StepPlayback < data.m_StepInterval) return;
-
-		double speedPercentage = min(delta / data.m_StepPlayback * 8.0, 1.0);
-
-		double soundLevel = CVar.GetCVar('fs_volume_mul').GetFloat() * speedPercentage;
-
-		TextureID floorTextureID = pawn.floorpic;
-		int foundIndex = m_StepTextures.Find(int(floorTextureID));
-
-		if (foundIndex != m_StepTextures.Size())
+		if (delta ~== 0.0)
 		{
-			pawn.A_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, 0, soundLevel);
-		}
-		else
-		{
-			pawn.A_StartSound(m_DefaultStepSound, CHAN_AUTO, 0, soundLevel);
+			playback = 0.0;
+			return playback;
 		}
 
-		data.m_StepPlayback = 0.0;
+		playback += delta;
+
+		if (playback >= TICRATE * pawn.m_BobTime)
+		{
+			double speedPercentage = delta / 1.0;
+
+			double soundLevel = CVar.GetCVar('fs_volume_mul').GetFloat() * speedPercentage;
+
+			TextureID floorTextureID = pawn.floorpic;
+			int foundIndex = m_StepTextures.Find(int(floorTextureID));
+
+			if (foundIndex != m_StepTextures.Size())
+			{
+				pawn.A_StartSound(m_StepSounds[foundIndex], CHAN_AUTO, 0, soundLevel);
+			}
+			else
+			{
+				pawn.A_StartSound(m_DefaultStepSound, CHAN_AUTO, 0, soundLevel);
+			}
+
+			playback = 0.0;
+		}
+
+		return playback;
 	}
 }

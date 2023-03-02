@@ -3,6 +3,11 @@ version "4.10.0"
 const MAX_FORWARD_MOVE = 12800;
 const MAX_SIDE_MOVE = 10240;
 
+enum BobbingExt
+{
+	Bob_FigureEight = Bob_InverseSmooth + 1,
+	Bob_Snap
+}
 struct Settings
 {
 	enum Values { OFF, VERY_LOW, LOW, MEDIUM, HIGH, VERY_HIGH, ULTRA }

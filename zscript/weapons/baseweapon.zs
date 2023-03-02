@@ -52,31 +52,12 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	meta double m_MoveSwayResponseSpeed;
 	property MoveSwayResponse: m_MoveSwayResponseSpeed;
 
-	//====================== Bob Parameters ===================//
-
-	meta double m_BobIntensity;
-	property BobIntensity: m_BobIntensity;
-
-	meta double m_BobIntensityResponseTime;
-	property BobIntensityResponseTime: m_BobIntensityResponseTime;
-
-	meta double m_BobInputAcceleratingResponseTime;
-	property BobInputAcceleratingResponseTime: m_BobInputAcceleratingResponseTime;
-	
-	meta double m_BobInputDeceleratingResponseTime;
-	property BobInputDeceleratingResponseTime: m_BobInputDeceleratingResponseTime;
-
 	meta double m_BobSpeedResponseTime;
-	property BobSpeedResponseTime: m_BobIntensityResponseTime;
+	property BobSpeedResponseTime: m_BobSpeedResponseTime;
 
 	protected WeaponSwayer m_WeaponMoveSwayer;
 	protected WeaponSwayer m_WeaponLookSwayer;
 	protected InterpolatedPSpriteTransform m_WeaponBobber;
-
-	protected InterpolatedDouble m_BobAmplitude;
-	protected InterpolatedDouble m_BobPlaybackSpeed;
-
-	private InterpolatedDouble m_BobInput;
 
 	private double m_FallMomentum;
 	private double m_BobPlayback;
@@ -88,9 +69,10 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	Default
 	{
-		Weapon.BobRangeX 5.0;
-		Weapon.BobRangeY 2.5;
-		Weapon.BobSpeed 1.0;
+		Weapon.BobRangeX 8.0;
+		Weapon.BobRangeY 4.0;
+		Weapon.BobSpeed 0.5;
+		Weapon.BobStyle "Alpha";
 		Weapon.UpSound "weapon/select";
 
 		BaseWeapon.MoveSwayUpRange 2.0;
@@ -106,12 +88,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		BaseWeapon.LookSwayRigidity 8.0;
 		BaseWeapon.LookSwayStrengthX 12.0;
 		BaseWeapon.LookSwayStrengthY 0.0;
-
-		BaseWeapon.BobIntensity 1.0;
-		BaseWeapon.BobInputAcceleratingResponseTime 0.08;
-		BaseWeapon.BobInputDeceleratingResponseTime 1.5;
-		BaseWeapon.BobIntensityResponseTime 0.05;
-		BaseWeapon.BobSpeedResponseTime 0.05;
 
 		BaseWeapon.HUDExtensionType "";
 
@@ -157,13 +133,6 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			maxTranslationSplit: (-m_MoveSwayLeftRange, m_MoveSwayRightRange, -m_MoveSwayUpRange, m_MoveSwayDownRange));
 		m_WeaponMoveSwayer.AddTransform(m_PSpritePosition, m_PSpriteRotation, m_PSpriteScale);
 		m_WeaponMoveSwayer.ForceSet((0.0, 0.0), 0.0, (1.0, 1.0));
-
-		m_BobAmplitude = new("InterpolatedDouble");
-		m_BobAmplitude.m_SmoothTime = m_BobIntensityResponseTime;
-		m_BobPlaybackSpeed = new("InterpolatedDouble");
-		m_BobPlaybackSpeed.m_SmoothTime = m_BobSpeedResponseTime;
-		m_BobInput = new("InterpolatedDouble");
-		m_BobInput.m_SmoothTime = m_BobInputAcceleratingResponseTime;
 
 		m_WeaponBobber = new("InterpolatedPSpriteTransform");
 		m_WeaponBobber.InterpolatedInit(1.0 / TICRATE);
@@ -387,32 +356,59 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 	private void WeaponBob()
 	{
 		KergPlayer pawn = KergPlayer(owner);
-
-		double inputStrength = pawn.GetNormalizedInput().Length();
-
-		m_BobInput.m_Target = owner.Player.onground ? inputStrength : 0.0;
-		m_BobInput.Update();
-
-		m_BobAmplitude.m_Target = min(m_BobInput.GetValue(), owner.player.Vel.Length() / pawn.GetMaxPlayerVelocity());
-		m_BobAmplitude.Update();
 	
-		m_BobPlaybackSpeed.m_Target = m_BobAmplitude.m_Target;
-		m_BobPlaybackSpeed.Update();
+		double bobPlayback = pawn.GetBobPlayback();
 
-		m_BobPlayback += m_BobPlaybackSpeed.GetValue();
+		double xAmplitude = BobRangeX * pawn.GetBobAmplitude();
+		double yAmplitude = BobRangeY * pawn.GetBobAmplitude();
 
-		if (m_BobAmplitude.GetValue() < 0.001) m_BobPlayback = 0.0;
-
-		double xAmplitude = BobRangeX * m_BobAmplitude.GetValue();
-		double yAmplitude = BobRangeY * m_BobAmplitude.GetValue();
-		double frequency = BobSpeed;
-
-		vector2 bobPosition;
-		bobPosition.x = cos(m_BobPlayback * TICRATE * frequency / 2.0) * xAmplitude;
-		bobPosition.y = sin(m_BobPlayback * TICRATE * frequency) * yAmplitude;
+		vector2 bobPosition = ProceduralWeaponBob(bobPlayback, xAmplitude, yAmplitude, pawn.m_BobSpeed);
 
 		m_WeaponBobber.SetTargetTranslation(bobPosition);
 		m_WeaponBobber.Update();
+	}
+	
+	private vector2 ProceduralWeaponBob(double playback, double xRange, double yRange, double frequency)
+	{
+		frequency *= 0.5;
+
+		switch (BobStyle)
+		{
+			case Bob_Normal:
+				return (
+					xRange * cos(playback * TICRATE * frequency),
+					yRange * abs(sin(playback * TICRATE * frequency)));
+
+			case Bob_Inverse:
+				return (
+					xRange * cos(playback * TICRATE * frequency),
+					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+
+			case Bob_Alpha:
+				return (
+					xRange * sin(playback * TICRATE * frequency),
+					yRange * abs(sin(playback * TICRATE * frequency)));
+
+			case Bob_InverseAlpha:
+				return (
+					xRange * sin(playback * TICRATE * frequency),
+					yRange * (1.0 - abs(sin(playback * TICRATE * frequency))));
+
+			case Bob_Smooth:
+				return (
+					xRange * cos(playback * TICRATE * frequency),
+					0.5 * (yRange * (1.0 - cos(playback * TICRATE * frequency * 2.0))));
+
+			case Bob_InverseSmooth:
+				return (
+					xRange * cos(playback * TICRATE * frequency),
+					0.5 * (yRange * (1.0 + cos(playback * TICRATE * frequency * 2.0))));
+
+			default:
+				return (
+					xRange * cos(playback * TICRATE * frequency / 2.0),
+					yRange * sin(playback * TICRATE * frequency));
+		}
 	}
 
 	private Actor SpawnProjectile(class<Actor> projectileType, vector3 position, double yaw, double pitch, double speed = double.Infinity)

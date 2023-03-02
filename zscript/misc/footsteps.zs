@@ -47,7 +47,7 @@ class FootstepEventHandler : EventHandler
 
 	override void PlayerEntered(PlayerEvent e)
 	{
-		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(100));
+		m_StepAudioDataMap.Insert(e.PlayerNumber, StepAudioData.Create(200));
 	}
 
 	override void PlayerDisconnected(PlayerEvent e)

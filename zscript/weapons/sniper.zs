@@ -34,7 +34,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		BaseWeapon.LookSwayResponse 4.0;
 		BaseWeapon.LookSwayRigidity 7.0;
 
-		BaseWeapon.MoveSwayUpRange 1.0;
+		BaseWeapon.MoveSwayUpRange 0.5;
+		BaseWeapon.MoveSwayDownRange 18.0;
 		BaseWeapon.MoveSwayWeight 14.0;
 		BaseWeapon.MoveSwayResponse 12.0;
 
@@ -70,10 +71,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Goto Ready;
 
 	Fire:
+		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If empty.
 		TNT1 A 0 A_JumpIf((!invoker.m_Shouldered && !invoker.m_Chambered), "Bolt");
 		TNT1 A 0 A_JumpIf((invoker.m_Shouldered && !invoker.m_Chambered), "ShoulderedBolt");
 		TNT1 A 0 A_JumpIf((invoker.m_Shouldered && invoker.m_Chambered), "ShoulderedFire");
-		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If empty.
 		TNT1 A 0 A_JumpIfInventory("SniperAmmo", 1, 1);
 		Goto Empty;
 		TNT1 A 0;
@@ -394,6 +395,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 		effectOrigin.Destroy();
 	}
+
 	protected void SpawnSmokeTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing)
 	{
 		int weaponEffectSetting = CVar.GetCVar("weapon_effects", owner.player).GetInt();

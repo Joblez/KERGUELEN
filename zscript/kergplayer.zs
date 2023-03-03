@@ -57,7 +57,7 @@ class KergPlayer : PlayerPawn
 	{
 		Player.ViewHeight 50.0;
 		Player.AttackZOffset 22.0;
-		Player.JumpZ 9.0;
+		Player.JumpZ 9.5;
 		Player.DisplayName "Amerigo";
 		Player.StartItem "Colt", 1;
 		Player.StartItem "Hatchet", 1;
@@ -67,7 +67,7 @@ class KergPlayer : PlayerPawn
 		Player.WeaponSlot 1, "Hatchet";
 		Player.WeaponSlot 2, "Colt","Revolver";
 		Player.WeaponSlot 3, "Ithaca";
-		Player.WeaponSlot 4, "FNC";
+		Player.WeaponSlot 4, "M2C";
 		Player.WeaponSlot 5, "Dynamite";
 		Player.WeaponSlot 6, "Ishapore";
 		Player.CrouchSprite "PLYC";
@@ -93,9 +93,10 @@ class KergPlayer : PlayerPawn
 
 		Radius 16.025;
 		// Speed 16;
-		Speed 3.47005242;
+		Speed 1.8;
 		// Speed 0.65;
-		Friction 0.75;
+		Friction 0.93;
+
 		Gravity 1.0;
 		DamageFactor "Explosive", 0.7;
 		+NOSKIN

@@ -34,6 +34,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		BaseWeapon.LookSwayResponse 4.0;
 		BaseWeapon.LookSwayRigidity 7.0;
 
+		BaseWeapon.MoveSwayUpRange 1.0;
 		BaseWeapon.MoveSwayWeight 14.0;
 		BaseWeapon.MoveSwayResponse 12.0;
 
@@ -79,13 +80,32 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHF A 1 Bright {
 			FLineTraceData t;
 
-			LineTrace(angle, 8192.0, pitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
+			double attackAngle = Angle + FRandom(-2.0, 2.0);
+			double attackPitch = Pitch + FRandom(-2.0, 2.0);
 
-			if (t.HitActor) ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(angle, pitch), 220.0, true);
+			LineTrace(attackAngle, 16384.0, attackPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
-			A_FireBullets(2, 2, -1, Random(80, 120), "Bullet_Puff", FBF_NORANDOM);
+			int damage = 120;
+
+			if (t.Distance > 8192.0) damage *= 1.0 - ((t.Distance - 8192.0) / 8192.0);
+
+			A_FireBullets(
+				attackAngle - Angle,
+				attackPitch - Pitch,
+				-1,
+				damage,
+				"Bullet_Puff",
+				FBF_NORANDOM | FBF_USEAMMO | FBF_NORANDOMPUFFZ | FBF_EXPLICITANGLE,
+				16384.0);
+
+			if (t.HitActor)
+			{
+				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(attackAngle, attackPitch), 220.0, true);
+			}
+
+			A_SpawnTracer(t);
+
 			A_FRecoil(2);
-			A_SingleSmoke(5, -3);
 			A_SpawnFlash(5, -3, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
@@ -237,13 +257,34 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	ShoulderedFire:
 		TNT1 A 0 A_JumpIfInventory("SniperAmmo", 1, 1);
 		Goto EmptyScoped;
-		TNT1 A 0 A_FireBullets(0, 0, -1, 80, "Bullet_Puff");
 		ISAF A 2 Bright {
+			FLineTraceData t;
+			LineTrace(Angle, 16384.0, Pitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
+
+			int damage = 120;
+
+			if (t.Distance > 8192.0) damage *= 1.0 - ((t.Distance - 8192.0) / 8192.0);
+
+			A_FireBullets(
+				0.0,
+				0.0,
+				-1,
+				damage,
+				"Bullet_Puff",
+				FBF_NORANDOM | FBF_USEAMMO | FBF_NORANDOMPUFFZ,
+				16384.0);
+
+			if (t.HitActor)
+			{
+				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle, Pitch), 220.0, true);
+			}
+
+			A_SpawnTracer(t);
+
 			A_GunFlash("ZFScoped");
 			A_StartSound("sniper/fire", 1);
 			A_AlertMonsters();
 			A_FRecoil(2.5);
-			A_SingleSmoke(0, 0);
 			A_SpawnFlash(0, 0, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			invoker.m_Chambered = false;
@@ -325,6 +366,53 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
+	}
+
+	private action void A_SpawnTracer(FLineTraceData t)
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		double spacing = Settings.ULTRA + 1.0 - weaponEffectSetting;
+
+		FSpawnParticleParams params;
+
+		params.color1 = 0xFFFFFFFF;
+		params.texture = TexMan.CheckForTexture("SMOK01");
+		params.style = STYLE_Translucent;
+		params.lifetime = 35;
+		params.size = 10.0;
+		// params.sizestep = -params.size / params.lifetime;
+		// params.vel.z += 0.125;
+		params.startalpha = 0.05 * spacing;
+		params.fadestep = params.startalpha / params.lifetime;
+
+		Actor effectOrigin = invoker.SpawnEffect("Agent", (12.0, 4.5, 32.0), 0.0, 0.0, 0.0, false);
+
+		invoker.SpawnSmokeTrail(params, effectOrigin.Pos, t.HitLocation, spacing);
+
+		effectOrigin.Destroy();
+	}
+	protected void SpawnSmokeTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing)
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		double factor = Math.Remap(double(weaponEffectSetting) / Settings.ULTRA, 0.0, 1.0, 4.0, 1.0);
+		spacing *= factor;
+
+		vector3 direction = LevelLocals.Vec3Diff(start, end);
+		double delta = direction.Length();
+		direction = direction.Unit();
+
+		for (double step = 0.0; step < delta; step += spacing)
+		{
+			particleParams.Pos = start + direction * step;
+			particleParams.vel = Vec3Util.Random(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0).Unit() * FRandom(0.2, 0.5);
+			level.SpawnParticle(particleParams);
+		}
 	}
 
 	private action void A_SpawnCasing()

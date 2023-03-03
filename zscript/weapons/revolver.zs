@@ -70,7 +70,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBullets(invoker.m_Spread.x, invoker.m_Spread.y, -1, 35, "BulletPuff");
 			A_FRecoil(1);
-			A_ShotgunSmoke(7, -1);
+			A_SpawnSmoke();
 			A_SpawnFlash(7, -1);
 		}
 		TNT1 A 0 { invoker.m_SingleAction = false; }
@@ -239,6 +239,22 @@ class Revolver : BaseWeapon replaces Supershotgun
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
+	}
+
+	private action void A_SpawnSmoke()
+	{
+		if (CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		Actor effect = invoker.SpawnEffect(
+			"MuzzleSmoke",
+			(10.5, 3.0, 20.0),
+			FRandom(-2.0, 2.0),
+			FRandom(-1.0, 1.0),
+			8.0,
+			true);
+
+		effect.Scale.x += 0.45;
+		effect.Scale.y = effect.Scale.x;
 	}
 
 	private action void A_DropCasings()

@@ -316,6 +316,31 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		}
 	}
 
+	protected action void A_SpawnTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing)
+	{
+		invoker.SpawnTrail(particleParams, start, end, spacing);
+	}
+
+	protected void SpawnTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing)
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		double factor = Math.Remap(double(weaponEffectSetting) / Settings.ULTRA, 0.0, 1.0, 4.0, 1.0);
+		spacing *= factor;
+
+		vector3 direction = LevelLocals.Vec3Diff(start, end);
+		double delta = direction.Length();
+		direction = direction.Unit();
+
+		for (double step = 0.0; step < delta; step += spacing)
+		{
+			particleParams.Pos = start + direction * step;
+			level.SpawnParticle(particleParams);
+		}
+	}
+
 	protected double GetSpawnOffsetFovFactor() const
 	{
 		let factor = Math.Remap(owner.Player.FOV, 75.0, 120.0, 1.6, 1.0);

@@ -99,7 +99,7 @@ class M2C : BaseWeapon replaces Chaingun
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);
 			A_SpawnCasing();
-			A_SingleSmoke(5, -3);
+			A_SpawnSmoke();
 			A_TakeInventory("RifleMag", 1);
 			A_StartSound("M2C/fire", CHAN_AUTO, 0, 0.9);
 			A_AlertMonsters();
@@ -123,7 +123,7 @@ class M2C : BaseWeapon replaces Chaingun
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);
 			A_SpawnCasing();
-			A_SingleSmoke(5, -3);
+			A_SpawnSmoke();
 			A_SpawnFlash(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
@@ -252,6 +252,23 @@ class M2C : BaseWeapon replaces Chaingun
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
+	}
+
+	private action void A_SpawnSmoke()
+	{
+		if (CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		Actor effect = invoker.SpawnEffect(
+			"MuzzleSmoke",
+			(8.5, 5.0, 32.0),
+			FRandom(-6.0, 6.0),
+			FRandom(-6.0, 6.0),
+			FRandom(4.0, 8.0),
+			true);
+
+		effect.A_FadeOut(FRandom(0.0, 0.075));
+		effect.Scale.x += 0.2;
+		effect.Scale.y = effect.Scale.x;
 	}
 
 	private action void A_SpawnCasing()

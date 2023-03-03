@@ -35,6 +35,14 @@ class WeaponFlash : Actor
 
 class MuzzleSmoke : Actor
 {
+	double m_AirFriction;
+	property AirResistance: m_AirFriction;
+
+	double m_AirBuoyancy;
+	property AirBuoyancy: m_AirBuoyancy;
+
+	mixin ProjectileExt;
+
 	Default
 	{
 		Speed -1;
@@ -43,14 +51,35 @@ class MuzzleSmoke : Actor
 		Radius 0;
 		Height 0;
 		Scale 0.55;
+		
+		MuzzleSmoke.AirResistance 1.075;
+		MuzzleSmoke.AirBuoyancy 0.15;
+
 		+NOGRAVITY
 		+NOBLOCKMAP
-		+FLOORCLIP
 		+FORCEXYBILLBOARD
 		+NOINTERACTION
 		+DONTSPLASH
 		+CLIENTSIDEONLY
 	}
+
+	override void Tick()
+	{
+		Super.Tick();
+
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", GetTargetPlayerOrConsolePlayer()).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF)
+		{
+			Destroy();
+			return;
+		}
+
+		Vel.z += m_AirBuoyancy;
+
+		Vel /= max(1.0, m_AirFriction);
+	}
+
 	States
 	{
 	Spawn:
@@ -158,9 +187,7 @@ class EffectTrail : Actor abstract
 			m_DistanceDelta = 0.0;
 		}
 
-		Vel.x /= m_AirFriction;
-		Vel.y /= m_AirFriction;
-		Vel.z /= m_AirFriction;
+		Vel /= max(1.0, m_AirFriction);
 
 		if (Vel.Length() <= 0.1)
 		{

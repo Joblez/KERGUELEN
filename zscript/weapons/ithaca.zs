@@ -108,13 +108,12 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_FireBullets(7, 7, 12, 4, "Bullet_Puff");
 			A_FRecoil(2);
 			A_AlertMonsters();
-			A_ShotgunSmoke(4, -4);
-			A_ShotgunSmoke(4, -4);
 			A_SpawnFlash(4, -4, 2);
 			A_TakeInventory("Sh12Tube", 1);
 			A_StartSound("shotgun/fire", CHAN_WEAPON);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(4, 34);
+			A_SpawnSmoke();
 		}
 		ITAF B 1 Bright A_SetBaseOffset(2, 32);
 		ITAF CDEF 1;
@@ -249,6 +248,28 @@ class Ithaca : BaseWeapon replaces Shotgun
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
+	}
+
+	private action void A_SpawnSmoke()
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		for (int i = 0; i < weaponEffectSetting * 2; ++i)
+		{
+			Actor effect = invoker.SpawnEffect(
+				"MuzzleSmoke",
+				(10.5, 3.5, 20.0),
+				FRandom(-28.0, 28.0),
+				FRandom(-10.0, 10.0),
+				FRandom(5.0, 10.0),
+				true);
+			
+			effect.A_FadeOut(FRandom(0.0, 0.125));
+			effect.Scale.x += FRandom(-0.15, 0.35);
+			effect.Scale.y = effect.Scale.x;
+		}
 	}
 
 	private action void A_SpawnCasing()

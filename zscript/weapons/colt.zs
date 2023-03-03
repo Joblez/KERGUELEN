@@ -95,8 +95,14 @@ class Colt : BaseWeapon replaces Pistol
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
 				A_FireBullets(2, 2, -1, 10, "BulletPuff");
 				A_FRecoil(1);
-				A_SingleSmoke(6, -1);
 				A_SpawnFlash(6, -1);
+				A_SpawnEffect(
+					"MuzzleSmoke",
+					(10.5, 3.0, 20.0),
+					FRandom(-3.0, 3.0),
+					FRandom(-1.5, 1.5),
+					4.0,
+					true);
 			}
 			M19F B 1 A_SpawnCasing();
 			M19F CDE 1;
@@ -112,8 +118,8 @@ class Colt : BaseWeapon replaces Pistol
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
 				A_FireBullets(2, 2, -1, 10, "BulletPuff");
 				A_FRecoil(1);
-				A_SingleSmoke(6, -1);
 				A_SpawnFlash(6, -1);
+				A_SpawnSmoke();
 			}
 			M1FE B 1 A_SpawnCasing();
 			M1FE CEFGHI 1;
@@ -222,6 +228,19 @@ class Colt : BaseWeapon replaces Pistol
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
+	}
+
+	private action void A_SpawnSmoke()
+	{
+		if (CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		A_SpawnEffect(
+			"MuzzleSmoke",
+			(10.5, 3.0, 20.0),
+			FRandom(-3.0, 3.0),
+			FRandom(-1.5, 1.5),
+			4.0,
+			true);
 	}
 
 	private action void A_SpawnCasing()

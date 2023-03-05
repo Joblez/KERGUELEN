@@ -63,7 +63,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Goto Empty;
 
 		SWDA E 0 Bright {
-			A_AlertMonsters();
+			A_AlertMonsters(4096.0);
 			A_TakeInventory("RevoCylinder", 1);
 			invoker.GetHUDExtension().SendEventToSM('RoundFired');
 			A_StartSound("sw/fire", CHAN_AUTO);

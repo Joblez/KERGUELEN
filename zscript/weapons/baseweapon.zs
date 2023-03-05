@@ -371,6 +371,72 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		}
 	}
 
+	protected action void A_SpawnSmokeTrail(FLineTraceData t, vector3 origin, double size = 10.0, int lifetime = 35, double spacing = 1.0, double spread = 1.0)
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		spacing *= Settings.ULTRA + 1.0 - weaponEffectSetting;
+
+		FSpawnParticleParams params;
+
+		params.color1 = 0xFFFFFFFF;
+		params.texture = TexMan.CheckForTexture("SMOK01");
+		params.style = STYLE_Translucent;
+		params.lifetime = lifetime;
+		params.size = size;
+		params.sizestep = spread * 0.5;
+		// params.vel.z += 0.125;
+		params.startalpha = 0.1 * spacing;
+
+		Actor effectOrigin = invoker.SpawnEffect("Agent", origin, 0.0, 0.0, 0.0, false);
+
+		vector3 endpoint = t.HitLocation;
+
+		if (t.HitTexture.IsValid()) Console.Printf("Hit texture: %s", TexMan.GetName(t.HitTexture));
+
+		if (t.HitTexture == skyflatnum)
+		{
+			endpoint += t.HitDir.Unit() * 8192.0;
+		}
+
+		invoker.SpawnSmokeTrail(params, effectOrigin.Pos, endpoint, spacing, spread);
+
+		effectOrigin.Destroy();
+	}
+
+	protected void SpawnSmokeTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing, double spread)
+	{
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", owner.player).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF) return;
+
+		double factor = Math.Remap(double(weaponEffectSetting) / Settings.ULTRA, 0.0, 1.0, 4.0, 1.0);
+		spacing *= factor;
+
+		vector3 direction = LevelLocals.Vec3Diff(start, end);
+		double delta = direction.Length();
+		direction = direction.Unit();
+
+		for (double step = 0.0; step < delta; step += spacing)
+		{
+			particleParams.Pos = start + direction * step;
+
+			vector3 moveDir;
+			double angle = FRandom(0.0, 360.0);
+
+			vector3 p = (direction cross (abs(direction.z) ~== 1.0 ? Vec3Util.Right() : Vec3Util.Up())).Unit();
+			Quat rot = Quat.AxisAngle(direction, angle);
+			moveDir = rot * p;
+
+			particleParams.vel = moveDir * spread * particleParams.size * 0.01;
+			particleParams.startalpha *= 0.9995;
+			particleParams.fadestep = particleParams.startalpha / particleParams.lifetime;
+			level.SpawnParticle(particleParams);
+		}
+	}
+
 	protected double GetSpawnOffsetFovFactor() const
 	{
 		let factor = Math.Remap(owner.Player.FOV, 75.0, 120.0, 1.6, 1.0);

@@ -262,8 +262,8 @@ class M2C : BaseWeapon replaces Chaingun
 		Actor effect = invoker.SpawnEffect(
 			"MuzzleSmoke",
 			(8.5, 5.0, 32.0),
-			FRandom(-6.0, 6.0),
-			FRandom(-6.0, 6.0),
+			FRandom(-14.0, 14.0),
+			FRandom(-9.0, 9.0),
 			FRandom(4.0, 8.0),
 			true);
 
@@ -276,11 +276,11 @@ class M2C : BaseWeapon replaces Chaingun
 	{
 		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
 
-		A_SpawnEffect(
+		invoker.SpawnEffect(
 			"RifleCasing",
-			(Math.Remap(Pitch, -90.0, 90.0, 34.0, 20.0),
-			Math.Remap(abs(Pitch), 0.0, 90.0, 19.0, 23.0),
-			31.0),
+			(Math.Remap(Pitch, -90.0, 90.0, 30.0, 16.0),
+			Math.Remap(abs(Pitch), 0.0, 90.0, 18.0, 20.0),
+			26.0),
 			-90.0 + FRandom(-5.0, 5.0),
 			FRandom(40.0, 65.0),
 			FRandom(3.0, 5.5),

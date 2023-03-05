@@ -237,8 +237,8 @@ class Colt : BaseWeapon replaces Pistol
 		A_SpawnEffect(
 			"MuzzleSmoke",
 			(10.5, 3.0, 20.0),
-			FRandom(-3.0, 3.0),
-			FRandom(-1.5, 1.5),
+			FRandom(-6.0, 6.0),
+			FRandom(-2.5, 2.5),
 			4.0,
 			true);
 	}

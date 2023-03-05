@@ -84,7 +84,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			double attackAngle = FRandom(-2.0, 2.0);
 			double attackPitch = FRandom(-2.0, 2.0);
 
-			LineTrace(attackAngle, 16384.0, attackPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
+			LineTrace(Angle + ViewAngle + attackAngle, 16384.0, Pitch + ViewPitch + attackPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
 			int damage = 120;
 
@@ -97,7 +97,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(attackAngle, attackPitch), 220.0, true);
 			}
 
-			A_SpawnTracer(t);
+			A_SpawnSmokeTrail(t, (16.0, 5.5, 36.0), 4.5, spread: 1.35);
 
 			A_FRecoil(2);
 			A_SpawnFlash(5, -3, 2);
@@ -266,7 +266,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle, Pitch), 220.0, true);
 			}
 
-			A_SpawnTracer(t);
+			A_SpawnSmokeTrail(t, (0.0, 18.0, 32.0), 4.5, spread: 1.35);
 
 			A_GunFlash("ZFScoped");
 			A_StartSound("sniper/fire", 1);
@@ -332,6 +332,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			KergPlayer(self).SetZoomFactor(1.0);
 			A_ZoomFactor(1.0);
 			invoker.m_Shouldered = false;
+			A_SetCrosshair(0);
 		}
 		ISHI A 1 A_SetBaseOffset(1, 34);
 		ISR2 G 1 A_SetBaseOffset(-12, 38);
@@ -353,54 +354,6 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	override int GetReserveAmmo() const
 	{
 		return Ammo2.Amount;
-	}
-
-	private action void A_SpawnTracer(FLineTraceData t)
-	{
-		int weaponEffectSetting = CVar.GetCVar("weapon_effects", invoker.owner.player).GetInt();
-
-		if (weaponEffectSetting <= Settings.OFF) return;
-
-		double spacing = Settings.ULTRA + 1.0 - weaponEffectSetting;
-
-		FSpawnParticleParams params;
-
-		params.color1 = 0xFFFFFFFF;
-		params.texture = TexMan.CheckForTexture("SMOK01");
-		params.style = STYLE_Translucent;
-		params.lifetime = 35;
-		params.size = 10.0;
-		// params.sizestep = -params.size / params.lifetime;
-		// params.vel.z += 0.125;
-		params.startalpha = 0.05 * spacing;
-		params.fadestep = params.startalpha / params.lifetime;
-
-		Actor effectOrigin = invoker.SpawnEffect("Agent", (12.0, 4.5, 32.0), 0.0, 0.0, 0.0, false);
-
-		invoker.SpawnSmokeTrail(params, effectOrigin.Pos, t.HitLocation, spacing);
-
-		effectOrigin.Destroy();
-	}
-
-	protected void SpawnSmokeTrail(FSpawnParticleParams particleParams, vector3 start, vector3 end, double spacing)
-	{
-		int weaponEffectSetting = CVar.GetCVar("weapon_effects", owner.player).GetInt();
-
-		if (weaponEffectSetting <= Settings.OFF) return;
-
-		double factor = Math.Remap(double(weaponEffectSetting) / Settings.ULTRA, 0.0, 1.0, 4.0, 1.0);
-		spacing *= factor;
-
-		vector3 direction = LevelLocals.Vec3Diff(start, end);
-		double delta = direction.Length();
-		direction = direction.Unit();
-
-		for (double step = 0.0; step < delta; step += spacing)
-		{
-			particleParams.Pos = start + direction * step;
-			particleParams.vel = Vec3Util.Random(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0).Unit() * FRandom(0.2, 0.5);
-			level.SpawnParticle(particleParams);
-		}
 	}
 
 	private action void A_SpawnCasing()

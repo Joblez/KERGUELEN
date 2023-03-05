@@ -110,7 +110,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_AlertMonsters();
 			A_SpawnFlash(4, -4, 2);
 			A_TakeInventory("Sh12Tube", 1);
-			A_StartSound("shotgun/fire", CHAN_WEAPON);
+			A_StartSound("shotgun/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(4, 34);
 			A_SpawnSmoke();
@@ -147,11 +147,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	Charge:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		TNT1 A 0 A_StartSound("shotgun/pumpback", 9,0,0.9);
+		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO ,0, 0.9);
 		ITAP ABC 1;
 		ITAP DE 2;
 		TNT1 A 0 A_SpawnCasing();
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", 9,0,0.9);
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
 		ITAP FG 2;
 		TNT1 A 0 { invoker.m_Chambered = true; }
 		ITAP HIJ 1 A_WeaponReady();

@@ -203,9 +203,6 @@ class KergPlayer : PlayerPawn
 
 		m_ViewSwayer.UpdateSway();
 
-		Console.Printf("Pitch: %f", Pitch);
-		Console.Printf("Sway pitch: %f", m_ViewSwayer.GetPitch());
-
 		A_SetViewAngle(m_ViewYaw.GetValue(), SPF_INTERPOLATE);
 		A_SetViewPitch(m_ViewPitch.GetValue(), SPF_INTERPOLATE);
 		A_SetViewRoll(m_ViewRoll.GetValue(), SPF_INTERPOLATE);

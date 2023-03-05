@@ -216,8 +216,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 			viewOffset = pawn.ViewPos.offset;
 
 			// Rotate view offset offset to view direction
-			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Left(), pawn.Pitch);
-			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Up(), pawn.Angle);
+			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Left(), pawn.Pitch + pawn.ViewPitch);
+			viewOffset = MathVec3.Rotate(viewOffset, Vec3Util.Up(), pawn.Angle + pawn.ViewAngle);
 		}
 
 		if (followPSpriteOffset)
@@ -240,8 +240,8 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		vector3 zxyOffset = (spawnOffset.z, -spawnOffset.x, -spawnOffset.y);
 
 		// Rotate offset to view direction.
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch);
-		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Left(), pawn.Pitch + pawn.ViewPitch);
+		zxyOffset = MathVec3.Rotate(zxyOffset, Vec3Util.Up(), pawn.Angle + pawn.ViewAngle);
 
 		let position = spawnPoint + zxyOffset + viewOffset;
 
@@ -258,6 +258,36 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 		let effect = SpawnProjectile(effectType, (position.x, position.y, position.z), yaw, pitch, velocity);
 		if (addPawnVelocity) effect.Vel += pawn.Vel;
 		return effect;
+	}
+
+	action void A_FireBulletsEx(vector2 spread, double distance, int damage, int count = 1, int flags = 0)
+	{
+		vector3 offset;
+		if (ViewPos) offset = -ViewPos.Offset;
+
+		vector2 angles = spread;
+
+		for (int i = 0; i < count; ++i)
+		{
+			if (!(flags & FBF_EXPLICITANGLE))
+			{
+				angles.x = FRandom(-spread.x, spread.x);
+				angles.y = FRandom(-spread.y, spread.y);
+			}
+
+			LineAttack(
+				Angle + ViewAngle + angles.x,
+				distance,
+				Pitch + ViewPitch + angles.y,
+				damage,
+				'None',
+				"Bullet_Puff",
+				LAF_NORANDOMPUFFZ,
+				null,
+				offset.z,
+				-offset.x,
+				offset.y);
+			}
 	}
 
 	action void A_SpawnEffect(class<Actor> effectType, vector3 spawnOffset = (0, 0, 0), double yaw = 0.0, double pitch = 0.0, double velocity = 0.0, bool addPawnVelocity = false)

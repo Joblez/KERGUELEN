@@ -93,7 +93,7 @@ class Colt : BaseWeapon replaces Pistol
 				A_TakeInventory("ColtMag", 1);
 				A_StartSound("colt/fire", CHAN_AUTO);
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
-				A_FireBullets(2, 2, -1, 10, "BulletPuff");
+				A_FireBulletsEx((2.0, 2.0), 4096.0, 10, 1);
 				A_FRecoil(1);
 				A_SpawnFlash(6, -1);
 				A_SpawnEffect(
@@ -116,7 +116,7 @@ class Colt : BaseWeapon replaces Pistol
 				A_TakeInventory("ColtMag", 1);
 				A_StartSound("colt/fire", CHAN_WEAPON);
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
-				A_FireBullets(2, 2, -1, 10, "BulletPuff");
+				A_FireBulletsEx((2.0, 2.0), 10, 4096.0, 1);
 				A_FRecoil(1);
 				A_SpawnFlash(6, -1);
 				A_SpawnSmoke();

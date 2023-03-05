@@ -81,8 +81,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		ISHF A 1 Bright {
 			FLineTraceData t;
 
-			double attackAngle = Angle + FRandom(-2.0, 2.0);
-			double attackPitch = Pitch + FRandom(-2.0, 2.0);
+			double attackAngle = FRandom(-2.0, 2.0);
+			double attackPitch = FRandom(-2.0, 2.0);
 
 			LineTrace(attackAngle, 16384.0, attackPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
@@ -90,14 +90,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			if (t.Distance > 8192.0) damage *= 1.0 - ((t.Distance - 8192.0) / 8192.0);
 
-			A_FireBullets(
-				attackAngle - Angle,
-				attackPitch - Pitch,
-				-1,
-				damage,
-				"Bullet_Puff",
-				FBF_NORANDOM | FBF_USEAMMO | FBF_NORANDOMPUFFZ | FBF_EXPLICITANGLE,
-				16384.0);
+			A_FireBulletsEx((attackAngle, attackPitch), 16384.0, damage, 1, FBF_EXPLICITANGLE);
 
 			if (t.HitActor)
 			{
@@ -260,20 +253,13 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Goto EmptyScoped;
 		ISAF A 2 Bright {
 			FLineTraceData t;
-			LineTrace(Angle, 16384.0, Pitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
+			LineTrace(Angle + ViewAngle, 16384.0, Pitch + ViewPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
 			int damage = 120;
 
 			if (t.Distance > 8192.0) damage *= 1.0 - ((t.Distance - 8192.0) / 8192.0);
 
-			A_FireBullets(
-				0.0,
-				0.0,
-				-1,
-				damage,
-				"Bullet_Puff",
-				FBF_NORANDOM | FBF_USEAMMO | FBF_NORANDOMPUFFZ,
-				16384.0);
+			A_FireBulletsEx((0.0, 0.0), 16384.0, damage, 1);
 
 			if (t.HitActor)
 			{

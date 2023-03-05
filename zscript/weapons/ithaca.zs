@@ -105,7 +105,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 				}
 			}
 
-			A_FireBullets(7, 7, 12, 4, "Bullet_Puff");
+			A_FireBulletsEx((7.0, 7.0), 4096.0, 4, 12);
 			A_FRecoil(2);
 			A_AlertMonsters();
 			A_SpawnFlash(4, -4, 2);

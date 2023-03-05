@@ -147,6 +147,9 @@ class DynamiteStick : Actor
 	meta double m_ThrustForce;
 	property ThrustForce : m_ThrustForce;
 
+	meta int m_Firecrackers;
+	property Firecrackers : m_Firecrackers;
+
 	meta int m_SmokeTrails;
 	property SmokeTrails : m_SmokeTrails;
 
@@ -175,7 +178,8 @@ class DynamiteStick : Actor
 		DamageType "Explosive";
 		Projectile;
 
-		DynamiteStick.ThrustForce 360;
+		DynamiteStick.ThrustForce 380;
+		DynamiteStick.Firecrackers 6;
 		DynamiteStick.SmokeTrails 16;
 		DynamiteStick.SparkTrails 40;
 
@@ -198,7 +202,7 @@ class DynamiteStick : Actor
 		TNT1 A 1 {
 			A_NoGravity();
 			A_StopSound(7);
-			A_SetScale(2.0, 2.0);
+			A_SetScale(1.0, 1.0);
 			A_AlertMonsters(4096.0);
 			A_SetRenderStyle(1.0, STYLE_Add);
 			A_StartSound("dynamite/explode", CHAN_AUTO, attenuation: 0.4);
@@ -262,16 +266,14 @@ class DynamiteStick : Actor
 				if (i % 2 == 0)
 				{
 					pitch = FRandom(-180.0, -20.0);
-					params.startalpha = FRandom(0.15, 0.3);
 				}
 				else
 				{
 					pitch = FRandom(20.0, 180.0);
-					params.startalpha = FRandom(0.2, 0.6);
 				}
 
 				SparkLightTrail trail = SparkLightTrail.Create(Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(5.0, 12.0)), params);
-				trail.m_AirFriction += FRandom(0.0, 0.3);
+				trail.m_AirFriction += FRandom(0.0, 0.05);
 				trail.Mass += FRandom(0.0, 25.0);
 				trail.Gravity += FRandom(0.0, 2.5);
 				trail.bouncefactor = FRandom(0.3, 0.8);
@@ -285,8 +287,10 @@ class DynamiteStick : Actor
 				}
 			}
 
+			// Thrust physical effects.
 			ActorUtil.Explode3D(self, 0, m_ThrustForce, ExplosionRadius, THRTARGET_Origin, hitActors);
 
+			// Disale physics on thrusted effects.
 			foreach (effect : spawnedEffects)
 			{
 				if (effect)
@@ -297,6 +301,25 @@ class DynamiteStick : Actor
 				}
 			}
 			spawnedEffects.Clear();
+
+			int firecrackerCount = round(MathI.Lerp(0, m_Firecrackers, double(weaponEffectSetting) / Settings.ULTRA));
+
+			// Firecrackers.
+			for (int i = 0; i < firecrackerCount; ++i)
+			{
+				// Distribute evenly across hemispheres.
+				double pitch = 0.0;
+				if (i % 2 == 0)
+				{
+					pitch = FRandom(-180.0, -20.0);
+				}
+				else
+				{
+					pitch = FRandom(20.0, 180.0);
+				}
+
+				Spawn("Firecracker", Pos + Vec3Util.FromAngles(FRandom(0.0, 360.0), pitch, FRandom(2.0, 4.0)));
+			}
 		}
 		BOOM T 1 {
 			m_ExplosionFadeLight = PointLight(Spawn("PointLight", Pos));

@@ -75,6 +75,7 @@ class MuzzleSmoke : Actor
 			return;
 		}
 
+		Vel.z = max(0.0, Vel.z);
 		Vel.z += m_AirBuoyancy;
 
 		Vel /= max(1.0, m_AirFriction);
@@ -108,7 +109,7 @@ class ExplosionSmoke : Actor
 		Scale 1.0;
 		Projectile;
 		Speed 12;
-		Gravity 0.65;
+		Gravity 0.5;
 		+CLIENTSIDEONLY
 		-NOGRAVITY
 	}
@@ -211,10 +212,10 @@ class SmokeTrail : EffectTrail
 {
 	Default
 	{
-		Mass 55;
-		Gravity 3.5;
+		Mass 60;
+		Gravity 1.75;
 		EffectTrail.Spacing 10.0;
-		EffectTrail.AirResistance 1.1;
+		EffectTrail.AirResistance 1.075;
 	}
 
 	override void SpawnEffect(vector3 position)
@@ -244,14 +245,14 @@ class ParticleTrail : EffectTrail
 
 	Default
 	{
-		Mass 35;
-		Gravity 3.0;
+		Mass 50;
+		Gravity 2.0;
 		BounceFactor 0.7;
 		WallBounceFactor 0.7;
 		BounceCount 6;
 
 		EffectTrail.Spacing 2.0;
-		EffectTrail.AirResistance 1.075;
+		EffectTrail.AirResistance 1.035;
 
 		+DOOMBOUNCE
 	}
@@ -304,6 +305,10 @@ class ParticleTrail : EffectTrail
 
 class SparkLightTrail : ParticleTrail
 {
+	Default
+	{
+		EffectTrail.AirResistance 1.0425;
+	}
 	static SparkLightTrail Create(vector3 position, FSpawnParticleParams params)
 	{
 		SparkLightTrail trail = SparkLightTrail(Spawn("SparkLightTrail", position));
@@ -399,16 +404,18 @@ class WallSparks : Actor
 	}
 }
 
-class RocketDebris : Actor
+class Firecracker : Actor
 {
+	mixin ProjectileExt;
+
 	Default
 	{
 		Damage 0;
-		Gravity 0.3;
+		Gravity 0.25;
 		BounceFactor 0.2;
 		WallBounceFactor 0.2;
-		Speed 15;
-		Alpha 0.5;
+		Speed 35;
+		Alpha 1.0;
 		Scale 0.6;
 		RenderStyle "Add";
 		BounceType "Grenade";
@@ -423,8 +430,33 @@ class RocketDebris : Actor
 
 	action void A_SpawnDebris()
 	{
-		A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
-		A_SpawnProjectile("RocketDebrisII", 0, 0, random(0, 360), 2, random(0, 360));
+		int weaponEffectSetting = CVar.GetCVar("weapon_effects", invoker.GetTargetPlayerOrConsolePlayer()).GetInt();
+
+		if (weaponEffectSetting <= Settings.OFF)
+		{
+			return;
+		}
+
+		FSpawnParticleParams params;
+		params.color1 = 0xFFFFFFFF;
+		params.texture = TexMan.CheckForTexture("PRBMA0");
+		params.style = STYLE_Add;
+		params.flags = SPF_FULLBRIGHT;
+		params.pos = Pos;
+		params.accel = Vec3Util.Down() * Gravity * 1.5;
+		params.startalpha = 1.0;
+		level.SpawnParticle(params);
+
+		int amount = max(1, weaponEffectSetting / 2);
+
+		for (int i = 0; i < amount; ++i)
+		{
+			params.vel = Vec3Util.Random(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0).Unit() * Speed * 0.5;
+			params.lifetime = Random(16, 32);
+			params.size = Scale.x * 3.0 * FRandom(0.5, 1.0);
+			params.sizestep = params.size / params.lifetime;
+			level.SpawnParticle(params);
+		}
 	}
 
 	States
@@ -441,38 +473,6 @@ class RocketDebris : Actor
 		PRBM A 4 Bright A_SetTranslucent(0.1, 1);
 		Goto Death;
 
-	Death:
-		TNT1 A 0;
-		Stop;
-	XDeath:
-		TNT1 A 0;
-		Stop;
-	}
-}
-
-class RocketDebrisII : RocketDebris
-{
-	Default
-	{
-		Damage 0;
-		Gravity 0.3;
-		BounceFactor 0.2;
-		WallBounceFactor 0.2;
-		RenderStyle "Add";
-		Speed 10;
-		Alpha 0.5;
-		Scale 0.3;
-	}
-
-	States
-	{
-	Spawn:
-		PRBM A 4 Bright NoDelay A_SetTranslucent(0.8, 1);
-		PRBM A 4 Bright A_SetTranslucent(0.7, 1);
-		PRBM A 4 Bright A_SetTranslucent(0.6, 1);
-		PRBM A 4 Bright A_SetTranslucent(0.4, 1);
-		PRBM A 4 Bright A_SetTranslucent(0.1, 1);
-		Goto Death;
 	Death:
 		TNT1 A 0;
 		Stop;
@@ -761,7 +761,7 @@ class RifleCasing : BaseCasing
 	Default
 	{
 		Speed 8;
-		Scale 0.10;
+		Scale 0.14;
 		BounceSound "weapons/shell2";
 
 		BaseCasing.StartingRoll 140.0;

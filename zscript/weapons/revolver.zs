@@ -199,10 +199,30 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 	Select:
 		TNT1 A 0 {
-			SetPlayerProperty(0, 1, 2);
-			invoker.m_SingleAction = false;
+			// Wish I could just conditional operator this...
+			if (invoker.m_SingleAction)
+			{
+				return ResolveState("SingleActionSelect");
+			}
+			else
+			{
+				return ResolveState("DoubleActionSelect");
+			}
 		}
-		TNT1 A 1;
+		Wait;
+	
+	SingleActionSelect:
+		SWSA N 1 A_SetBaseOffset(-65, 81);
+		SWSA N 1 A_SetBaseOffset(-35, 55);
+		SWSA N 1 A_SetBaseOffset(-28, 39);
+		SWSA N 1 A_SetBaseOffset(-12, 38);
+		SWSA N 1 A_SetBaseOffset(3, 34);
+		SWSA N 1 A_SetBaseOffset(3, 34);
+		SWSA N 3;
+		SWAF A 0 A_SetBaseOffset(0, WEAPONTOP);
+		Goto AltReady;
+
+	DoubleActionSelect:
 		SWCL J 1 A_SetBaseOffset(-65, 81);
 		SWCL J 1 A_SetBaseOffset(-35, 55);
 		SWCL J 1 A_SetBaseOffset(-28, 39);
@@ -211,10 +231,34 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWCL K 1 A_SetBaseOffset(3, 34);
 		SWCL LMN 1;
 		SWAF A 0 A_SetBaseOffset(0, WEAPONTOP);
-		SWAI A 1 A_Raise(16);
 		Goto Ready;
 
 	Deselect:
+		TNT1 A 0 {
+			// Wish I could just conditional operator this...
+			if (invoker.m_SingleAction)
+			{
+				return ResolveState("SingleActionDeselect");
+			}
+			else
+			{
+				return ResolveState("DoubleActionDeselect");
+			}
+		}
+		Wait;
+	
+	SingleActionDeselect:
+		SWSA N 1 A_SetBaseOffset(3, 34);
+		SWSA N 1 A_SetBaseOffset(-12, 38);
+		SWSA N 1 A_SetBaseOffset(-28, 39);
+		SWSA N 1 A_SetBaseOffset(-35, 55);
+		SWSA N 1 A_SetBaseOffset(-65, 81);
+		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
+		TNT1 A 4;
+		SWAI A 1 A_Lower(16);
+		Wait;
+	
+	DoubleActionDeselect:
 		SWCL M 1 A_SetBaseOffset(3, 34);
 		SWCL K 1 A_SetBaseOffset(-12, 38);
 		SWCL J 1 A_SetBaseOffset(-28, 39);

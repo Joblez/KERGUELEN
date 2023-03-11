@@ -94,7 +94,7 @@ class M2C : BaseWeapon replaces Chaingun
 		}
 		TNT1 A 0 A_JumpIf((invoker.m_FireSelect), "Automatic"); //Goes to automatic fire if the selector is on full auto
 	Single:
-		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, 10, 1);
+		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, Random(10, 18), 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);
@@ -119,7 +119,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
 
-		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, 10, 1);
+		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, Random(10, 18), 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
 			A_FRecoil(0.8);

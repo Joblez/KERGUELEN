@@ -68,7 +68,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.GetHUDExtension().SendEventToSM('RoundFired');
 			A_StartSound("sw/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
-			A_FireBulletsEx((invoker.m_Spread.x, invoker.m_Spread.y), 4096.0, 35, 1);
+			A_FireBulletsEx((invoker.m_Spread.x, invoker.m_Spread.y), 4096.0, Random(32, 36), 1);
 			A_FRecoil(1);
 			A_SpawnSmoke();
 			A_SpawnFlash(7, -1);

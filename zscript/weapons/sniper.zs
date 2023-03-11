@@ -255,7 +255,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			FLineTraceData t;
 			LineTrace(Angle + ViewAngle, 16384.0, Pitch + ViewPitch, offsetz: self.Player.viewz - self.Pos.z, data: t);
 
-			int damage = 120;
+			int damage = 150;
 
 			if (t.Distance > 8192.0) damage *= 1.0 - ((t.Distance - 8192.0) / 8192.0);
 

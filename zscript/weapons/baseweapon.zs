@@ -314,9 +314,9 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 	// Felt Recoil.
 
-	action void A_FRecoil(double pitch)
+	action void A_FRecoil(double sp)
 	{
-		KergPlayer(self.player.mo).AddViewForce(0.0, -pitch, 0.0);
+		A_SetPitch(pitch - sp);
 	}
 	
 	// Smoke

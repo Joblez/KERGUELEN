@@ -36,21 +36,6 @@ class KergPlayer : PlayerPawn
 	meta double m_ZoomFactorResponseTime;
 	property ZoomResponseTime: m_ZoomFactorResponseTime;
 
-	meta double m_ViewSwayResponseSpeed;
-	property ViewSwayResponse: m_ViewSwayResponseSpeed;
-
-	meta double m_ViewSwayReturnSpeed;
-	property ViewSwayRigidity: m_ViewSwayReturnSpeed;
-
-	private ModifiableDouble m_ViewYaw;
-	private ModifiableDouble m_ViewPitch;
-	private ModifiableDouble m_ViewRoll;
-
-	private DoubleModifier m_ViewBobYaw;
-	private DoubleModifier m_ViewBobPitch;
-	private DoubleModifier m_ViewBobRoll;
-
-	private ViewSwayer m_ViewSwayer;
 	private InterpolatedVector2 m_ViewTilt;
 
 	private InterpolatedDouble m_FOVAdjust;
@@ -67,7 +52,6 @@ class KergPlayer : PlayerPawn
 	private double m_MaxPlayerVelocity;
 
 	private double m_PrevSpeed;
-	private double m_PrevPitch;
 
 	Default
 	{
@@ -100,10 +84,7 @@ class KergPlayer : PlayerPawn
 		KergPlayer.BobStyle Bob_Alpha;
 
 		KergPlayer.ViewTiltDistance 12.0;
-		KergPlayer.ViewTiltResponseTime 0.3;
-
-		KergPlayer.ViewSwayResponse 0.05;
-		KergPlayer.ViewSwayRigidity 1.45;
+		KergPlayer.ViewTiltResponseTime 0.165;
 
 		KergPlayer.FOVAdjustResponse 0.045;
 		KergPlayer.FOVAdjustRigidity 16.0;
@@ -124,25 +105,6 @@ class KergPlayer : PlayerPawn
 	override void BeginPlay()
 	{
 		Super.BeginPlay();
-
-		m_ViewYaw = new("ModifiableDouble");
-		m_ViewPitch = new("ModifiableDouble");
-		m_ViewRoll = new("ModifiableDouble");
-		m_ViewSwayer = ViewSwayer.Create(
-			m_ViewSwayResponseSpeed,
-			1.0 / m_ViewSwayReturnSpeed);
-		m_ViewSwayer.AddTransform(m_ViewYaw, m_ViewPitch, m_ViewRoll);
-
-		m_ViewBobYaw = new("DoubleModifier");
-		m_ViewBobYaw.SetType(MD_Additive);
-		m_ViewBobPitch = new("DoubleModifier");
-		m_ViewBobPitch.SetType(MD_Additive);
-		m_ViewBobRoll = new("DoubleModifier");
-		m_ViewBobRoll.SetType(MD_Additive);
-		
-		m_ViewYaw.AddModifier(m_ViewBobYaw);
-		m_ViewPitch.AddModifier(m_ViewBobPitch);
-		m_ViewRoll.AddModifier(m_ViewBobRoll);
 
 		m_ZoomFactor = new("InterpolatedDouble");
 		m_ZoomFactor.m_SmoothTime = m_ZoomFactorResponseTime;
@@ -185,28 +147,6 @@ class KergPlayer : PlayerPawn
 		m_FOVAdjust.Update();
 		m_ZoomFactor.Update();
 
-		// Recoil compensation.
-		if (m_ViewSwayer.m_Target.y < 0.0 && Pitch - m_PrevPitch > 0)
-		{
-			Console.Printf("Compensating %.4f degrees", Pitch - m_PrevPitch);
-			m_ViewSwayer.m_Target.y += Pitch - m_PrevPitch;
-			Pitch -= Pitch - m_PrevPitch;
-
-			if (m_ViewSwayer.m_Target.y > 0.0) m_ViewSwayer.m_Target.y = 0.0;
-		}
-
-		// Clamp rotation.
-		if (m_ViewSwayer.GetPitch() + Pitch < -90.0)
-		{
-			m_ViewSwayer.m_Target.y = 0.0;
-		}
-
-		m_ViewSwayer.UpdateSway();
-
-		A_SetViewAngle(m_ViewYaw.GetValue(), SPF_INTERPOLATE);
-		A_SetViewPitch(m_ViewPitch.GetValue(), SPF_INTERPOLATE);
-		A_SetViewRoll(m_ViewRoll.GetValue(), SPF_INTERPOLATE);
-
 		player.FOV = m_FOVAdjust.GetValue() / m_ZoomFactor.GetValue();
 
 		if (Speed != m_PrevSpeed)
@@ -214,8 +154,6 @@ class KergPlayer : PlayerPawn
 			CalculateMaxPlayerVelocity();
 			m_PrevSpeed = Speed;
 		}
-
-		m_PrevPitch = Pitch;
 	}
 
 	// Same as vanilla, but without view bobbing.
@@ -305,7 +243,7 @@ class KergPlayer : PlayerPawn
 					player.deltaviewheight = 1 / 65536.;
 			}
 			
-			if (player.deltaviewheight)
+			if (player.deltaviewheight)	
 			{
 				player.deltaviewheight += 0.25;
 				if (!player.deltaviewheight)
@@ -386,11 +324,6 @@ class KergPlayer : PlayerPawn
 	void SetZoomFactor(double factor)
 	{
 		m_ZoomFactor.m_Target = factor;
-	}
-
-	void AddViewForce(double yaw, double pitch, double roll)
-	{
-		m_ViewSwayer.AddForce(yaw, pitch, roll);
 	}
 
 	void AddFOVForce(double force)
@@ -492,9 +425,9 @@ class KergPlayer : PlayerPawn
 		vector2 angles = MathVec3.ToYawAndPitch(lookVector);
 
 		SetViewPos(offset);
-		m_ViewBobYaw.SetValue(angles.x);
-		m_ViewBobPitch.SetValue(angles.y);
-		m_ViewBobRoll.SetValue(roll);
+		A_SetViewAngle(angles.x, SPF_INTERPOLATE);
+		A_SetViewPitch(angles.y, SPF_INTERPOLATE);
+		A_SetViewRoll(roll, SPF_INTERPOLATE);
 	}
 
 	private vector2, double ProceduralViewBob()
@@ -634,91 +567,4 @@ class KergPlayer : PlayerPawn
 	}
 }
 
-class ViewSwayer : InterpolatedVector3
-{
-	private DoubleModifier m_Yaw;
-	private DoubleModifier m_Pitch;
-	private DoubleModifier m_Roll;
-
-	private double m_TargetSmoothTime;
-	private vector3 m_TargetSpeed;
-
-	static ViewSwayer Create(double smoothTime, double targetSmoothTime)
-	{
-		ViewSwayer swayer = new("ViewSwayer");
-
-		swayer.m_Yaw = new("DoubleModifier");
-		swayer.m_Yaw.SetType(MD_Additive);
-		swayer.m_Yaw.SetValue(0.0);
-
-		swayer.m_Pitch = new("DoubleModifier");
-		swayer.m_Pitch.SetType(MD_Additive);
-		swayer.m_Pitch.SetValue(0.0);
-
-		swayer.m_Roll = new("DoubleModifier");
-		swayer.m_Roll.SetType(MD_Additive);
-		swayer.m_Roll.SetValue(0.0);
-
-		swayer.m_SmoothTime = smoothTime;
-		swayer.m_TargetSmoothTime = targetSmoothTime;
-
-		return swayer;
-	}
-
-	void UpdateSway()
-	{
-		Update();
-
-		m_Target = MathVec3.SmoothDamp(
-			m_Target,
-			(0.0, 0.0, 0.0),
-			m_TargetSpeed,
-			m_TargetSmoothTime,
-			double.Infinity,
-			1.0 / TICRATE);
-
-		m_Yaw.SetValue(GetX());
-		m_Pitch.SetValue(GetY());
-		m_Roll.SetValue(GetZ());
-	}
-
-	double GetYaw() const
-	{
-		return m_Yaw.GetValue();
-	}
-
-	double GetPitch() const
-	{
-		return m_Pitch.GetValue();
-	}
-
-	double GetRoll() const
-	{
-		return m_Roll.GetValue();
-	}
-
-	void AddTransform(out ModifiableDouble originYaw, out ModifiableDouble originPitch, out ModifiableDouble originRoll)
-	{
-		originYaw.AddModifier(m_Yaw);
-		originPitch.AddModifier(m_Pitch);
-		originRoll.AddModifier(m_Roll);
-	}
-
-	void RemoveTransform(out ModifiableDouble originYaw, out ModifiableDouble originPitch, out ModifiableDouble originRoll)
-	{
-		originYaw.RemoveModifier(m_Yaw);
-		originPitch.RemoveModifier(m_Pitch);
-		originRoll.RemoveModifier(m_Roll);
-	}
-
-	void AddForce(double yaw, double pitch, double roll)
-	{
-		m_Target += (yaw, pitch, roll);
-	}
-
-	void SetForce(double yaw, double pitch, double roll)
-	{
-		m_Target = (yaw, pitch, roll);
-	}
-}
 

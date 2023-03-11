@@ -99,7 +99,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			A_SpawnSmokeTrail(t, (16.0, 5.5, 36.0), 4.5, spread: 1.35);
 
-			A_FRecoil(12.0);
+			A_FRecoil(2);
 			A_SpawnFlash(5, -3, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
@@ -271,7 +271,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_GunFlash("ZFScoped");
 			A_StartSound("sniper/fire", 1);
 			A_AlertMonsters();
-			A_FRecoil(7.0);
+			A_FRecoil(2.5);
 			A_SpawnFlash(0, 0, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			invoker.m_Chambered = false;

@@ -97,7 +97,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, 10, 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
-			A_FRecoil(1.75);
+			A_FRecoil(0.8);
 			A_SpawnCasing();
 			A_SpawnSmoke();
 			A_TakeInventory("RifleMag", 1);
@@ -122,7 +122,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, 10, 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		M2FL A 1 Bright {
-			A_FRecoil(1.75);
+			A_FRecoil(0.8);
 			A_SpawnCasing();
 			A_SpawnSmoke();
 			A_SpawnFlash(5, -3);

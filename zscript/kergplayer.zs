@@ -93,7 +93,7 @@ class KergPlayer : PlayerPawn
 
 		Radius 16.025;
 		// Speed 16;
-		Speed 1.8;
+		Speed 2.4;
 		// Speed 0.65;
 		Friction 0.93;
 

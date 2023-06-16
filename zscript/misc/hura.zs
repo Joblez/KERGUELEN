@@ -2,7 +2,7 @@ Class Hura : Actor replaces ExplosiveBarrel
 {
 	Default
 	{
-		Health 20;
+		Health 12;
 		Radius 16;
 		Height 40;
 		Scale 0.75;

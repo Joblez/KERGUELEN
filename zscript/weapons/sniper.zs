@@ -227,14 +227,15 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	Deshoulder:
 		TNT1 A 0 A_ZoomFactor(1.0);
 		ISAS E 1 { KergPlayer(self).SetZoomFactor(4.0); }
-		ISAS E 1 { KergPlayer(self).SetZoomFactor(3.6); }
-		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.2); }
-		ISAS D 1 { KergPlayer(self).SetZoomFactor(2.8); }
-		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.4); }
-		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.0); }
-		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.5); }
-		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.0); }
-		ISAS A 2;
+		ISAS E 1 { KergPlayer(self).SetZoomFactor(3.67); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.33); }
+		ISAS D 1 { KergPlayer(self).SetZoomFactor(3.0); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.67); }
+		ISAS C 1 { KergPlayer(self).SetZoomFactor(2.33); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(1.67); }
+		ISAS B 1 { KergPlayer(self).SetZoomFactor(2.0); }
+		ISAS A 1 { KergPlayer(self).SetZoomFactor(1.33); }
+		ISAS A 1 { KergPlayer(self).SetZoomFactor(1.0); }
 		TNT1 A 0 A_SetCrosshair(0);
 		TNT1 A 0 { invoker.m_Shouldered = false; }
 		goto ready;

@@ -31,7 +31,7 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		{
 			RainSpawner.Create(
 				28,
-				3200.0,
+				4000.0,
 				level.Sectors[i],
 				m_WeatherAgent);
 		}
@@ -55,7 +55,7 @@ class WeatherHandler : StaticEventHandler // Need to be save-game-aware to recon
 		{
 			WeatherParticleSpawner.Create(
 				15,
-				1700.0,
+				2400.0,
 				level.Sectors[i],
 				m_WeatherAgent,
 				snowParams,

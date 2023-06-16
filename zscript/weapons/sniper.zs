@@ -94,7 +94,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			if (t.HitActor)
 			{
-				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(attackAngle, attackPitch), 220.0, true);
+				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle + ViewAngle + attackAngle, Pitch + ViewPitch + attackPitch), 220.0, true);
 			}
 
 			A_SpawnSmokeTrail(t, (16.0, 5.5, 36.0), 4.5, spread: 1.35);
@@ -263,7 +263,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 			if (t.HitActor)
 			{
-				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle, Pitch), 220.0, true);
+				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle + ViewAngle, Pitch + ViewPitch), 220.0, true);
 			}
 
 			A_SpawnSmokeTrail(t, (0.0, 18.0, 32.0), 4.5, spread: 1.35);

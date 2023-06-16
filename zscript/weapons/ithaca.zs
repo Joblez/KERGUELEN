@@ -33,6 +33,8 @@ class Ithaca : BaseWeapon replaces Shotgun
 		BaseWeapon.LookSwayStrengthX 18.0;
 		BaseWeapon.LookSwayResponse 5.0;
 		BaseWeapon.LookSwayRigidity 10.0;
+
+		BaseWeapon.MoveSwayUpRange 0.4;
 		BaseWeapon.MoveSwayWeight 5.0;
 		BaseWeapon.MoveSwayResponse 14.0;
 

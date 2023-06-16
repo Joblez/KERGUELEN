@@ -19,14 +19,14 @@ PointLight Flash
 {
     Offset 0 0 0
     Color 0.5 0.25 0.0
-    Size 64
+    Size 96
 }
 
 PointLight LargeFlash
 {
     Offset 0 0 0
     Color 0.5 0.25 0.0
-    Size 128
+    Size 192
 }
 
 PointLight Stick

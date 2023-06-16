@@ -82,9 +82,9 @@ class WeatherSpawner : Thinker
 	{
 		vector2 point = m_Triangulation.GetRandomPoint();
 		double spawnScore = FRandom[Weather](0.0, 1.0);
-		if (!ShouldSpawn(point, spawnScore, 0.0, 0.5, 0.3)) return;
+		if (!ShouldSpawn(point, spawnScore, 0.0, 0.35, 0.3)) return;
 
-		Actor.Spawn(m_WeatherType, (point.x, point.y, m_Sector.ceilingplane.ZatPoint(point) - FRandom[Weather](2, 12)));
+		Actor.Spawn(m_WeatherType, (point.x, point.y, m_Sector.ceilingplane.ZatPoint(point) - FRandom[Weather](8, 24)));
 	}
 
 	protected virtual double GetWeatherVerticalSpeed() const { return abs(GetDefaultByType(m_WeatherType).Vel.z); }

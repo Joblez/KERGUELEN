@@ -106,7 +106,7 @@ class Colt : BaseWeapon replaces Pistol
 			}
 			M19F B 1 A_SpawnCasing();
 			M19F CDE 1;
-			M19F FG 2 A_WeaponReady(WRF_NOBOB);
+			M19F FGH 2 A_WeaponReady(WRF_NOBOB);
 			Goto Ready;
 		
 		FinalShot:
@@ -127,11 +127,11 @@ class Colt : BaseWeapon replaces Pistol
 
 		AltReady:
 			TNT1 A 0 A_JumpIf(CheckInventory("ColtMag", 1), "Ready"); // In case players use inventory cheats
-			M1FE J 1 A_WeaponReady(WRF_ALLOWRELOAD);
+			M1FE I 1 A_WeaponReady(WRF_ALLOWRELOAD);
 			Loop;
 		
 		Empty:
-			M1FE H 1 {
+			M1FE I 1 {
 				invoker.m_Empty = true;
 				A_StartSound("weapons/empty", CHAN_AUTO, 0, 0.5);
 			}
@@ -154,28 +154,32 @@ class Colt : BaseWeapon replaces Pistol
 
 		ChamberedReload:
 			M19R ABCD 1;
+			M19R EF 1;
 			TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
-			M19R EF 2;
-			M19R GHI 1;
-			M19R JKLMNO 2;
+			M19R GHIJ 2;
+			M19R KLM 2;
+			M19R NO 1;
+			M19R PQR 2;
+			M19R ST 1;
 			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
-			M19R PQR 1;
-			M19R STUVWXYZ 2;
-			M199 AB 1;
+			M19R UVWXYZ 2;
+			M199 A 2;
+			M199 BCD 1;
+			M199 EFGH 2;
 			Goto Loading;
 		
 		EmptyReload:
-			M1RE ABCDE 1;
+			M1RE ABCD 1;
+			M1RE EF 2;
 			TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
-			M1RE FG 2;
-			M1RE HIJ 1;
-			M1RE KLMNOP 2;
-			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
-			M1RE QRST 1;
+			M1RE GHIJ 2;
+			M1RE KLMNOPQR 2;
+			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);				
+			M1RE ST 1;
 			M1RE UVWXYZ 2;
-			M1RR ABC 1;
+			M1RR ABCD 1;
 			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);
-			M1RR DEFGHIJKL 2;
+			M1RR EFGHIJKLMNO 2;
 		Loading:
 			TNT1 A 0 {
 				int ammoAmount = min(

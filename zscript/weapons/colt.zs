@@ -176,12 +176,12 @@ class Colt : BaseWeapon replaces Pistol
 			M1RE GHIJ 1;
 			M1RE KLM 2;
 			M1RE NOPQR 2;
-			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);				
+			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
 			M1RE STU 1;
 			M1RE VW 2;
-			M1RE XYZ 2;				
+			M1RE XYZ 2;
 			M1RR ABCDEF 1;
-			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);					
+			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);
 			M1RR GH 3;
 			M1RR IJKLMNOP 2;
 		Loading:
@@ -257,7 +257,7 @@ class Colt : BaseWeapon replaces Pistol
 		
 		A_SpawnEffect(
 			"PistolCasing",
-			(12.5, 4.25, 16.0),
+			(9.1, 2.75, 10.0),
 			-90.0 + FRandom(0.0, 15.0),
 			FRandom(20.0, 35.0),
 			FRandom(4.0, 6.0),

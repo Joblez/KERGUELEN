@@ -93,7 +93,7 @@ class Colt : BaseWeapon replaces Pistol
 				A_TakeInventory("ColtMag", 1);
 				A_StartSound("colt/fire", CHAN_AUTO);
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
-				A_FireBulletsEx((2.0, 2.0), 4096.0, Random(14, 18), 1);
+				A_FireBulletsEx((1.5, 1.0), 4096.0, Random(14, 18), 1);
 				A_FRecoil(1);
 				A_SpawnFlash(6, -1);
 				A_SpawnEffect(
@@ -116,7 +116,7 @@ class Colt : BaseWeapon replaces Pistol
 				A_TakeInventory("ColtMag", 1);
 				A_StartSound("colt/fire", CHAN_WEAPON);
 				A_GunFlash("ZF", GFF_NOEXTCHANGE);
-				A_FireBulletsEx((2.0, 2.0), 4096.0, Random(14, 18), 1);
+				A_FireBulletsEx((1.5, 1.0), 4096.0, Random(14, 18), 1);
 				A_FRecoil(3.0);
 				A_SpawnFlash(6, -1);
 				A_SpawnSmoke();
@@ -135,8 +135,8 @@ class Colt : BaseWeapon replaces Pistol
 				invoker.m_Empty = true;
 				A_StartSound("weapons/empty", CHAN_AUTO, 0, 0.5);
 			}
-			M1FE IJ 1;
-			Goto AltReady;
+			M1FE GH 1;
+			Goto Reload;
 		
 		Reload:
 			TNT1 A 0 {
@@ -156,13 +156,14 @@ class Colt : BaseWeapon replaces Pistol
 			M19R ABCD 1;
 			M19R EF 1;
 			TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
-			M19R GHIJ 2;
+			M19R GHIJ 1;
 			M19R KLM 2;
-			M19R NO 1;
+			M19R NO 2;
 			M19R PQR 2;
-			M19R ST 1;
+			M19R STU 1;
 			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);
-			M19R UVWXYZ 2;
+			M19R VW 3;
+			M19R XYZ 2;
 			M199 A 2;
 			M199 BCD 1;
 			M199 EFG 2;
@@ -170,16 +171,19 @@ class Colt : BaseWeapon replaces Pistol
 		
 		EmptyReload:
 			M1RE ABCD 1;
-			M1RE EF 2;
+			M1RE EF 1;
 			TNT1 A 0 A_StartSound("colt/magout", CHAN_AUTO);
-			M1RE GHIJ 2;
-			M1RE KLMNOPQR 2;
+			M1RE GHIJ 1;
+			M1RE KLM 2;
+			M1RE NOPQR 2;
 			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);				
-			M1RE ST 1;
-			M1RE UVWXYZ 2;
-			M1RR ABCDE 1;
-			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);
-			M1RR EFGHIJKLMNOP 2;
+			M1RE STU 1;
+			M1RE VW 2;
+			M1RE XYZ 2;				
+			M1RR ABCDEF 1;
+			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);					
+			M1RR GH 3;
+			M1RR IJKLMNOP 2;
 		Loading:
 			TNT1 A 0 {
 				int ammoAmount = min(

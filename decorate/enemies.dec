@@ -60,7 +60,7 @@ actor Grarg replaces Demon
 		Goto Spawn
 
 	Pain:
-		GRRG I 3 A_Pain
+		GRRG I 8 A_Pain
 		Goto See
 
 	Death:
@@ -82,7 +82,7 @@ actor Grarg replaces Demon
 
 actor Lesco replaces ZombieMan
 {
-	Health 40
+	Health 28
 	Radius 16
 	Height 48
 	Speed 10
@@ -140,7 +140,7 @@ actor Lesco replaces ZombieMan
 		Goto Spawn
 
 	Pain:
-		GGLG H 2 A_Pain
+		GGLG H 6 A_Pain
 		Goto See
 
 	Death:

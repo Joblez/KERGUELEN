@@ -48,24 +48,24 @@ class Colt : BaseWeapon replaces Pistol
 			Stop;
 
 		ChamberedSelect:
-			M19R V 1 A_SetBaseOffset(-65, 81);
-			M19R W 1 A_SetBaseOffset(-35, 55);
-			M19R X 1 A_SetBaseOffset(-28, 39);
-			M19R Y 1 A_SetBaseOffset(-12, 38);
-			M19R Z 1 A_SetBaseOffset(3, 34);
+			M19R A 1 A_SetBaseOffset(65, 81);
+			M19R A 1 A_SetBaseOffset(35, 55);
+			M19R A 1 A_SetBaseOffset(28, 39);
+			M19R A 1 A_SetBaseOffset(12, 38);
+			M19R A 1 A_SetBaseOffset(3, 34);
 			M19I A 1 A_SetBaseOffset(0, WEAPONTOP);
 			M19I A 3;
 			Goto Ready;
 		
 		EmptySelect:
-			M1FE J 1 A_SetBaseOffset(-65, 81);
-			M1FE J 1 A_SetBaseOffset(-35, 55);
-			M1FE J 1 A_SetBaseOffset(-28, 39);
-			M1FE J 1 A_SetBaseOffset(-12, 38);
-			M1FE J 1 A_SetBaseOffset(3, 34);
-			M1FE J 1 A_SetBaseOffset(3, 34);
-			M1FE J 1 A_SetBaseOffset(0, WEAPONTOP);
-			M1FE J 3;
+			M1FE I 1 A_SetBaseOffset(65, 81);
+			M1FE I 1 A_SetBaseOffset(35, 55);
+			M1FE I 1 A_SetBaseOffset(28, 39);
+			M1FE I 1 A_SetBaseOffset(12, 38);
+			M1FE I 1 A_SetBaseOffset(3, 34);
+			M1FE I 1 A_SetBaseOffset(3, 34);
+			M1FE I 1 A_SetBaseOffset(0, WEAPONTOP);
+			M1FE I 3;
 			Goto AltReady;
 
 		Ready:
@@ -165,7 +165,7 @@ class Colt : BaseWeapon replaces Pistol
 			M19R UVWXYZ 2;
 			M199 A 2;
 			M199 BCD 1;
-			M199 EFGH 2;
+			M199 EFG 2;
 			Goto Loading;
 		
 		EmptyReload:
@@ -177,9 +177,9 @@ class Colt : BaseWeapon replaces Pistol
 			TNT1 A 0 A_StartSound("colt/magins", CHAN_AUTO);				
 			M1RE ST 1;
 			M1RE UVWXYZ 2;
-			M1RR ABCD 1;
+			M1RR ABCDE 1;
 			TNT1 A 0 A_StartSound("colt/sliderel", CHAN_AUTO);
-			M1RR EFGHIJKLMNO 2;
+			M1RR EFGHIJKLMNOP 2;
 		Loading:
 			TNT1 A 0 {
 				int ammoAmount = min(
@@ -203,21 +203,21 @@ class Colt : BaseWeapon replaces Pistol
 
 		ChamberedDeselect:
 			M19I A 1 A_SetBaseOffset(3, 34);
-			M19R Z 1 A_SetBaseOffset(-12, 38);
-			M19R Y 1 A_SetBaseOffset(-28, 39);
-			M19R X 1 A_SetBaseOffset(-35, 55);
-			M19R W 1 A_SetBaseOffset(-65, 81);
+			M19R A 1 A_SetBaseOffset(12, 38);
+			M19R A 1 A_SetBaseOffset(28, 39);
+			M19R A 1 A_SetBaseOffset(35, 55);
+			M19R A 1 A_SetBaseOffset(65, 81);
 			TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 			TNT1 A 4;
 			TNT1 A 0 A_Lower(16);
 			Loop;
 
 		EmptyDeselect:
-			M1FE J 1 A_SetBaseOffset(3, 34);
-			M1FE J 1 A_SetBaseOffset(-12, 38);
-			M1FE J 1 A_SetBaseOffset(-28, 39);
-			M1FE J 1 A_SetBaseOffset(-35, 55);
-			M1FE J 1 A_SetBaseOffset(-65, 81);
+			M1FE I 1 A_SetBaseOffset(3, 34);
+			M1FE I 1 A_SetBaseOffset(12, 38);
+			M1FE I 1 A_SetBaseOffset(28, 39);
+			M1FE I 1 A_SetBaseOffset(35, 55);
+			M1FE I 1 A_SetBaseOffset(65, 81);
 			TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 			TNT1 A 4;
 			TNT1 A 0 A_Lower(16);

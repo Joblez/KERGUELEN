@@ -61,7 +61,8 @@ class KergPlayer : PlayerPawn
 		Player.DisplayName "Amerigo";
 		Player.StartItem "Colt", 1;
 		Player.StartItem "Hatchet", 1;
-		Player.StartItem "Ammo45", 48;
+		Player.StartItem "Ammo45", 16;
+		Player.StartItem "ColtMag",8;
 		Player.Startitem "RevoCylinder", 6;
 		Player.SoundClass "player";
 		Player.WeaponSlot 1, "Hatchet";
@@ -94,9 +95,7 @@ class KergPlayer : PlayerPawn
 		Radius 16.025;
 		// Speed 16;
 		Speed 2.4;
-		// Speed 0.65;
-		Friction 0.93;
-
+		Friction 0.94;
 		Gravity 1.0;
 		DamageFactor "Explosive", 0.7;
 		+NOSKIN

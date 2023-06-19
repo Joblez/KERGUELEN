@@ -29,7 +29,7 @@ class Colt : BaseWeapon replaces Pistol
 
 		Inventory.PickupMessage "[2] .45 Handgun";
 
-		Tag "Colt M1911A1";
+		Tag "M1911";
 	}
 
 	States

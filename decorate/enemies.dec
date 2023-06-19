@@ -164,7 +164,7 @@ actor RockProjectile
 	Speed 30
 	Gravity 0.3
 	Scale 0.7
-	Damage (8)
+	Damage (10)
 	Projectile
 	Seesound "rock/bounce"
 	DamageType "Normal"
@@ -175,7 +175,7 @@ actor RockProjectile
 	States
 	{
 	Spawn:
-		PROC ABCDEGHABCDEGH 3
+		PROC ABCDEGHABCDEGH 3 A_AttachLightDef('Lighter','Lighter')
 		TNT1 A 0 A_SetGravity(0.5)
 		Loop
 
@@ -184,7 +184,7 @@ actor RockProjectile
 		Stop
 
 	Death:
-		PROC A 12
+		PROC A 12 A_RemoveLight('Lighter')
 		Stop
 	}
 }

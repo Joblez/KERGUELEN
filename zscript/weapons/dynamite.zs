@@ -71,13 +71,14 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 	Release:
 		TNT1 A 0 A_StartSound("hatchet/swing", 9);
 		TNT1 A 0 A_TakeInventory(invoker.AmmoType1, 1);
-		DYNT ABC 1;
+		DYNT AB 1;
 		TNT1 A 0 {
 			Actor stick = A_FireProjectile("DynamiteStick", 0, 1, 0, 12, 0, 0);
 			stick.Vel *= min(invoker.m_Throw, 2.5);
 		}
-		DYNT DE 2;
-		DYNT FGHIJK 1;
+		DYNT CDE 1;
+		DYNT FGH 2;
+		DYNT IJK 1;
 		TNT1 A 0 {
 			invoker.AmmoUse1 = invoker.GetReserveAmmo() > 0 ? 0 : 1;
 			A_CheckReload();
@@ -119,18 +120,19 @@ class Dynamite : BaseWeapon replaces Rocketlauncher
 		DYNS CD 2 A_SetBaseOffset(1, 50);
 		TNT1 A 0 A_AttachLightDef('lighter', 'Lighter');
 		TNT1 A 0 A_StartSound("dynamite/light", 10);
-		DYNS E 2 A_SetBaseOffset(1, 50);
+		DYNS E 2 A_SetBaseOffset(1, 40);
 		DYNS FGH 2 A_SetBaseOffset(1, 30);
-		DYNS I 2 A_SetBaseOffset(0, WEAPONTOP);
+		DYNS IJ 2 A_SetBaseOffset(0, WEAPONTOP);
 		TNT1 A 0 A_Raise(16);
 		Wait;
 
 	Deselect:
-		DYNS FED 2;
+		DYNS GFED 2;
 		TNT1 A 0 A_RemoveLight('lighter');
 		DYNS CB 2;
 		TNT1 A 0 A_StartSound("dynamite/close", 10);
 		DYNS A 2;
+		TNT1 A 2;
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 0 A_Lower(16);
 		Wait;

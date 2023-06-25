@@ -168,30 +168,32 @@ shotgun/draw DSSHTGB
 
 //m2 carbine
 
-$random m2c/fire { DSm2cF1 DSm2cF2 DSm2cF3 DSm2cF4 }
+$random AR10/fire { DSM2CF1 DSM2CF2 DSM2CF3 DSM2CF4 }
 
-DSm2cF1 DSm2cF1
-DSm2cF2 DSm2cF2
-DSm2cF3 DSm2cF3
-DSm2cF4 DSm2cF4
+DSM2CF1 DSM2CF1
+DSM2CF2 DSM2CF2
+DSM2CF3 DSM2CF3
+DSM2CF4 DSM2CF4
 
-m2c/magout DSFNOUT
+AR10/magout DSFNOUT
 
-m2c/magins DSFNINS
+AR10/magins DSFNINS
 
-m2c/boltback DSFNBAC
+AR10/magtap DSARTAP
 
-m2c/boltrel DSFNREL
+AR10/boltback DSFNBAC
 
-m2c/loop DSMCHLP
+AR10/boltrel DSFNREL
 
-m2c/loopend DSMCHED
+AR10/loop DSMCHLP
+
+AR10/loopend DSMCHED
 
 weapons/empty DRYFIRE
 
 weapons/firemode DSWEPCK
 
-m2c/draw DSm2cGB
+AR10/draw DSAR10GB
 
 //Dynamite
 

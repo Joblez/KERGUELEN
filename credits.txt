@@ -6,24 +6,32 @@ This mod uses Nashgore by Nash Muhandes
 
 this also uses vsonnier's port of thezombiekiller's footsteps, modified by Magdiel
 
-Specifics:
+Textures - ID Software
 
-1.Enemies/NPCs
+Enemies/NPCs:
 
-'Grarg' Enemy - 3D Realms, Ultimecia, Obsidian
+	'Grarg' Enemy - 3D Realms, Ultimecia, Obsidian
 
-'Greenlittleguy' Enemy - Bethesda, Obsidian
+	'Greenlittleguy' Enemy - Bethesda, Obsidian
+	
+	'Wyvern' - Raven Software, Obsidian
 
-'Wyvern' - Raven Software, Obsidian
-
-Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+	Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
 
 
-2.Weapons
+Weapons:
 
-Selecting weapon sounds - CS:GO
+	Selecting weapon sounds - Valve, CS:GO
 
-FNC sound effects - Polenar Tactical, TFB TV, NWI
+	Shotgun: Tripwire Interactive, Killing Floor 
+	"Remington Model 10 Demonstration" - https://youtu.be/Msm6-xnv4Kk
 
-Explosion Sprites - Rogue Software
+	Assault Rifle:
+
+	"US M14 (Clone) POV - 308k Subscriber Special" - https://www.youtube.com/watch?v=nU0ECshc89M
+	
+	"M16A1 (clone) POV firing" - https://youtu.be/b2wOTXJ3wXk
+
+	"Shooting and Disassembly of Early Dutch AR10s" - https://youtu.be/nuEKwdwoqBA
+
 

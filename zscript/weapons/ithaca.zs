@@ -65,7 +65,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_JumpIf((invoker.m_Chambered && invoker.m_IsLoading), "ReloadEnd"); // If loaded.
 		TNT1 A 0 A_JumpIf((!invoker.m_Chambered && !invoker.m_IsLoading), "Pump"); // If empty.
 
-		ITAF A 2 Bright {
+		ITAF A 1 Bright {
 			invoker.m_Chambered = false;
 
 			let iterator = BlockThingsIterator.Create(self, 256.0);
@@ -107,7 +107,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 				}
 			}
 
-			A_FireBulletsEx((7.0, 7.0), 4096.0, Random(4, 7), 12);
+			A_FireBulletsEx((7.0, 4.0), 4096.0, Random(5, 9), 12);
 			A_FRecoil(2);
 			A_AlertMonsters();
 			A_SpawnFlash(4, -4, 2);
@@ -139,7 +139,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		TNT1 A 0 A_JumpIf(invoker.m_IsLoading, "ReloadStart");
 	Postshot:	
 		ITAP IJM 2;
-		ITAP NOP 1 A_Weaponready(WRF_NOSWITCH); 
+		ITAP NOP 2 A_Weaponready(WRF_NOSWITCH); 
 		Goto Ready;
 
 	Empty:

@@ -511,26 +511,34 @@ class Bullet_Puff : Actor replaces BulletPuff
 		Stop;
 
 	Crash:
-		TNT1 A 0 A_Jump(128, "Crash2", "Crash3");
+		TNT1 A 0 A_Jump(128, "Crash2", "Crash3","Crash4");
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 A 1 Bright Light("Spark");
-		FX57 BC 1 Bright Light("Spark");
-		FX57 D 1 Bright;
-		FX57 E 1 Bright A_SetTranslucent(.5, 1);
+		RIC1 A 1 Bright Light("Spark");
+		RIC1 BC 1 Bright Light("Spark");
+		RIC1 D 1 Bright;
+		RIC1 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash2:
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 J 1 Bright Light("Spark");
-		FX57 KL 1 Bright Light("Spark");
-		FX57 M 1 Bright;
-		FX57 N 1 Bright A_SetTranslucent(.5, 1);
+		RIC2 A 1 Bright Light("Spark");
+		RIC2 BC 1 Bright Light("Spark");
+		RIC2 D 1 Bright;
+		RIC2 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash3:
 		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
-		FX57 F 1 Bright Light("Spark");
-		FX57 GH 1 Bright Light("Spark");
-		FX57 I 1 Bright;
+		RIC3 A 1 Bright Light("Spark");
+		RIC3 BC 1 Bright Light("Spark");
+		RIC3 D 1 Bright;
 		Stop;
+
+	Crash4:
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
+		RIC4 A 1 Bright Light("Spark");
+		RIC4 BC 1 Bright Light("Spark");
+		RIC4 D 1 Bright;
+		Stop;
+
 	}
 }
 
@@ -550,11 +558,10 @@ class Melee_Puff : Bullet_Puff
 
 	Crash:
 		TNT1 A 0 A_SetScale(0.5);
-		FX57 A 1 Bright Light("Spark") A_StartSound("hatchet/hitwall", CHAN_AUTO);
-		FX57 BC 1 Bright Light("Spark") A_SetTranslucent(.8, 1);
-		FX57 DE 1 Bright A_SetTranslucent(.6, 1);
-		FX57 FG 1 Bright Light("Spark") A_SetTranslucent(.4, 1);
-		FX57 HIJ 1 Bright A_SetTranslucent(.2, 1);
+		RIC1 A 1 Bright Light("Spark") A_StartSound("hatchet/hitwall", CHAN_AUTO);
+		RIC1 BC 1 Bright Light("Spark") A_SetTranslucent(.8, 1);
+		RIC1 D 1 Bright A_SetTranslucent(.6, 1);
+		RIC1 E 1 Bright Light("Spark") A_SetTranslucent(.4, 1);
 		Stop;
 	Melee:
 		FX57 A 0 Bright A_StartSound("hatchet/hit", CHAN_AUTO);

@@ -117,59 +117,62 @@ class Ithaca : BaseWeapon replaces Shotgun
 			A_SetBaseOffset(4, 34);
 			A_SpawnSmoke();
 		}
-		ITAF B 1 Bright A_SetBaseOffset(2, 32);
-		ITAF CDEF 1;
-		ITAF GHI 2;
+		ITAF B 2 Bright A_SetBaseOffset(2, 32);
+		ITAF CD 2;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 {
 			if (CountInv("Sh12Tube") == 0) {
-				return ResolveState("Ready");
+				return ResolveState("Postshot");
 			}
 			else {
 				return ResolveState("Pump");
 			}
 		}
 	Pump:
-		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO, 0, 0.9);
 		TNT1 A 0 { invoker.m_Chambered = true; }
-		ITAP ABC 1;
+		ITAP AB 1;
+		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO, 0, 0.9);		
 		TNT1 A 0 A_SpawnCasing();
-		ITAP DE 2;
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
-
-		ITAP FG 2;
+		ITAP CDE 2;
+		ITAP FGH 1;
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);		
 		TNT1 A 0 A_JumpIf(invoker.m_IsLoading, "ReloadStart");
-		ITAP HIJ 1;
+	Postshot:	
+		ITAP IJM 2;
+		ITAP NOP 1 A_Weaponready(WRF_NOSWITCH); 
 		Goto Ready;
 
 	Empty:
 		TNT1 A 0 A_StartSound("weapons/empty", 10,0,0.5);
-		ITAF FGH 2;
-		Goto Ready;
+		ITAP NOP 2;
+		Goto Reload;
 
 	Charge:
 		TNT1 A 0 { invoker.m_IsLoading = false; }
-		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO ,0, 0.9);
-		ITAP ABC 1;
-		ITAP DE 2;
+		ITPP AB 2;
+		ITPP C 2;
+		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO ,0, 0.9);		
+		ITPP DE 2;
 		TNT1 A 0 A_SpawnCasing();
-		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);
-		ITAP FG 2;
+		ITPP FG 2;
+		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);		
 		TNT1 A 0 { invoker.m_Chambered = true; }
-		ITAP HIJ 1 A_WeaponReady();
-		Goto Ready;
+		ITPP H 2;
+		ITPP BA 1;
+		ITRL IJKL 1;		
+		Goto ReloadRepeat;
 
 	Select:
 		TNT1 A 0 SetPlayerProperty(0, 1, 2);
 		TNT1 A 1;
-		ITRS F 1 A_SetBaseOffset(70, 100);
-		ITRS E 1 A_SetBaseOffset(60, 80);
-		ITRS D 1 A_SetBaseOffset(40, 60);
-		ITRS C 1 A_SetBaseOffset(20, 40);
-		ITRS B 1 A_SetBaseOffset(10, 30);
-		ITRS A 1 A_SetBaseOffset(2, 30);
+		ITAI A 1 A_SetBaseOffset(70, 100);
+		ITAI A 1 A_SetBaseOffset(60, 80);
+		ITAI A 1 A_SetBaseOffset(40, 60);
+		ITAI A 1 A_SetBaseOffset(20, 40);
+		ITAI A 1 A_SetBaseOffset(10, 30);
+		ITAI A 1 A_SetBaseOffset(2, 30);
 		ITAI A 0 A_SetBaseOffset(0, WEAPONTOP);
-		ITAF FGH 2;
+		ITAI AAA 2;
 		ITAI A 1 A_Raise(16);
 		Goto Ready;
 
@@ -191,7 +194,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 
 	ReloadStart:
 		ITRS ABCDE 1 A_WeaponReady(WRF_NOFIRE | WRF_NOBOB);
-		ITRS FGH 2 A_WeaponReady(WRF_NOFIRE | WRF_NOBOB);
+		ITRS FGHIJ 2 A_WeaponReady(WRF_NOFIRE | WRF_NOBOB);
 		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("Sh12Tube", STUBE, "ReloadEnd");
@@ -206,19 +209,20 @@ class Ithaca : BaseWeapon replaces Shotgun
 			if (invoker.GetAmmo() == 0) flags |= WRF_NOFIRE;
 			A_WeaponReady(flags);
 		}
-		ITRL BCD 1;
-		ITRL EF 2;
-		ITRL G 1 {
+		ITRL BCDE 1;
+		ITRL F 2;
+		ITRL G 2 {
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
 			A_StartSound("shotgun/load", 10, 0, 0.5);
 		}
-		ITRL HI 1;
+		ITRL H 1;
+		TNT1 A 0 A_JumpIf(!invoker.m_Chambered, "Charge");				
 		TNT1 A 0 A_SetBaseOffset(4, 34);
-		ITRL JKL 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
+		ITRL IJ 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
+		ITRL KL 1;
 		TNT1 A 0 A_SetBaseOffset(3, 33);
-		ITRL M 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOBOB);
 		TNT1 A 0 {
 			A_SetBaseOffset(2, 32);
 
@@ -233,11 +237,11 @@ class Ithaca : BaseWeapon replaces Shotgun
 		}
 	ReloadEnd:
 		TNT1 A 0 A_SetBaseOffset(2, 32);
-		ITRE ABCDE 2;
+		ITRE A 2 ;		
+		ITRE BCDE 2;
 		TNT1 A 0 A_SetBaseOffset(1, 31);
 		ITRE FGHI 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
-		TNT1 A 0 A_JumpIf(!invoker.m_Chambered, "Pump");
 		TNT1 A 0 { invoker.m_IsLoading = false; }
 		Goto Ready;
 	}

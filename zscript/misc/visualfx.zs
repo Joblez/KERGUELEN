@@ -512,28 +512,28 @@ class Bullet_Puff : Actor replaces BulletPuff
 
 	Crash:
 		TNT1 A 0 A_Jump(128, "Crash2", "Crash3","Crash4");
-		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.2);
 		RIC1 A 1 Bright Light("Spark");
 		RIC1 BC 1 Bright Light("Spark");
 		RIC1 D 1 Bright;
 		RIC1 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash2:
-		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.2);
 		RIC2 A 1 Bright Light("Spark");
 		RIC2 BC 1 Bright Light("Spark");
 		RIC2 D 1 Bright;
 		RIC2 E 1 Bright A_SetTranslucent(.5, 1);
 		Stop;
 	Crash3:
-		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.2);
 		RIC3 A 1 Bright Light("Spark");
 		RIC3 BC 1 Bright Light("Spark");
 		RIC3 D 1 Bright;
 		Stop;
 
 	Crash4:
-		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.5);
+		TNT1 A 0 A_StartSound("weapons/ricochet", 11,0,0.2);
 		RIC4 A 1 Bright Light("Spark");
 		RIC4 BC 1 Bright Light("Spark");
 		RIC4 D 1 Bright;

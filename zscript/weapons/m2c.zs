@@ -1,4 +1,4 @@
-const RMAG = 25;
+const RMAG = 30;
 
 class RifleMag : Ammo
 {
@@ -15,7 +15,7 @@ class M2C : BaseWeapon replaces Chaingun
 
 	Default
 	{
-		Inventory.PickupMessage "(4) 7.62 Rifle";
+		Inventory.PickupMessage "(4)7.62 Armalite Rifle";
 		Weapon.AmmoUse 0;
 		Weapon.AmmoGive1 0;
 		Weapon.AmmoGive2 RMAG;
@@ -24,7 +24,7 @@ class M2C : BaseWeapon replaces Chaingun
 		Weapon.BobRangeX 5.0;
 		Weapon.BobRangeY 2.0;
 		Weapon.AmmoType1 "RifleMag";
-		Weapon.AmmoType2 "Ammo30";
+		Weapon.AmmoType2 "Ammo762";
 		Weapon.UpSound("AR10/draw");
 
 		BaseWeapon.MoveSwayUpRange 1.0;
@@ -95,7 +95,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
 
-		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, Random(15, 25), 1);
+		TNT1 A 0 A_FireBulletsEx((1.0, 1.0), 5120.0, Random(15, 20), 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ARFL A 1 Bright {
 			A_FRecoil(1.2);
@@ -115,16 +115,14 @@ class M2C : BaseWeapon replaces Chaingun
 		ARFR B 1;
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf(Player.cmd.buttons & BT_ATTACK, "Automatic");
-		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("AR10/loopend", 11);
-		ARFR CDEF 2 A_WeaponReady(WRF_NOSWITCH);
+		ARFR CDEFF 1 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 		
 	Automatic:
 		TNT1 A 0 A_JumpIfInventory("RifleMag", 1, 1);
 		Goto Finalshot;
 
-		TNT1 A 0 A_FireBulletsEx((5.0, 2.0), 5120.0, Random(15, 25), 1);
+		TNT1 A 0 A_FireBulletsEx((5.0, 1.0), 5120.0, Random(15, 20), 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ARFL A 1 Bright {
 			A_FRecoil(1.2);
@@ -133,8 +131,8 @@ class M2C : BaseWeapon replaces Chaingun
 			A_SpawnFlash(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
-			A_StartSound("AR10/loop", CHAN_WEAPON, CHANF_LOOPING);
 			//A_StartSound("AR10/fire", CHAN_WEAPON);
+			A_StartSound("AR10/loop", CHAN_WEAPON, CHANF_LOOPING);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
@@ -147,7 +145,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_JumpIf(Player.cmd.buttons & BT_ATTACK, "Automatic");
 		TNT1 A 0 A_StopSound(1);
 		TNT1 A 0 A_StartSound("AR10/loopend", 11);
-		ARFR CDEF 2 A_WeaponReady(WRF_NOSWITCH);
+		ARFR CDEFF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 
 	FinalShot:

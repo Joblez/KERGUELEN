@@ -34,14 +34,14 @@ actor 9mmBigBox : Ammo9mm 20048
 	}
 }
 
-//.30 Carbine
+//7.62 Nato
 
-actor Ammo30: Ammo replaces Clip
+actor Ammo762: Ammo replaces Clip
 {
 	//$Category Ammunition
 	Inventory.Amount 35
 	Inventory.MaxAmount 210
-	Inventory.PickupMessage "A .30 cal magazine."
+	Inventory.PickupMessage "A 7.62 magazine."
 	Inventory.PickupSound "pickup/ammo"
 
 	States
@@ -52,11 +52,11 @@ actor Ammo30: Ammo replaces Clip
 	}
 }
 
-actor Ammo30BigBox : Ammo30 replaces ClipBox
+actor Ammo762Box : Ammo762 replaces ClipBox
 {
 	//$Category Ammunition
 	Inventory.Amount 70
-	Inventory.PickupMessage "A box of .30 cal magazines."
+	Inventory.PickupMessage "A box of 7.62 magazines."
 	Inventory.PickupSound "pickup/ammo"
 
 	States

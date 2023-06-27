@@ -98,7 +98,7 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_FireBulletsEx((1.0, 1.0), 5120.0, Random(15, 20), 1);
 		TNT1 A 0 A_SetBaseOffset(2, 32);
 		ARFL A 1 Bright {
-			A_FRecoil(1.2);
+			A_FRecoil(2.0);
 			A_SpawnCasing();
 			A_SpawnSmoke();
 			A_SpawnFlash(5, -3);
@@ -264,7 +264,7 @@ class M2C : BaseWeapon replaces Chaingun
 
 		invoker.SpawnEffect(
 			"RifleCasing",
-			(Math.Remap(Pitch, -90.0, 90.0, 30.0, 16.0),
+			(Math.Remap(Pitch, -120.0, 120.0, 30.0, 20.0),
 			Math.Remap(abs(Pitch), 0.0, 90.0, 18.0, 20.0),
 			26.0),
 			-90.0 + FRandom(-5.0, 5.0),

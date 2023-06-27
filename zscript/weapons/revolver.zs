@@ -1,5 +1,5 @@
 
-// { S&W Model 19 }
+// { Colt Trooper }
 
 const BCYN = 6;
 
@@ -35,7 +35,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 		Inventory.PickupMessage "[2].357 Magnum Revolver";
 
-		Tag "Model 19";
+		Tag "Trooper";
 	}
 
 	States
@@ -68,7 +68,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.GetHUDExtension().SendEventToSM('RoundFired');
 			A_StartSound("sw/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
-			A_FireBulletsEx((invoker.m_Spread.x, invoker.m_Spread.y), 4096.0, Random(32, 36), 1);
+			A_FireBulletsEx((invoker.m_Spread.x, invoker.m_Spread.y), 4096.0, Random(82, 88), 1);
 			A_FRecoil(1);
 			A_SpawnSmoke();
 			A_SpawnFlash(7, -1);
@@ -78,12 +78,13 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 	PostShot:
 		SWAF A 1 Bright;
-		SWAF B 2 Bright;
-		SWAF C 1;
+		SWAF B 1 Bright;
+		SWAF C 3;
 		SWAF D 2;
-		SWAF E 1;
-		SWAF F 2;
+		SWAF E 2;
+		SWAF F 1;
 		SWAF G 1;
+		SWAF H 1;
 	PostPostShot:
 		SWAF I 1;
 		TNT1 A 0 A_ReFire("PostPostShot");
@@ -96,17 +97,17 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
 		SWSA E 1;
 		SWSA F 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
-		SWSA GHIJKLMN 1;
+		SWSA GHIJKL 1;
 		TNT1 A 0 { invoker.m_SingleAction = true; }
 		Goto AltReady;
 
 	AltReady:
-		TNT1 A 0 { invoker.m_Spread = (1, 1); }
-		SWSA N 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		TNT1 A 0 { invoker.m_Spread = (1, 0); }
+		SWSA L 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
 	Ready:
-		TNT1 A 0 { invoker.m_Spread = (3, 3); }
+		TNT1 A 0 { invoker.m_Spread = (3, 1); }
 		SWAI A 1 A_WeaponReady(WRF_ALLOWRELOAD);
 		Loop;
 
@@ -143,8 +144,8 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
 			A_DropCasings();
-			A_TakeInventory("RevoCylinder", BCYN);
-			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
+			//A_TakeInventory("RevoCylinder", BCYN);
+			//invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
 			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
 		}
 		SWEJ N 1;
@@ -223,13 +224,13 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Goto AltReady;
 
 	DoubleActionSelect:
-		SWCL J 1 A_SetBaseOffset(-65, 81);
-		SWCL J 1 A_SetBaseOffset(-35, 55);
-		SWCL J 1 A_SetBaseOffset(-28, 39);
-		SWCL J 1 A_SetBaseOffset(-12, 38);
-		SWCL K 1 A_SetBaseOffset(3, 34);
-		SWCL K 1 A_SetBaseOffset(3, 34);
-		SWCL LMN 1;
+		SWAI A 1 A_SetBaseOffset(-65, 81);
+		SWAI A 1 A_SetBaseOffset(-35, 55);
+		SWAI A 1 A_SetBaseOffset(-28, 39);
+		SWAI A 1 A_SetBaseOffset(-12, 38);
+		SWAI A 1 A_SetBaseOffset(3, 34);
+		SWAI A 1 A_SetBaseOffset(3, 34);
+		SWAI A 1;
 		SWAF A 0 A_SetBaseOffset(0, WEAPONTOP);
 		Goto Ready;
 
@@ -259,11 +260,11 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Wait;
 	
 	DoubleActionDeselect:
-		SWCL M 1 A_SetBaseOffset(3, 34);
-		SWCL K 1 A_SetBaseOffset(-12, 38);
-		SWCL J 1 A_SetBaseOffset(-28, 39);
-		SWCL J 1 A_SetBaseOffset(-35, 55);
-		SWCL J 1 A_SetBaseOffset(-65, 81);
+		SWAI A 1 A_SetBaseOffset(3, 34);
+		SWAI A 1 A_SetBaseOffset(-12, 38);
+		SWAI A 1 A_SetBaseOffset(-28, 39);
+		SWAI A 1 A_SetBaseOffset(-35, 55);
+		SWAI A 1 A_SetBaseOffset(-65, 81);
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);

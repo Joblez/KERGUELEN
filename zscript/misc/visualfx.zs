@@ -50,7 +50,7 @@ class MuzzleSmoke : Actor
 		Alpha 0.4;
 		Radius 0;
 		Height 0;
-		Scale 0.55;
+		Scale 1.2;
 		
 		MuzzleSmoke.AirResistance 1.075;
 		MuzzleSmoke.AirBuoyancy 0.15;

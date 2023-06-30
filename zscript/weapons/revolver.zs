@@ -55,7 +55,6 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_StartSound("sw/cock2", 9);
 			invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
 		}
-		SWDA A 1;
 		SWDA B 1;
 		SWDA C 1;
 	Shoot:
@@ -134,29 +133,37 @@ class Revolver : BaseWeapon replaces Supershotgun
 			}
 			return ResolveState(null);
 		}
-		SWEJ ABC 1;
+
+		TNT1 A 0 {
+			if (CheckInventory("RevoCylinder", 1))
+				{
+					return ResolveState(null);
+				}
+			else
+				{
+					return ResolveState("EmptyReload");
+				}
+			}
+	FullReload:
+		SWEJ ABC 2;
 		SWEJ DE 2;
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
-		SWEJ FG 1;
-		SWEJ HI 1;
-		SWEJ JKL 1;
-		SWEJ M 3;
+		SWEJ FG 2;
+		SWEJ HI 2;
+		SWEJ JKL 2;
+		SWEJ L 2;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
-			A_DropCasings();
 			//A_TakeInventory("RevoCylinder", BCYN);
-			//invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
-			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
-		}
-		SWEJ N 1;
-		SWEJ O 3;
-		SWEJ PQ 1;
-		SWEJ R 1;
-		SWEJ ST 1;
-		SWEJ UV 2;
+			//invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');			
+			}
 	Load:
 		SWLD ABC 1 A_WeaponReady(WRF_NOSWITCH);
-		SWLD DE 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD DEF 2 A_WeaponReady(WRF_NOSWITCH);
+		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
+		SWLD GHI 2 A_WeaponReady(WRF_NOSWITCH);
+		TNT1 A 0 A_DropCasing();
+		SWLD JK 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			A_StartSound("sw/load", CHAN_AUTO,0,0.5);
 			int ammoAmount = min(
@@ -171,8 +178,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
 			return ResolveState(null);
 		}
-		SWLD FG 2 A_WeaponReady(WRF_NOSWITCH);
-		SWLD HIJ 1 A_WeaponReady(WRF_NOSWITCH);
+		SWLD LM 2 A_WeaponReady(WRF_NOSWITCH);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, BCYN) || !CheckInventory(invoker.AmmoType2, 1))
 			{
@@ -187,16 +193,57 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWCL C 1 {
 			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
 		}
-		SWCL DE 1;
+		SWCL DE 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
-		SWCL FGH 3;
-		SWCL IJKLMN 2;
+		SWCL FGH 2;
+		SWCL IJ 2;
 		TNT1 A 0 {
 			invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');
 			invoker.m_SingleAction = false;
 			invoker.m_IsLoading = false;
 		}
 		Goto Ready;
+
+	EmptyReload:
+		SWER ABCDEF 2;
+		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
+		SWER GHIJKLM 2;
+		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
+		SWER NOPQ 1;
+		TNT1 A 0 A_DropCasings();
+		SWER RSTUVWXYZ 2;
+		SWRR ABCDE 2;
+		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO,0,0.5);
+	Loading:
+		TNT1 A 0 {
+			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
+			{
+				return ResolveState ("Ready");
+			}
+
+			int ammoAmount = min(
+				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
+				CountInv(invoker.AmmoType2));
+
+			if (ammoAmount <= 0) return ResolveState ("Ready");
+
+			GiveInventory (invoker.AmmoType1, ammoAmount);
+			TakeInventory (invoker.AmmoType2, ammoAmount);
+
+			return ResolveState ("EmptyReloadEnd");
+		}
+	EmptyReloadEnd:
+		SWRR FGHI 2;
+		SWRR JKL 2;
+		TNT1 A 0 { A_StartSound("sw/close", CHAN_AUTO,0,0.5); invoker.GetHUDExtension().SendEventToSM('CylinderClosed'); }
+		SWRR MNOPQRS 2;
+		TNT1 A 0 {
+			invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');
+			invoker.m_SingleAction = false;
+			invoker.m_IsLoading = false;
+		}
+		goto ready;
+
 
 	Select:
 		TNT1 A 0 {
@@ -301,6 +348,18 @@ class Revolver : BaseWeapon replaces Supershotgun
 		effect.Scale.x += 0.45;
 		effect.Scale.y = effect.Scale.x;
 	}
+	private action void A_DropCasing()
+	{
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+		
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+	}
 
 	private action void A_DropCasings()
 	{
@@ -321,4 +380,5 @@ class Revolver : BaseWeapon replaces Supershotgun
 				true);
 		}
 	}
+
 }

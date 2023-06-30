@@ -1,4 +1,4 @@
-const RMAG = 30;
+const RMAG = 35;
 
 class RifleMag : Ammo
 {

@@ -40,7 +40,7 @@ actor Ammo762: Ammo replaces Clip
 {
 	//$Category Ammunition
 	Inventory.Amount 35
-	Inventory.MaxAmount 210
+	Inventory.MaxAmount 280
 	Inventory.PickupMessage "A 7.62 magazine."
 	Inventory.PickupSound "pickup/ammo"
 

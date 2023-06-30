@@ -1,6 +1,3 @@
-
-// { Colt Trooper }
-
 const BCYN = 6;
 
 Class RevoCylinder : Ammo
@@ -13,6 +10,8 @@ Class RevoCylinder : Ammo
 		Ammo.BackpackMaxAmount BCYN;
 	}
 }
+
+// Colt Trooper
 
 class Revolver : BaseWeapon replaces Supershotgun
 {
@@ -55,8 +54,8 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_StartSound("sw/cock2", 9);
 			invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
 		}
+		SWDA A 1;
 		SWDA B 1;
-		SWDA C 1;
 	Shoot:
 		TNT1 A 0 A_JumpIfInventory("RevoCylinder", 1, 1);
 		Goto Empty;
@@ -209,7 +208,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
 		SWER GHIJKLM 2;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
-		SWER NOPQ 1;
+		SWER NOPQ 2;
 		TNT1 A 0 A_DropCasings();
 		SWER RSTUVWXYZ 2;
 		SWRR ABCDE 2;

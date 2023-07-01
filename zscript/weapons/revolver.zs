@@ -146,25 +146,27 @@ class Revolver : BaseWeapon replaces Supershotgun
 	FullReload:
 		SWEJ ABC 2;
 		SWEJ DE 2;
-		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
+		TNT1 A 0 {
+			invoker.m_IsLoading = true;
+			A_StartSound("sw/open", CHAN_AUTO, 0, 0.5);
+			invoker.GetHUDExtension().SendEventToSM('CylinderOpened');
+		}
 		SWEJ FG 2;
 		SWEJ HI 2;
 		SWEJ JKL 2;
 		SWEJ L 2;
-		TNT1 A 0 {
-			invoker.m_IsLoading = true;
-			//A_TakeInventory("RevoCylinder", BCYN);
-			//invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');			
-			}
 	Load:
 		SWLD ABC 1 A_WeaponReady(WRF_NOSWITCH);
-		SWLD DEF 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
-		SWLD GHI 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 A_DropCasing();
-		SWLD JK 2 A_WeaponReady(WRF_NOSWITCH);
-		TNT1 A 0 {
-			A_StartSound("sw/load", CHAN_AUTO,0,0.5);
+		SWLD D 1 {
+			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
+			invoker.GetHUDExtension().SendEventToSM('RoundRemoved');
+		}
+		SWLD D 1;
+		SWLD DEF 2;
+		SWLD GH 2;
+		SWLD I 1 {
+			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
+			A_StartSound("sw/load", CHAN_AUTO, 0, 0.5);
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));
@@ -174,24 +176,26 @@ class Revolver : BaseWeapon replaces Supershotgun
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 
-			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
 			return ResolveState(null);
 		}
-		SWLD LM 2 A_WeaponReady(WRF_NOSWITCH);
+		SWLD I 1;
+		TNT1 A 0 A_DropCasing();
+		SWLD JK 2;
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, BCYN) || !CheckInventory(invoker.AmmoType2, 1))
 			{
-				return ResolveState ("ReloadEnd");
+				return ResolveState("ReloadEnd");
 			}
 
-			return ResolveState("Load");
+			invoker.GetHUDExtension().SendEventToSM('CylinderRotatedReverse');
+			return ResolveState(null);
 		}
+		SWLD LM 2 A_WeaponReady(WRF_NOSWITCH);
+		Goto Load;
 	ReloadEnd:
 	Close:
 		SWCL AB 1;
-		SWCL C 1 {
-			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
-		}
+		SWCL C 1 { invoker.GetHUDExtension().SendEventToSM('CylinderClosed'); }
 		SWCL DE 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
 		SWCL FGH 2;
@@ -208,7 +212,13 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
 		SWER GHIJKLM 2;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
-		SWER NOPQ 2;
+		SWER N 2;
+		TNT1 A 0 {
+			invoker.m_IsLoading = true;
+			A_TakeInventory("RevoCylinder", BCYN);
+			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
+		}
+		SWER OPQ 2;
 		TNT1 A 0 A_DropCasings();
 		SWER RSTUVWXYZ 2;
 		SWRR ABCDE 2;
@@ -347,6 +357,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		effect.Scale.x += 0.45;
 		effect.Scale.y = effect.Scale.x;
 	}
+
 	private action void A_DropCasing()
 	{
 		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;

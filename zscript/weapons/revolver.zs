@@ -196,8 +196,8 @@ class Revolver : BaseWeapon replaces Supershotgun
 	Close:
 		SWCL AB 1;
 		SWCL C 1 { invoker.GetHUDExtension().SendEventToSM('CylinderClosed'); }
-		SWCL DE 2;
 		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
+		SWCL DE 2;
 		SWCL FGH 2;
 		SWCL IJ 2;
 		TNT1 A 0 {

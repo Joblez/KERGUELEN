@@ -209,7 +209,10 @@ class Revolver : BaseWeapon replaces Supershotgun
 
 	EmptyReload:
 		SWER ABCDEF 2;
-		TNT1 A 0 A_StartSound("sw/open", CHAN_AUTO,0,0.5);
+		TNT1 A 0 {
+			A_StartSound("sw/open", CHAN_AUTO,0,0.5);
+			invoker.GetHUDExtension().SendEventToSM('CylinderOpened');
+		}
 		SWER GHIJKLM 2;
 		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
 		SWER N 2;
@@ -244,7 +247,10 @@ class Revolver : BaseWeapon replaces Supershotgun
 	EmptyReloadEnd:
 		SWRR FGHI 2;
 		SWRR JKL 2;
-		TNT1 A 0 { A_StartSound("sw/close", CHAN_AUTO,0,0.5); invoker.GetHUDExtension().SendEventToSM('CylinderClosed'); }
+		TNT1 A 0 {
+			A_StartSound("sw/close", CHAN_AUTO,0,0.5);
+			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
+		}
 		SWRR MNOPQRS 2;
 		TNT1 A 0 {
 			invoker.GetHUDExtension().SendEventToSM('SmoothTimeReset');

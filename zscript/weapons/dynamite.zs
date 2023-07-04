@@ -181,9 +181,9 @@ class DynamiteStick : Actor
 		Projectile;
 
 		DynamiteStick.ThrustForce 380;
-		DynamiteStick.Firecrackers 6;
+		DynamiteStick.Firecrackers 8;
 		DynamiteStick.SmokeTrails 16;
-		DynamiteStick.SparkTrails 40;
+		DynamiteStick.SparkTrails 48;
 
 		//+DOOMBOUNCE;
 		-NOGRAVITY;

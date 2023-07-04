@@ -37,7 +37,7 @@ Class Hura : Actor replaces ExplosiveBarrel
 				A_SpawnProjectile("Huraseed", 20, 0, angle, CMF_AIMDIRECTION, -7.0);
 			}
 		}
-		TNT1 A 0 A_Explode(10, 128);
+		TNT1 A 0 A_Explode(10, 256);
 		TNT1 A 0 A_Startsound("Dryad/Death", CHAN_AUTO);
 		TNT1 A 0 A_XScream;
 		EFEX EFGHIJ 2 Bright A_NoBlocking;

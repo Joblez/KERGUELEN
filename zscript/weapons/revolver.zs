@@ -144,13 +144,13 @@ class Revolver : BaseWeapon replaces Supershotgun
 				}
 			}
 	FullReload:
-		SWEJ ABC 2;
-		SWEJ DE 2;
+		SWEJ ABC 1;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
 			A_StartSound("trooper/open", CHAN_AUTO, 0, 0.5);
 			invoker.GetHUDExtension().SendEventToSM('CylinderOpened');
-		}
+		}		
+		SWEJ DE 1;
 		SWEJ FG 2;
 		SWEJ HI 2;
 		SWEJ JKL 2;
@@ -162,8 +162,8 @@ class Revolver : BaseWeapon replaces Supershotgun
 			invoker.GetHUDExtension().SendEventToSM('RoundRemoved');
 		}
 		SWLD D 1;
-		SWLD DEF 2;
-		SWLD GH 2;
+		SWLD EF 2;
+		SWLD GH 1;
 		SWLD I 1 {
 			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
 			A_StartSound("trooper/load", CHAN_AUTO, 0, 0.8);

@@ -28,7 +28,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Weapon.AmmoGive2 BCYN;
 		Weapon.AmmoType1 "RevoCylinder";
 		Weapon.AmmoType2 "Ammo357";
-		Weapon.UpSound("sw/raise");
+		Weapon.UpSound("trooper/raise");
 
 		BaseWeapon.HUDExtensionType "RevolverHUD";
 
@@ -51,7 +51,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "Shoot");
 	DoubleAction:
 		TNT1 A 0 {
-			A_StartSound("sw/cock2", 9);
+			A_StartSound("trooper/cock2", 9);
 			invoker.GetHUDExtension().SendEventToSM('CylinderRotated');
 		}
 		SWDA A 1;
@@ -64,7 +64,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_AlertMonsters(4096.0);
 			A_TakeInventory("RevoCylinder", 1);
 			invoker.GetHUDExtension().SendEventToSM('RoundFired');
-			A_StartSound("sw/fire", CHAN_AUTO);
+			A_StartSound("trooper/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_FireBulletsEx((invoker.m_Spread.x, invoker.m_Spread.y), 4096.0, Random(82, 88), 1);
 			A_FRecoil(1);
@@ -92,7 +92,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		TNT1 A 0 A_JumpIf((invoker.m_IsLoading), "ReloadEnd"); // If reloading.
 		TNT1 A 0 A_JumpIf(invoker.m_SingleAction, "AltReady");
 		SWSA ABCD 1;
-		TNT1 A 0 A_StartSound("sw/cock", 10,0,0.5);
+		TNT1 A 0 A_StartSound("trooper/cock", 10,0,0.5);
 		SWSA E 1;
 		SWSA F 1 { invoker.GetHUDExtension().SendEventToSM('CylinderRotated'); }
 		SWSA GHIJKL 1;
@@ -114,7 +114,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 			A_StartSound("weapons/empty", CHAN_AUTO,0,0.5);
 			invoker.m_SingleAction = false;
 		}
-		Goto Ready;
+		Goto Reload;
 
 	Reload:
 		TNT1 A 0 {
@@ -148,7 +148,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWEJ DE 2;
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
-			A_StartSound("sw/open", CHAN_AUTO, 0, 0.5);
+			A_StartSound("trooper/open", CHAN_AUTO, 0, 0.5);
 			invoker.GetHUDExtension().SendEventToSM('CylinderOpened');
 		}
 		SWEJ FG 2;
@@ -158,7 +158,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 	Load:
 		SWLD ABC 1 A_WeaponReady(WRF_NOSWITCH);
 		SWLD D 1 {
-			A_StartSound("sw/eject", CHAN_AUTO, 0, 0.5);
+			A_StartSound("trooper/ejectsingle", CHAN_AUTO, 0, 0.8);
 			invoker.GetHUDExtension().SendEventToSM('RoundRemoved');
 		}
 		SWLD D 1;
@@ -166,7 +166,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWLD GH 2;
 		SWLD I 1 {
 			invoker.GetHUDExtension().SendEventToSM('RoundInserted');
-			A_StartSound("sw/load", CHAN_AUTO, 0, 0.5);
+			A_StartSound("trooper/load", CHAN_AUTO, 0, 0.8);
 			int ammoAmount = min(
 				FindInventory(invoker.AmmoType1).maxAmount - CountInv(invoker.AmmoType1),
 				CountInv(invoker.AmmoType2));
@@ -196,7 +196,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 	Close:
 		SWCL AB 1;
 		SWCL C 1 { invoker.GetHUDExtension().SendEventToSM('CylinderClosed'); }
-		SWCL A 0 A_StartSound("sw/close", CHAN_AUTO, 0, 0.5);
+		SWCL A 0 A_StartSound("trooper/close", CHAN_AUTO, 0, 0.5);
 		SWCL DE 2;
 		SWCL FGH 2;
 		SWCL IJ 2;
@@ -208,24 +208,28 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Goto Ready;
 
 	EmptyReload:
-		SWER ABCDEF 2;
+		SWER A 2;
 		TNT1 A 0 {
-			A_StartSound("sw/open", CHAN_AUTO,0,0.5);
+			A_StartSound("trooper/open", CHAN_AUTO,0,0.5);
 			invoker.GetHUDExtension().SendEventToSM('CylinderOpened');
 		}
-		SWER GHIJKLM 2;
-		TNT1 A 0 A_StartSound("sw/eject", CHAN_AUTO,0,0.5);
-		SWER N 2;
+		SWER BCDEF 1;
+		SWER GHIJKL 2;
+		TNT1 A 0 A_StartSound("trooper/eject", CHAN_AUTO,0,0.5);
 		TNT1 A 0 {
 			invoker.m_IsLoading = true;
 			A_TakeInventory("RevoCylinder", BCYN);
 			invoker.GetHUDExtension().SendEventToSM('CylinderEmptied');
 		}
-		SWER OPQ 2;
+		SWER M 2;		
+		SWER NOP 1;
 		TNT1 A 0 A_DropCasings();
-		SWER RSTUVWXYZ 2;
-		SWRR ABCDE 2;
-		TNT1 A 0 A_StartSound("sw/load", CHAN_AUTO,0,0.5);
+		SWER Q 3;
+		SWER RSTUVW 2;
+		SWER XYZ 2;
+		SWRR ABC 1;
+		SWRR DE 2;
+		TNT1 A 0 A_StartSound("trooper/speedload", CHAN_AUTO,0,0.5);
 	Loading:
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
@@ -248,7 +252,7 @@ class Revolver : BaseWeapon replaces Supershotgun
 		SWRR FGHI 2;
 		SWRR JKL 2;
 		TNT1 A 0 {
-			A_StartSound("sw/close", CHAN_AUTO,0,0.5);
+			A_StartSound("trooper/close", CHAN_AUTO,0,0.5);
 			invoker.GetHUDExtension().SendEventToSM('CylinderClosed');
 		}
 		SWRR MNOPQRS 2;
@@ -384,17 +388,52 @@ class Revolver : BaseWeapon replaces Supershotgun
 		// Yuck.
 		RevolverHUD hud = RevolverHUD(invoker.GetHUDExtension());
 
-		for (int i = 0; i < BCYN - hud.m_EmptyRounds; ++i)
-		{
-			vector2 coords = MathVec2.PolarToCartesian((3.0, (360.0 - double(i) * 60.0)));
-			A_SpawnEffect(
-				"RevolverCasing",
-				(coords.x, coords.y + 8.0, -2.0),
-				210.0,
-				FRandom(-62.0, -63.0),
-				FRandom(2.0, 2.5),
-				true);
-		}
+
+		//OK, THIS LOOKS BAD! I KNOW IT DOES. THIS USED TO LOOK BETTER BUT IT STOPPED WORKING SO I WENT WITH A CRINGE BRUTE FORCE METHOD. 
+		//MAG, IF YOU SEE THIS, I HOPE YOU CAN FIND A CLEANER METHOD. THE OLD ONE STOPPED WORKING. -JOBLZ
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);
+		A_SpawnEffect(
+			"RevolverCasing",
+			(10.0, -3.25, -32.0),
+			-90.0 + FRandom(0.0, 15.0),
+			FRandom(20.0, 35.0),
+			FRandom(4.0, 6.0),
+			true);						
+
 	}
 
 }

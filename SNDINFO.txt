@@ -101,33 +101,42 @@ dslvsi5 dslvsi5
 world/lavsiz2			dslvsiz2
 world/lavasizzlesmall	dslavsml
 
-//MOD.19
+//COLT TROOPER .357 MAGNUM
 
-$random sw/fire { DSREVO1 DSREVO2 DSREVO3 DSREVO4 }
+$random trooper/fire { DSREVO1 DSREVO2 DSREVO3 DSREVO4 }
 
 DSREVO1	DSREVO1
 DSREVO2 DSREVO2
 DSREVO3	DSREVO3
 DSREVO4	DSREVO4
 
-sw/cock DSHAMR
+trooper/cock DSHAMR
 
-sw/cock2 DSHAM2
+trooper/cock2 DSHAM2
 
-sw/open DSRVOPN
+trooper/open DSRVOPN
 
-sw/close DSRVCLS
+trooper/close DSRVCLS
 
-sw/eject DSRVEJC
+trooper/eject DSRVEJC
 
-$random sw/load { DSRLOD1 DSRLOD2 DSRLOD3 DSRLOD4 }
+trooper/speedload DSRVSLD
+
+$random trooper/load { DSRLOD1 DSRLOD2 DSRLOD3 DSRLOD4 }
 
 DSRLOD1 DSRLOD1
 DSRLOD2 DSRLOD2
 DSRLOD3 DSRLOD3
 DSRLOD4 DSRLOD4
 
-sw/raise DSREGRB
+$random trooper/ejectsingle { DSREJT1 DSREJT2 DSREJT3 DSREJT4 }
+
+DSREJT1 DSREJT1
+DSREJT2 DSREJT2
+DSREJT3 DSREJT3
+DSREJT4 DSREJT4
+
+trooper/raise DSREGRB
 
 //HATCHET
 
@@ -147,7 +156,7 @@ hatchet/hitwall DSHITWL
 
 hatchet/draw DSHATGB
 
-//ITHACA
+//ITHACA M37
 
 $random shotgun/fire { DSSHTG1 DSSHTG2 DSSHTG3 }
 
@@ -166,7 +175,7 @@ DSLODH3 DSLODH3
 
 shotgun/draw DSSHTGB
 
-//m2 carbine
+//ARMALITE AR10 
 
 $random AR10/fire { DSM2CF1 DSM2CF2 DSM2CF3 DSM2CF4 }
 

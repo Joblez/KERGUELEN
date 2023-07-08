@@ -109,7 +109,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SVTF A 1;
 		SVTF B 1 A_SetBaseOffset(4, 33);
 		TNT1 A 0 {invoker.m_Chambered = true;}
-		SVTF CDEFG 2 A_SetBaseOffset(0, 30);
+		SVTF CDE 2 A_SetBaseOffset(0, 30);
+		SVTF FG 2 A_Weaponready(WRF_NOSWITCH);
 		goto ready;
 
 	Reload:

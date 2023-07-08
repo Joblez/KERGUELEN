@@ -221,9 +221,9 @@ actor 12GaugeBox : Ammo12 2049
 	}
 }
 
-// .308 Winchester
+// 7.62x54r
 
-actor Ammo308 : Ammo replaces Cell
+actor Ammo54r : Ammo replaces Cell
 {
 	//$Category Ammunition
 	Inventory.Amount 5
@@ -240,7 +240,7 @@ actor Ammo308 : Ammo replaces Cell
 	}
 }
 
-actor 308Box : Ammo308 replaces Cellpack
+actor Ammo54rBox : Ammo54r replaces Cellpack
 {
 	//$Category Ammunition
 	Inventory.Amount 10

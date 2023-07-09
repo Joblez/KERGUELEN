@@ -12,6 +12,6 @@ Map "MAP02" "KERG02"
 	LightMode = 3
 	Sky1 = "DS_SKY02"
 	next = "MAP03"
-	music = "MUS_1"
+	music = "STG01"
 	par = 30
 }

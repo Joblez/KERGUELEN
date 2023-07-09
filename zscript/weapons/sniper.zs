@@ -239,7 +239,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	EmptyScoped:
 		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
-		SADI DE 2;
+		SADS EF 2;
 		Goto DeshouldertoReload;
 
 	ShoulderedFire:
@@ -269,7 +269,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_SpawnFlash(0, 0, 2);
 			A_TakeInventory("SniperAmmo", 1);
 		}
-		SADF BCDE 2;
+		SADF BCD 2;
+		SADF E 2 A_WEAPONREADY(WRF_NOSWITCH);
 		Goto AltReady;
 
 	Select:

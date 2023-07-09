@@ -153,7 +153,7 @@ class Ithaca : BaseWeapon replaces Shotgun
 		ITPP C 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpback", CHAN_AUTO ,0, 0.9);		
 		ITPP DE 2;
-		TNT1 A 0 A_SpawnCasing();
+		TNT1 A 0 A_SpawnCasingAlt();
 		ITPP FG 2;
 		TNT1 A 0 A_StartSound("shotgun/pumpfor", CHAN_AUTO, 0, 0.9);		
 		TNT1 A 0 { invoker.m_Chambered = true; }
@@ -290,4 +290,16 @@ class Ithaca : BaseWeapon replaces Shotgun
 			FRandom(1.0, 1.5),
 			true);
 	}
+	private action void A_SpawnCasingAlt()
+	{
+		if (CVar.GetCVar("weapon_casings", invoker.owner.player).GetInt() <= Settings.OFF) return;
+
+		A_SpawnEffect(
+			"ShotgunCasing",
+			(16.0, 18.0, 20.0),
+			FRandom(-50.0, -50.5),
+			FRandom(-10.0, -10.75),
+			FRandom(-4.0, -4.5),
+			true);
+	}	
 }

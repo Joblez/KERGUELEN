@@ -105,6 +105,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			A_SetBaseOffset(8, 36);
 			invoker.m_Chambered = false;
+			A_SpawnCasingAlt();
 		}
 		SVTF A 1;
 		SVTF B 1 A_SetBaseOffset(4, 33);
@@ -268,6 +269,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_FRecoil(2.5);
 			A_SpawnFlash(0, 0, 2);
 			A_TakeInventory("SniperAmmo", 1);
+			A_SpawnCasing();
 		}
 		SADF BCD 2;
 		SADF E 2 A_WEAPONREADY(WRF_NOSWITCH);
@@ -321,7 +323,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		RifleCasing effect = RifleCasing(
 			invoker.SpawnEffect(
 				"RifleCasing",
-				(17.0, 17.0, 23.0),
+				(-8.0, 17.0, 33.0),
 				-90.0 + FRandom(-5.0, 1.0),
 				FRandom(70.0, 75.0),
 				FRandom(5.35, 5.45),
@@ -337,10 +339,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		RifleCasing effect = RifleCasing(
 			invoker.SpawnEffect(
 				"RifleCasing",
-				(-2.0, 10.0, 11.0),
-				-16.0 + FRandom(-2.0, 2.0),
-				FRandom(50.0, 57.5),
-				FRandom(4.35, 4.65),
+				(12.0, 12.0, 16.0),
+				-90.0 + FRandom(-5.0, 5.0),
+				FRandom(85.0, 90.0),
+				FRandom(5.0, 5.5),
 				true));
 		
 		effect.SetVirtualRoll(175.0);

@@ -264,12 +264,12 @@ class M2C : BaseWeapon replaces Chaingun
 
 		invoker.SpawnEffect(
 			"RifleCasing",
-			(Math.Remap(Pitch, -120.0, 120.0, 30.0, 20.0),
+			(Math.Remap(Pitch, -80.0, 80.0, 30.0, 20.0),
 			Math.Remap(abs(Pitch), 0.0, 90.0, 18.0, 20.0),
 			26.0),
 			-90.0 + FRandom(-5.0, 5.0),
 			FRandom(40.0, 65.0),
-			FRandom(3.0, 5.5),
+			FRandom(4.0, 5.5),
 			true);
 	}
 }

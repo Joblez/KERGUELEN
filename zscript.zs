@@ -58,7 +58,13 @@ struct Settings
 
 //NPCs
 
+//Hostile NPCs
 #include "zscript/npcs/hostile/grarg.zs"
 #include "zscript/npcs/hostile/lesco.zs"
 #include "zscript/npcs/hostile/wyvern.zs"
 #include "zscript/npcs/hostile/dryad.zs"
+
+//Neutral/Friendly NPCs
+#include "zscript/npcs/friendly/sheep.zs"
+#include "zscript/npcs/friendly/penguin.zs"
+#include "zscript/npcs/friendly/caribou.zs"

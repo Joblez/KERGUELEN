@@ -347,3 +347,21 @@ actor Cabbage4 : Cabbage 10279
 		Stop
 	}
 }
+
+actor Star 11001
+{
+	Health 1
+	Radius 1
+	Height 4
+	Scale 1
+	+NOGRAVITY
+	+SOLID
+
+	States
+	{
+	Spawn:
+		STRC ABCDEFGHIJKL 8 Bright
+		Loop
+	}
+
+}

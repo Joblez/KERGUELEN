@@ -1,7 +1,3 @@
 #include "decorate/items.dec"
-
 #include "decorate/ammo.dec"
-
 #include "decorate/props.dec"
-
-#include "decorate/friendlies.dec"

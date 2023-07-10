@@ -12,4 +12,12 @@ GameInfo
 	AddEventHandlers = "FootstepEventHandler", "WeatherHandler", "AmbienceHandler"
 }
 
+//Man, I really wish they'd just add this feature to Zscript, why can't we just have like a "Spawn Number" property built in like decorate?
 
+DoomEdNums
+{
+//Friendly/Neutral NPCs
+11000 = Sheep
+11002 = Penguin
+11003 = Caribou
+}

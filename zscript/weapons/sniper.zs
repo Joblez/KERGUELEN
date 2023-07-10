@@ -95,9 +95,9 @@ class Ishapore : baseweapon replaces Plasmarifle {
 				ActorUtil.Thrust3D(t.HitActor, Vec3Util.FromAngles(Angle + ViewAngle + attackAngle, Pitch + ViewPitch + attackPitch), 220.0, true);
 			}
 
-			A_SpawnSmokeTrail(t, (16.0, 5.5, 36.0), 4.5, spread: 1.35);
-
 			A_FRecoil(2);
+			A_SpawnSmokeTrail(t, (10.0, 5.0, 36.0), 4.5, spread: 1.35);
+
 			A_SpawnFlash(5, -3, 2);
 			A_TakeInventory("SniperAmmo", 1);
 			A_StartSound("sniper/fire", CHAN_AUTO);
@@ -108,8 +108,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			A_SpawnCasingAlt();
 		}
 		SVTF A 1;
+		TNT1 A 0 { invoker.m_Chambered = true; }
 		SVTF B 1 A_SetBaseOffset(4, 33);
-		TNT1 A 0 {invoker.m_Chambered = true;}
 		SVTF CDE 2 A_SetBaseOffset(0, 30);
 		SVTF FG 2 A_Weaponready(WRF_NOSWITCH);
 		goto ready;
@@ -119,7 +119,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SVRS ABCDE 1;
 		SVRS FGHI 2;
 		TNT1 A 0 A_StartSound("sniper/boltback", 9);
-		TNT1 A 0 {invoker.m_Chambered = false;}
+		TNT1 A 0 { invoker.m_Chambered = false; }
 		SVRS J 1;
 		SVRS KL 2;
 		SVRS MN 2;
@@ -187,7 +187,6 @@ class Ishapore : baseweapon replaces Plasmarifle {
 
 	Shoulder:
 		TNT1 A 0 A_SetCrosshair(58);
-		TNT1 A 0 A_ZoomFactor(4.0);
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.0); }
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.33); }
 		SADS B 1 { KergPlayer(self).SetZoomFactor(1.67); }
@@ -198,11 +197,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SADS D 1 { KergPlayer(self).SetZoomFactor(3.33); }
 		SADS E 1 { KergPlayer(self).SetZoomFactor(3.67); }
 		SADS FG 1 { KergPlayer(self).SetZoomFactor(4.0); }
+		TNT1 A 0 A_ZoomFactor(4.0);
 		TNT1 A 0 { invoker.m_Shouldered = true; }
 		Goto AltReady;
 
 	Deshoulder:
-		TNT1 A 0 A_ZoomFactor(1.0);
 		SADS E 1 { KergPlayer(self).SetZoomFactor(4.0); }
 		SADS E 1 { KergPlayer(self).SetZoomFactor(3.67); }
 		SADS D 1 { KergPlayer(self).SetZoomFactor(3.33); }
@@ -218,8 +217,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		goto ready;
 
 
-	DeshouldertoReload:
-		TNT1 A 0 A_ZoomFactor(1.0);
+	DeshoulderToReload:
 		SADS E 1 { KergPlayer(self).SetZoomFactor(4.0); }
 		SADS E 1 { KergPlayer(self).SetZoomFactor(3.67); }
 		SADS D 1 { KergPlayer(self).SetZoomFactor(3.33); }
@@ -230,9 +228,10 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SADS B 1 { KergPlayer(self).SetZoomFactor(2.0); }
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.33); }
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		TNT1 A 0 A_ZoomFactor(1.0);
 		TNT1 A 0 A_SetCrosshair(0);
 		TNT1 A 0 { invoker.m_Shouldered = false; }
-		goto reload;
+		Goto Reload;
 
 	AltReady:
 		SADI A 1 A_WeaponReady();
@@ -241,7 +240,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 	EmptyScoped:
 		TNT1 A 0 A_StartSound("weapons/empty", 10, 0, 0.5);
 		SADS EF 2;
-		Goto DeshouldertoReload;
+		Goto DeshoulderToReload;
 
 	ShoulderedFire:
 		TNT1 A 0 A_JumpIfInventory("SniperAmmo", 1, 1);
@@ -276,6 +275,8 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Goto AltReady;
 
 	Select:
+		// Workaround for IDFA/IDKFA UI bug.
+		TNT1 A 0 { if (CheckInventory(invoker.AmmoType1, SMAG)) invoker.m_Chambered = true; }
 		TNT1 A 4 A_SetBaseOffset(-65, 81);
 		SVTI A 1 A_SetBaseOffset(-65, 81);
 		SVTI A 1 A_SetBaseOffset(-35, 55);

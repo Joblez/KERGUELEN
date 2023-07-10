@@ -4,6 +4,4 @@
 
 #include "decorate/props.dec"
 
-#include "decorate/enemies.dec"
-
 #include "decorate/friendlies.dec"

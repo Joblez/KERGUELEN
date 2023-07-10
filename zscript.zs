@@ -55,3 +55,10 @@ struct Settings
 
 // Second-level includes.
 #include "zscript_nashgore.zs"
+
+//NPCs
+
+#include "zscript/npcs/hostile/grarg.zs"
+#include "zscript/npcs/hostile/lesco.zs"
+#include "zscript/npcs/hostile/wyvern.zs"
+#include "zscript/npcs/hostile/dryad.zs"

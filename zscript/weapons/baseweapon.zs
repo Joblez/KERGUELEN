@@ -394,7 +394,7 @@ class BaseWeapon : DoomWeapon replaces DoomWeapon
 
 		vector3 endpoint = t.HitLocation;
 
-		if (t.HitTexture.IsValid()) Console.Printf("Hit texture: %s", TexMan.GetName(t.HitTexture));
+		// if (t.HitTexture.IsValid()) Console.Printf("Hit texture: %s", TexMan.GetName(t.HitTexture));
 
 		if (t.HitTexture == skyflatnum)
 		{

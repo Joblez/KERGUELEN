@@ -102,15 +102,8 @@ class SMRevolverHUDState : SMHUDState
 			// so they have to be modified independently.
 
 			case 'RoundInserted':
-				// int insertIndex = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
 				m_RoundsHUD.m_Rounds[m_RoundsHUD.m_CurrentRound] = RevolverHUD.RS_Ready;
 				m_RoundsHUD.m_EmptyRounds--;
-				// Revolver rev = m_RoundsHUD.m_Revolver;
-				// if (rev.owner.CountInv(rev.AmmoType1) < BCYN)
-				// {
-				// 	m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
-				// 	m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
-				// }
 				return true;
 
 			case 'RoundRemoved':

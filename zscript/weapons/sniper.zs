@@ -212,6 +212,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SADS B 1 { KergPlayer(self).SetZoomFactor(2.0); }
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.33); }
 		SADS A 1 { KergPlayer(self).SetZoomFactor(1.0); }
+		TNT1 A 0 A_ZoomFactor(1.0);
 		TNT1 A 0 A_SetCrosshair(0);
 		TNT1 A 0 { invoker.m_Shouldered = false; }
 		goto ready;

@@ -130,7 +130,7 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		Goto ReloadEnd;
 
 	ProperReload:
-		SVRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH);
+		SVRL ABCDEF 1 A_WeaponReady(WRF_NOSWITCH | WRF_NOSECONDARY);
 		TNT1 A 0 {
 			A_StartSound("sniper/load", 10);
 			A_SetBaseOffset(-1, 33);
@@ -138,11 +138,11 @@ class Ishapore : baseweapon replaces Plasmarifle {
 			GiveInventory(invoker.AmmoType1, 1);
 			TakeInventory(invoker.AmmoType2, 1);
 		}
-		SVRL GH 2 A_WeaponReady(WRF_NOSWITCH);
+		SVRL GH 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOSECONDARY);
 		TNT1 A 0 A_SetBaseOffset(-1, 32);
-		SVRL IJ 2 A_WeaponReady(WRF_NOSWITCH);
+		SVRL IJ 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOSECONDARY);
 		TNT1 A 0 A_SetBaseOffset(-1, 31);
-		SVRL K 2 A_WeaponReady(WRF_NOSWITCH);
+		SVRL K 2 A_WeaponReady(WRF_NOSWITCH | WRF_NOSECONDARY);
 		TNT1 A 0 {
 			if (CheckInventory(invoker.AmmoType1, 0) || !CheckInventory(invoker.AmmoType2, 1))
 			{

@@ -165,6 +165,7 @@ class DryadVine : Actor
 	States
 	{
 	Spawn:
+		TNT1 A 0 A_LOOK();
 		See:
 		VIDL ABCDEFGHIJKLM 4 A_CustomMeleeAttack(2);
 		Loop;

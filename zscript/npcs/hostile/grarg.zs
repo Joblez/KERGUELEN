@@ -1,4 +1,4 @@
-class Grarg: Actor replaces Demon
+class Grarg : Actor replaces Demon
 {
 	Default
 	{
@@ -24,7 +24,7 @@ class Grarg: Actor replaces Demon
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_Jump(20, "Grumble");
+		TNT1 A 0 A_Jump(2, "Grumble");
 		GRRG A 4 A_Look();
 		Loop;
 
@@ -58,7 +58,8 @@ class Grarg: Actor replaces Demon
 		Goto See;
 
 	Grumble:
-		TNT1 A 0 A_Startsound("Grarg/Idle",CHAN_AUTO,0.25);
+		TNT1 A 0 A_Startsound("Grarg/Idle",CHAN_AUTO,CHANF_DEFAULT,0.25);
+		GRRG A 16 A_Look();
 		Goto Spawn;
 
 	Pain:

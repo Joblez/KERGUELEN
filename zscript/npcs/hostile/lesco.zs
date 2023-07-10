@@ -2,7 +2,7 @@ class Lesco : Actor replaces ZombieMan
 {
 	Default
 	{
-	Health 28;
+	Health 30;
 	Radius 16;
 	Height 48;
 	Speed 10;
@@ -24,7 +24,7 @@ class Lesco : Actor replaces ZombieMan
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_Jump(20, "Grumble");
+		TNT1 A 0 A_Jump(2, "Grumble");
 		GGLG A 4 A_Look();
 		Loop;
 
@@ -56,7 +56,8 @@ class Lesco : Actor replaces ZombieMan
 		Goto See;
 
 	Grumble:
-		TNT1 A 0 A_Startsound("GLG/Idle",CHAN_AUTO,0.25);
+		TNT1 A 0 A_Startsound("GLG/Idle",CHAN_AUTO,CHANF_DEFAULT,0.25);
+		GGLG A 16 A_Look();
 		Goto Spawn;
 
 	Pain:

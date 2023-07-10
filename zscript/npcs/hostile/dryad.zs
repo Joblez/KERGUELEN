@@ -150,7 +150,7 @@ class DryadVine : Actor
 	Default
 	{
 	Monster;
-	Health 60;
+	Health 30;
 	Mass 40;
 	Radius 24;
 	MeleeRange 52;
@@ -165,8 +165,9 @@ class DryadVine : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 0 A_LOOK();
-		See:
+		VIDL A 2 A_LOOK();
+		Loop;
+	See:
 		VIDL ABCDEFGHIJKLM 4 A_CustomMeleeAttack(2);
 		Loop;
 

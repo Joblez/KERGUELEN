@@ -18,6 +18,20 @@ class Wyvern : Actor replaces Cacodemon
 	+FLOAT;
 	+NOGRAVITY;
 	}
+
+	const DEFWYVSPEED = 20;
+	
+	void WyvernAttack(double WYVSPEED = DEFWYVSPEED)
+	{
+		if (target == null) return;
+
+		if (WYVSPEED <= 0) WYVSPEED = DEFWYVSPEED;
+
+		A_FaceTarget();
+		VelFromAngle(WYVSPEED);
+		Vel.Z = (target.pos.Z + target.Height/2 - pos.Z) / DistanceBySpeed(target, WYVSPEED);
+		A_CustomMeleeAttack(20);
+	}
 	States
 	{
 	Spawn:
@@ -47,15 +61,16 @@ class Wyvern : Actor replaces Cacodemon
 		goto See;
 
 	Missile:
-		WYVN F 5 A_FaceTarget;
-		WYVN E 5 A_FaceTarget;
-		WYVN A 5 BRIGHT A_HeadAttack;
+		WYVN A 3 A_FaceTarget;
+		TNT1 A 0 A_StartSound("Wyvern/pain", CHAN_VOICE);
+		WYVN ABCDBC 3 WyvernAttack();
+		WYVN A 5 BRIGHT;
 		Goto See;
 	Pain:
 		WYVN F 3;
 		WYVN F 3 A_Pain;
 		WYVN F 6;
-		Goto See;
+		Goto Rage;
 	Death:
 		WYVD A 8 A_Startsound("Wyvern/scream",CHAN_AUTO);
 		WYVD B 8 A_Scream;

@@ -65,6 +65,7 @@ class Lesco : Actor replaces ZombieMan
 		Goto See;
 	XDeath:
 	Death:
+		TNT1 A 0 {bISMONSTER = false;}	
 		TNT1 A 0 A_Scream;
 		TNT1 A 0 A_Startsound("GLG/Death");
 		GGLD A 7;

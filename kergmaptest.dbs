@@ -27,8 +27,8 @@ maps
 				requiredarchives = "";
 			}
 		}
-		viewpositiony = -3661.13f;
-		viewpositionx = 297.4294f;
+		viewpositiony = -2323.937f;
+		viewpositionx = -1534.234f;
 		
 		testprecommand
 		{
@@ -52,7 +52,7 @@ maps
 			background = "";
 			backoffsety = 0;
 		}
-		viewscale = 0.2155472f;
+		viewscale = 0.1658055f;
 		
 		reloadresourceprecommand
 		{
@@ -83,15 +83,6 @@ maps
 			autocloseonsuccess = true;
 			exitcodeiserror = true;
 			stderriserror = true;
-		}
-		
-		fieldtypes
-		{
-			
-			sector
-			{
-				user_ambient_sound = 2;
-			}
 		}
 		
 		scriptdocuments

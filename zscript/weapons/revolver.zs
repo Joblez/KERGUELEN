@@ -315,11 +315,11 @@ class Revolver : BaseWeapon replaces Supershotgun
 		Wait;
 	
 	SingleActionDeselect:
-		SWSA N 1 A_SetBaseOffset(3, 34);
-		SWSA N 1 A_SetBaseOffset(-12, 38);
-		SWSA N 1 A_SetBaseOffset(-28, 39);
-		SWSA N 1 A_SetBaseOffset(-35, 55);
-		SWSA N 1 A_SetBaseOffset(-65, 81);
+		SWSA L 1 A_SetBaseOffset(3, 34);
+		SWSA L 1 A_SetBaseOffset(-12, 38);
+		SWSA L 1 A_SetBaseOffset(-28, 39);
+		SWSA L 1 A_SetBaseOffset(-35, 55);
+		SWSA L 1 A_SetBaseOffset(-65, 81);
 		TNT1 A 0 A_SetBaseOffset(0, WEAPONBOTTOM);
 		TNT1 A 4;
 		SWAI A 1 A_Lower(16);

@@ -1,5 +1,5 @@
 #include "zcommon.acs"
-
+//This Code is unused but still useful, so I'm just gonna keep it here
 Script 101 OPEN
 {
 	if (!GetCVar ("fade_toggle"))

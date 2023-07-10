@@ -350,18 +350,27 @@ actor Cabbage4 : Cabbage 10279
 
 actor Star 11001
 {
+	//$Category Props
 	Health 1
 	Radius 1
 	Height 4
 	Scale 1
 	+NOGRAVITY
 	+SOLID
+	+SHOOTABLE
 
 	States
 	{
 	Spawn:
-		STRC ABCDEFGHIJKL 8 Bright
+		STRI AAAA 8 A_SETSCALE(1,1)		
+		STRI A 8 A_SETSCALE(0.9,0.9)
+		STRI A 8 A_SETSCALE(0.8,0.8)
+		STRI AAAA 8 A_SETSCALE(0.7,0.7)
+		STRI A 8 A_SETSCALE(0.8,0.8)
+		STRI A 8 A_SETSCALE(0.9,0.9)
 		Loop
+	Death:
+		Stop
 	}
 
 }

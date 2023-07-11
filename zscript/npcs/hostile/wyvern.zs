@@ -30,7 +30,7 @@ class Wyvern : Actor replaces Cacodemon
 		A_FaceTarget();
 		VelFromAngle(WYVSPEED);
 		Vel.Z = (target.pos.Z + target.Height/2 - pos.Z) / DistanceBySpeed(target, WYVSPEED);
-		A_CustomMeleeAttack(20);
+		A_CustomMeleeAttack(5);
 	}
 	States
 	{

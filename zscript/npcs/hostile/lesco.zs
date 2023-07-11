@@ -88,7 +88,7 @@ class RockProjectile : Actor
 	Speed 30;
 	Gravity 0.3;
 	Scale 0.7;
-	Damage (10);
+	Damage (5);
 	Projectile;
 	Seesound "rock/bounce";
 	DamageType "Normal";

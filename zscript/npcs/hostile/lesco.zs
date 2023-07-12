@@ -122,10 +122,6 @@ class DummyLescoSpawner: Actor
 	
 	Default
 	{
-		void LescoSpawner()
-		{
-		
-		}
 	
 	}
 	States

@@ -1,5 +1,7 @@
-class Lesco : Actor replaces ZombieMan
+class Lesco : Actor replaces Zombieman
 {
+	
+	
 	Default
 	{
 	Health 30;
@@ -110,5 +112,24 @@ class RockProjectile : Actor
 	Death:
 		PROC A 12 A_RemoveLight('Lighter');
 		Stop;
+	}
+}
+
+class DummyLescoSpawner: Actor 
+{
+	Actor Lesco;
+	array <DummyLescoSpawner> Total;
+	
+	Default
+	{
+		void LescoSpawner()
+		{
+		
+		}
+	
+	}
+	States
+	{
+	
 	}
 }

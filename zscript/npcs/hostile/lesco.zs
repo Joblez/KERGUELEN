@@ -11,6 +11,7 @@ class Lesco : Actor replaces Zombieman
 	PainChance 255;
 	Mass 50;
 	Scale 0.7;
+	
 	Monster;
 	Dropitem "Ammo45",96;
 	Bloodcolor "e8 00 21";

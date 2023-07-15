@@ -1,39 +1,6 @@
 
 //AMMO TYPES
 
-//9x19mm Parabellum
-
-actor Ammo9mm: Ammo 20007
-{
-	//$Category Ammunition
-	Inventory.Amount 8
-	Inventory.MaxAmount 40
-	Inventory.PickupMessage "A pistol magazine."
-	Inventory.PickupSound "pickup/ammo"
-
-	States
-	{
-	Spawn:
-		9MMI B -1
-		stop
-	}
-}
-
-actor 9mmBigBox : Ammo9mm 20048
-{
-	//$Category Ammunition
-	Inventory.Amount 24
-	Inventory.PickupMessage "A box of pistol ammo."
-	Inventory.PickupSound "pickup/ammo"
-
-	States
-	{
-		Spawn:
-		9MMI C -1
-		stop
-	}
-}
-
 //7.62 Nato
 
 actor Ammo762: Ammo replaces Clip
@@ -47,7 +14,7 @@ actor Ammo762: Ammo replaces Clip
 	States
 	{
 	Spawn:
-		A223 A -1
+		A762 A -1
 	stop
 	}
 }
@@ -56,13 +23,14 @@ actor Ammo762Box : Ammo762 replaces ClipBox
 {
 	//$Category Ammunition
 	Inventory.Amount 70
+	Scale 1.2
 	Inventory.PickupMessage "A box of 7.62 magazines."
 	Inventory.PickupSound "pickup/ammo"
 
 	States
 	{
 	Spawn:
-		A223 B -1
+		A762 B -1
 		stop
 	}
 }
@@ -72,7 +40,7 @@ actor Ammo762Box : Ammo762 replaces ClipBox
 actor Ammo45: Ammo 302
 {
 	//$Category Ammunition
-	Inventory.Amount 16
+	Inventory.Amount 8
 	Inventory.MaxAmount 64
 	Inventory.PickupMessage "A .45 magazine."
 	Inventory.PickupSound "pickup/ammo"
@@ -80,7 +48,7 @@ actor Ammo45: Ammo 302
 	States
 	{
 	Spawn:
-		A223 A -1
+		PAMO A -1
 		stop
 	}
 }
@@ -95,7 +63,7 @@ actor Ammo45bigbox : Ammo45 303
 	States
 	{
 	Spawn:
-		A223 B -1
+		PAMO B -1
 		Loop
 	}
 }
@@ -211,7 +179,7 @@ actor 12GaugeBox : Ammo12 2049
 	Inventory.PickupSound "pickup/ammo"
 	Inventory.PickupMessage "A box of shotgun shells."
 
-	Scale 1.0
+	Scale 1.2
 
 	States
 	{

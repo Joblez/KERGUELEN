@@ -366,6 +366,8 @@ sight6	sight6
 
 sheep/eat SHEEPNOM
 
+sheep/death DSSHPDTH
+
 //PENGUIN
 
 $random penguin/noot { DPNGRT1 DPNGRT2 }

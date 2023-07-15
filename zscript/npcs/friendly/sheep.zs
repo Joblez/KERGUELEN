@@ -14,6 +14,7 @@ class Sheep : Actor
 	SeeSound "sheep/sight";
 	ActiveSound "sheep/sight";
 	PainSound "sheep/sight";
+	Deathsound "sheep/death";
 	+FRIENDLY;
 	+DONTFOLLOWPLAYERS;
 	-COUNTKILL;
@@ -57,7 +58,6 @@ class Sheep : Actor
 
 	Death:
 		TNT1 A 0 A_Scream;
-		TNT1 A 0 A_Startsound("sheep/sight");
 		TNT1 A 0 A_NoBlocking;
 		SHED ABCDEF 4;
 		SHED F -1;

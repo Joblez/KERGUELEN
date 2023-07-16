@@ -110,7 +110,7 @@ class Colt : BaseWeapon replaces Pistol
 			Goto Ready;
 		
 		FinalShot:
-			M1FE A 1 BRIGHT {
+			M19F A 1 BRIGHT {
 				invoker.m_Empty = true;
 				A_AlertMonsters();
 				A_TakeInventory("ColtMag", 1);

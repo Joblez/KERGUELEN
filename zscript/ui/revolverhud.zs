@@ -133,7 +133,11 @@ class SMRevolverHUDState : SMHUDState
 				return true;
 
 			case 'CylinderOpened':
-				// m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
+				if (m_RoundsHUD.m_Revolver.m_SingleAction)
+				{
+					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
+					m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
+				}
 				m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
 				return true;
 			

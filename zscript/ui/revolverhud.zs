@@ -123,11 +123,13 @@ class SMRevolverHUDState : SMHUDState
 				return true;
 
 			case 'CylinderRotated':
+				m_RoundsHUD.m_CylinderRotation.m_SmoothTime = RevolverHUD.ROTATION_SMOOTH_TIME;
 				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound + 1, BCYN);
 				m_RoundsHUD.m_CylinderRotation.m_Target += 60.0;
 				return true;
 
 			case 'CylinderRotatedReverse':
+				m_RoundsHUD.m_CylinderRotation.m_SmoothTime = RevolverHUD.ROTATION_SMOOTH_TIME;
 				m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
 				m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
 				return true;
@@ -137,6 +139,7 @@ class SMRevolverHUDState : SMHUDState
 				{
 					m_RoundsHUD.m_CurrentRound = MathI.PosMod(m_RoundsHUD.m_CurrentRound - 1, BCYN);
 					m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
+					m_RoundsHUD.m_CylinderRotation.m_SmoothTime = 0.11;
 				}
 				m_RoundsHUD.m_CylinderRotation.m_Target -= 60.0;
 				return true;

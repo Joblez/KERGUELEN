@@ -59,6 +59,7 @@ class Sheep : Actor
 	Death:
 		TNT1 A 0 A_Scream;
 		TNT1 A 0 A_NoBlocking;
+		TNT1 A 0 { bNoBlockMonst = true; }
 		SHED ABCDEF 4;
 		SHED F -1;
 		Stop;

@@ -50,6 +50,7 @@ class Dryad : Actor replaces Stealthdoomimp
 	goto See;
 
 	Death:
+		TNT1 A 0 { bNoBlockMonst = true; }
 		TNT1 A 0 A_Startsound("Dryad/death",CHAN_AUTO);
 		DRYD E 1 A_XScream;
 		DRYD FGHIJK 4;

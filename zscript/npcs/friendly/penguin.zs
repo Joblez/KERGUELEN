@@ -49,6 +49,7 @@ class Penguin : Actor
 	Death:
 		TNT1 A 0 A_Scream;
 		TNT1 A 0 A_Startsound("penguin/death", 10);
+		TNT1 A 0 { bNoBlockMonst = true; }
 		TNT1 A 0 A_Noblocking;
 		PEND ABCDE 4;
 		PEND E -1;

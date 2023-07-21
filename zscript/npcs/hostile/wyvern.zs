@@ -32,6 +32,7 @@ class Wyvern : Actor replaces Cacodemon
 		Vel.Z = (target.pos.Z + target.Height/2 - pos.Z) / DistanceBySpeed(target, WYVSPEED);
 		A_CustomMeleeAttack(5);
 	}
+
 	States
 	{
 	Spawn:
@@ -39,6 +40,7 @@ class Wyvern : Actor replaces Cacodemon
 		TNT1 A 0 A_Startsound("Wyvern/flap",CHAN_AUTO);
 		WYVN DCB 5 A_Look;
 		Loop;
+
 	See:
 		TNT1 A 0 A_JumpIf (health <= 100, "Rage");
 		TNT1 A 0 A_Setspeed(14);
@@ -58,7 +60,7 @@ class Wyvern : Actor replaces Cacodemon
 		WYVN ABC 2 A_Chase;
 		TNT1 A 0 A_Startsound("Wyvern/flap",CHAN_AUTO);
 		WYVN DCB 2 A_Chase;
-		goto See;
+		Goto See;
 
 	Missile:
 		WYVN A 3 A_FaceTarget;
@@ -66,12 +68,15 @@ class Wyvern : Actor replaces Cacodemon
 		WYVN ABCDBC 3 WyvernAttack();
 		WYVN A 5 BRIGHT;
 		Goto See;
+
 	Pain:
 		WYVN F 3;
 		WYVN F 3 A_Pain;
 		WYVN F 6;
 		Goto Rage;
+
 	Death:
+		TNT1 A 0 { bNoBlockMonst = true; }
 		WYVD A 8 A_Startsound("Wyvern/scream",CHAN_AUTO);
 		WYVD B 8 A_Scream;
 		WYVD C 8;
@@ -79,13 +84,12 @@ class Wyvern : Actor replaces Cacodemon
 		WYVD D 8;
 		WYVD D 4 A_JumpIf (Pos.Z <= floorz, "Crash");
 		Wait;
+
 	Crash:
 		TNT1 A 0 A_Startsound("Wyvern/fall",CHAN_AUTO);
 		WYVD DE 5 A_NoBlocking;
 		WYVD F -1;
 		Stop;
-
-
 
 	Raise:
 		WYVD F 8 A_UnSetFloorClip;

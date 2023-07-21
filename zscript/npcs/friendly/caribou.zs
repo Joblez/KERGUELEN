@@ -51,6 +51,7 @@ class Caribou : Actor
 	Death:
 		TNT1 A 0 A_Scream;
 		TNT1 A 0 A_Startsound("caribou/sight");
+		TNT1 A 0 { bNoBlockMonst = true; }
 		TNT1 A 0 A_NoBlocking;
 		REDD ABCDEF 3;
 		REDD F -1;

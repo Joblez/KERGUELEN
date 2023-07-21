@@ -67,6 +67,7 @@ class Grarg : Actor replaces Demon
 		Goto See;
 
 	Death:
+		TNT1 A 0 { bNoBlockMonst = true; }
 		TNT1 A 0 A_Scream;
 		TNT1 A 0 A_Startsound("Grarg/Death");
 		GRGD AB 4;

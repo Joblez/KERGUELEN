@@ -119,11 +119,13 @@ class Ishapore : baseweapon replaces Plasmarifle {
 		SVRS ABCDE 1;
 		SVRS FGHI 2;
 		TNT1 A 0 A_StartSound("sniper/boltback", 9);
-		TNT1 A 0 { invoker.m_Chambered = false; }
+		TNT1 A 0 {
+			invoker.m_IsLoading = true;
+			invoker.m_Chambered = false;
+		}
 		SVRS J 1;
 		SVRS KL 2;
 		SVRS MN 2;
-		TNT1 A 0 { invoker.m_IsLoading = true; }
 	ReloadRepeat:
 		TNT1 A 0 A_JumpIfInventory("SniperAmmo", SMAG, "ReloadEnd");
 		TNT1 A 0 A_JumpIfInventory("Ammo54r", 1, "ProperReload");

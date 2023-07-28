@@ -104,7 +104,7 @@ class M2C : BaseWeapon replaces Chaingun
 			A_SpawnFlash(5, -3);
 			A_TakeInventory("RifleMag", 1);
 			A_AlertMonsters();
-			A_StartSound("AR10/fire", CHAN_WEAPON);
+			A_StartSound("AR10/fire", CHAN_AUTO);
 			A_GunFlash("ZF", GFF_NOEXTCHANGE);
 			let psp = player.FindPSprite(PSP_Weapon);
 			if (psp)
@@ -144,13 +144,13 @@ class M2C : BaseWeapon replaces Chaingun
 		TNT1 A 0 A_SetBaseOffset(0, 30);
 		TNT1 A 0 A_JumpIf(Player.cmd.buttons & BT_ATTACK, "Automatic");
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("AR10/loopend", 11);
+		TNT1 A 0 A_StartSound("AR10/loopend", CHAN_WEAPON);
 		ARFR CDEFF 2 A_WeaponReady(WRF_NOSWITCH);
 		Goto Ready;
 
 	FinalShot:
 		TNT1 A 0 A_StopSound(1);
-		TNT1 A 0 A_StartSound("AR10/loopend", 11);
+		TNT1 A 0 A_StartSound("AR10/loopend", CHAN_WEAPON);
 		ARFR DEF 2;
 		Goto Ready;
 

@@ -15,3 +15,12 @@ Map "MAP02" "KERG02"
 	music = "STG01"
 	par = 30
 }
+
+Map "MAP31" "KERG31"
+{
+	LightMode = 3
+	Sky1 = "DS_SKY01"
+	next = "MAP02"
+	music = "MUS_1"
+	par = 30
+}

@@ -75,7 +75,6 @@ class MuzzleSmoke : Actor
 			return;
 		}
 
-		Vel.z = max(0.0, Vel.z);
 		Vel.z += m_AirBuoyancy;
 
 		Vel /= max(1.0, m_AirFriction);

@@ -2,30 +2,44 @@ Mod by Joe 'Joblez' Salem
 
 MUtil created by Magdiel, creator of various features, assisted in development (make code look good)
 
-This mod uses Nashgore by Nash Muhandes
+This mod uses Nashgore by Nash Muhandes, all assets involving the blood are made by him
 
-this also uses vsonnier's port of thezombiekiller's footsteps, modified by Magdiel
+this also uses vsonnier's port of thezombiekiller's footsteps, modified by Magdiel012
 
-Textures - ID Software
+If an asset has no credit here, it's likely I (Joblez) made it. There are sounds, sprites,
+and textures for this mod by me. There are also a handful of sounds that use a sample that are in the
+Public Domain. I will attempt to credit as many public domain samples as possible but there may be
+some missing.
+
+Textures - ID Software(Doom 2)
+
+Player - Id Software(Doom), Raven Software(Sounds)
 
 Enemies/NPCs:
-
-	'Grarg' Enemy - 3D Realms, Ultimecia, Obsidian
-
-	'Greenlittleguy' Enemy - Bethesda, Obsidian
 	
-	'Wyvern' - Raven Software, Obsidian
+	'Grarg' Enemy - 3D Realms(Sprites), Ultimecia, Obsidian Entertainment(Sounds, Fallout New Vegas)
 
-	Penguin Sounds - sampled from https://youtu.be/0Haxy5PvCuk
+	'Greenlittleguy' Enemy - Bethesda(Sprites), Obsidian Entertainment(Sounds, Fallout New Vegas)
+	
+	'Wyvern' - Raven Software(Sprites), Obsidian Entertainment(Sounds, Fallout New Vegas)
+	
+	Penguin Sound Samples - https://youtu.be/0Haxy5PvCuk
 
+Particles:
+
+	JonnyFive - Rain and snow sprites (we took them from universal snow/rain ngl)
 
 Weapons:
 
 	Selecting weapon sounds - Valve, CS:GO
 
-	Shotgun: Tripwire Interactive, Killing Floor 
-	"Remington Model 10 Demonstration" - https://youtu.be/Msm6-xnv4Kk
+	Hatchet: Impact Sound - Valve, L4D2
 
+	Shotgun: 
+	Tripwire Interactive, Killing Floor 
+	"Remington Model 10 Demonstration" - https://youtu.be/Msm6-xnv4Kk
+	Model by 8SianDude - https://skfb.ly/oFrMK
+	
 	Assault Rifle:
 
 	"US M14 (Clone) POV - 308k Subscriber Special" - https://www.youtube.com/watch?v=nU0ECshc89M
@@ -34,4 +48,15 @@ Weapons:
 
 	"Shooting and Disassembly of Early Dutch AR10s" - https://youtu.be/nuEKwdwoqBA
 
+	Dynamite:
+		Explosion Sounds - Epic Games, Unreal Gold
+		
+	SVT-40:
+	
+Misc:
+	Footsteps - Valve (Half Life), Infinity Ward (Call of Duty)
+	Pickup Sounds - Monolith Productions(Ammo / Health), Epic Games(Guns), Valve(Misc)
+	
+	
+	
 

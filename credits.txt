@@ -23,6 +23,8 @@ Enemies/NPCs:
 	
 	'Wyvern' - Raven Software(Sprites), Obsidian Entertainment(Sounds, Fallout New Vegas)
 	
+	'Dryad' - Monolith Productions(Sprites), Obsidian Entertainment(Sounds, Fallout New Vegas)
+	
 	Penguin Sound Samples - https://youtu.be/0Haxy5PvCuk
 
 Particles:
